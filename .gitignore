@@ -1,0 +1,9 @@
+node_modules/
+out/
+release/
+*.log
+.env
+e2e-shots/
+
+# Claves gratuitas precargadas (no versionar ni distribuir en el zip de código)
+build-config/default-keys.json

@@ -1,0 +1,668 @@
+[
+  {
+    "id": "int-fund-1",
+    "area": "fundamentos",
+    "level": "principiante",
+    "kind": "tecnica",
+    "question": "Explícame la diferencia entre una variable y una constante como si yo recién empezara.",
+    "keyPoints": [
+      "Una variable puede cambiar de valor durante el programa",
+      "Una constante se fija una vez y no cambia",
+      "Usar constante avisa de un error si intentas cambiarla",
+      "Da un ejemplo cotidiano, como el precio fijo del envío"
+    ],
+    "redFlags": [
+      "Confunde constante con variable",
+      "No da ningún ejemplo concreto"
+    ],
+    "followUp": "¿Cuándo preferirías una constante aunque el lenguaje te deje usar variable?"
+  },
+  {
+    "id": "int-fund-2",
+    "area": "fundamentos",
+    "level": "principiante",
+    "kind": "conductual",
+    "question": "Cuéntame una vez que te quedaste atascado aprendiendo algo y cómo saliste. Usa situación, tarea, acción y resultado.",
+    "keyPoints": [
+      "Situación y tarea concretas, no vagas",
+      "Acciones propias, no del grupo",
+      "Un resultado medible o un aprendizaje claro",
+      "Qué haría distinto la próxima vez"
+    ],
+    "redFlags": [
+      "Habla solo del equipo y no de su aporte",
+      "No cierra con resultado ni aprendizaje"
+    ],
+    "followUp": "¿Qué recurso o persona te desatascó y por qué te sirvió?"
+  },
+  {
+    "id": "int-fund-3",
+    "area": "fundamentos",
+    "level": "intermedio",
+    "kind": "tecnica",
+    "question": "Tu programa funciona en tu equipo pero falla en el del compañero. ¿Cómo lo investigas?",
+    "keyPoints": [
+      "Compara versiones de lenguaje y dependencias",
+      "Revisa diferencias de sistema o de datos de prueba",
+      "Reproduce el fallo con pasos claros antes de tocar código",
+      "Busca supuestos que valen en tu equipo y no en el otro"
+    ],
+    "redFlags": [
+      "Cambia código al azar sin reproducir el fallo",
+      "Culpa al equipo del compañero sin evidencia"
+    ],
+    "followUp": "¿Cómo dejarías esto documentado para que no vuelva a pasar?"
+  },
+  {
+    "id": "int-fund-4",
+    "area": "fundamentos",
+    "level": "intermedio",
+    "kind": "tecnica",
+    "question": "Usaste una IA para generar una función y no la entiendes del todo. ¿La entregas? Justifica.",
+    "keyPoints": [
+      "No entregar código que no puedes defender",
+      "Pedir a la IA que lo explique y verificar con pruebas",
+      "Entenderlo línea a línea antes de usarlo",
+      "Declarar que usaste IA si la política lo pide"
+    ],
+    "redFlags": [
+      "Dice que entrega igual porque funciona",
+      "No menciona probar ni entender el código"
+    ],
+    "followUp": "¿Qué pregunta le harías a la IA para entender la parte que no te queda clara?"
+  },
+  {
+    "id": "int-fe-1",
+    "area": "frontend",
+    "level": "principiante",
+    "kind": "tecnica",
+    "question": "Un botón no hace nada al pulsarlo y no hay errores visibles. ¿Cómo lo depuras?",
+    "keyPoints": [
+      "Revisa la consola del navegador por errores",
+      "Confirma que el evento está realmente conectado al botón",
+      "Verifica que el selector apunta al elemento correcto",
+      "Comprueba si otro elemento tapa el botón"
+    ],
+    "redFlags": [
+      "Reescribe todo sin mirar la consola",
+      "No distingue entre no conectado y error dentro del manejador"
+    ],
+    "followUp": "¿Cómo confirmarías si el problema es de estilos encima o de lógica?"
+  },
+  {
+    "id": "int-fe-2",
+    "area": "frontend",
+    "level": "intermedio",
+    "kind": "tecnica",
+    "question": "¿Qué significa que una interfaz sea responsive y cómo decides los puntos de quiebre?",
+    "keyPoints": [
+      "Se adapta de móvil a escritorio sin desbordes",
+      "Los puntos de quiebre salen del contenido, no de modelos de teléfono",
+      "Prueba en anchos reales, no solo en el simulador",
+      "Prioriza móvil primero cuando el público es móvil"
+    ],
+    "redFlags": [
+      "Fija puntos de quiebre por marcas de teléfono",
+      "No menciona probar en varios anchos"
+    ],
+    "followUp": "¿Cómo manejarías una tabla ancha en una pantalla de 320 px?"
+  },
+  {
+    "id": "int-fe-3",
+    "area": "frontend",
+    "level": "intermedio",
+    "kind": "tecnica",
+    "question": "En React, ¿por qué una lista pide una clave estable y qué pasa si usas el índice?",
+    "keyPoints": [
+      "La clave ayuda a React a identificar cada elemento",
+      "Con el índice, reordenar o borrar mezcla el estado",
+      "Una clave estable viene del dato, como su identificador",
+      "El síntoma típico es datos que saltan de fila"
+    ],
+    "redFlags": [
+      "Dice que la clave es solo para quitar la advertencia",
+      "No explica el problema de reordenar con índice"
+    ],
+    "followUp": "¿Qué harías si tus datos no tienen un identificador único?"
+  },
+  {
+    "id": "int-fe-4",
+    "area": "frontend",
+    "level": "avanzado",
+    "kind": "diseno",
+    "question": "Diseña cómo compartir el estado del usuario entre muchas pantallas sin pasarlo por todas.",
+    "keyPoints": [
+      "Un estado global para datos que muchas pantallas usan",
+      "Mantener local lo que solo usa una pantalla",
+      "Evitar guardar en global datos que se derivan de otros",
+      "Pensar en el costo de volver a dibujar al cambiar"
+    ],
+    "redFlags": [
+      "Mete todo en el estado global sin criterio",
+      "No distingue estado de servidor de estado de interfaz"
+    ],
+    "followUp": "¿Qué datos dejarías fuera del estado global y por qué?"
+  },
+  {
+    "id": "int-fe-5",
+    "area": "frontend",
+    "level": "avanzado",
+    "kind": "tecnica",
+    "question": "Tu página carga lenta en móvil. ¿Qué mides y qué atacas primero?",
+    "keyPoints": [
+      "Mide con una herramienta antes de optimizar",
+      "Separa peso de imágenes, de código y de red",
+      "Ataca primero lo que más pesa en la carga inicial",
+      "Carga diferida de lo que no se ve al entrar"
+    ],
+    "redFlags": [
+      "Optimiza sin medir qué es lo lento",
+      "Cambia librerías sin datos que lo justifiquen"
+    ],
+    "followUp": "¿Cómo evitarías que una imagen grande bloquee lo primero que ve el usuario?"
+  },
+  {
+    "id": "int-be-1",
+    "area": "backend",
+    "level": "principiante",
+    "kind": "tecnica",
+    "question": "¿Qué diferencia hay entre los códigos 200, 404 y 500 de una respuesta web?",
+    "keyPoints": [
+      "200 indica que salió bien",
+      "404 que no se encontró lo pedido",
+      "500 que falló el servidor, no el cliente",
+      "Usar el código correcto ayuda a quien consume la API"
+    ],
+    "redFlags": [
+      "Confunde error de cliente con error de servidor",
+      "Dice que todo error es 404"
+    ],
+    "followUp": "¿Qué código devolverías si el usuario manda datos inválidos?"
+  },
+  {
+    "id": "int-be-2",
+    "area": "backend",
+    "level": "intermedio",
+    "kind": "tecnica",
+    "question": "Diseña los endpoints para gestionar pedidos de una tienda. ¿Qué rutas y métodos usarías?",
+    "keyPoints": [
+      "Rutas por recurso, como pedidos y sus elementos",
+      "Métodos según la acción: crear, leer, cambiar, borrar",
+      "Un pedido se identifica por su ruta, no por el cuerpo",
+      "Pensar en permisos: quién puede ver cada pedido"
+    ],
+    "redFlags": [
+      "Mete verbos en la ruta en vez de usar el método",
+      "No piensa en quién puede acceder a qué pedido"
+    ],
+    "followUp": "¿Cómo evitarías que un cliente vea el pedido de otro?"
+  },
+  {
+    "id": "int-be-3",
+    "area": "backend",
+    "level": "intermedio",
+    "kind": "tecnica",
+    "question": "Explica cómo guardarías contraseñas de usuarios de forma segura.",
+    "keyPoints": [
+      "Nunca guardar la contraseña en texto plano",
+      "Usar una función de hash lenta pensada para contraseñas",
+      "Añadir un valor aleatorio distinto por usuario",
+      "Nunca registrar la contraseña en los logs"
+    ],
+    "redFlags": [
+      "Propone cifrado reversible o texto plano",
+      "No menciona el valor aleatorio por usuario"
+    ],
+    "followUp": "¿Por qué una función de hash rápida es mala idea para contraseñas?"
+  },
+  {
+    "id": "int-be-4",
+    "area": "backend",
+    "level": "avanzado",
+    "kind": "diseno",
+    "question": "Un endpoint recibe muchas peticiones y la base de datos sufre. ¿Cómo lo abordas?",
+    "keyPoints": [
+      "Mide dónde está el cuello: consulta, red o cálculo",
+      "Añade caché a lo que se lee mucho y cambia poco",
+      "Revisa índices y consultas lentas",
+      "Considera limitar la frecuencia por cliente"
+    ],
+    "redFlags": [
+      "Escala la máquina sin medir la causa",
+      "No menciona índices ni consultas lentas"
+    ],
+    "followUp": "¿Qué riesgo trae una caché y cómo lo controlas?"
+  },
+  {
+    "id": "int-be-5",
+    "area": "backend",
+    "level": "avanzado",
+    "kind": "codigo",
+    "question": "Escribe en palabras la lógica para que un pedido descuente existencias sin que dos compras dejen el stock negativo.",
+    "keyPoints": [
+      "Reservar o descontar dentro de una transacción",
+      "Comprobar y actualizar existencias de forma atómica",
+      "Rechazar la compra si no hay suficiente al confirmar",
+      "Pensar en dos compras simultáneas del último ítem"
+    ],
+    "redFlags": [
+      "Comprueba y luego descuenta en pasos separados sin protección",
+      "Ignora el caso de dos compras a la vez"
+    ],
+    "followUp": "¿Qué pasa si el pago falla después de descontar el stock?"
+  },
+  {
+    "id": "int-dat-1",
+    "area": "datos",
+    "level": "principiante",
+    "kind": "tecnica",
+    "question": "¿Para qué sirve una clave primaria y en qué se diferencia de una clave foránea?",
+    "keyPoints": [
+      "La clave primaria identifica de forma única cada fila",
+      "La foránea apunta a la clave primaria de otra tabla",
+      "La foránea mantiene la relación entre tablas",
+      "Evitan filas duplicadas y datos sueltos"
+    ],
+    "redFlags": [
+      "Confunde clave primaria con foránea",
+      "No explica para qué sirve la relación"
+    ],
+    "followUp": "¿Qué pasa si borras una fila referida por una clave foránea?"
+  },
+  {
+    "id": "int-dat-2",
+    "area": "datos",
+    "level": "intermedio",
+    "kind": "tecnica",
+    "question": "Tienes clientes y pedidos en dos tablas. ¿Cómo listarías cada cliente con su número de pedidos?",
+    "keyPoints": [
+      "Unir las dos tablas por la relación cliente a pedido",
+      "Agrupar por cliente y contar sus pedidos",
+      "Incluir clientes con cero pedidos si se piden",
+      "Verificar el total contra una muestra pequeña"
+    ],
+    "redFlags": [
+      "Deja fuera a los clientes sin pedidos sin querer",
+      "No agrupa y cuenta filas repetidas"
+    ],
+    "followUp": "¿Cómo incluirías también a los clientes que no han comprado nada?"
+  },
+  {
+    "id": "int-dat-3",
+    "area": "datos",
+    "level": "intermedio",
+    "kind": "tecnica",
+    "question": "Una consulta tarda demasiado. ¿Cómo investigas antes de tocar nada?",
+    "keyPoints": [
+      "Mira el plan de ejecución de la consulta",
+      "Identifica si recorre toda la tabla sin índice",
+      "Revisa filtros y uniones sobre columnas sin índice",
+      "Prueba el efecto de un índice en una copia primero"
+    ],
+    "redFlags": [
+      "Añade índices al azar sin ver el plan",
+      "Culpa a la máquina sin analizar la consulta"
+    ],
+    "followUp": "¿Cuándo un índice de más puede perjudicar?"
+  },
+  {
+    "id": "int-dat-4",
+    "area": "datos",
+    "level": "avanzado",
+    "kind": "diseno",
+    "question": "Diseña el modelo para analizar ventas por tiempo, producto y región en un almacén de datos.",
+    "keyPoints": [
+      "Una tabla de hechos con las ventas y su grano claro",
+      "Dimensiones de tiempo, producto y región",
+      "Evitar repetir textos descriptivos en los hechos",
+      "El grano define qué representa cada fila de hechos"
+    ],
+    "redFlags": [
+      "Mezcla hechos y descripciones en una sola tabla",
+      "No define el grano de la tabla de hechos"
+    ],
+    "followUp": "¿Qué grano elegirías: por línea de venta o por ticket, y por qué?"
+  },
+  {
+    "id": "int-cal-1",
+    "area": "calidad",
+    "level": "principiante",
+    "kind": "tecnica",
+    "question": "¿Qué diferencia hay entre una prueba manual y una automática y cuándo usas cada una?",
+    "keyPoints": [
+      "La manual la ejecuta una persona cada vez",
+      "La automática corre sola y se repite barata",
+      "Automatizar lo repetitivo y estable",
+      "Explorar a mano lo nuevo o visual"
+    ],
+    "redFlags": [
+      "Dice que hay que automatizar todo siempre",
+      "No distingue qué conviene automatizar"
+    ],
+    "followUp": "¿Qué automatizarías primero si tuvieras poco tiempo?"
+  },
+  {
+    "id": "int-cal-2",
+    "area": "calidad",
+    "level": "intermedio",
+    "kind": "tecnica",
+    "question": "Escribe los casos de prueba de un formulario de registro. ¿Qué cubrirías?",
+    "keyPoints": [
+      "Camino feliz con datos válidos",
+      "Campos vacíos y formatos inválidos",
+      "Correo repetido y contraseña débil",
+      "Prioriza por riesgo, no por cantidad"
+    ],
+    "redFlags": [
+      "Solo prueba el camino feliz",
+      "Lista casos sin pensar en el riesgo"
+    ],
+    "followUp": "¿Qué caso de borde se suele olvidar en un registro?"
+  },
+  {
+    "id": "int-cal-3",
+    "area": "calidad",
+    "level": "intermedio",
+    "kind": "conductual",
+    "question": "Cuéntame cuando reportaste un error que el desarrollador insistía en que no existía. Usa STAR.",
+    "keyPoints": [
+      "Situación concreta del desacuerdo",
+      "Cómo reprodujo el error con pasos claros",
+      "Comunicación con datos, no con opiniones",
+      "Resultado: se corrigió o se acordó algo"
+    ],
+    "redFlags": [
+      "Lo cuenta como pelea personal",
+      "No muestra evidencia que reprodujera el error"
+    ],
+    "followUp": "¿Cómo presentas un error para que no suene a ataque?"
+  },
+  {
+    "id": "int-cal-4",
+    "area": "calidad",
+    "level": "avanzado",
+    "kind": "tecnica",
+    "question": "Tienes una prueba automática que a veces pasa y a veces falla. ¿Qué haces?",
+    "keyPoints": [
+      "No la ignoras: una prueba inestable esconde un problema",
+      "Buscas esperas por tiempo fijo o datos compartidos",
+      "Aíslas la prueba para que no dependa de otras",
+      "Usas esperas por condición, no por reloj"
+    ],
+    "redFlags": [
+      "Reintenta hasta que pase y la deja así",
+      "Borra la prueba sin investigar"
+    ],
+    "followUp": "¿Qué riesgo tiene reintentar una prueba hasta que pase?"
+  },
+  {
+    "id": "int-ana-1",
+    "area": "analisis",
+    "level": "principiante",
+    "kind": "tecnica",
+    "question": "Un cliente dice 'quiero que el sistema sea rápido'. ¿Cómo lo conviertes en un requisito útil?",
+    "keyPoints": [
+      "Pides una medida concreta y verificable",
+      "Acuerdas un número y una condición, como responder en 2 segundos",
+      "Separas lo que se puede comprobar de lo que no",
+      "Anotas el supuesto si el cliente no sabe el número"
+    ],
+    "redFlags": [
+      "Deja el requisito como 'rápido' sin medida",
+      "No busca hacerlo verificable"
+    ],
+    "followUp": "¿Cómo redactarías ese requisito para poder probarlo luego?"
+  },
+  {
+    "id": "int-ana-2",
+    "area": "analisis",
+    "level": "intermedio",
+    "kind": "tecnica",
+    "question": "Dos interesados piden cosas opuestas para la misma pantalla. ¿Cómo lo resuelves?",
+    "keyPoints": [
+      "Entiende el porqué detrás de cada pedido",
+      "Busca el objetivo común por encima de la solución",
+      "Lleva datos o ejemplos para decidir, no opiniones",
+      "Documenta la decisión y quién la tomó"
+    ],
+    "redFlags": [
+      "Elige al que grita más fuerte",
+      "No indaga el motivo de cada pedido"
+    ],
+    "followUp": "¿Qué harías si ninguno cede y hay que avanzar?"
+  },
+  {
+    "id": "int-ana-3",
+    "area": "analisis",
+    "level": "intermedio",
+    "kind": "conductual",
+    "question": "Cuéntame una vez que detectaste un requisito faltante tarde en el proyecto. Usa STAR.",
+    "keyPoints": [
+      "Cómo lo detectaste y el impacto que tenía",
+      "Qué acción tomaste al descubrirlo",
+      "Cómo lo comunicaste al equipo y al cliente",
+      "Qué cambiaste para que no se repita"
+    ],
+    "redFlags": [
+      "Culpa a otros sin su parte de responsabilidad",
+      "No dice qué aprendió del caso"
+    ],
+    "followUp": "¿Qué señal temprana hubiera evitado ese olvido?"
+  },
+  {
+    "id": "int-ana-4",
+    "area": "analisis",
+    "level": "avanzado",
+    "kind": "diseno",
+    "question": "Te piden especificar un sistema de reservas. ¿Cómo organizas el trabajo de análisis?",
+    "keyPoints": [
+      "Empieza por los interesados y sus objetivos",
+      "Levanta reglas de negocio con ejemplos",
+      "Modela casos de uso y flujos alternativos",
+      "Deja trazabilidad de cada requisito a su origen"
+    ],
+    "redFlags": [
+      "Salta directo a diseñar pantallas",
+      "No contempla los flujos de error"
+    ],
+    "followUp": "¿Qué incluirías para que el equipo pueda estimar el esfuerzo?"
+  },
+  {
+    "id": "int-dev-1",
+    "area": "devops",
+    "level": "principiante",
+    "kind": "tecnica",
+    "question": "¿Qué problema resuelve una imagen de contenedor frente a 'en mi máquina funciona'?",
+    "keyPoints": [
+      "Empaqueta la app con sus dependencias",
+      "Corre igual en cualquier máquina con el motor",
+      "Evita diferencias de versión entre equipos",
+      "Facilita levantar lo mismo en pruebas y producción"
+    ],
+    "redFlags": [
+      "Dice que el contenedor es solo una máquina virtual",
+      "No menciona las dependencias empaquetadas"
+    ],
+    "followUp": "¿Qué dejarías fuera de la imagen y por qué?"
+  },
+  {
+    "id": "int-dev-2",
+    "area": "devops",
+    "level": "intermedio",
+    "kind": "tecnica",
+    "question": "Explica qué haría una tubería que corre tus pruebas cada vez que subes código.",
+    "keyPoints": [
+      "Se dispara al subir cambios al repositorio",
+      "Instala, construye y corre las pruebas",
+      "Bloquea la fusión si algo falla",
+      "Da aviso rápido de qué se rompió"
+    ],
+    "redFlags": [
+      "Cree que la tubería despliega sin probar",
+      "No menciona bloquear la fusión ante fallos"
+    ],
+    "followUp": "¿Qué pasos pondrías antes de permitir desplegar a producción?"
+  },
+  {
+    "id": "int-dev-3",
+    "area": "devops",
+    "level": "avanzado",
+    "kind": "diseno",
+    "question": "Un despliegue nuevo rompe producción. ¿Cómo diseñas para recuperarte rápido?",
+    "keyPoints": [
+      "Poder volver a la versión anterior rápido",
+      "Desplegar poco a poco y vigilar señales",
+      "Tener alertas que avisen del fallo pronto",
+      "Separar el cambio de datos del cambio de código"
+    ],
+    "redFlags": [
+      "Confía en que no fallará y no prepara vuelta atrás",
+      "No menciona vigilar tras desplegar"
+    ],
+    "followUp": "¿Cómo despliegas un cambio de base de datos sin bloquear la vuelta atrás?"
+  },
+  {
+    "id": "int-sec-1",
+    "area": "seguridad",
+    "level": "principiante",
+    "kind": "tecnica",
+    "question": "¿Por qué no debes confiar en los datos que manda el usuario?",
+    "keyPoints": [
+      "El usuario puede enviar datos maliciosos",
+      "Validar y limpiar toda entrada en el servidor",
+      "La validación del navegador no basta",
+      "Tratar la entrada como texto, no como instrucción"
+    ],
+    "redFlags": [
+      "Dice que basta validar en el navegador",
+      "No menciona validar en el servidor"
+    ],
+    "followUp": "¿Qué validación del navegador puede saltarse un atacante?"
+  },
+  {
+    "id": "int-sec-2",
+    "area": "seguridad",
+    "level": "intermedio",
+    "kind": "tecnica",
+    "question": "Explica qué es una inyección en una consulta y cómo la evitas.",
+    "keyPoints": [
+      "El atacante mete código en un campo de entrada",
+      "Pasa cuando se arma la consulta pegando texto del usuario",
+      "Se evita con consultas parametrizadas",
+      "Nunca confiar en la entrada para armar la consulta"
+    ],
+    "redFlags": [
+      "Propone solo filtrar palabras sospechosas",
+      "No menciona consultas parametrizadas"
+    ],
+    "followUp": "¿Por qué filtrar palabras prohibidas no es suficiente?"
+  },
+  {
+    "id": "int-sec-3",
+    "area": "seguridad",
+    "level": "intermedio",
+    "kind": "conductual",
+    "question": "Encuentras una falla grave un día antes de una entrega importante. ¿Qué haces?",
+    "keyPoints": [
+      "Avisas de inmediato con el riesgo claro",
+      "Explicas impacto y opciones, no solo el problema",
+      "Propones mitigar o posponer según el riesgo",
+      "No la ocultas para cumplir la fecha"
+    ],
+    "redFlags": [
+      "Calla para no retrasar la entrega",
+      "Exagera o minimiza sin explicar el riesgo real"
+    ],
+    "followUp": "¿Cómo explicarías el riesgo a alguien no técnico que quiere entregar igual?"
+  },
+  {
+    "id": "int-sec-4",
+    "area": "seguridad",
+    "level": "avanzado",
+    "kind": "tecnica",
+    "question": "Revisas código generado por IA que maneja login. ¿Qué buscas antes de confiar en él?",
+    "keyPoints": [
+      "Que no guarde contraseñas en texto plano",
+      "Que no filtre secretos ni los deje en el código",
+      "Que valide permisos en cada ruta protegida",
+      "Que maneje bien el error sin revelar detalles internos"
+    ],
+    "redFlags": [
+      "Confía porque la IA lo generó",
+      "No revisa el manejo de contraseñas ni de permisos"
+    ],
+    "followUp": "¿Qué prueba escribirías para confirmar que un usuario no accede a datos de otro?"
+  },
+  {
+    "id": "int-ia-1",
+    "area": "ia",
+    "level": "intermedio",
+    "kind": "conductual",
+    "question": "Describe cómo usas una IA para programar y cómo te aseguras de entregar algo que puedas defender.",
+    "keyPoints": [
+      "Especificas bien la tarea antes de pedir",
+      "Revisas cada cambio que propone, no lo pegas a ciegas",
+      "Verificas con pruebas y entiendes el porqué",
+      "Declaras el uso de IA cuando corresponde"
+    ],
+    "redFlags": [
+      "Pega lo que genera sin leer ni probar",
+      "No puede explicar el código que entrega"
+    ],
+    "followUp": "¿Qué haces cuando la IA propone algo que no entiendes?"
+  },
+  {
+    "id": "int-ia-2",
+    "area": "ia",
+    "level": "intermedio",
+    "kind": "tecnica",
+    "question": "Tu asistente con IA a veces inventa datos que no existen. ¿Cómo lo controlas?",
+    "keyPoints": [
+      "Le das solo las fuentes y le pides citar de dónde saca cada dato",
+      "Añades una salida de 'no lo sé' cuando no hay fuente",
+      "Pruebas con preguntas trampa sin respuesta",
+      "No dejas que responda fuera de los datos dados"
+    ],
+    "redFlags": [
+      "Confía en la respuesta sin verificar la fuente",
+      "No prueba casos sin respuesta"
+    ],
+    "followUp": "¿Cómo medirías cuántas veces inventa antes y después de tu arreglo?"
+  },
+  {
+    "id": "int-ia-3",
+    "area": "ia",
+    "level": "avanzado",
+    "kind": "diseno",
+    "question": "Diseña un flujo donde una IA clasifica solicitudes pero un humano mantiene el control.",
+    "keyPoints": [
+      "La IA sugiere y el humano aprueba lo delicado",
+      "Una regla de respaldo cuando la IA duda",
+      "Registro para medir aciertos y fallos",
+      "Límites claros de qué puede decidir sola"
+    ],
+    "redFlags": [
+      "Deja que la IA decida todo sin control",
+      "No mide aciertos ni fallos"
+    ],
+    "followUp": "¿Qué decisiones nunca dejarías solo en manos del modelo?"
+  },
+  {
+    "id": "int-ia-4",
+    "area": "ia",
+    "level": "principiante",
+    "kind": "tecnica",
+    "question": "¿Qué diferencia una instrucción vaga de una buena al pedirle algo a una IA?",
+    "keyPoints": [
+      "La buena da contexto y el objetivo concreto",
+      "Dice el formato de salida esperado",
+      "Pone límites y ejemplos cuando ayudan",
+      "La vaga deja que la IA adivine y acierte poco"
+    ],
+    "redFlags": [
+      "Cree que más largo siempre es mejor",
+      "No menciona contexto ni formato esperado"
+    ],
+    "followUp": "Reescribe en voz alta una instrucción vaga para pedir un resumen de un texto."
+  }
+]

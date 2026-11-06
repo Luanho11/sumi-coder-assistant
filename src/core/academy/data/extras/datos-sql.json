@@ -1,0 +1,708 @@
+{
+  "trackId": "datos-sql",
+  "lessons": {
+    "mod-4-s1": {
+      "emoji": "🗂️",
+      "summary": "Pasas de una descripción de negocio a entidades, atributos y relaciones con su cardinalidad.",
+      "analogy": "Modelar es como planear el árbol genealógico antes de imprimirlo: quién aparece, qué dato lleva cada persona y quién es pariente de quién.",
+      "learned": [
+        "🗂️ Puedes leer cómo funciona un negocio y señalar qué cosas hay que registrar",
+        "🔗 Sabes decir si algo va con uno o con muchos, como un cliente y sus pedidos",
+        "🧩 Distingues lo que existe por sí solo de lo que depende de otra cosa"
+      ],
+      "check": [
+        {
+          "question": "En una tienda, cada pedido tiene varias líneas y una línea no tiene sentido sin su pedido. ¿Qué es DetallePedido?",
+          "options": [
+            "Una entidad fuerte con clave propia",
+            "Un atributo multivaluado de Pedido",
+            "Una entidad débil que depende de Pedido",
+            "Una relación N:M entre Pedido y Cliente"
+          ],
+          "correctIndex": 2,
+          "explanation": "La línea no existe sin su pedido: entidad débil. No es un simple atributo porque tiene datos propios (cantidad, precio) y se relaciona con Producto."
+        },
+        {
+          "question": "Un estudiante cursa muchas materias y cada materia tiene muchos estudiantes. ¿Cómo lo modelas?",
+          "options": [
+            "Una FK materia_id dentro de Estudiante",
+            "Una tabla intermedia Inscripcion con dos claves foráneas",
+            "Una columna materias con nombres separados por comas",
+            "Una FK estudiante_id dentro de Materia"
+          ],
+          "correctIndex": 1,
+          "explanation": "Es N:M y se resuelve con tabla intermedia. Una FK en un lado solo admite una pareja por fila; la lista con comas rompe la atomicidad."
+        }
+      ],
+      "diagram": "flowchart LR\n  C[Cliente]:::azul -->|1:N| P[Pedido]:::azul\n  P -->|1:N| D[DetallePedido]:::naranja\n  R[Producto]:::azul -->|1:N| D\n  C -->|1:1| F[Perfil]:::azul\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef naranja fill:#FF9F0A,stroke:#FF9F0A,color:#fff"
+    },
+    "mod-4-s2": {
+      "emoji": "🧹",
+      "summary": "Limpias tablas repetitivas hasta 3FN y conviertes el modelo ER en tablas con claves y restricciones.",
+      "analogy": "Normalizar es como la libreta de teléfonos: si el número de la abuela está en diez páginas, al cambiarlo olvidas alguna. Mejor una ficha y que las demás la señalen.",
+      "learned": [
+        "🧹 Puedes detectar un mismo dato copiado en muchos sitios y dejarlo en uno solo",
+        "🛡️ Sabes impedir que alguien registre un pedido de un cliente que no existe",
+        "✂️ Separas un campo con varios valores metidos juntos en piezas que se pueden buscar"
+      ],
+      "check": [
+        {
+          "question": "Tabla Empleados(id_empleado, nombre, id_departamento, nombre_departamento). ¿Qué forma normal incumple?",
+          "options": [
+            "1FN, por valores no atómicos",
+            "2FN, por dependencia parcial de la clave",
+            "3FN, por dependencia transitiva",
+            "Ninguna, ya está normalizada"
+          ],
+          "correctIndex": 2,
+          "explanation": "nombre_departamento depende de id_departamento, que depende de id_empleado: transitiva. No es 2FN porque la clave es simple, no compuesta."
+        },
+        {
+          "question": "Borras un cliente y la FK cliente_id de Pedidos tiene ON DELETE CASCADE. ¿Qué pasa?",
+          "options": [
+            "Sus pedidos quedan con cliente_id en NULL",
+            "La base impide borrar al cliente",
+            "Se borran también todos sus pedidos",
+            "Los pedidos quedan apuntando a un id inexistente"
+          ],
+          "correctIndex": 2,
+          "explanation": "CASCADE propaga el borrado. Quedar en NULL sería SET NULL e impedirlo sería RESTRICT. Por eso conviene usar CASCADE con cuidado."
+        }
+      ],
+      "diagram": "flowchart LR\n  A[Tabla con repetidos]:::rosa --> B[1FN valores atómicos]:::naranja\n  B --> C[2FN sin dependencia parcial]:::amarillo\n  C --> D[3FN sin transitivas]:::verde\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n  classDef naranja fill:#FF9F0A,stroke:#FF9F0A,color:#fff\n  classDef rosa fill:#FF375F,stroke:#FF375F,color:#fff\n  classDef amarillo fill:#FFD60A,stroke:#FFD60A,color:#1d1d1f"
+    },
+    "mod-11-s1": {
+      "emoji": "🔎",
+      "summary": "Pides a la base de datos solo las filas y columnas que necesitas, filtradas, ordenadas y resumidas.",
+      "analogy": "Una consulta es como pedir en una panadería: FROM es la vitrina, WHERE descarta lo que no quieres y GROUP BY junta los panes por tipo para contarlos.",
+      "learned": [
+        "🔎 Puedes sacar de una tabla enorme solo los datos que responden tu pregunta",
+        "🧮 Sabes contar, sumar y promediar por grupos, como ventas por categoría",
+        "🎯 Distingues entre descartar cosas sueltas y descartar grupos ya resumidos"
+      ],
+      "check": [
+        {
+          "question": "Quieres solo las categorías con más de 5 productos. ¿Dónde va la condición COUNT(*) > 5?",
+          "options": [
+            "En WHERE, antes de GROUP BY",
+            "En HAVING, después de GROUP BY",
+            "En ORDER BY, al final",
+            "En SELECT, como alias"
+          ],
+          "correctIndex": 1,
+          "explanation": "HAVING filtra grupos ya formados. WHERE actúa sobre filas antes de agrupar y no admite COUNT(*): es el error más típico con agregados."
+        },
+        {
+          "question": "Buscas productos cuyo nombre empiece por \"Lap\". ¿Qué filtro usas?",
+          "options": [
+            "nombre LIKE '%Lap'",
+            "nombre = 'Lap%'",
+            "nombre LIKE '_Lap'",
+            "nombre LIKE 'Lap%'"
+          ],
+          "correctIndex": 3,
+          "explanation": "El % al final significa 'lo que sea después'. '%Lap' busca los que terminan en Lap, y con = el % se compara como texto literal."
+        }
+      ],
+      "diagram": "flowchart LR\n  F[FROM]:::azul --> W[WHERE filas]:::naranja\n  W --> G[GROUP BY]:::morado\n  G --> H[HAVING grupos]:::naranja\n  H --> S[SELECT]:::verde\n  S --> O[ORDER BY]:::verde\n  O --> L[LIMIT]:::verde\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n  classDef naranja fill:#FF9F0A,stroke:#FF9F0A,color:#fff\n  classDef morado fill:#BF5AF2,stroke:#BF5AF2,color:#fff"
+    },
+    "mod-11-s2": {
+      "emoji": "✏️",
+      "summary": "Creas, cambias y borras registros sin llevarte por delante la tabla entera.",
+      "analogy": "Un UPDATE sin WHERE es como mandar \"te extraño\" a toda tu lista de contactos: el texto estaba bien, el destinatario no.",
+      "learned": [
+        "✏️ Puedes añadir, corregir y retirar datos de una tabla con precisión",
+        "🧯 Sabes comprobar primero a quién afectará un cambio antes de hacerlo",
+        "🗃️ Puedes archivar un registro sin perder su historia en lugar de borrarlo"
+      ],
+      "check": [
+        {
+          "question": "Debes subir un 10 % los precios de Electrónica. ¿Qué haces justo antes del UPDATE?",
+          "options": [
+            "Un TRUNCATE para empezar limpio",
+            "Un SELECT con el mismo WHERE para ver qué filas cambiarán",
+            "Quitar el WHERE para que sea más rápido",
+            "Desactivar las claves foráneas"
+          ],
+          "correctIndex": 1,
+          "explanation": "El SELECT con el mismo WHERE muestra exactamente qué filas tocarás. Mejor aún dentro de una transacción para poder hacer ROLLBACK."
+        },
+        {
+          "question": "RRHH quiere dar de baja empleados pero conservar su historial para auditorías. ¿Qué eliges?",
+          "options": [
+            "DELETE FROM empleados WHERE id = ?",
+            "TRUNCATE TABLE empleados",
+            "UPDATE con activo = 0 y fecha_baja (soft delete)",
+            "DROP TABLE empleados"
+          ],
+          "correctIndex": 2,
+          "explanation": "El soft delete marca el registro como inactivo y lo conserva. DELETE lo elimina; TRUNCATE y DROP se llevan la tabla entera."
+        }
+      ]
+    },
+    "mod-12-s1": {
+      "emoji": "🔗",
+      "summary": "Combinas varias tablas para responder preguntas reales, incluso las que buscan lo que falta.",
+      "analogy": "Un LEFT JOIN es como pasar lista: lees a todos los alumnos y marcas quién entregó la tarea; quien no entregó sigue en la lista con la casilla vacía.",
+      "learned": [
+        "🔗 Puedes cruzar datos de varias tablas para armar una respuesta completa",
+        "🕳️ Sabes encontrar lo que no tiene pareja, como categorías sin productos",
+        "👥 Puedes relacionar una lista consigo misma, como empleados con sus jefes"
+      ],
+      "check": [
+        {
+          "question": "Quieres todas las categorías con su número de productos, incluidas las que tienen 0. ¿Qué escribes?",
+          "options": [
+            "categorias INNER JOIN productos con COUNT(p.id)",
+            "categorias LEFT JOIN productos con COUNT(p.id)",
+            "categorias CROSS JOIN productos con COUNT(*)",
+            "productos LEFT JOIN categorias con COUNT(*)"
+          ],
+          "correctIndex": 1,
+          "explanation": "LEFT desde categorias conserva las vacías y COUNT(p.id) les da 0. INNER las descarta; COUNT(*) contaría 1 por la fila con NULL."
+        },
+        {
+          "question": "Cada empleado tiene jefe_id. Quieres la lista \"empleado – jefe\" incluyendo al CEO. ¿Qué JOIN?",
+          "options": [
+            "empleados e LEFT JOIN empleados j ON e.jefe_id = j.id",
+            "empleados e INNER JOIN empleados j ON e.id = j.id",
+            "empleados e CROSS JOIN empleados j",
+            "empleados e INNER JOIN empleados j ON e.jefe_id = j.id"
+          ],
+          "correctIndex": 0,
+          "explanation": "Self join con LEFT: el CEO tiene jefe_id NULL y con INNER desaparecería. Unir e.id = j.id empareja a cada uno consigo mismo."
+        }
+      ]
+    },
+    "mod-12-s2": {
+      "emoji": "🪟",
+      "summary": "Calculas rankings, acumulados y comparaciones mes a mes sin perder el detalle de cada fila.",
+      "analogy": "Una función de ventana es como la tabla de una liga de fútbol: cada equipo conserva su fila, pero además ve su puesto y los puntos del de arriba.",
+      "learned": [
+        "🏆 Puedes armar el top 3 de cada grupo sin perder el detalle de cada fila",
+        "📈 Sabes llevar un total que va sumando mes a mes y compararlo con el mes anterior",
+        "🌳 Puedes recorrer un organigrama de arriba abajo, nivel por nivel"
+      ],
+      "check": [
+        {
+          "question": "Tres productos empatan en el 2.º puesto por precio. Quieres que el siguiente quede 3.º, sin huecos. ¿Qué función?",
+          "options": [
+            "ROW_NUMBER()",
+            "RANK()",
+            "DENSE_RANK()",
+            "LAG()"
+          ],
+          "correctIndex": 2,
+          "explanation": "DENSE_RANK da 1,2,2,2,3. RANK deja hueco (1,2,2,2,5) y ROW_NUMBER rompe el empate con números distintos."
+        },
+        {
+          "question": "Necesitas la diferencia de ventas de cada mes contra el mes anterior. ¿Qué usas?",
+          "options": [
+            "ventas - LAG(ventas) OVER (ORDER BY fecha)",
+            "ventas - LEAD(ventas) OVER (ORDER BY fecha)",
+            "SUM(ventas) OVER (ORDER BY fecha)",
+            "GROUP BY fecha con MAX(ventas)"
+          ],
+          "correctIndex": 0,
+          "explanation": "LAG trae el valor de la fila anterior. LEAD trae el siguiente y SUM OVER da el acumulado, no la diferencia."
+        }
+      ],
+      "diagram": "flowchart LR\n  B[Caso base: sin jefe]:::azul --> U[UNION ALL]:::amarillo\n  U --> R[Caso recursivo: JOIN]:::morado\n  R -->|nuevas filas| U\n  R -->|sin filas| F[Organigrama]:::verde\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n  classDef morado fill:#BF5AF2,stroke:#BF5AF2,color:#fff\n  classDef amarillo fill:#FFD60A,stroke:#FFD60A,color:#1d1d1f"
+    },
+    "mod-13-s1": {
+      "emoji": "📇",
+      "summary": "Decides qué columnas indexar y lees el plan de ejecución para saber si tu índice se usa.",
+      "analogy": "Un índice compuesto (apellido, nombre) es como una guía telefónica: encuentras rápido \"García, Ana\", pero si solo sabes \"Ana\" toca leerla entera.",
+      "learned": [
+        "📇 Puedes decidir qué conviene ordenar de antemano para encontrar datos al instante",
+        "🔬 Sabes leer el plan de la base de datos y ver si está revisando todo de punta a punta",
+        "⚖️ Entiendes que acelerar las búsquedas cobra un precio al guardar datos nuevos"
+      ],
+      "check": [
+        {
+          "question": "Hay un índice en pedidos(cliente_id, fecha). ¿Cuál de estas consultas se queda sin aprovecharlo?",
+          "options": [
+            "WHERE cliente_id = 5",
+            "WHERE cliente_id = 5 AND fecha > '2024-01-01'",
+            "WHERE fecha > '2024-01-01'",
+            "WHERE cliente_id IN (5, 7)"
+          ],
+          "correctIndex": 2,
+          "explanation": "Un índice compuesto se usa de izquierda a derecha. Filtrar solo por fecha salta la primera columna, como buscar por nombre en una guía ordenada por apellido."
+        },
+        {
+          "question": "EXPLAIN muestra type: ALL, key: NULL y rows: 2000000 en una búsqueda por email. ¿Qué significa?",
+          "options": [
+            "Que usa el índice primario",
+            "Que recorre toda la tabla: falta un índice útil en email",
+            "Que el resultado tiene 2 millones de filas",
+            "Que otra transacción bloquea la tabla"
+          ],
+          "correctIndex": 1,
+          "explanation": "ALL con key NULL es escaneo completo. rows es una estimación de filas a revisar, no el tamaño del resultado."
+        }
+      ],
+      "diagram": "flowchart LR\n  A{¿Consulta lenta?}:::amarillo -->|sí| B[EXPLAIN]:::azul\n  A -->|no| N[No indexar]:::verde\n  B --> C{¿type ALL?}:::amarillo\n  C -->|sí| D{¿Columna selectiva?}:::amarillo\n  C -->|no| N\n  D -->|sí| I[Crear índice]:::verde\n  D -->|no| X[Índice inútil]:::rosa\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n  classDef rosa fill:#FF375F,stroke:#FF375F,color:#fff\n  classDef amarillo fill:#FFD60A,stroke:#FFD60A,color:#1d1d1f"
+    },
+    "mod-13-s2": {
+      "emoji": "🏎️",
+      "summary": "Reescribes consultas lentas, paginas sin escanear miles de filas y mantienes la base sana.",
+      "analogy": "Paginar con OFFSET es como buscar la página 500 de un libro contando hoja por hoja; con keyset abres directo por el marcapáginas.",
+      "learned": [
+        "🏎️ Puedes reescribir una búsqueda lenta para que haga mucho menos trabajo",
+        "🔖 Sabes mostrar listas enormes por páginas sin que la página mil tarde una eternidad",
+        "🩺 Tienes una rutina para revisar la salud de una base de datos cada semana"
+      ],
+      "check": [
+        {
+          "question": "WHERE YEAR(fecha) = 2024 va lenta aunque fecha tiene índice. ¿Mejor reescritura?",
+          "options": [
+            "WHERE fecha >= '2024-01-01' AND fecha < '2025-01-01'",
+            "WHERE YEAR(fecha) IN (2024)",
+            "WHERE CAST(fecha AS TEXT) LIKE '2024%'",
+            "Añadir ORDER BY fecha"
+          ],
+          "correctIndex": 0,
+          "explanation": "Envolver la columna en una función impide usar el índice. El rango la deja limpia; IN(2024) y CAST la siguen envolviendo."
+        },
+        {
+          "question": "Una app muestra productos de 10 en 10 y la página 2000 tarda segundos. ¿Qué propones?",
+          "options": [
+            "Subir el LIMIT a 100",
+            "Keyset: WHERE id > último_id ORDER BY id LIMIT 10",
+            "Usar un OFFSET todavía mayor",
+            "Quitar el ORDER BY"
+          ],
+          "correctIndex": 1,
+          "explanation": "Con OFFSET la base lee y descarta todas las filas previas. Keyset salta directo con el índice desde el último id visto."
+        }
+      ]
+    },
+    "mod-14-s1": {
+      "emoji": "🧰",
+      "summary": "Guardas lógica reutilizable en la base: procedimientos, funciones y triggers, y sabes cuándo no abusar.",
+      "analogy": "Un trigger es como el sensor de la puerta de una tienda: suena solo cada vez que alguien entra. Útil, pero con veinte sensores nadie sabe cuál pitó.",
+      "learned": [
+        "🧰 Puedes guardar una receta de pasos en la base para que todos la sigan igual",
+        "🔔 Sabes hacer que algo pase solo cuando cambia un dato, como descontar existencias",
+        "🕵️ Puedes dejar un rastro automático de quién cambió un precio y cuándo"
+      ],
+      "check": [
+        {
+          "question": "Necesitas un cálculo de descuento que puedas usar dentro de un SELECT. ¿Qué creas?",
+          "options": [
+            "Un procedimiento con parámetro OUT",
+            "Una función que devuelve un valor",
+            "Un trigger AFTER INSERT",
+            "Una tabla temporal"
+          ],
+          "correctIndex": 1,
+          "explanation": "La función devuelve un escalar y se usa como SELECT fn_xxx(). El procedimiento se invoca con CALL y no cabe dentro de un SELECT."
+        },
+        {
+          "question": "Quieres impedir que se guarde una línea de pedido si no hay stock suficiente. ¿Qué trigger?",
+          "options": [
+            "AFTER INSERT que resta el stock",
+            "AFTER UPDATE que audita el precio",
+            "BEFORE INSERT que lanza SIGNAL si falta stock",
+            "AFTER DELETE que repone el stock"
+          ],
+          "correctIndex": 2,
+          "explanation": "Solo un BEFORE puede frenar la inserción a tiempo. Un AFTER INSERT llega tarde: la fila ya está guardada."
+        }
+      ]
+    },
+    "mod-14-s2": {
+      "emoji": "🏦",
+      "summary": "Haces que varios cambios ocurran todos o ninguno, y evitas que dos usuarios se pisen.",
+      "analogy": "Una transacción es como pasar un billete entre dos alcancías: o sale de una y entra en la otra, o se queda donde estaba. Nunca a medio camino.",
+      "learned": [
+        "🏦 Puedes asegurar que un pago se completa entero o no se hace en absoluto",
+        "🚦 Sabes evitar que dos personas reserven el mismo asiento a la vez",
+        "🔁 Reconoces cuándo dos procesos se quedan esperándose para siempre y cómo evitarlo"
+      ],
+      "check": [
+        {
+          "question": "Transferencia: se descuenta de la cuenta 1 y falla el abono en la cuenta 2. ¿Qué garantiza la atomicidad?",
+          "options": [
+            "Que el abono se reintenta solo",
+            "Que el descuento se queda y se avisa al usuario",
+            "Que se revierten ambos cambios con ROLLBACK",
+            "Que la cuenta 2 queda bloqueada"
+          ],
+          "correctIndex": 2,
+          "explanation": "Atomicidad = todo o nada: si un paso falla, se deshace todo. Quedarse con el descuento es justo el estado a medias que se quiere evitar."
+        },
+        {
+          "question": "Pocas personas editan el mismo producto a la vez. Quieres detectar choques sin bloquear lecturas. ¿Qué usas?",
+          "options": [
+            "SELECT ... FOR UPDATE en cada lectura",
+            "Bloqueo optimista con columna version",
+            "SERIALIZABLE en toda la app",
+            "Quitar las transacciones"
+          ],
+          "correctIndex": 1,
+          "explanation": "Con baja contención, el optimista compara version al guardar y no bloquea a nadie. FOR UPDATE y SERIALIZABLE frenan a todos sin necesidad."
+        }
+      ],
+      "diagram": "flowchart LR\n  T1[Transacción 1]:::azul -->|tiene| A[Cuentas]:::rosa\n  T2[Transacción 2]:::morado -->|tiene| B[Pedidos]:::rosa\n  T1 -.->|espera| B\n  T2 -.->|espera| A\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef rosa fill:#FF375F,stroke:#FF375F,color:#fff\n  classDef morado fill:#BF5AF2,stroke:#BF5AF2,color:#fff"
+    }
+  },
+  "modules": {
+    "mod-4": {
+      "emoji": "📐",
+      "exam": [
+        {
+          "question": "Un cliente puede tener varios teléfonos. En el esquema lógico, ¿qué haces?",
+          "options": [
+            "Columna telefonos con valores separados por comas",
+            "Columnas telefono1, telefono2 y telefono3",
+            "Tabla Telefonos con FK a Cliente",
+            "Un teléfono en Cliente y los demás en notas"
+          ],
+          "correctIndex": 2,
+          "explanation": "Atributo multivaluado → tabla aparte con FK. La lista con comas rompe 1FN y las columnas numeradas fallan cuando llega el cuarto teléfono."
+        },
+        {
+          "question": "LineaPedido(id_pedido, id_producto, cantidad, nombre_producto) con clave (id_pedido, id_producto). ¿Problema?",
+          "options": [
+            "Incumple 1FN por la cantidad",
+            "Incumple 2FN: nombre_producto depende solo de id_producto",
+            "Incumple 3FN por la cantidad",
+            "Está bien normalizada"
+          ],
+          "correctIndex": 1,
+          "explanation": "nombre_producto depende de una parte de la clave compuesta: dependencia parcial, 2FN. Va en Productos. cantidad sí depende de la clave completa."
+        },
+        {
+          "question": "Relación 1:N entre Cliente y Pedido. ¿Dónde va la clave foránea?",
+          "options": [
+            "En Pedido, como cliente_id",
+            "En Cliente, como pedido_id",
+            "En una tabla intermedia ClientePedido",
+            "En ambas, una apuntando a la otra"
+          ],
+          "correctIndex": 0,
+          "explanation": "La FK va en el lado N. En Cliente solo cabría un pedido por cliente, y la tabla intermedia se reserva para N:M."
+        },
+        {
+          "question": "¿Guardarías la edad del cliente como columna?",
+          "options": [
+            "Sí, como entero que se actualiza a mano cada año",
+            "Sí, junto con la fecha, para consultar más rápido",
+            "Sí, en una tabla Edades con FK",
+            "No: es derivada y se calcula de fecha_nacimiento"
+          ],
+          "correctIndex": 3,
+          "explanation": "La edad se deriva de la fecha de nacimiento; guardarla crea un dato que caduca solo. Tener ambas invita a que no coincidan."
+        },
+        {
+          "question": "Quieres que el saldo de una cuenta nunca sea negativo. ¿Qué tipo de restricción es?",
+          "options": [
+            "Integridad de dominio, con CHECK saldo >= 0",
+            "Integridad referencial",
+            "Integridad de entidad",
+            "Acción ON DELETE CASCADE"
+          ],
+          "correctIndex": 0,
+          "explanation": "Limitar los valores permitidos es integridad de dominio. La referencial trata de FKs válidas y la de entidad, de PK única y no nula."
+        },
+        {
+          "question": "Un autor escribe muchos libros y un libro puede tener varios autores. Quieres guardar el orden de autoría. ¿Dónde?",
+          "options": [
+            "En la tabla Libro",
+            "En la tabla Autor",
+            "En la tabla intermedia AutorLibro",
+            "En ninguna: se calcula al consultar"
+          ],
+          "correctIndex": 2,
+          "explanation": "El orden describe la pareja autor-libro, no a uno solo; vive en la tabla intermedia, igual que la fecha en Inscripcion."
+        }
+      ]
+    },
+    "mod-11": {
+      "emoji": "💾",
+      "exam": [
+        {
+          "question": "¿Cuántas filas cambia UPDATE productos SET precio = 0; ?",
+          "options": [
+            "Ninguna: sin WHERE da error",
+            "Solo la primera fila",
+            "Todas las filas de la tabla",
+            "Solo las que tienen precio NULL"
+          ],
+          "correctIndex": 2,
+          "explanation": "Sin WHERE el UPDATE se aplica a toda la tabla y no avisa. Por eso conviene un SELECT previo y una transacción con ROLLBACK a mano."
+        },
+        {
+          "question": "WHERE categoria = 'Electrónica' OR categoria = 'Hogar' AND precio > 100. ¿Qué devuelve?",
+          "options": [
+            "Electrónica u Hogar, siempre con precio > 100",
+            "Toda Electrónica, más Hogar con precio > 100",
+            "Solo Hogar con precio > 100",
+            "Un error de sintaxis"
+          ],
+          "correctIndex": 1,
+          "explanation": "AND se evalúa antes que OR. Para aplicar el precio a ambas categorías hacen falta paréntesis alrededor del OR, o usar IN."
+        },
+        {
+          "question": "Buscas productos sin descripción. ¿Qué filtro funciona?",
+          "options": [
+            "descripcion = NULL",
+            "descripcion = ''",
+            "NOT descripcion",
+            "descripcion IS NULL"
+          ],
+          "correctIndex": 3,
+          "explanation": "NULL no es igual a nada, ni a sí mismo: = NULL nunca es verdadero. IS NULL es lo correcto; '' es un texto vacío, otra cosa."
+        },
+        {
+          "question": "Debes vaciar productos_archivo (5 millones de filas) y no te importan el contador ni los triggers. ¿Qué usas?",
+          "options": [
+            "TRUNCATE TABLE productos_archivo",
+            "DELETE FROM productos_archivo",
+            "UPDATE productos_archivo SET activo = 0",
+            "DELETE con un WHERE que siempre se cumple"
+          ],
+          "correctIndex": 0,
+          "explanation": "TRUNCATE es más rápido que DELETE sin filtro y resetea el contador. DELETE registra fila a fila y el UPDATE ni siquiera vacía la tabla."
+        },
+        {
+          "question": "SELECT categoria, AVG(precio) FROM productos WHERE AVG(precio) > 50 GROUP BY categoria. ¿Qué pasa?",
+          "options": [
+            "Funciona y filtra las categorías caras",
+            "Da error: un agregado no va en WHERE, va en HAVING",
+            "Devuelve una sola fila",
+            "Ignora el WHERE en silencio"
+          ],
+          "correctIndex": 1,
+          "explanation": "WHERE se evalúa antes de agrupar, cuando AVG aún no existe. La condición sobre el promedio va en HAVING, después del GROUP BY."
+        },
+        {
+          "question": "Quieres copiar a productos_archivo los productos creados antes de 2023. ¿Forma más directa?",
+          "options": [
+            "UPDATE productos SET tabla = 'archivo'",
+            "DELETE de productos y luego INSERT a mano",
+            "INSERT INTO productos_archivo (...) SELECT ... FROM productos WHERE fecha_creacion < '2023-01-01'",
+            "SELECT * INTO productos con el filtro de fecha"
+          ],
+          "correctIndex": 2,
+          "explanation": "INSERT ... SELECT copia filas de una tabla a otra en un paso. Borrar primero arriesga perder datos y UPDATE no mueve filas entre tablas."
+        }
+      ]
+    },
+    "mod-12": {
+      "emoji": "🕸️",
+      "exam": [
+        {
+          "question": "Necesitas los clientes que nunca han hecho un pedido. ¿Qué consulta funciona?",
+          "options": [
+            "clientes INNER JOIN pedidos",
+            "clientes c WHERE NOT EXISTS (SELECT 1 FROM pedidos p WHERE p.cliente_id = c.id)",
+            "clientes CROSS JOIN pedidos",
+            "pedidos LEFT JOIN clientes WHERE clientes.id IS NULL"
+          ],
+          "correctIndex": 1,
+          "explanation": "NOT EXISTS encuentra clientes sin pareja. El LEFT JOIN desde pedidos busca pedidos huérfanos, no clientes sin pedidos."
+        },
+        {
+          "question": "Top 3 productos más caros de cada categoría. ¿Qué pieza es la clave?",
+          "options": [
+            "GROUP BY categoria con MAX(precio)",
+            "ORDER BY precio DESC LIMIT 3",
+            "SELECT DISTINCT categoria, precio",
+            "ROW_NUMBER() OVER (PARTITION BY categoria ORDER BY precio DESC) y filtrar ≤ 3"
+          ],
+          "correctIndex": 3,
+          "explanation": "PARTITION BY reinicia la numeración en cada categoría. LIMIT 3 da el top global y MAX solo uno por categoría."
+        },
+        {
+          "question": "Una subconsulta usa c.id de la consulta exterior. ¿Qué es y qué implica?",
+          "options": [
+            "Correlacionada: se evalúa por cada fila exterior",
+            "No correlacionada: se ejecuta una sola vez",
+            "Una CTE recursiva",
+            "Un CROSS JOIN implícito"
+          ],
+          "correctIndex": 0,
+          "explanation": "Depender de la fila externa la hace correlacionada, y el motor la evalúa fila a fila. Por eso a veces conviene reescribirla con JOIN."
+        },
+        {
+          "question": "Tienes 4 colores y 5 tallas. ¿Cuántas filas da colores CROSS JOIN tallas?",
+          "options": [
+            "9",
+            "5",
+            "20",
+            "4"
+          ],
+          "correctIndex": 2,
+          "explanation": "El producto cartesiano combina todo con todo: 4 × 5 = 20. Sumar (9) es el error típico."
+        },
+        {
+          "question": "El organigrama tiene una profundidad desconocida. ¿Qué herramienta usas?",
+          "options": [
+            "Tantos self joins como niveles imagines",
+            "CTE recursiva con caso base jefe_id IS NULL",
+            "LAG sobre jefe_id",
+            "GROUP BY jefe_id"
+          ],
+          "correctIndex": 1,
+          "explanation": "La CTE recursiva repite el JOIN hasta que no aparecen filas nuevas. Los self joins fijos se rompen en cuanto hay un nivel más."
+        },
+        {
+          "question": "¿Qué devuelve SUM(monto) OVER (ORDER BY fecha)?",
+          "options": [
+            "El total de toda la tabla en cada fila",
+            "Un acumulado que crece fila a fila",
+            "Una sola fila con la suma",
+            "La diferencia con la fila anterior"
+          ],
+          "correctIndex": 1,
+          "explanation": "Con ORDER BY dentro de OVER, la ventana va del inicio a la fila actual: total acumulado. Sin ORDER BY daría el total en cada fila."
+        }
+      ]
+    },
+    "mod-13": {
+      "emoji": "⚡",
+      "exam": [
+        {
+          "question": "La columna activo (sí/no) está en una tabla de 2 millones de filas. ¿La indexas sola?",
+          "options": [
+            "Sí: toda columna del WHERE lleva índice",
+            "No: baja selectividad, el optimizador probablemente lo ignore",
+            "Sí, como índice único",
+            "Solo si es de tipo texto"
+          ],
+          "correctIndex": 1,
+          "explanation": "Si el filtro devuelve más del ~30 % de las filas, el índice no compensa. Con dos valores posibles casi siempre ocurre."
+        },
+        {
+          "question": "Te reportan una consulta lenta. ¿Primer paso profesional?",
+          "options": [
+            "Crear índices en todas las columnas del WHERE",
+            "Cambiar de motor de base de datos",
+            "Ejecutar EXPLAIN ANALYZE y leer el plan",
+            "Añadir más RAM al servidor"
+          ],
+          "correctIndex": 2,
+          "explanation": "Primero mides: el plan dice si hay escaneo completo, filesort o tabla temporal. Indexar a ciegas encarece cada escritura."
+        },
+        {
+          "question": "SELECT nombre, (SELECT COUNT(*) FROM pedidos WHERE cliente_id = c.id) FROM clientes c va lenta. ¿Reescritura?",
+          "options": [
+            "LEFT JOIN pedidos con GROUP BY c.id",
+            "Añadir DISTINCT",
+            "Paginar con OFFSET",
+            "Cambiar COUNT(*) por COUNT(1)"
+          ],
+          "correctIndex": 0,
+          "explanation": "La subconsulta en SELECT se ejecuta por cada cliente. Un LEFT JOIN con GROUP BY lo resuelve en una pasada y mantiene a los que tienen 0."
+        },
+        {
+          "question": "EXPLAIN de un ORDER BY fecha muestra Extra: Using filesort. ¿Qué indica?",
+          "options": [
+            "Que todo va bien, es lo ideal",
+            "Que ordena aparte: prueba un índice que incluya fecha",
+            "Que la tabla está corrupta",
+            "Que faltan estadísticas y hay que borrar la tabla"
+          ],
+          "correctIndex": 1,
+          "explanation": "Filesort es un ordenamiento extra fuera del índice. Un índice que ya entregue las filas ordenadas por fecha lo evita."
+        },
+        {
+          "question": "Una tabla de logs recibe 5000 inserciones por segundo y casi nunca se consulta. Proponen 6 índices. ¿Opinas?",
+          "options": [
+            "Bien: más índices siempre es más velocidad",
+            "Bien, siempre que sean índices hash",
+            "Da igual: los índices no afectan a las escrituras",
+            "Mal: cada índice encarece cada inserción y casi no se leen"
+          ],
+          "correctIndex": 3,
+          "explanation": "Cada índice se actualiza en cada INSERT. En una tabla de mucha escritura y poca lectura el costo supera al beneficio."
+        },
+        {
+          "question": "En la revisión semanal, sys.schema_unused_indexes lista 4 índices. ¿Qué haces?",
+          "options": [
+            "Borrarlos todos sin mirar",
+            "Confirmar que ningún proceso mensual los usa y retirarlos",
+            "Duplicarlos por seguridad",
+            "Ejecutar OPTIMIZE TABLE en cada consulta"
+          ],
+          "correctIndex": 1,
+          "explanation": "Un índice sin uso solo cuesta en escrituras, pero un informe de cierre de mes podría necesitarlo. Verificas y luego retiras."
+        }
+      ]
+    },
+    "mod-14": {
+      "emoji": "🔒",
+      "exam": [
+        {
+          "question": "¿Qué nivel de aislamiento mínimo evita las lecturas sucias (dirty reads)?",
+          "options": [
+            "READ UNCOMMITTED",
+            "Solo SERIALIZABLE",
+            "READ COMMITTED",
+            "Ningún nivel las evita"
+          ],
+          "correctIndex": 2,
+          "explanation": "READ COMMITTED ya impide leer cambios sin confirmar. SERIALIZABLE también, pero es más lento: usa el nivel más bajo que te proteja."
+        },
+        {
+          "question": "T1 bloquea cuentas y luego pedidos; T2 bloquea pedidos y luego cuentas. Se cuelgan. ¿Prevención?",
+          "options": [
+            "Acceder siempre a las tablas en el mismo orden",
+            "Subir todo a SERIALIZABLE",
+            "Quitar los índices",
+            "Alargar las transacciones"
+          ],
+          "correctIndex": 0,
+          "explanation": "El deadlock nace del orden cruzado. Con el mismo orden siempre, una espera a la otra y ninguna queda atrapada. Transacciones largas lo empeoran."
+        },
+        {
+          "question": "Venta de entradas: miles compiten por el mismo asiento. ¿Estrategia?",
+          "options": [
+            "Bloqueo optimista con reintentos",
+            "Bloqueo pesimista: SELECT ... FOR UPDATE del asiento",
+            "Sin transacción, para ir rápido",
+            "READ UNCOMMITTED para no esperar"
+          ],
+          "correctIndex": 1,
+          "explanation": "Con alta contención, el optimista generaría choques y reintentos constantes. Bloquear al leer asegura que solo uno se queda el asiento."
+        },
+        {
+          "question": "UPDATE productos SET stock = stock - 1, version = version + 1 WHERE id = 1 AND version = 5 afecta 0 filas. ¿Qué pasó?",
+          "options": [
+            "El producto se quedó sin stock",
+            "Hay un error de sintaxis en el WHERE",
+            "La transacción ya hizo COMMIT",
+            "Otro proceso cambió el registro antes: relees y reintentas"
+          ],
+          "correctIndex": 3,
+          "explanation": "Es el bloqueo optimista en acción: la version ya no es 5 porque alguien guardó primero. El stock no aparece en el WHERE, así que no es eso."
+        },
+        {
+          "question": "Quieres registrar cada cambio de precio con valor anterior y nuevo, venga de donde venga. ¿Qué usas?",
+          "options": [
+            "Trigger AFTER UPDATE que inserta en audit_productos",
+            "Una función escalar",
+            "Un índice único en precio",
+            "Nivel SERIALIZABLE"
+          ],
+          "correctIndex": 0,
+          "explanation": "El trigger salta en cada UPDATE, lo haga la app o un script, y tiene OLD y NEW a mano. Una función solo corre si alguien la llama."
+        },
+        {
+          "question": "Un procedimiento crea el pedido, inserta líneas y calcula el total. Falla una línea. ¿Qué evita pedidos a medias?",
+          "options": [
+            "Un trigger de auditoría",
+            "Envolver los pasos en una transacción con ROLLBACK si algo falla",
+            "Declararlo DETERMINISTIC",
+            "Usar una función en vez de un procedimiento"
+          ],
+          "correctIndex": 1,
+          "explanation": "La transacción hace que pedido, líneas y total se guarden juntos o no se guarden. DETERMINISTIC no tiene nada que ver con deshacer cambios."
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,629 @@
+{
+  "trackId": "csharp",
+  "lessons": {
+    "ses-csharp-1-1": {
+      "emoji": "🔷",
+      "summary": "Distingues copiar un valor de compartir un objeto, usas switch moderno y lees datos sin que el programa reviente.",
+      "analogy": "Un struct es una fotocopia: si la rayas, el original sigue limpio. Una class es un Google Doc compartido: si editas, todos lo ven.",
+      "learned": [
+        "📸 Puedes predecir si al cambiar una copia también cambia el original",
+        "🔀 Sabes escribir una decisión de varios casos en pocas líneas legibles",
+        "🛡️ Puedes leer lo que escribe una persona sin que un texto raro tumbe el programa"
+      ],
+      "check": [
+        {
+          "question": "struct Punto { public int X; } — var a = new Punto { X = 1 }; var b = a; b.X = 5; ¿Cuánto vale a.X?",
+          "options": [
+            "1",
+            "5",
+            "0",
+            "No compila"
+          ],
+          "correctIndex": 0,
+          "explanation": "Un struct es tipo valor: b = a copia los datos. Si Punto fuera class, ambos apuntarían al mismo objeto y a.X valdría 5."
+        },
+        {
+          "question": "Lees la edad desde un TextBox y puede llegar '' o 'veinte'. ¿Qué usas para no lanzar excepción?",
+          "options": [
+            "int.Parse(texto)",
+            "(int)texto",
+            "int.TryParse(texto, out int edad)",
+            "Convert.ToInt32(texto)"
+          ],
+          "correctIndex": 2,
+          "explanation": "TryParse devuelve false en vez de lanzar FormatException. Parse y Convert lanzan con texto no numérico, y el cast directo de string a int no compila."
+        }
+      ],
+      "diagram": "flowchart LR\n  A[var b = a]:::azul --> S{¿Qué tipo?}:::amarillo\n  S -->|struct| C[Copia propia]:::verde\n  S -->|class| R[Mismo objeto]:::naranja\n  C --> C2[a no cambia]:::verde\n  R --> R2[a también cambia]:::rosa\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n  classDef naranja fill:#FF9F0A,stroke:#FF9F0A,color:#fff\n  classDef rosa fill:#FF375F,stroke:#FF375F,color:#fff\n  classDef amarillo fill:#FFD60A,stroke:#FFD60A,color:#1d1d1f"
+    },
+    "ses-csharp-1-2": {
+      "emoji": "🧬",
+      "summary": "Modelas con clases abstractas, interfaces y records, consultas listas con LINQ y relanzas errores sin perder pistas.",
+      "analogy": "Una interfaz es el enchufe de pared: cualquier aparato que respete la forma de la clavija funciona, sea licuadora o cargador.",
+      "learned": [
+        "🔌 Puedes definir un contrato que muchas piezas distintas cumplen a su manera",
+        "🔎 Sabes pedirle a una lista \"dame los caros, ordenados por nombre\" en una sola frase",
+        "🧵 Puedes pasar un error hacia arriba sin borrar el rastro de dónde nació"
+      ],
+      "check": [
+        {
+          "question": "record Producto(string Nombre, decimal Precio, int Stock). ¿Qué da new Producto(\"Pan\", 1, 5) == new Producto(\"Pan\", 1, 5)?",
+          "options": [
+            "false: son dos referencias distintas",
+            "No compila: falta sobrescribir ==",
+            "true solo si usas Equals",
+            "true: los records comparan por valor"
+          ],
+          "correctIndex": 3,
+          "explanation": "record genera igualdad por valor en == y Equals. Con una class normal daría false porque compara referencias."
+        },
+        {
+          "question": "En un catch escribes throw ex; en vez de throw;. ¿Qué pierdes?",
+          "options": [
+            "Nada, son equivalentes",
+            "La traza original: el stack trace reinicia en el catch",
+            "El mensaje del error",
+            "El tipo de la excepción"
+          ],
+          "correctIndex": 1,
+          "explanation": "throw; relanza conservando dónde ocurrió el fallo. throw ex; mantiene tipo y mensaje, pero borra el camino hasta el origen, que es lo que necesitas al depurar."
+        }
+      ],
+      "diagram": "flowchart LR\n  P[productos]:::azul --> W[Where precio mayor 100]:::cian\n  W --> O[OrderBy nombre]:::cian\n  O --> S[Select nombre y precio]:::cian\n  S --> R[Resultado]:::verde\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n  classDef cian fill:#64D2FF,stroke:#64D2FF,color:#1d1d1f"
+    },
+    "ses-csharp-2-1": {
+      "emoji": "🏗️",
+      "summary": "Armas una API en capas Controller, Service y Repository, con dependencias inyectadas y EF Core.",
+      "analogy": "Las capas son un restaurante: el mesero (controller) toma el pedido, el chef (service) cocina y el almacenista (repository) trae ingredientes.",
+      "learned": [
+        "🍽️ Puedes repartir el trabajo de un servicio en piezas con una sola tarea cada una",
+        "🔧 Sabes cambiar una pieza por otra sin reescribir las que la usan",
+        "⏱️ Puedes decidir si algo se crea una vez, por visita o cada vez que se pide"
+      ],
+      "check": [
+        {
+          "question": "GET /api/productos/99 y el producto no existe. Con el controlador de la lección, ¿qué responde?",
+          "options": [
+            "404 Not Found",
+            "200 OK con null",
+            "500 Internal Server Error",
+            "204 No Content"
+          ],
+          "correctIndex": 0,
+          "explanation": "La acción hace producto is null ? NotFound() : Ok(producto). Devolver 200 con null obliga al cliente a adivinar si existe."
+        },
+        {
+          "question": "Necesitas un contador de visitas compartido por todas las peticiones mientras la app vive. ¿Qué lifetime registras?",
+          "options": [
+            "AddScoped",
+            "AddTransient",
+            "AddSingleton",
+            "Ninguno: haces new en el controlador"
+          ],
+          "correctIndex": 2,
+          "explanation": "Singleton crea una instancia para toda la app. Scoped crea una por petición y Transient una por inyección, así el contador volvería a cero."
+        }
+      ],
+      "diagram": "flowchart LR\n  H[Petición HTTP]:::azul --> C[Controller]:::cian\n  C --> S[Service]:::naranja\n  S --> R[Repository]:::verde\n  R --> DB[(Base de datos)]:::morado\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n  classDef naranja fill:#FF9F0A,stroke:#FF9F0A,color:#fff\n  classDef morado fill:#BF5AF2,stroke:#BF5AF2,color:#fff\n  classDef cian fill:#64D2FF,stroke:#64D2FF,color:#1d1d1f"
+    },
+    "ses-csharp-2-2": {
+      "emoji": "🔗",
+      "summary": "Relacionas entidades en EF Core, pruebas servicios con xUnit y Moq y empaquetas la API en Docker.",
+      "analogy": "Un mock es el doble de acción del cine: hace la escena peligrosa (la base de datos) para que pruebes al actor principal sin riesgo.",
+      "learned": [
+        "🎬 Puedes probar una regla de negocio sin necesitar la base de datos real",
+        "🧷 Sabes impedir que se borre algo de lo que dependen otros registros",
+        "🩺 Puedes darle al servidor una forma de decir \"estoy sano\" para que lo vigilen"
+      ],
+      "check": [
+        {
+          "question": "Configuras Producto→Categoria con OnDelete(DeleteBehavior.Restrict). Borras una categoría que tiene productos. ¿Qué pasa?",
+          "options": [
+            "Se borran sus productos en cascada",
+            "Se rechaza el borrado mientras tenga productos",
+            "Los productos quedan con CategoriaId en null",
+            "EF ignora la regla y borra igual"
+          ],
+          "correctIndex": 1,
+          "explanation": "Restrict bloquea el borrado del padre si hay hijos. Cascade borraría los productos y SetNull los dejaría huérfanos."
+        },
+        {
+          "question": "En el test de ProductoService creas Mock<IProductoRepository>. ¿Para qué?",
+          "options": [
+            "Para medir la velocidad de la base",
+            "Para generar las migraciones",
+            "Para probar el controlador por HTTP",
+            "Para probar la lógica del servicio controlando lo que devuelve el repositorio, sin base real"
+          ],
+          "correctIndex": 3,
+          "explanation": "Setup(...).ReturnsAsync(...) define la respuesta del repositorio y así aíslas el servicio. Probar el controlador por HTTP es trabajo de WebApplicationFactory."
+        }
+      ]
+    },
+    "ses-csharp-3-1": {
+      "emoji": "🔎",
+      "summary": "Filtras, ordenas, agrupas y transformas colecciones con LINQ y sabes cuándo se ejecuta la consulta.",
+      "analogy": "Una consulta LINQ es una receta escrita: no hay pastel hasta que alguien la cocina con foreach, Count o ToList.",
+      "learned": [
+        "🧁 Puedes preguntarle a una lista lo que quieres sin escribir bucles anidados",
+        "⏳ Sabes en qué momento exacto se hace el trabajo de una consulta",
+        "📊 Puedes sacar totales por cliente o por curso en pocas líneas"
+      ],
+      "check": [
+        {
+          "question": "var caros = productos.Where(p => p.Precio > 100); luego productos.Add(new Producto { Precio = 500 }); ¿Qué da caros.Count()?",
+          "options": [
+            "No lo incluye: se calculó en Where",
+            "Lanza error por modificar la colección",
+            "Incluye el nuevo: la consulta se evalúa al enumerar",
+            "Devuelve 0"
+          ],
+          "correctIndex": 2,
+          "explanation": "Where solo guarda la receta (ejecución diferida); Count() la ejecuta con la lista actual. Si quieres una foto fija, llama a ToList() antes."
+        },
+        {
+          "question": "Necesitas saber si algún pedido supera $1000. ¿Qué es lo más directo?",
+          "options": [
+            "pedidos.Any(p => p.Monto > 1000)",
+            "pedidos.Where(p => p.Monto > 1000).Count() > 0",
+            "pedidos.All(p => p.Monto > 1000)",
+            "pedidos.First(p => p.Monto > 1000) != null"
+          ],
+          "correctIndex": 0,
+          "explanation": "Any se detiene en el primero que cumple. Count recorre todo; All pregunta otra cosa; First lanza excepción si no hay ninguno."
+        }
+      ],
+      "diagram": "flowchart LR\n  Q[Consulta LINQ]:::azul --> A{¿Qué fuente?}:::amarillo\n  A -->|IQueryable| SQL[Se traduce a SQL]:::verde\n  SQL --> DB[(Filtra la base)]:::verde\n  A -->|IEnumerable| MEM[Filtra en memoria]:::naranja\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n  classDef naranja fill:#FF9F0A,stroke:#FF9F0A,color:#fff\n  classDef amarillo fill:#FFD60A,stroke:#FFD60A,color:#1d1d1f"
+    },
+    "ses-csharp-4-1": {
+      "emoji": "🧵",
+      "summary": "Escribes código con async/await que libera el hilo mientras espera y evitas los bloqueos clásicos.",
+      "analogy": "await es dejar la ropa en la lavadora y lavar los platos mientras tanto; .Result es quedarte mirando el tambor hasta que termine.",
+      "learned": [
+        "🧺 Puedes atender otras tareas mientras esperas una respuesta lenta",
+        "🚫 Sabes detectar el atajo que congela un servidor con mucha gente",
+        "✋ Puedes cancelar un trabajo largo cuando la persona ya se fue"
+      ],
+      "check": [
+        {
+          "question": "Un endpoint hace var datos = cliente.GetStringAsync(url).Result; y llegan 100 peticiones a la vez. ¿Qué riesgo hay?",
+          "options": [
+            "Corre más rápido que con await",
+            "El compilador lo rechaza",
+            "Ninguno: .Result equivale a await",
+            "Cada petición bloquea un hilo esperando y el servidor se queda sin hilos"
+          ],
+          "correctIndex": 3,
+          "explanation": ".Result bloquea el hilo hasta que la tarea termina. En apps con contexto de sincronización (UI, ASP.NET clásico) incluso puede causar deadlock."
+        },
+        {
+          "question": "¿En qué caso es aceptable un método async void?",
+          "options": [
+            "En un manejador de eventos, como el Click de un botón",
+            "En un servicio que no devuelve nada",
+            "En una acción de controlador",
+            "En un test de xUnit"
+          ],
+          "correctIndex": 0,
+          "explanation": "Los eventos exigen firma void. En los demás casos usa async Task: con void nadie puede esperar el método ni atrapar sus errores."
+        }
+      ],
+      "diagram": "flowchart LR\n  P[Petición]:::azul --> S[Sync: espera BD]:::rosa\n  S --> B[Hilo bloqueado]:::rosa\n  P --> A[Async: await BD]:::cian\n  A --> L[Hilo atiende otra]:::verde\n  L --> C[Retoma al responder]:::verde\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n  classDef rosa fill:#FF375F,stroke:#FF375F,color:#fff\n  classDef cian fill:#64D2FF,stroke:#64D2FF,color:#1d1d1f"
+    },
+    "ses-csharp-5-1": {
+      "emoji": "🏫",
+      "summary": "Diseñas la API escolar con Clean Architecture: entidades, relaciones, DTOs y quién depende de quién.",
+      "analogy": "Clean Architecture es una cebolla: el centro (dominio) no sabe que existen las capas de afuera, pero ellas sí lo conocen a él.",
+      "learned": [
+        "🧅 Puedes ordenar un proyecto grande para que el corazón no dependa de herramientas",
+        "📮 Sabes decidir qué datos entran y salen sin exponer todo lo que guardas",
+        "🧑‍🏫 Puedes dibujar cómo se relacionan alumnos, grupos, materias y calificaciones"
+      ],
+      "check": [
+        {
+          "question": "¿En qué proyecto va la interfaz IAlumnoRepository y en cuál su implementación con EF Core?",
+          "options": [
+            "Ambas en API",
+            "Interfaz en Domain, implementación en Infrastructure",
+            "Interfaz en Infrastructure, implementación en Domain",
+            "Ambas en Application"
+          ],
+          "correctIndex": 1,
+          "explanation": "El dominio define qué necesita y la infraestructura decide cómo, con EF Core. Así Domain no depende de ninguna librería de datos."
+        },
+        {
+          "question": "CrearCalificacionDTO tiene [Range(0, 10)] en Parcial1 y llega Parcial1 = 11 a un controlador con [ApiController]. ¿Qué pasa?",
+          "options": [
+            "Se guarda 11",
+            "Lanza una excepción y responde 500",
+            "Responde 400 automáticamente con el error de validación",
+            "Recorta el valor a 10"
+          ],
+          "correctIndex": 2,
+          "explanation": "[ApiController] revisa el modelo antes de entrar a la acción y devuelve 400 con los detalles. No ajusta valores ni llega a tu código."
+        }
+      ],
+      "diagram": "flowchart TD\n  API[API]:::azul --> APP[Application]:::cian\n  APP --> DOM[Domain]:::morado\n  INF[Infrastructure]:::naranja --> DOM\n  API --> INF\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef naranja fill:#FF9F0A,stroke:#FF9F0A,color:#fff\n  classDef morado fill:#BF5AF2,stroke:#BF5AF2,color:#fff\n  classDef cian fill:#64D2FF,stroke:#64D2FF,color:#1d1d1f"
+    },
+    "ses-csharp-5-2": {
+      "emoji": "🎓",
+      "summary": "Terminas la API escolar: endpoints de calificaciones y reportes, pruebas en pirámide y despliegue con Docker y CI.",
+      "analogy": "La pirámide de pruebas es revisar un auto: muchas piezas por separado, algunas juntas en el taller y pocas vueltas a la pista.",
+      "learned": [
+        "🏎️ Puedes repartir tu tiempo de pruebas donde más errores atrapa",
+        "🧾 Sabes armar reportes que se filtran solo si la persona lo pide",
+        "🗝️ Puedes detectar una contraseña escrita donde no debe antes de compartir el proyecto"
+      ],
+      "check": [
+        {
+          "question": "El docker-compose de la lección escribe SA_PASSWORD=YourStr0ng! en el archivo. ¿Qué cambias antes de subir el repo?",
+          "options": [
+            "Nada, es solo para desarrollo",
+            "Cambiarla por una más larga en el mismo archivo",
+            "Cifrar el docker-compose con base64",
+            "Moverla a un .env ignorado por git o a los secretos del CI"
+          ],
+          "correctIndex": 3,
+          "explanation": "Todo lo que entra a git queda en el historial aunque luego lo borres. base64 no cifra nada; cualquiera lo decodifica."
+        },
+        {
+          "question": "GET /api/reportes/promedios con [FromQuery] int? grupoId, sin mandar grupoId. ¿Qué recibe la acción?",
+          "options": [
+            "grupoId = null, y el reporte no filtra por grupo",
+            "Un 400 por parámetro faltante",
+            "grupoId = 0 y filtra el grupo 0",
+            "Un 500"
+          ],
+          "correctIndex": 0,
+          "explanation": "int? acepta null, así que el parámetro es opcional. Con int sin ? recibirías 0 y filtrarías por un grupo que no existe."
+        }
+      ]
+    }
+  },
+  "modules": {
+    "mod-csharp-1": {
+      "emoji": "🧱",
+      "exam": [
+        {
+          "question": "var x = 5; y luego x = \"hola\"; ¿Qué pasa?",
+          "options": [
+            "Error de compilación: var fijó el tipo int",
+            "x pasa a ser string, como en Python",
+            "Se convierte en '5hola'",
+            "Falla solo al ejecutar"
+          ],
+          "correctIndex": 0,
+          "explanation": "var infiere el tipo una vez y queda fijo. Es tipado estático con menos escritura, no tipado dinámico."
+        },
+        {
+          "question": "Necesitas un valor que se lee de la configuración al arrancar y no debe cambiar después. ¿Qué usas?",
+          "options": [
+            "const",
+            "readonly",
+            "static",
+            "var"
+          ],
+          "correctIndex": 1,
+          "explanation": "const exige un valor conocido al compilar; un dato leído al arrancar solo puede ser readonly. static no impide cambiarlo."
+        },
+        {
+          "question": "cliente = { EsVip: false, Antiguedad: 7 } pasa por el switch de descuentos de la lección. ¿Qué devuelve?",
+          "options": [
+            "0.2",
+            "0",
+            "0.1",
+            "No compila"
+          ],
+          "correctIndex": 2,
+          "explanation": "Los casos se prueban en orden: EsVip true no coincide, Antiguedad > 5 sí, así que 0.1. El _ solo se usa si nada antes coincide."
+        },
+        {
+          "question": "Buscas un libro por ISBN y puede no existir. ¿Qué usas?",
+          "options": [
+            "First dentro de un try en cada llamada",
+            "Single",
+            "Where(...).ToList()[0]",
+            "FirstOrDefault y luego revisas si es null"
+          ],
+          "correctIndex": 3,
+          "explanation": "FirstOrDefault devuelve null si no hay coincidencia. First y Single lanzan InvalidOperationException; [0] sobre lista vacía lanza otra excepción."
+        },
+        {
+          "question": "class Circulo : Forma, IDibujable, IRedimensionable. ¿Es válido?",
+          "options": [
+            "Sí: una clase base y varias interfaces",
+            "No: solo se permite una interfaz",
+            "No: son tres clases base",
+            "Sí, pero Forma debe ser interfaz"
+          ],
+          "correctIndex": 0,
+          "explanation": "C# permite heredar de una sola clase e implementar muchas interfaces. Forma puede ser abstracta, como en la lección."
+        },
+        {
+          "question": "Pones catch (Exception) antes de catch (ArgumentException). ¿Qué pasa?",
+          "options": [
+            "Atrapa ArgumentException el segundo bloque",
+            "No compila: el segundo catch sería inalcanzable",
+            "Se ejecutan los dos",
+            "Compila con una advertencia"
+          ],
+          "correctIndex": 1,
+          "explanation": "C# detecta que Exception ya cubre ArgumentException y marca error. En Python el mismo orden compila pero el segundo bloque nunca corre."
+        }
+      ]
+    },
+    "mod-csharp-2": {
+      "emoji": "🌐",
+      "exam": [
+        {
+          "question": "Tu POST termina con CreatedAtAction(nameof(Obtener), new { id = creado.Id }, creado). ¿Qué recibe el cliente?",
+          "options": [
+            "201 con una cabecera Location que apunta al recurso nuevo",
+            "200 con el objeto creado",
+            "204 sin cuerpo",
+            "Una redirección 302 a Obtener"
+          ],
+          "correctIndex": 0,
+          "explanation": "CreatedAtAction arma la URL de la acción Obtener y la pone en Location. Así el cliente sabe dónde leer el recurso sin adivinar."
+        },
+        {
+          "question": "ProductosController lleva [Route(\"api/[controller]\")]. ¿Qué ruta queda?",
+          "options": [
+            "api/ProductosController",
+            "api/controller",
+            "api/Productos: el nombre de la clase sin Controller",
+            "productos"
+          ],
+          "correctIndex": 2,
+          "explanation": "[controller] se reemplaza por el nombre de la clase sin el sufijo Controller. Las rutas no distinguen mayúsculas por defecto."
+        },
+        {
+          "question": "Agregas la propiedad Descuento a Producto. ¿Cómo llega a la base?",
+          "options": [
+            "Solo dotnet ef database update",
+            "dotnet ef migrations add AgregarDescuento y luego dotnet ef database update",
+            "Borrar la base y reiniciar",
+            "dotnet ef migrations remove"
+          ],
+          "correctIndex": 1,
+          "explanation": "Primero generas la migración que describe el cambio y luego la aplicas. update sin migración nueva no tiene nada que aplicar."
+        },
+        {
+          "question": "Con WebApplicationFactory<Program> haces un test de integración. ¿Qué prueba que un unitario con Moq no prueba?",
+          "options": [
+            "Que el servicio calcula bien",
+            "Que Moq configura el repositorio",
+            "Que la base de producción responde",
+            "Que ruta, JSON, inyección y controlador funcionan juntos en un HttpClient"
+          ],
+          "correctIndex": 3,
+          "explanation": "La fábrica levanta la app en memoria y la llamas por HTTP de verdad. El unitario aísla una clase; ninguno debe tocar producción."
+        },
+        {
+          "question": "appsettings.json y appsettings.Production.json definen ConnectionStrings. En producción, ¿cuál se usa?",
+          "options": [
+            "El de Production, que sobrescribe al común",
+            "El común, porque se lee primero",
+            "Ninguno: hay conflicto y falla",
+            "Se combinan las dos cadenas"
+          ],
+          "correctIndex": 0,
+          "explanation": "ASP.NET Core carga el común y luego el del entorno, que reemplaza las claves repetidas. Las variables de entorno pueden sobrescribir ambos."
+        },
+        {
+          "question": "Agregas AddHealthChecks().AddNpgSql(...) y MapHealthChecks(\"/health\"). ¿Para qué?",
+          "options": [
+            "Para mostrar métricas de negocio",
+            "Para documentar la API",
+            "Para que el orquestador sepa si la API y su base responden",
+            "Para reintentar consultas fallidas"
+          ],
+          "correctIndex": 2,
+          "explanation": "Docker o Kubernetes consultan /health y reinician o sacan de servicio la instancia enferma. No reemplaza a Swagger ni a métricas."
+        }
+      ]
+    },
+    "mod-csharp-3": {
+      "emoji": "🔍",
+      "exam": [
+        {
+          "question": "Lista de Order { Customer, Amount }. ¿Cómo sacas el total vendido por cliente?",
+          "options": [
+            "Select(o => o.Customer).Sum()",
+            "GroupBy(o => o.Customer).Select(g => new { g.Key, Total = g.Sum(o => o.Amount) })",
+            "OrderBy(o => o.Customer).Sum(o => o.Amount)",
+            "Distinct().Sum(o => o.Amount)"
+          ],
+          "correctIndex": 1,
+          "explanation": "GroupBy junta los pedidos por cliente y Sum suma cada grupo. OrderBy solo ordena: su Sum da un único total global."
+        },
+        {
+          "question": "Ya tienes los totales por cliente. ¿Cómo obtienes el top 3?",
+          "options": [
+            "OrderByDescending(x => x.Total).Take(3)",
+            "OrderBy(x => x.Total).Take(3)",
+            "Take(3).OrderByDescending(x => x.Total)",
+            "Skip(3)"
+          ],
+          "correctIndex": 0,
+          "explanation": "Primero ordenas de mayor a menor y luego tomas 3. Take antes de ordenar elige 3 al azar del orden original; OrderBy da los 3 peores."
+        },
+        {
+          "question": "Cada Estudiante tiene List<string> Materias. Quieres todas las materias sin repetir. ¿Qué usas?",
+          "options": [
+            "estudiantes.Select(e => e.Materias).Distinct()",
+            "estudiantes.GroupBy(e => e.Materias)",
+            "estudiantes.Materias.Distinct()",
+            "estudiantes.SelectMany(e => e.Materias).Distinct()"
+          ],
+          "correctIndex": 3,
+          "explanation": "SelectMany aplana la lista de listas en una sola secuencia. Select deja listas dentro de una lista y Distinct compararía listas enteras."
+        },
+        {
+          "question": "Escribes db.Pedidos.AsEnumerable().Where(p => p.Monto > 500). ¿Qué ocurre?",
+          "options": [
+            "Filtra en SQL igual que sin AsEnumerable",
+            "No compila",
+            "Trae todos los pedidos a memoria y filtra en C#",
+            "Trae solo los mayores a 500"
+          ],
+          "correctIndex": 2,
+          "explanation": "AsEnumerable corta la traducción a SQL: desde ahí todo corre en memoria. Con IQueryable, el Where viajaría a la base como WHERE."
+        },
+        {
+          "question": "var consulta = lista.Where(...).Select(...); y la recorres con dos foreach. ¿Cuántas veces se ejecuta?",
+          "options": [
+            "Dos veces; usa ToList() si quieres ejecutarla una sola",
+            "Una vez, LINQ guarda el resultado",
+            "Ninguna hasta llamar a Count()",
+            "Una vez por elemento de la lista"
+          ],
+          "correctIndex": 0,
+          "explanation": "La ejecución diferida repite la consulta en cada enumeración. Con datos caros o una base detrás, materializa con ToList()."
+        }
+      ]
+    },
+    "mod-csharp-4": {
+      "emoji": "⏳",
+      "exam": [
+        {
+          "question": "Necesitas descargar 5 URLs a la vez. ¿Qué haces?",
+          "options": [
+            "await cada descarga dentro de un foreach",
+            "Task.WaitAll(tareas)",
+            "Lanzar las 5 tareas y luego await Task.WhenAll(tareas)",
+            "Parallel.ForEach con .Result"
+          ],
+          "correctIndex": 2,
+          "explanation": "WhenAll espera todas sin bloquear el hilo. Un await por vuelta las hace una tras otra; WaitAll y .Result bloquean."
+        },
+        {
+          "question": "El usuario cierra la página mientras tu endpoint hace una consulta de 30 segundos. ¿Qué te deja dejar de trabajar?",
+          "options": [
+            "Pasar el CancellationToken de la acción a las llamadas async",
+            "Un try/catch alrededor de la consulta",
+            "Marcar la acción como async void",
+            "Thread.Abort()"
+          ],
+          "correctIndex": 0,
+          "explanation": "ASP.NET Core cancela ese token cuando el cliente se desconecta; si lo propagas, la consulta se detiene. try/catch no detiene nada por sí solo."
+        },
+        {
+          "question": "En una app de escritorio calculas un hash pesado y la ventana se congela. ¿Qué aplica la regla de la lección?",
+          "options": [
+            "Marcar el método async sin ningún await",
+            "Llamar .Result al terminar",
+            "Agregar Thread.Sleep entre pasos",
+            "await Task.Run(() => CalcularHash(datos))"
+          ],
+          "correctIndex": 3,
+          "explanation": "El trabajo de CPU no es E/S, así que la lección indica Task.Run para sacarlo del hilo de la ventana. async sin await sigue corriendo en el mismo hilo."
+        },
+        {
+          "question": "Escribes una librería NuGet que otros usarán en apps de escritorio. ¿Dónde aplica ConfigureAwait(false)?",
+          "options": [
+            "En los controladores de quien la usa",
+            "En los await internos de la librería",
+            "Solo en Main",
+            "En ningún lado: está obsoleto"
+          ],
+          "correctIndex": 1,
+          "explanation": "Evita volver al contexto del llamador (por ejemplo la UI) y reduce riesgo de deadlock. El código de la app que necesita la UI no lo usa."
+        },
+        {
+          "question": "Debes procesar 20 CSV, como máximo 3 a la vez. ¿Qué usas?",
+          "options": [
+            "SemaphoreSlim(3) con await WaitAsync() y Release() en finally",
+            "Un lock alrededor del procesamiento",
+            "Task.Delay entre archivos",
+            "Tres foreach en paralelo a mano"
+          ],
+          "correctIndex": 0,
+          "explanation": "El semáforo deja pasar 3 y hace esperar al resto sin bloquear hilos. lock permite uno solo; Release en finally evita fugas si hay error."
+        },
+        {
+          "question": "Un método async void lanza una excepción. ¿Qué pasa?",
+          "options": [
+            "La atrapa el try/catch del llamador",
+            "Se ignora en silencio",
+            "El llamador no puede atraparla y puede tumbar el proceso",
+            "Se guarda en la Task devuelta"
+          ],
+          "correctIndex": 2,
+          "explanation": "async void no devuelve Task, así que no hay dónde guardar el error ni a quién esperar. Con async Task el error viaja en la Task."
+        }
+      ]
+    },
+    "mod-csharp-5": {
+      "emoji": "🏫",
+      "exam": [
+        {
+          "question": "En la API escolar, Domain no referencia EF Core. ¿Qué ganas?",
+          "options": [
+            "Menos archivos en la solución",
+            "Consultas SQL más rápidas",
+            "No hace falta escribir DTOs",
+            "Pruebas las reglas de negocio sin base de datos y puedes cambiar de proveedor"
+          ],
+          "correctIndex": 3,
+          "explanation": "El dominio queda libre de detalles técnicos. Clean Architecture suele sumar proyectos, no quitarlos."
+        },
+        {
+          "question": "¿Por qué la lección modela Calificacion como value object (0-10) en vez de un double suelto?",
+          "options": [
+            "Valida el rango en un solo lugar: no puede existir una calificación de 12",
+            "Ocupa menos memoria",
+            "EF Core lo exige",
+            "Para poder usar LINQ"
+          ],
+          "correctIndex": 0,
+          "explanation": "Un value object se valida al crearse y no puede quedar inválido. Con double, cada servicio debería acordarse de revisar el rango."
+        },
+        {
+          "question": "El final es el promedio de tres parciales. Un alumno saca 6, 7 y 9. ¿Qué final calcula el servicio?",
+          "options": [
+            "7",
+            "7.33",
+            "9",
+            "22"
+          ],
+          "correctIndex": 1,
+          "explanation": "(6 + 7 + 9) / 3 = 7.33. 22 es la suma sin dividir; 7 aparece si divides enteros y se trunca el resultado."
+        },
+        {
+          "question": "Tienes dos días para escribir pruebas de la API. ¿Cómo las repartes?",
+          "options": [
+            "Solo pruebas de punta a punta",
+            "Solo pruebas manuales en Swagger",
+            "Muchos unitarios de servicios, algunos de integración y pocos de punta a punta",
+            "Mitad unitarios y mitad de punta a punta"
+          ],
+          "correctIndex": 2,
+          "explanation": "Los unitarios son rápidos y señalan el fallo exacto; los de punta a punta son lentos y frágiles. Esa es la pirámide de la lección."
+        },
+        {
+          "question": "El Dockerfile tiene dos FROM: sdk:8.0 y aspnet:8.0. ¿Para qué?",
+          "options": [
+            "Compilas con el SDK y la imagen final solo lleva el runtime",
+            "Para tener dos versiones de .NET",
+            "Docker exige dos etapas",
+            "Para correr tests y API en paralelo"
+          ],
+          "correctIndex": 0,
+          "explanation": "La imagen final no incluye compilador ni código fuente: pesa menos y expone menos. Es un build multi-stage."
+        },
+        {
+          "question": "¿Por qué AlumnosController devuelve AlumnoDTO y no la entidad Alumno?",
+          "options": [
+            "Porque las entidades no se pueden convertir a JSON",
+            "Para que la respuesta sea más lenta",
+            "Porque EF Core prohíbe devolver entidades",
+            "Controlas qué sale y evitas ciclos Alumno→Calificaciones→Alumno al serializar"
+          ],
+          "correctIndex": 3,
+          "explanation": "El DTO expone solo lo necesario (como PromedioGeneral) y corta las referencias circulares. Las entidades sí se serializan, pero con riesgos."
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,690 @@
+{
+  "track": {
+    "id": "oficio",
+    "title": "El oficio: lo que la IA no hace por ti",
+    "description": "Terminal, depuración, estructuras de datos, TDD, refactoring, patrones, cómo funciona la web, logs, entornos y arquitectura.",
+    "area": "fundamentos",
+    "color": "#5E5CE6",
+    "source": "xara",
+    "modules": [
+      {
+        "id": "of-m1",
+        "trackId": "oficio",
+        "title": "Tus herramientas de cada día",
+        "description": "La terminal y el depurador: lo que usas a diario y casi nadie te enseña bien.",
+        "level": "principiante",
+        "lessons": [
+          {
+            "id": "of-l1",
+            "title": "La terminal sin miedo",
+            "objective": "Moverte, crear, buscar y encadenar comandos en la terminal sin depender del ratón.",
+            "slides": [
+              {
+                "title": "🖥️ Por qué la terminal",
+                "content": "Servidores, Docker, Git, CI y los agentes de IA trabajan en terminal: casi nunca hay ventanas.\n\n- **Prompt**: donde escribes\n- **Comando + opciones + argumentos**: `ls -la src`\n- **Ruta absoluta** (`/home/lm/app`) vs **relativa** (`./src`, `../`)\n\nEn Windows tienes PowerShell; Git Bash y WSL te dan los comandos de Linux, que son los que verás en tutoriales y servidores."
+              },
+              {
+                "title": "📁 Moverte y manejar archivos",
+                "content": "```bash\npwd            # ¿dónde estoy?\nls -la         # qué hay (con ocultos)\ncd src/app     # entrar\ncd ..          # subir un nivel\nmkdir pruebas  # crear carpeta\ntouch nota.md  # crear archivo vacío\ncp a.txt b.txt # copiar\nmv b.txt docs/ # mover o renombrar\nrm nota.md     # borrar (sin papelera)\n```\n⚠️ `rm -rf` borra sin preguntar ni papelera: revisa la ruta dos veces."
+              },
+              {
+                "title": "🔗 Pipes y redirección",
+                "content": "La fuerza de la terminal es **encadenar** comandos pequeños:\n\n```bash\ncat app.log | grep ERROR | wc -l   # cuántos errores hay\nnpm test > resultado.txt           # guarda la salida (sobrescribe)\necho \"fin\" >> resultado.txt        # añade al final\nhistory | grep docker              # qué comando de docker usé\n```\n`|` pasa la salida de uno como entrada del siguiente."
+              },
+              {
+                "title": "⚡ Trucos que ahorran horas",
+                "content": "- **Tab** autocompleta rutas y comandos\n- **↑** repite comandos anteriores; **Ctrl+R** busca en el historial\n- **Ctrl+C** corta un proceso colgado\n- `man ls` o `ls --help`: la ayuda está en la propia terminal\n- `which node`: qué programa se ejecuta de verdad\n\nCuando un agente de IA te proponga un comando, léelo antes de pulsar Enter: tú eres quien responde por lo que borra."
+              }
+            ],
+            "videos": [
+              {
+                "kind": "video",
+                "title": "Buscar en YouTube: terminal linux comandos basicos para programadores espanol",
+                "url": "https://www.youtube.com/results?search_query=terminal+linux+comandos+basicos+para+programadores+espanol"
+              }
+            ],
+            "exerciseIds": [
+              "of-l1-e1"
+            ]
+          },
+          {
+            "id": "of-l2",
+            "title": "Depurar como profesional",
+            "objective": "Leer un error, reproducirlo y encontrar la causa con el depurador en lugar de adivinar.",
+            "slides": [
+              {
+                "title": "🧠 La mentalidad",
+                "content": "Depurar no es cambiar cosas hasta que funcione. Es un método:\n\n1. **Reproducir** el fallo siempre igual\n2. **Aislar**: el caso más pequeño que falla\n3. **Hipótesis**: \"creo que `total` llega vacío\"\n4. **Comprobar** con datos, no con fe\n5. **Arreglar** y añadir una prueba para que no vuelva"
+              },
+              {
+                "title": "📜 Leer el mensaje de error",
+                "content": "```text\nTypeError: Cannot read properties of undefined (reading 'nombre')\n    at mostrarUsuario (perfil.js:12:24)\n    at main (app.js:40:3)\n```\n- **Tipo**: TypeError, algo es `undefined`\n- **Qué**: se intentó leer `.nombre`\n- **Dónde**: `perfil.js`, línea 12, columna 24\n- La lista de abajo es la **traza**: quién llamó a quién. Empieza por la primera línea que sea código tuyo."
+              },
+              {
+                "title": "🔴 El depurador",
+                "content": "En VS Code haz clic a la izquierda del número de línea: eso es un **breakpoint**. Ejecuta con F5 y el programa se **pausa** ahí.\n\n- **Variables**: ves el valor real de cada una\n- **Step over** (F10): siguiente línea\n- **Step into** (F11): entrar en la función\n- **Watch**: vigilar una expresión\n- **Breakpoint condicional**: para solo si `id === 42`\n\nUn breakpoint te enseña más que diez `console.log`."
+              },
+              {
+                "title": "🦆 Técnicas que funcionan",
+                "content": "- **Patito de goma**: explica el código línea a línea en voz alta (o a XARA). Al explicarlo, ves el fallo.\n- **Búsqueda binaria**: comenta la mitad del código o vuelve a un commit de hace días; si falla, el problema está en esa mitad. `git bisect` lo automatiza.\n- **Log con contexto**: `console.log({ id, total })` en vez de `console.log(\"aquí\")`\n\nAl buscar en internet, copia el mensaje exacto, sin tus nombres de variables."
+              }
+            ],
+            "videos": [
+              {
+                "kind": "video",
+                "title": "Buscar en YouTube: como usar el debugger de vs code breakpoints espanol",
+                "url": "https://www.youtube.com/results?search_query=como+usar+el+debugger+de+vs+code+breakpoints+espanol"
+              }
+            ],
+            "exerciseIds": []
+          }
+        ]
+      },
+      {
+        "id": "of-m2",
+        "trackId": "oficio",
+        "title": "Estructuras de datos y algoritmos clásicos",
+        "description": "Pilas, colas, árboles, grafos, ordenación y búsqueda: lo que preguntan en entrevistas y usas sin darte cuenta.",
+        "level": "intermedio",
+        "lessons": [
+          {
+            "id": "of-l3",
+            "title": "Pilas, colas, árboles y grafos",
+            "objective": "Elegir la estructura adecuada según cómo entran y salen los datos.",
+            "slides": [
+              {
+                "title": "📚 Pila (último en entrar, primero en salir)",
+                "content": "Como una pila de platos: solo tocas el de arriba.\n\n```js\nconst pila = []\npila.push('a'); pila.push('b')\npila.pop() // 'b'\n```\nLa usas sin saberlo: el botón **Deshacer**, el historial de **Atrás** del navegador y la **pila de llamadas** de las funciones (la que ves en la traza de un error)."
+              },
+              {
+                "title": "🚶 Cola (primero en entrar, primero en salir)",
+                "content": "Como la fila del banco: se atiende al que llegó primero.\n\n```js\nconst cola = []\ncola.push('pedido1'); cola.push('pedido2')\ncola.shift() // 'pedido1'\n```\nEjemplos reales: pedidos pendientes, correos por enviar, tareas en segundo plano. En sistemas grandes se usan colas dedicadas como RabbitMQ o SQS."
+              },
+              {
+                "title": "🌳 Árboles",
+                "content": "Datos con jerarquía: un **nodo raíz** con hijos, y cada hijo con los suyos.\n\n- El **DOM** de una página web\n- Las **carpetas** de tu disco\n- Un **árbol binario de búsqueda**: a la izquierda los menores, a la derecha los mayores, y buscar cuesta O(log n)\n\nLos **índices** de una base de datos usan árboles (B-tree): por eso buscar por un campo indexado es tan rápido."
+              },
+              {
+                "title": "🕸️ Grafos",
+                "content": "Nodos unidos por **aristas**, sin jerarquía fija.\n\n- Amigos en una red social\n- Ciudades y carreteras (con **peso**: los kilómetros)\n- Dependencias entre paquetes de npm\n\nDos recorridos clásicos: **BFS** (por niveles, sirve para el camino más corto sin pesos) y **DFS** (profundiza primero, sirve para detectar ciclos). Google Maps usa variantes de **Dijkstra** sobre un grafo con pesos."
+              }
+            ],
+            "videos": [
+              {
+                "kind": "video",
+                "title": "Buscar en YouTube: estructuras de datos pilas colas arboles grafos explicado espanol",
+                "url": "https://www.youtube.com/results?search_query=estructuras+de+datos+pilas+colas+arboles+grafos+explicado+espanol"
+              }
+            ],
+            "exerciseIds": []
+          },
+          {
+            "id": "of-l4",
+            "title": "Ordenar y buscar",
+            "objective": "Saber qué cuesta ordenar y buscar, y cuándo la búsqueda binaria cambia el juego.",
+            "slides": [
+              {
+                "title": "🔍 Buscar",
+                "content": "- **Búsqueda lineal**: miras uno por uno. O(n). Funciona siempre.\n- **Búsqueda binaria**: solo si está **ordenado**. Miras el centro y descartas la mitad cada vez. O(log n).\n\nEn una lista de 1 000 000 de elementos: la lineal puede necesitar 1 000 000 de pasos; la binaria, unos **20**."
+              },
+              {
+                "title": "🧮 Búsqueda binaria en código",
+                "content": "```js\nfunction buscar(lista, objetivo) {\n  let ini = 0, fin = lista.length - 1\n  while (ini <= fin) {\n    const mitad = Math.floor((ini + fin) / 2)\n    if (lista[mitad] === objetivo) return mitad\n    if (lista[mitad] < objetivo) ini = mitad + 1\n    else fin = mitad - 1\n  }\n  return -1\n}\n```\nError típico de entrevista: olvidar el `<=` o el `+ 1` y quedarse en un bucle infinito."
+              },
+              {
+                "title": "📊 Ordenar",
+                "content": "| Algoritmo | Coste | Idea |\n|---|---|---|\n| Burbuja | O(n²) | intercambia vecinos |\n| Inserción | O(n²) | bueno con casi ordenados |\n| Merge sort | O(n log n) | divide, ordena, mezcla |\n| Quick sort | O(n log n) medio | parte por un pivote |\n\nEn el trabajo usas el `sort` del lenguaje (ya es O(n log n)). En entrevistas te piden **explicar** merge o quick sort."
+              },
+              {
+                "title": "⚠️ La trampa del sort en JavaScript",
+                "content": "```js\n[10, 9, 1].sort()            // [1, 10, 9] 😱\n[10, 9, 1].sort((a, b) => a - b) // [1, 9, 10] ✅\n```\nSin función de comparación, `sort` compara como **texto**. Y además **modifica** el array original: usa `toSorted()` o copia antes si no quieres eso."
+              }
+            ],
+            "videos": [
+              {
+                "kind": "video",
+                "title": "Buscar en YouTube: busqueda binaria y algoritmos de ordenamiento explicado espanol",
+                "url": "https://www.youtube.com/results?search_query=busqueda+binaria+y+algoritmos+de+ordenamiento+explicado+espanol"
+              }
+            ],
+            "exerciseIds": [
+              "of-l4-e1"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "of-m3",
+        "trackId": "oficio",
+        "title": "Código que dura",
+        "description": "Pruebas primero, refactorizar sin miedo y los patrones de diseño que vas a encontrar en cualquier proyecto.",
+        "level": "intermedio",
+        "lessons": [
+          {
+            "id": "of-l5",
+            "title": "TDD: la prueba primero",
+            "objective": "Aplicar el ciclo rojo, verde, refactor para diseñar código que se puede comprobar.",
+            "slides": [
+              {
+                "title": "🔴🟢🔵 El ciclo",
+                "content": "**Test Driven Development**: escribes la prueba **antes** que el código.\n\n1. 🔴 **Rojo**: una prueba pequeña que falla\n2. 🟢 **Verde**: el código mínimo para que pase\n3. 🔵 **Refactor**: lo limpias con la prueba protegiéndote\n\nY repites. Cada vuelta dura minutos, no horas."
+              },
+              {
+                "title": "🧪 Un ejemplo",
+                "content": "```js\n// 1. Rojo\ntest('aplica 10% a partir de 100', () => {\n  expect(descuento(150)).toBe(15)\n  expect(descuento(50)).toBe(0)\n})\n// 2. Verde\nconst descuento = (total) => (total >= 100 ? total * 0.1 : 0)\n```\nLa prueba dejó claro el requisito (\"a partir de 100\" incluye el 100) antes de escribir una línea de lógica."
+              },
+              {
+                "title": "🤖 TDD con IA",
+                "content": "Con asistentes de IA, TDD vale aún más:\n\n- Tú escribes las pruebas: son la **especificación**\n- La IA propone la implementación\n- Las pruebas deciden si sirve, no la confianza del modelo\n\nSi pides a la IA las pruebas **y** el código a la vez, puede escribir pruebas que confirman su propio error."
+              },
+              {
+                "title": "🏛️ La pirámide de pruebas",
+                "content": "- **Unitarias** (muchas, rápidas): una función aislada\n- **Integración** (algunas): varias piezas juntas, por ejemplo tu API con la base de datos\n- **End-to-end** (pocas, lentas): un navegador real haciendo clic, con Playwright o Cypress\n\nUna buena prueba dice qué comportamiento protege en su nombre y falla por una sola razón."
+              }
+            ],
+            "videos": [
+              {
+                "kind": "video",
+                "title": "Buscar en YouTube: TDD test driven development explicado con ejemplo espanol",
+                "url": "https://www.youtube.com/results?search_query=TDD+test+driven+development+explicado+con+ejemplo+espanol"
+              }
+            ],
+            "exerciseIds": []
+          },
+          {
+            "id": "of-l6",
+            "title": "Refactoring y deuda técnica",
+            "objective": "Mejorar código existente sin cambiar lo que hace y explicar la deuda técnica a tu equipo.",
+            "slides": [
+              {
+                "title": "♻️ Qué es refactorizar",
+                "content": "Cambiar la **estructura** del código **sin cambiar su comportamiento**.\n\nSí refactoriza: antes de añadir una función a código enredado, al arreglar un bug en una zona confusa, cuando copias lo mismo por tercera vez.\n\nNo refactorices: sin pruebas que te protejan, justo antes de una entrega, o código que se va a tirar."
+              },
+              {
+                "title": "🛠️ Técnicas de todos los días",
+                "content": "```js\n// Antes\nif (u.t === 2 && u.d > 30) precio *= 0.85\n// Después\nconst ES_PREMIUM = 2\nconst DIAS_FIDELIDAD = 30\nconst esFiel = u.tipo === ES_PREMIUM && u.dias > DIAS_FIDELIDAD\nif (esFiel) precio *= 0.85\n```\n- **Renombrar** para que se entienda\n- **Extraer función** cuando un bloque hace una cosa con nombre propio\n- **Quitar números mágicos**\n- **Guard clauses**: `return` temprano en vez de `if` anidados"
+              },
+              {
+                "title": "💳 Deuda técnica",
+                "content": "Es tomar un atajo hoy que **cobra intereses** mañana: cada cambio en esa zona cuesta más.\n\n- **Deliberada**: \"lanzamos sin caché y la añadimos la próxima semana\" (aceptable si se anota)\n- **Accidental**: nadie se dio cuenta\n\nCómo gestionarla: apuntarla en tickets, dedicar un porcentaje fijo de cada sprint y aplicar la regla del boy scout: deja el código un poco mejor de lo que lo encontraste."
+              },
+              {
+                "title": "🗣️ Explicarla sin tecnicismos",
+                "content": "A un responsable de producto no le digas \"el código está feo\". Dile el coste:\n\n> \"Cada cambio en el carrito tarda 3 días en vez de 1 porque está duplicado en 4 sitios. Si dedicamos 2 días a unificarlo, las próximas 5 tareas salen el doble de rápido.\"\n\nEso es lo que distingue a alguien que programa de alguien que hace ingeniería."
+              }
+            ],
+            "videos": [
+              {
+                "kind": "video",
+                "title": "Buscar en YouTube: refactoring y deuda tecnica explicado espanol",
+                "url": "https://www.youtube.com/results?search_query=refactoring+y+deuda+tecnica+explicado+espanol"
+              }
+            ],
+            "exerciseIds": [
+              "of-l6-e1"
+            ]
+          },
+          {
+            "id": "of-l7",
+            "title": "Patrones que vas a ver: Observer, Strategy y Factory",
+            "objective": "Reconocer tres patrones de diseño en código real y saber cuándo usarlos.",
+            "slides": [
+              {
+                "title": "🧩 Qué es un patrón",
+                "content": "Una **solución con nombre** a un problema que se repite. No es código para copiar: es vocabulario.\n\nDecir \"aquí uso Strategy\" ahorra diez minutos de explicación en un code review. Vienen del libro de 1994 del \"Gang of Four\", pero los ves a diario en React, Express o Spring."
+              },
+              {
+                "title": "👀 Observer (publicar y suscribirse)",
+                "content": "Un objeto avisa a todos los que se suscribieron cuando algo cambia.\n\n```js\nboton.addEventListener('click', guardar)\nboton.addEventListener('click', registrarMetrica)\n```\nEl botón no sabe quién lo escucha. Lo ves en eventos del navegador, en el `useEffect` de React, en sistemas de notificaciones y en las colas de mensajes."
+              },
+              {
+                "title": "🎯 Strategy",
+                "content": "Cambiar el **algoritmo** sin tocar a quien lo usa.\n\n```js\nconst envios = {\n  normal: (kg) => 5 + kg,\n  express: (kg) => 12 + kg * 2\n}\nconst coste = envios[tipo](peso)\n```\nAdiós al `if/else` gigante: añadir un tipo de envío nuevo es añadir una línea, sin tocar el resto."
+              },
+              {
+                "title": "🏭 Factory",
+                "content": "Una función que **crea** objetos y esconde los detalles de cómo.\n\n```js\nfunction crearNotificador(canal) {\n  if (canal === 'email') return new Email()\n  if (canal === 'sms') return new Sms()\n  throw new Error(`Canal desconocido: ${canal}`)\n}\n```\nQuien la usa no sabe qué clase concreta recibe. Útil con varias implementaciones de lo mismo, o para dar un objeto falso en las pruebas."
+              }
+            ],
+            "videos": [
+              {
+                "kind": "video",
+                "title": "Buscar en YouTube: patrones de diseno observer strategy factory explicado espanol",
+                "url": "https://www.youtube.com/results?search_query=patrones+de+diseno+observer+strategy+factory+explicado+espanol"
+              }
+            ],
+            "exerciseIds": []
+          }
+        ]
+      },
+      {
+        "id": "of-m4",
+        "trackId": "oficio",
+        "title": "La web por dentro",
+        "description": "Qué pasa entre el navegador y el servidor, por qué aparece el error de CORS y dos herramientas finas: regex y control de eventos.",
+        "level": "intermedio",
+        "lessons": [
+          {
+            "id": "of-l8",
+            "title": "Del navegador al servidor: DNS, IP, puertos y HTTP",
+            "objective": "Explicar paso a paso qué ocurre al escribir una dirección web y leer una petición HTTP.",
+            "slides": [
+              {
+                "title": "🌍 El viaje de una petición",
+                "content": "1. Escribes `tienda.com`\n2. **DNS** traduce el nombre a una **IP** (como la agenda del móvil: nombre → número)\n3. Tu navegador conecta a esa IP en el **puerto** 443 (HTTPS)\n4. Se negocia el cifrado **TLS**\n5. Envía una **petición HTTP**\n6. El servidor responde con un **código** y el contenido"
+              },
+              {
+                "title": "🚪 IP y puertos",
+                "content": "La **IP** es la dirección del edificio; el **puerto**, el número de la puerta.\n\n| Puerto | Uso |\n|---|---|\n| 80 | HTTP |\n| 443 | HTTPS |\n| 22 | SSH |\n| 5432 | PostgreSQL |\n| 3000 / 5173 | tu servidor de desarrollo |\n\n`localhost` (127.0.0.1) es tu propio equipo."
+              },
+              {
+                "title": "📨 Petición y respuesta HTTP",
+                "content": "```http\nPOST /api/pedidos HTTP/1.1\nHost: tienda.com\nContent-Type: application/json\nAuthorization: Bearer <token>\n\n{ \"producto\": 7, \"cantidad\": 2 }\n```\nRespuesta: `201 Created` y el pedido en JSON.\n\nCódigos que debes saber: **200** OK, **201** creado, **400** petición mal hecha, **401** sin identificar, **403** sin permiso, **404** no existe, **429** demasiadas peticiones, **500** error del servidor."
+              },
+              {
+                "title": "🛠️ Diagnosticar",
+                "content": "- **DevTools → Network** (F12): cada petición, sus cabeceras, tiempos y respuesta\n- `curl -i https://tienda.com/api/salud` desde la terminal\n- `ping` y `nslookup tienda.com` para ver si responde y qué IP tiene\n\nAnte \"la web no carga\", pregunta en orden: ¿resuelve el DNS? ¿responde el servidor? ¿qué código devuelve?"
+              }
+            ],
+            "videos": [
+              {
+                "kind": "video",
+                "title": "Buscar en YouTube: que pasa cuando escribes una url dns http explicado espanol",
+                "url": "https://www.youtube.com/results?search_query=que+pasa+cuando+escribes+una+url+dns+http+explicado+espanol"
+              }
+            ],
+            "exerciseIds": []
+          },
+          {
+            "id": "of-l9",
+            "title": "CORS sin dolor",
+            "objective": "Entender por qué el navegador bloquea peticiones entre orígenes y configurarlo bien en el servidor.",
+            "slides": [
+              {
+                "title": "🧱 El error famoso",
+                "content": "```text\nAccess to fetch at 'https://api.tienda.com' from origin\n'http://localhost:5173' has been blocked by CORS policy\n```\nNo es un fallo de tu código ni del servidor caído: es el **navegador** protegiéndote. Por defecto, una página solo puede leer respuestas de su **mismo origen** (protocolo + dominio + puerto)."
+              },
+              {
+                "title": "🔑 Quién lo arregla",
+                "content": "CORS se arregla en el **servidor**, que declara qué orígenes acepta:\n\n```js\napp.use(cors({ origin: ['https://tienda.com', 'http://localhost:5173'] }))\n```\nEl servidor responde con `Access-Control-Allow-Origin`. Para métodos como PUT o DELETE, o cabeceras propias, el navegador manda antes una petición **OPTIONS** (preflight) para preguntar."
+              },
+              {
+                "title": "⚠️ Lo que no debes hacer",
+                "content": "- `origin: '*'` junto con cookies o credenciales: el navegador lo rechaza y además abre la puerta a cualquier web\n- Instalar una extensión que \"quita CORS\": funciona en tu equipo y falla con todos tus usuarios\n\nPostman o curl no aplican CORS: que funcione ahí no prueba que funcione en el navegador."
+              }
+            ],
+            "videos": [
+              {
+                "kind": "video",
+                "title": "Buscar en YouTube: que es CORS y como solucionarlo explicado espanol",
+                "url": "https://www.youtube.com/results?search_query=que+es+CORS+y+como+solucionarlo+explicado+espanol"
+              }
+            ],
+            "exerciseIds": [
+              "of-l9-e1"
+            ]
+          },
+          {
+            "id": "of-l10",
+            "title": "Expresiones regulares útiles",
+            "objective": "Leer y escribir expresiones regulares sencillas para validar y buscar texto.",
+            "slides": [
+              {
+                "title": "🔎 Para qué sirven",
+                "content": "Una **regex** describe un **patrón** de texto: validar un código postal, encontrar todas las fechas de un log, reemplazar espacios dobles.\n\nNo la uses para todo: para un email complejo o para HTML hay librerías. La regla: si nadie del equipo puede leerla en 10 segundos, es demasiado larga."
+              },
+              {
+                "title": "🔤 Las piezas",
+                "content": "| Pieza | Significa |\n|---|---|\n| `.` | cualquier carácter |\n| `\\d` / `\\w` / `\\s` | dígito / letra o número / espacio |\n| `[aeiou]` | uno de esos |\n| `*` `+` `?` | 0 o más / 1 o más / 0 o 1 |\n| `{3}` | exactamente 3 |\n| `^` `$` | inicio / fin |\n| `( )` | grupo que puedes capturar |"
+              },
+              {
+                "title": "🧪 Ejemplos reales",
+                "content": "```js\n/^\\d{5}$/.test('28013')          // código postal de 5 dígitos\n/^[A-Z]{3}-\\d{4}$/.test('ABC-1234') // formato de matrícula\n'2026-10-25'.match(/(\\d{4})-(\\d{2})-(\\d{2})/) // año, mes, día\n'hola   mundo'.replace(/\\s+/g, ' ')   // espacios dobles a uno\n```\nPruébalas en regex101.com: te explica cada pieza. Y pide a la IA que te explique una regex antes de pegarla."
+              }
+            ],
+            "videos": [
+              {
+                "kind": "video",
+                "title": "Buscar en YouTube: expresiones regulares regex desde cero espanol",
+                "url": "https://www.youtube.com/results?search_query=expresiones+regulares+regex+desde+cero+espanol"
+              }
+            ],
+            "exerciseIds": []
+          },
+          {
+            "id": "of-l11",
+            "title": "Eventos, debounce, throttle y condiciones de carrera",
+            "objective": "Controlar eventos que se disparan muchas veces y evitar resultados cruzados en código asíncrono.",
+            "slides": [
+              {
+                "title": "⚡ Programar con eventos",
+                "content": "En una interfaz el código no corre de arriba abajo: **reacciona** a eventos (clic, tecla, scroll, respuesta del servidor).\n\n```js\ninput.addEventListener('input', (e) => buscar(e.target.value))\n```\nProblema: al escribir \"zapatos\" se lanzan **7 búsquedas** al servidor, una por letra."
+              },
+              {
+                "title": "⏳ Debounce",
+                "content": "Espera a que el usuario **deje de** disparar el evento durante un tiempo.\n\n```js\nfunction debounce(fn, ms) {\n  let t\n  return (...args) => {\n    clearTimeout(t)\n    t = setTimeout(() => fn(...args), ms)\n  }\n}\ninput.addEventListener('input', debounce(e => buscar(e.target.value), 300))\n```\nCon \"zapatos\": **1** búsqueda, 300 ms después de la última tecla. Ideal para buscadores y autoguardado."
+              },
+              {
+                "title": "🚦 Throttle",
+                "content": "Ejecuta **como máximo una vez** cada cierto tiempo, aunque el evento siga llegando.\n\nIdeal para **scroll**, **redimensionar** la ventana o mover el ratón: actualizas la posición cada 100 ms en vez de 60 veces por segundo.\n\nResumen: debounce = \"cuando termines\"; throttle = \"cada tanto, mientras sigas\"."
+              },
+              {
+                "title": "🏁 Condiciones de carrera",
+                "content": "Escribes \"za\" y luego \"zap\". La respuesta de \"za\" llega **después** que la de \"zap\" y pisa el resultado correcto.\n\n```js\nlet ultima = 0\nasync function buscar(texto) {\n  const mia = ++ultima\n  const datos = await api(texto)\n  if (mia !== ultima) return // llegó tarde: se ignora\n  pintar(datos)\n}\n```\nOtra opción: cancelar la petición anterior con `AbortController`."
+              }
+            ],
+            "videos": [
+              {
+                "kind": "video",
+                "title": "Buscar en YouTube: debounce y throttle javascript explicado espanol",
+                "url": "https://www.youtube.com/results?search_query=debounce+y+throttle+javascript+explicado+espanol"
+              }
+            ],
+            "exerciseIds": []
+          }
+        ]
+      },
+      {
+        "id": "of-m5",
+        "trackId": "oficio",
+        "title": "Tu código en producción",
+        "description": "Logs que sirven, entornos y configuración segura, y cómo se organiza una aplicación por dentro.",
+        "level": "intermedio",
+        "lessons": [
+          {
+            "id": "of-l12",
+            "title": "Logs y observabilidad",
+            "objective": "Registrar lo justo, con contexto y nivel, para saber qué pasó en producción sin poder depurar.",
+            "slides": [
+              {
+                "title": "🔭 Por qué",
+                "content": "En producción no puedes poner un breakpoint. Lo único que sabes de lo que pasó es lo que **registraste**.\n\nNiveles: **DEBUG** (detalle, solo en desarrollo) · **INFO** (algo normal: pedido creado) · **WARN** (raro pero sigue) · **ERROR** (falló una operación) · **FATAL** (la app no puede seguir)."
+              },
+              {
+                "title": "✅ Qué registrar y qué no",
+                "content": "Sí: inicio y fin de las operaciones clave, errores con su traza, llamadas a servicios externos y cuánto tardaron, cambios de estado (pago aprobado).\n\n**Nunca**: contraseñas, tokens, números de tarjeta, datos personales completos. Un log se lee por muchas personas y se guarda mucho tiempo."
+              },
+              {
+                "title": "🧾 Logs estructurados",
+                "content": "```js\n// Mal\nconsole.log('error en pago')\n// Bien\nlogger.error({ pedidoId, usuarioId, importe, err: err.message, requestId }, 'pago rechazado')\n```\nEn JSON se pueden **filtrar** (\"todos los errores del pedido 812\"). El **requestId** (id de correlación) une todas las líneas de una misma petición aunque pase por varios servicios."
+              },
+              {
+                "title": "📈 Más allá de los logs",
+                "content": "- **Métricas**: números en el tiempo (peticiones por minuto, latencia, % de errores). Prometheus y Grafana.\n- **Trazas**: el recorrido de una petición entre servicios. OpenTelemetry.\n- **Alertas**: que te avisen cuando el % de errores sube, no cuando un cliente se queja.\n\nSentry agrupa los errores de tu app con su traza y el navegador del usuario."
+              }
+            ],
+            "videos": [
+              {
+                "kind": "video",
+                "title": "Buscar en YouTube: logging buenas practicas observabilidad explicado espanol",
+                "url": "https://www.youtube.com/results?search_query=logging+buenas+practicas+observabilidad+explicado+espanol"
+              }
+            ],
+            "exerciseIds": []
+          },
+          {
+            "id": "of-l13",
+            "title": "Entornos, variables y feature flags",
+            "objective": "Separar desarrollo, pruebas y producción y configurar la app sin meter secretos en el código.",
+            "slides": [
+              {
+                "title": "🏗️ Tres entornos",
+                "content": "- **Desarrollo**: tu equipo, datos falsos, se rompe sin pasar nada\n- **Staging / QA**: copia de producción para probar antes de publicar\n- **Producción**: usuarios reales, datos reales, cuidado\n\nRegla de oro: **nunca** pruebes contra la base de datos de producción."
+              },
+              {
+                "title": "🔧 Variables de entorno",
+                "content": "El mismo código, distinta configuración según dónde corre:\n\n```bash\n# .env (nunca se sube a Git)\nDATABASE_URL=postgres://localhost/tienda_dev\nSTRIPE_KEY=sk_test_...\n```\n```js\nconst db = conectar(process.env.DATABASE_URL)\n```\nSube un `.env.example` **sin valores reales** para que el equipo sepa qué variables hacen falta. Si una clave se filtra, se **rota** (se cambia), no basta con borrarla del repo."
+              },
+              {
+                "title": "🚩 Feature flags",
+                "content": "Un interruptor para activar una función **sin desplegar de nuevo**:\n\n```js\nif (flags.nuevoCheckout) mostrarCheckoutNuevo()\nelse mostrarCheckoutViejo()\n```\n- Publicas el código apagado y lo enciendes cuando quieras\n- Lo activas solo para el 5% de usuarios y miras las métricas\n- Si algo falla, lo apagas en segundos\n\nBorra el flag cuando ya no haga falta: los flags viejos son deuda técnica."
+              }
+            ],
+            "videos": [
+              {
+                "kind": "video",
+                "title": "Buscar en YouTube: variables de entorno y feature flags explicado espanol",
+                "url": "https://www.youtube.com/results?search_query=variables+de+entorno+y+feature+flags+explicado+espanol"
+              }
+            ],
+            "exerciseIds": [
+              "of-l13-e1"
+            ]
+          },
+          {
+            "id": "of-l14",
+            "title": "Arquitectura: MVC, capas y hexagonal",
+            "objective": "Organizar una aplicación en partes con responsabilidades claras y explicar por qué.",
+            "slides": [
+              {
+                "title": "🧱 MVC",
+                "content": "- **Modelo**: los datos y sus reglas (un `Pedido` no puede tener cantidad negativa)\n- **Vista**: lo que ve el usuario\n- **Controlador**: recibe la petición, llama al modelo y elige la vista\n\nLo usan Rails, Laravel, Django y Spring MVC. La idea clave: la vista **no** habla directamente con la base de datos."
+              },
+              {
+                "title": "🍰 Capas",
+                "content": "```text\nRutas / Controladores   ← HTTP: entra y sale\nServicios               ← reglas de negocio\nRepositorios            ← acceso a datos\nBase de datos\n```\nCada capa solo habla con la de abajo. Cambiar de PostgreSQL a otra base solo toca los repositorios; la regla \"envío gratis desde 50 €\" vive en un único servicio."
+              },
+              {
+                "title": "⬡ Hexagonal (puertos y adaptadores)",
+                "content": "El **núcleo** con las reglas del negocio no conoce nada externo. Define **puertos** (interfaces) como `RepositorioPedidos` o `Pasarela de pago`, y fuera hay **adaptadores**: uno para PostgreSQL, otro para Stripe, otro falso para las pruebas.\n\nVentaja: pruebas el negocio sin base de datos ni internet, y cambias de proveedor sin tocar el núcleo."
+              },
+              {
+                "title": "⚖️ Monolito o microservicios",
+                "content": "- **Monolito**: una sola aplicación. Simple de desplegar y depurar. Lo correcto para empezar.\n- **Microservicios**: servicios pequeños que se despliegan por separado. Escalan equipos grandes, pero suman red, fallos parciales y observabilidad compleja.\n\nEn una entrevista, decir \"empezaría con un monolito bien separado en módulos\" y justificarlo suele sumar más que pedir microservicios."
+              }
+            ],
+            "videos": [
+              {
+                "kind": "video",
+                "title": "Buscar en YouTube: arquitectura de software mvc capas hexagonal explicado espanol",
+                "url": "https://www.youtube.com/results?search_query=arquitectura+de+software+mvc+capas+hexagonal+explicado+espanol"
+              }
+            ],
+            "exerciseIds": []
+          }
+        ]
+      }
+    ]
+  },
+  "exercises": [
+    {
+      "id": "of-l1-e1",
+      "moduleId": "of-m1",
+      "lessonId": "of-l1",
+      "title": "Investiga un log desde la terminal",
+      "description": "Tienes `app.log` con miles de líneas como `2026-10-25 10:31:02 ERROR pago pedido=812 motivo=saldo`.\n\nEscribe los comandos (uno por pregunta) para:\n1. Contar cuántas líneas tienen ERROR\n2. Ver solo las 5 últimas líneas con ERROR\n3. Guardar todas las líneas de `pedido=812` en `pedido812.txt`\n\nExplica en una frase qué hace cada pipe que uses.",
+      "objective": "Encadenar comandos con pipes y redirección para responder preguntas sobre un archivo.",
+      "difficulty": "principiante",
+      "kind": "guiado",
+      "aiPolicy": "ia_tutor",
+      "constraints": [
+        "Un comando por pregunta",
+        "Explica cada pipe"
+      ],
+      "hints": [
+        "grep filtra líneas que contienen un texto",
+        "wc -l cuenta líneas y tail -n 5 muestra las últimas",
+        "> guarda la salida en un archivo"
+      ],
+      "solution": "1) grep ERROR app.log | wc -l  2) grep ERROR app.log | tail -n 5  3) grep \"pedido=812\" app.log > pedido812.txt. El pipe pasa la salida de grep como entrada del siguiente comando.",
+      "criteria": [
+        "Usa grep para filtrar",
+        "Cuenta con wc -l o grep -c",
+        "Usa tail para las últimas líneas",
+        "Redirige con > al archivo pedido812.txt"
+      ],
+      "commonErrors": [
+        "Usar >> y acumular resultados de ejecuciones anteriores",
+        "Olvidar las comillas en el patrón"
+      ],
+      "interviewQuestion": "Un servicio da errores en producción y solo tienes SSH. ¿Cómo investigas el log?",
+      "resources": [
+        {
+          "kind": "doc",
+          "title": "GNU grep",
+          "url": "https://www.gnu.org/software/grep/manual/grep.html"
+        }
+      ],
+      "trackId": "oficio",
+      "theory": false
+    },
+    {
+      "id": "of-l4-e1",
+      "moduleId": "of-m2",
+      "lessonId": "of-l4",
+      "title": "Búsqueda binaria con primera aparición",
+      "description": "Escribe `primeraPosicion(lista, objetivo)` que, en una lista **ordenada** con posibles repetidos, devuelva el índice de la **primera** aparición del objetivo, o -1 si no está. Debe ser O(log n).\n\nEjemplo: `primeraPosicion([1, 3, 3, 3, 7], 3)` devuelve `1`.\n\nExplica por qué tu bucle termina siempre.",
+      "objective": "Adaptar la búsqueda binaria a una variante típica de entrevista.",
+      "difficulty": "intermedio",
+      "kind": "entrevista",
+      "aiPolicy": "sin_ia",
+      "constraints": [
+        "O(log n)",
+        "Sin usar indexOf ni findIndex"
+      ],
+      "hints": [
+        "Parte de la búsqueda binaria clásica",
+        "Cuando encuentres el objetivo, no pares: guarda la posición",
+        "Después de guardarla, sigue buscando en la mitad izquierda"
+      ],
+      "solution": "Binaria con ini y fin; si lista[mitad] === objetivo se guarda resultado = mitad y se hace fin = mitad - 1; si es menor ini = mitad + 1; si es mayor fin = mitad - 1. Devuelve resultado (inicial -1). Termina porque el intervalo se reduce en cada vuelta.",
+      "criteria": [
+        "Es O(log n)",
+        "Devuelve la primera aparición con repetidos",
+        "Devuelve -1 si no está",
+        "Justifica que el bucle termina"
+      ],
+      "commonErrors": [
+        "Devolver la primera coincidencia que encuentra, no la primera posición",
+        "Bucle infinito por no mover ini o fin"
+      ],
+      "interviewQuestion": "¿Cómo encontrarías el rango completo de apariciones de un valor en una lista ordenada?",
+      "resources": [],
+      "trackId": "oficio",
+      "theory": false
+    },
+    {
+      "id": "of-l6-e1",
+      "moduleId": "of-m3",
+      "lessonId": "of-l6",
+      "title": "Refactoriza sin cambiar el comportamiento",
+      "description": "Refactoriza esta función sin cambiar lo que devuelve:\n\n```js\nfunction p(u, t) {\n  if (u) {\n    if (u.t === 2) {\n      if (t > 100) return t * 0.8\n      else return t * 0.9\n    } else {\n      if (t > 100) return t * 0.95\n      return t\n    }\n  }\n  return t\n}\n```\nUsa nombres claros, constantes en lugar de números mágicos y guard clauses. Escribe antes 4 casos de prueba que demuestren que el comportamiento no cambió.",
+      "objective": "Aplicar renombrado, constantes y guard clauses protegido por pruebas.",
+      "difficulty": "intermedio",
+      "kind": "practica_autonoma",
+      "aiPolicy": "ia_tutor",
+      "constraints": [
+        "Mismos resultados para cualquier entrada",
+        "Pruebas escritas antes del cambio"
+      ],
+      "hints": [
+        "Primero escribe pruebas para usuario nulo, premium y normal, por encima y por debajo de 100",
+        "Un return temprano para el caso sin usuario quita un nivel de if",
+        "Pon nombre a 2, 100, 0.8, 0.9 y 0.95"
+      ],
+      "solution": "const PREMIUM = 2, UMBRAL = 100. function precioFinal(usuario, total) { if (!usuario) return total; const grande = total > UMBRAL; if (usuario.tipo === PREMIUM) return total * (grande ? 0.8 : 0.9); return grande ? total * 0.95 : total }. Ojo: el original lee u.t, así que el nombre del campo solo cambia si cambia el dato.",
+      "criteria": [
+        "Las pruebas cubren usuario nulo, premium y normal",
+        "Elimina los números mágicos",
+        "Usa al menos una guard clause",
+        "El comportamiento es idéntico"
+      ],
+      "commonErrors": [
+        "Cambiar u.t por u.tipo sin que el dato cambie",
+        "Convertir > 100 en >= 100"
+      ],
+      "interviewQuestion": "¿Cómo te aseguras de que un refactor no rompe nada?",
+      "resources": [
+        {
+          "kind": "doc",
+          "title": "Catálogo de refactorings de Martin Fowler",
+          "url": "https://refactoring.com/catalog/"
+        }
+      ],
+      "trackId": "oficio",
+      "theory": false
+    },
+    {
+      "id": "of-l9-e1",
+      "moduleId": "of-m4",
+      "lessonId": "of-l9",
+      "title": "Diagnostica un error de CORS",
+      "description": "Tu frontend en `https://app.mitienda.com` llama con `fetch` y `credentials: \"include\"` a `https://api.mitienda.com/carrito`. El navegador muestra un error CORS. El servidor tiene configurado `Access-Control-Allow-Origin: *`.\n\n1. Explica por qué falla\n2. Escribe la configuración correcta del servidor\n3. Explica por qué en Postman sí funcionaba",
+      "objective": "Razonar sobre orígenes, credenciales y preflight para arreglar CORS en el servidor.",
+      "difficulty": "intermedio",
+      "kind": "aplicacion_real",
+      "aiPolicy": "ia_tutor",
+      "constraints": [
+        "La solución va en el servidor",
+        "No vale desactivar CORS en el navegador"
+      ],
+      "hints": [
+        "¿Son app.mitienda.com y api.mitienda.com el mismo origen?",
+        "¿Qué dice el navegador del comodín * cuando hay credenciales?",
+        "Busca Access-Control-Allow-Credentials"
+      ],
+      "solution": "Son orígenes distintos. Con credenciales, el navegador no acepta el comodín *: el servidor debe responder Access-Control-Allow-Origin: https://app.mitienda.com y Access-Control-Allow-Credentials: true (en Express: cors({ origin: \"https://app.mitienda.com\", credentials: true })). Postman no es un navegador y no aplica CORS.",
+      "criteria": [
+        "Identifica que son orígenes distintos",
+        "Explica que * no vale con credenciales",
+        "Configura origen concreto y credenciales en el servidor",
+        "Explica por qué Postman no lo detecta"
+      ],
+      "commonErrors": [
+        "Proponer una extensión que quita CORS",
+        "Arreglarlo en el frontend"
+      ],
+      "interviewQuestion": "¿Qué es una petición preflight y cuándo la envía el navegador?",
+      "resources": [
+        {
+          "kind": "doc",
+          "title": "MDN: CORS",
+          "url": "https://developer.mozilla.org/es/docs/Web/HTTP/CORS"
+        }
+      ],
+      "trackId": "oficio",
+      "theory": false
+    },
+    {
+      "id": "of-l13-e1",
+      "moduleId": "of-m5",
+      "lessonId": "of-l13",
+      "title": "Prepara la configuración de una app para tres entornos",
+      "description": "Una app de reservas usa una base de datos, una clave de la pasarela de pagos y un servicio de correo. Ahora todo está escrito directamente en `config.js`.\n\n1. Lista las variables de entorno que crearías y escribe el `.env.example`\n2. Di qué valor tendría cada una en desarrollo, staging y producción (sin claves reales)\n3. Propón un feature flag para lanzar un nuevo calendario solo al 10% de usuarios y cómo lo retirarías",
+      "objective": "Separar configuración y secretos por entorno y planear un lanzamiento con feature flag.",
+      "difficulty": "intermedio",
+      "kind": "aplicacion_real",
+      "aiPolicy": "ia_tutor",
+      "constraints": [
+        "Ningún secreto real en la respuesta",
+        "Incluir cómo se retira el flag"
+      ],
+      "hints": [
+        "Piensa en DATABASE_URL, la clave de pagos y la del correo",
+        "En desarrollo y staging, la pasarela tiene claves de prueba",
+        "Un flag necesita un porcentaje, una métrica que vigilar y una fecha de retirada"
+      ],
+      "solution": ".env.example con DATABASE_URL=, PAGOS_KEY=, CORREO_KEY= y FLAG_CALENDARIO_PORCENTAJE= vacíos. Desarrollo: base local y claves de prueba; staging: copia anonimizada y claves de prueba; producción: base real y claves reales en el gestor de secretos del hosting. Flag al 10%, vigilar errores y reservas completadas; al 100% y estable, borrar el flag y el calendario viejo.",
+      "criteria": [
+        "Saca todos los secretos de config.js",
+        "Distingue valores por entorno",
+        "El .env.example no tiene valores reales",
+        "El flag tiene porcentaje, métrica y plan de retirada"
+      ],
+      "commonErrors": [
+        "Usar la base de producción en staging",
+        "Dejar el flag para siempre"
+      ],
+      "interviewQuestion": "¿Cómo gestionas los secretos de una aplicación en producción?",
+      "resources": [
+        {
+          "kind": "doc",
+          "title": "The Twelve-Factor App: configuración",
+          "url": "https://12factor.net/es/config"
+        }
+      ],
+      "trackId": "oficio",
+      "theory": false
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self' ws://localhost:*" />
+    <title>Recortar captura</title>
+  </head>
+  <body>
+    <img id="fondo" alt="" />
+    <div id="seleccion" hidden></div>
+    <div id="ayuda">Arrastra para recortar · <b>Enter</b> pantalla completa · <b>Esc</b> cancelar</div>
+    <script type="module" src="./src/capture/capture.ts"></script>
+  </body>
+</html>

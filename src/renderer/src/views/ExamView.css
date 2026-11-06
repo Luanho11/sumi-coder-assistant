@@ -1,0 +1,60 @@
+.exam-view {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 18px clamp(16px, 4vw, 32px) 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: flex-start;
+  animation: fade-up 0.35s var(--ease);
+}
+.exam-view h2 {
+  font-size: 23px;
+  margin: 0;
+}
+.exam-score {
+  width: 100%;
+  border-radius: var(--radius-lg);
+  padding: 16px 20px;
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  color: #fff;
+}
+.exam-score.pass {
+  background: var(--ok);
+}
+.exam-score.fail {
+  background: var(--warn);
+}
+.exam-score b {
+  font-size: 28px;
+}
+.exam-q-list {
+  width: 100%;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  counter-reset: q;
+}
+.exam-q-list > li {
+  counter-increment: q;
+}
+.exam-q::before {
+  content: counter(q) '. ';
+  color: var(--muted);
+}
+.exam-q {
+  font-weight: 500;
+  margin: 0 0 8px;
+}
+.exam-view .quiz-options button.sel {
+  background: color-mix(in srgb, var(--accent) 16%, var(--panel));
+}
+.exam-actions {
+  display: flex;
+  gap: 8px;
+}

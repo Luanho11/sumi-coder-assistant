@@ -1,0 +1,1252 @@
+[
+  {
+    "id": "cap-analisis-software",
+    "trackId": "analisis-software",
+    "title": "Análisis completo de un sistema de historia clínica",
+    "emoji": "🩺",
+    "level": "avanzado",
+    "summary": "Entregas el dossier de análisis de una clínica: alcance, requisitos, casos de uso, modelo de datos y arquitectura, listo para que un equipo lo construya.",
+    "why": "Demuestra que sabes traducir un problema real en documentos que un equipo técnico puede ejecutar, la parte que separa a un analista de un programador.",
+    "features": [
+      "Documento de alcance con objetivos medibles y fuera de alcance",
+      "Catálogo de requisitos funcionales y no funcionales numerados",
+      "Diagramas de casos de uso y de clases en UML",
+      "Modelo de datos normalizado con diagrama entidad-relación",
+      "Diagrama de arquitectura con decisiones justificadas"
+    ],
+    "acceptance": [
+      "Cada requisito es verificable y rastreable a un caso de uso",
+      "El modelo de datos cumple tercera forma normal sin datos duplicados",
+      "Un lector nuevo entiende el sistema sin explicación oral"
+    ],
+    "milestones": [
+      {
+        "title": "Semana 1: alcance y stakeholders",
+        "tasks": [
+          "Entrevistar a 2 perfiles ficticios y anotar necesidades",
+          "Redactar objetivos, alcance y supuestos"
+        ]
+      },
+      {
+        "title": "Semana 2: requisitos y casos de uso",
+        "tasks": [
+          "Escribir 20 requisitos funcionales y 6 no funcionales",
+          "Dibujar los casos de uso principales en UML"
+        ]
+      },
+      {
+        "title": "Semana 3: datos y clases",
+        "tasks": [
+          "Diseñar el modelo entidad-relación y normalizarlo",
+          "Modelar las clases del dominio con sus relaciones"
+        ]
+      },
+      {
+        "title": "Semana 4: arquitectura y cierre",
+        "tasks": [
+          "Elegir arquitectura y justificar cada decisión",
+          "Revisar trazabilidad y publicar el dossier en el repo"
+        ]
+      }
+    ],
+    "deliverables": [
+      "Repositorio con el dossier en PDF y en Markdown",
+      "Diagramas UML y entidad-relación exportados como imagen",
+      "Tabla de trazabilidad requisito a caso de uso"
+    ],
+    "stretch": [
+      "Prototipo navegable de las pantallas clave en Figma",
+      "Estimación de esfuerzo por módulo con riesgos"
+    ],
+    "aiGuide": {
+      "steps": [
+        "Especifica primero: dale a la IA el contexto de la clínica y pídele que proponga preguntas para los stakeholders antes de escribir requisitos",
+        "Revisa cada requisito que genere la IA: elimina los vagos y exige que cada uno sea medible",
+        "Verifica el modelo de datos a mano buscando redundancias; la IA suele dejar tablas sin normalizar",
+        "Declara en el README qué partes apoyaste con IA y por qué entiendes cada decisión"
+      ],
+      "samplePrompts": [
+        "Eres analista senior. Con este contexto de una clínica pequeña, propón 10 preguntas que haría a la jefa de enfermería para levantar requisitos del módulo de citas. No inventes requisitos todavía.",
+        "Tengo estos 8 requisitos funcionales del módulo de recetas. Señala cuáles no son verificables y reescríbelos para que cada uno tenga un criterio de aceptación medible.",
+        "Revisa este modelo entidad-relación de pacientes y citas y dime qué tablas violan la tercera forma normal y cómo corregirlas."
+      ]
+    }
+  },
+  {
+    "id": "cap-analisis-funcional",
+    "trackId": "analisis-funcional",
+    "title": "Especificación funcional de un sistema de reservas",
+    "emoji": "🍽️",
+    "level": "intermedio",
+    "summary": "Redactas la especificación funcional de un sistema de reservas de restaurante: reglas de negocio, flujos, BPMN y mockups que el equipo puede implementar sin dudas.",
+    "why": "Una buena especificación funcional es lo que te piden en roles de analista funcional; este documento prueba que sabes cerrar ambigüedades antes de programar.",
+    "features": [
+      "Reglas de negocio de reservas, cancelaciones y aforo",
+      "Flujos de proceso en notación BPMN",
+      "Mockups de las pantallas de cliente y de personal",
+      "Matriz de permisos por rol"
+    ],
+    "acceptance": [
+      "No queda ningún flujo con un camino sin definir",
+      "Cada regla de negocio tiene un ejemplo numérico",
+      "El equipo podría estimar el trabajo solo con este documento"
+    ],
+    "milestones": [
+      {
+        "title": "Semana 1: dominio y reglas",
+        "tasks": [
+          "Mapear el proceso actual de reservas del restaurante",
+          "Escribir las reglas de aforo, horarios y cancelación"
+        ]
+      },
+      {
+        "title": "Semana 2: flujos y procesos",
+        "tasks": [
+          "Modelar en BPMN el flujo de reserva exitosa",
+          "Modelar los flujos alternativos y de error"
+        ]
+      },
+      {
+        "title": "Semana 3: pantallas y permisos",
+        "tasks": [
+          "Diseñar mockups de reserva, confirmación y panel de personal",
+          "Definir la matriz de permisos por rol"
+        ]
+      }
+    ],
+    "deliverables": [
+      "Documento funcional en el repo con índice navegable",
+      "Diagramas BPMN exportados",
+      "Mockups enlazados o incrustados"
+    ],
+    "stretch": [
+      "Casos de prueba derivados de cada regla de negocio",
+      "Glosario de términos del negocio"
+    ],
+    "aiGuide": {
+      "steps": [
+        "Pide a la IA que liste los casos borde de un sistema de reservas, luego decide tú cuáles aplican a este restaurante",
+        "Haz que la IA critique tus reglas de negocio buscando contradicciones, pero valida cada hallazgo con un ejemplo",
+        "Usa la IA para pasar un flujo escrito a notación BPMN y corrige a mano los nodos mal clasificados",
+        "No dejes que la IA invente reglas; escribe tú el negocio y úsala solo para pulir la redacción"
+      ],
+      "samplePrompts": [
+        "Eres analista funcional. Dada esta regla de aforo de un restaurante, enumera 8 casos borde que debería cubrir la especificación. No propongas solución, solo los casos.",
+        "Revisa este flujo de cancelación de reserva escrito en prosa y dime en qué puntos queda ambiguo qué pasa después.",
+        "Convierte este proceso de reserva en una lista de pasos BPMN con sus compuertas de decisión, y marca dónde falta información."
+      ]
+    }
+  },
+  {
+    "id": "cap-html-css",
+    "trackId": "html-css",
+    "title": "Sitio web responsive y accesible de una cafetería",
+    "emoji": "☕",
+    "level": "intermedio",
+    "summary": "Construyes el sitio multipágina de una cafetería: inicio, menú, reservas y contacto, responsive de móvil a escritorio y accesible con teclado y lector de pantalla.",
+    "why": "Un sitio pulido y accesible es lo primero que mira un reclutador junior de frontend; demuestra orden visual, responsive real y cuidado por el usuario.",
+    "features": [
+      "Menú con cuadrícula adaptable a cualquier pantalla",
+      "Navegación accesible con foco visible y etiquetas",
+      "Formulario de reservas con validación visual",
+      "Modo claro y oscuro con una variable de color"
+    ],
+    "acceptance": [
+      "No hay desbordamiento horizontal en pantallas de 320 a 1440 px",
+      "Se puede recorrer todo el sitio solo con el teclado",
+      "La puntuación de accesibilidad de Lighthouse supera 90"
+    ],
+    "milestones": [
+      {
+        "title": "Semana 1: estructura y estilo base",
+        "tasks": [
+          "Maquetar inicio y menú con HTML semántico",
+          "Definir tipografía, colores y espaciados con variables"
+        ]
+      },
+      {
+        "title": "Semana 2: responsive y layout",
+        "tasks": [
+          "Adaptar el menú con Grid y Flexbox a tres tamaños",
+          "Ajustar la navegación para móvil con menú plegable"
+        ]
+      },
+      {
+        "title": "Semana 3: accesibilidad y pulido",
+        "tasks": [
+          "Añadir foco visible, textos alternativos y roles",
+          "Medir con Lighthouse y corregir lo que baje de 90"
+        ]
+      }
+    ],
+    "deliverables": [
+      "Repositorio con el sitio y README con capturas",
+      "Sitio publicado en un hosting gratuito",
+      "Reporte de Lighthouse adjunto"
+    ],
+    "stretch": [
+      "Animaciones suaves al desplazar sin marear",
+      "Página de pedido con carrito solo visual"
+    ],
+    "aiGuide": {
+      "steps": [
+        "Pide a la IA una base de HTML semántico y revisa que use las etiquetas correctas, no solo divs",
+        "Cuando algo no se ve bien en móvil, dale a la IA tu CSS y el ancho exacto donde falla, no 'arréglalo'",
+        "Haz que la IA audite tu accesibilidad listando problemas concretos, y corrige tú cada uno entendiendo el porqué",
+        "Nunca pegues una paleta generada sin comprobar el contraste de color real"
+      ],
+      "samplePrompts": [
+        "Dame una estructura HTML semántica para la página de menú de una cafetería con secciones de bebidas y postres, usando header, nav, main y section correctamente.",
+        "Mi menú se desborda a 360 px de ancho. Aquí está mi CSS de la cuadrícula. Dime qué propiedad lo causa y cómo hacerlo adaptable sin romper el escritorio.",
+        "Revisa este formulario de reservas y lista los problemas de accesibilidad por teclado y lector de pantalla, ordenados por gravedad."
+      ]
+    }
+  },
+  {
+    "id": "cap-react",
+    "trackId": "react",
+    "title": "Tablero de tareas estilo kanban en React",
+    "emoji": "🗂️",
+    "level": "avanzado",
+    "summary": "Creas un tablero kanban con columnas, tarjetas que se arrastran entre columnas, filtros y guardado en el navegador, como un Trello en pequeño.",
+    "why": "El arrastre, el estado compartido y la persistencia son justo lo que evalúan en pruebas técnicas de React junior; es un proyecto que se demuestra vivo en segundos.",
+    "features": [
+      "Columnas configurables y tarjetas con etiquetas",
+      "Arrastrar y soltar tarjetas entre columnas",
+      "Filtro por texto y por etiqueta",
+      "Persistencia en el navegador al recargar"
+    ],
+    "acceptance": [
+      "Una tarjeta movida sigue en su columna tras recargar",
+      "El filtro reacciona sin recargar la página",
+      "No hay advertencias de claves ni de estado en la consola"
+    ],
+    "milestones": [
+      {
+        "title": "Semana 1: modelo y vista",
+        "tasks": [
+          "Definir el estado del tablero y pintar columnas y tarjetas",
+          "Crear y borrar tarjetas con un formulario"
+        ]
+      },
+      {
+        "title": "Semana 2: interacción",
+        "tasks": [
+          "Implementar arrastrar y soltar entre columnas",
+          "Añadir edición en línea del título de la tarjeta"
+        ]
+      },
+      {
+        "title": "Semana 3: filtros y datos",
+        "tasks": [
+          "Añadir filtro por texto y etiqueta sin perder el estado",
+          "Guardar y recuperar el tablero del navegador"
+        ]
+      }
+    ],
+    "deliverables": [
+      "Repositorio con README y demo publicada",
+      "Capturas o gif del arrastre funcionando",
+      "Componentes organizados por carpeta"
+    ],
+    "stretch": [
+      "Deshacer el último movimiento",
+      "Varios tableros guardados por nombre"
+    ],
+    "aiGuide": {
+      "steps": [
+        "Pide el esqueleto de componentes antes que la lógica, y revisa que el estado viva en el lugar correcto, no todo en el componente raíz",
+        "Para el arrastre, pide a la IA que te explique dos enfoques y elige tú según el tamaño del proyecto",
+        "Verifica cada cambio corriendo la app; la IA a veces mueve estado y rompe el guardado",
+        "Pide tests de la lógica de mover tarjetas y léelos para confirmar que prueban lo que importa"
+      ],
+      "samplePrompts": [
+        "Diseña la estructura de componentes de un tablero kanban en React con columnas y tarjetas. Dime dónde debería vivir el estado y por qué, sin escribir la lógica todavía.",
+        "Tengo el estado del tablero como un objeto de columnas con tarjetas. Escribe la función pura que mueve una tarjeta de una columna a otra en una posición dada, y 3 tests para ella.",
+        "Mi tablero pierde los cambios al recargar. Aquí está el hook de guardado. Revisa por qué no persiste y propón la corrección explicando la causa."
+      ]
+    }
+  },
+  {
+    "id": "cap-angular",
+    "trackId": "angular",
+    "title": "Panel de reservas de citas médicas en Angular",
+    "emoji": "📅",
+    "level": "avanzado",
+    "summary": "Desarrollas un panel donde el personal ve la agenda, crea y cancela citas, con rutas protegidas, servicios y llamadas a una API simulada.",
+    "why": "Angular se usa mucho en empresa; un panel con rutas protegidas, servicios y formularios reactivos muestra que dominas la forma de trabajar que piden esos equipos.",
+    "features": [
+      "Agenda por día con huecos libres y ocupados",
+      "Alta y cancelación de citas con formulario reactivo",
+      "Rutas protegidas según rol con guard",
+      "Datos desde un servicio y una API simulada"
+    ],
+    "acceptance": [
+      "Un usuario sin permiso no entra a la ruta de administración",
+      "El formulario no deja guardar una cita en un hueco ocupado",
+      "Al cancelar, la agenda se actualiza sin recargar"
+    ],
+    "milestones": [
+      {
+        "title": "Semana 1: base y rutas",
+        "tasks": [
+          "Crear la estructura de rutas y el layout del panel",
+          "Montar el guard que protege la zona de administración"
+        ]
+      },
+      {
+        "title": "Semana 2: servicios y datos",
+        "tasks": [
+          "Crear el servicio de citas contra una API simulada",
+          "Listar la agenda del día consumiendo el servicio"
+        ]
+      },
+      {
+        "title": "Semana 3: formularios y estado",
+        "tasks": [
+          "Construir el formulario reactivo de alta de cita con validación",
+          "Implementar cancelación y refresco de la agenda"
+        ]
+      }
+    ],
+    "deliverables": [
+      "Repositorio con README y demo",
+      "Capturas del panel y del flujo de alta",
+      "Servicios y guards separados por carpeta"
+    ],
+    "stretch": [
+      "Vista semanal además de la diaria",
+      "Notificación visual al crear o cancelar"
+    ],
+    "aiGuide": {
+      "steps": [
+        "Pide a la IA la estructura de módulos y rutas primero, y revisa que el guard proteja lo correcto",
+        "Dale el contrato de la API simulada y pide el servicio tipado; comprueba tú los tipos",
+        "Cuando un formulario reactivo falle, comparte el esquema del formulario y el error exacto, no toda la pantalla",
+        "Lee el código generado de RxJS y asegúrate de entender cada operador antes de dejarlo"
+      ],
+      "samplePrompts": [
+        "Diseña la estructura de rutas de un panel de citas médicas en Angular, con una zona pública y una de administración protegida por rol. Explica dónde pondrías el guard.",
+        "Aquí está el contrato de una API de citas. Escribe el servicio Angular tipado con los métodos de listar, crear y cancelar, usando el cliente HTTP.",
+        "Mi formulario reactivo de cita permite guardar en un hueco ya ocupado. Aquí está el esquema del formulario. Propón la validación cruzada y explícala."
+      ]
+    }
+  },
+  {
+    "id": "cap-java",
+    "trackId": "java",
+    "title": "API REST de biblioteca con Spring Boot",
+    "emoji": "📚",
+    "level": "avanzado",
+    "summary": "Construyes la API de una biblioteca: libros, socios y préstamos, con reglas de negocio, base de datos y pruebas automáticas en Spring Boot.",
+    "why": "Spring Boot con pruebas es el estándar en backend Java de empresa; una API con reglas reales y tests demuestra que puedes entrar a un equipo y producir.",
+    "features": [
+      "Catálogo de libros con búsqueda y existencias",
+      "Registro de socios y de préstamos",
+      "Regla de no prestar un libro sin ejemplares",
+      "Pruebas automáticas de los casos clave"
+    ],
+    "acceptance": [
+      "Un socio no puede llevarse un libro sin existencias",
+      "Devolver un préstamo repone el ejemplar",
+      "Las pruebas pasan en una máquina limpia con un comando"
+    ],
+    "milestones": [
+      {
+        "title": "Semana 1: modelo y persistencia",
+        "tasks": [
+          "Modelar libros, socios y préstamos y sus relaciones",
+          "Configurar la base de datos y las migraciones"
+        ]
+      },
+      {
+        "title": "Semana 2: lógica de préstamos",
+        "tasks": [
+          "Implementar prestar y devolver con sus reglas",
+          "Validar existencias y límites por socio"
+        ]
+      },
+      {
+        "title": "Semana 3: pruebas y cierre",
+        "tasks": [
+          "Escribir pruebas de los casos clave y de error",
+          "Documentar la API y publicar el repo"
+        ]
+      }
+    ],
+    "deliverables": [
+      "Repositorio con README y pasos para ejecutar",
+      "Colección de la API para probar los endpoints",
+      "Reporte de las pruebas pasando"
+    ],
+    "stretch": [
+      "Multas por retraso calculadas por días",
+      "Reservas de libros sin existencias"
+    ],
+    "aiGuide": {
+      "steps": [
+        "Pide el modelo de entidades y sus relaciones antes que los controladores, y revisa las claves foráneas",
+        "Para cada regla de negocio, pide primero las pruebas y luego la implementación que las haga pasar",
+        "Verifica tú que las pruebas fallan sin el código y pasan con él; la IA a veces escribe pruebas que siempre pasan",
+        "No pegues credenciales de base de datos reales en los prompts"
+      ],
+      "samplePrompts": [
+        "Diseña las entidades de una biblioteca en Spring Boot: libro, socio y préstamo, con sus relaciones y claves. No escribas controladores todavía.",
+        "Escribe pruebas para la regla 'no se puede prestar un libro sin ejemplares disponibles' antes de la implementación, usando el framework de test de Spring Boot.",
+        "Aquí está mi servicio de préstamos. Revisa la concurrencia: si dos socios piden el último ejemplar a la vez, qué pasa y cómo lo evito."
+      ]
+    }
+  },
+  {
+    "id": "cap-python",
+    "trackId": "python",
+    "title": "API de gastos personales con FastAPI",
+    "emoji": "💸",
+    "level": "intermedio",
+    "summary": "Haces la API de una app de gastos: registras ingresos y gastos por categoría, consultas el balance por mes y pruebas todo de forma automática.",
+    "why": "Una API limpia con pruebas y documentación automática es un proyecto de portafolio directo y fácil de demostrar en una entrevista de backend Python.",
+    "features": [
+      "Alta de ingresos y gastos con categoría y fecha",
+      "Balance y resumen por mes y por categoría",
+      "Validación de datos de entrada",
+      "Pruebas automáticas de los endpoints"
+    ],
+    "acceptance": [
+      "No se puede registrar un gasto con monto negativo",
+      "El resumen mensual suma exactamente los movimientos del mes",
+      "La documentación de la API se genera sola y es correcta"
+    ],
+    "milestones": [
+      {
+        "title": "Semana 1: modelo y rutas",
+        "tasks": [
+          "Modelar movimientos y categorías",
+          "Crear los endpoints de alta y listado"
+        ]
+      },
+      {
+        "title": "Semana 2: lógica y validación",
+        "tasks": [
+          "Implementar el resumen mensual por categoría",
+          "Validar montos, fechas y categorías"
+        ]
+      },
+      {
+        "title": "Semana 3: pruebas y datos",
+        "tasks": [
+          "Escribir pruebas de los endpoints y casos de error",
+          "Conectar una base de datos y migrar el esquema"
+        ]
+      }
+    ],
+    "deliverables": [
+      "Repositorio con README y pasos de ejecución",
+      "Documentación de la API accesible",
+      "Pruebas pasando con un comando"
+    ],
+    "stretch": [
+      "Exportar el resumen mensual a CSV",
+      "Presupuesto por categoría con aviso al superarlo"
+    ],
+    "aiGuide": {
+      "steps": [
+        "Pide los modelos de datos con validación antes que los endpoints, y revisa los tipos",
+        "Haz que la IA proponga casos de prueba de borde, luego escribe tú los que falten",
+        "Verifica el cálculo del resumen con un ejemplo a mano antes de confiar en la IA",
+        "Usa variables de entorno para la conexión; no las escribas en el prompt"
+      ],
+      "samplePrompts": [
+        "Define los modelos de FastAPI para movimientos de dinero con categoría, monto y fecha, incluyendo la validación de que el monto sea positivo.",
+        "Escribe pruebas para el endpoint de resumen mensual: casos con movimientos, sin movimientos y con un mes sin datos.",
+        "Revisa esta función de resumen por categoría. Dame un ejemplo numérico donde podría fallar el redondeo y cómo evitarlo."
+      ]
+    }
+  },
+  {
+    "id": "cap-csharp",
+    "trackId": "csharp",
+    "title": "API de ecommerce en C# y .NET",
+    "emoji": "🛒",
+    "level": "avanzado",
+    "summary": "Levantas el backend de una tienda: catálogo con categorías, carrito, pedidos y login con roles, usando ASP.NET Core y base de datos.",
+    "why": "Un backend de ecommerce con autenticación y roles es el proyecto que pide una entrevista de .NET; cubre casi todo lo que evalúan en backend junior y semi senior.",
+    "features": [
+      "Catálogo con categorías y búsqueda",
+      "Carrito y creación de pedidos",
+      "Login con token y roles de cliente y administrador",
+      "Panel de administración de productos"
+    ],
+    "acceptance": [
+      "Un cliente no puede ver los pedidos de otro cliente",
+      "Solo un administrador puede crear o borrar productos",
+      "Un pedido descuenta existencias del producto"
+    ],
+    "milestones": [
+      {
+        "title": "Semana 1: datos y migraciones",
+        "tasks": [
+          "Modelar productos, categorías, usuarios y pedidos",
+          "Crear la base de datos con migraciones"
+        ]
+      },
+      {
+        "title": "Semana 2: catálogo y carrito",
+        "tasks": [
+          "Implementar el catálogo con búsqueda y filtros",
+          "Construir el carrito y la creación de pedidos"
+        ]
+      },
+      {
+        "title": "Semana 3: seguridad",
+        "tasks": [
+          "Añadir login con token y roles",
+          "Proteger las rutas de administración"
+        ]
+      },
+      {
+        "title": "Semana 4: pruebas y cierre",
+        "tasks": [
+          "Escribir pruebas de pedidos y de permisos",
+          "Documentar la API y publicar el repo"
+        ]
+      }
+    ],
+    "deliverables": [
+      "Repositorio con README y pasos de ejecución",
+      "Colección de la API para probar los flujos",
+      "Pruebas de permisos pasando"
+    ],
+    "stretch": [
+      "Pasarela de pago simulada con estados de pedido",
+      "Historial de pedidos por cliente paginado"
+    ],
+    "aiGuide": {
+      "steps": [
+        "Pide el modelo de datos y las relaciones antes que nada, y revisa las claves y los índices",
+        "Para la seguridad, pide a la IA que explique dónde valida los roles y confirma tú que ninguna ruta queda abierta",
+        "Escribe una prueba que intente ver el pedido de otro usuario y confirma que falla",
+        "No pegues cadenas de conexión ni claves de firma en los prompts"
+      ],
+      "samplePrompts": [
+        "Diseña el modelo de datos de un ecommerce en ASP.NET Core: productos, categorías, usuarios, carrito y pedidos, con relaciones y restricciones.",
+        "Escribe una prueba que verifique que un cliente autenticado no puede acceder a los pedidos de otro cliente, y explica qué parte del controlador lo garantiza.",
+        "Revisa este controlador de administración de productos y dime si alguna ruta queda accesible sin el rol de administrador."
+      ]
+    }
+  },
+  {
+    "id": "cap-qa-testing",
+    "trackId": "qa-testing",
+    "title": "Suite de pruebas automatizadas de una web real",
+    "emoji": "🧪",
+    "level": "intermedio",
+    "summary": "Tomas una web de demostración y entregas su plan de pruebas, casos manuales y una suite automática de extremo a extremo con un reporte de resultados.",
+    "why": "Un repo con plan, casos y pruebas automáticas corriendo es exactamente lo que un líder de QA quiere ver; demuestra criterio y no solo clics.",
+    "features": [
+      "Plan de pruebas con alcance y riesgos",
+      "Casos manuales de los flujos principales",
+      "Pruebas automáticas de extremo a extremo",
+      "Reporte de resultados legible"
+    ],
+    "acceptance": [
+      "Cada caso automático prueba un criterio claro y falla si se rompe",
+      "El plan cubre los flujos de mayor riesgo primero",
+      "La suite corre en una máquina limpia con un comando"
+    ],
+    "milestones": [
+      {
+        "title": "Semana 1: análisis y plan",
+        "tasks": [
+          "Explorar la web y listar los flujos y riesgos",
+          "Redactar el plan de pruebas y los casos manuales"
+        ]
+      },
+      {
+        "title": "Semana 2: automatización",
+        "tasks": [
+          "Automatizar el flujo principal de extremo a extremo",
+          "Añadir casos de datos inválidos y de error"
+        ]
+      },
+      {
+        "title": "Semana 3: reporte y cierre",
+        "tasks": [
+          "Generar un reporte de la ejecución",
+          "Documentar cómo correr la suite en el README"
+        ]
+      }
+    ],
+    "deliverables": [
+      "Repositorio con plan, casos y suite automática",
+      "Reporte de la última ejecución",
+      "README con pasos para ejecutar"
+    ],
+    "stretch": [
+      "Pruebas en dos navegadores distintos",
+      "Integración para correr la suite al subir cambios"
+    ],
+    "aiGuide": {
+      "steps": [
+        "Pide a la IA que proponga casos de borde del flujo, luego prioriza tú por riesgo",
+        "Dale el HTML del flujo para generar selectores estables y evita los selectores frágiles que sugiera",
+        "Verifica que cada prueba falla cuando rompes el flujo a propósito; si no falla, no prueba nada",
+        "Haz que la IA explique por qué una prueba es inestable antes de añadir esperas al azar"
+      ],
+      "samplePrompts": [
+        "Eres QA senior. Dada esta pantalla de registro, lista los casos de prueba por prioridad de riesgo, separando camino feliz y casos de error.",
+        "Genera una prueba de extremo a extremo del flujo de login con selectores estables basados en roles y etiquetas, no en clases de estilo.",
+        "Esta prueba a veces pasa y a veces falla. Aquí está el código. Dime la causa probable de la inestabilidad y cómo hacerla fiable sin esperas fijas."
+      ]
+    }
+  },
+  {
+    "id": "cap-datos-sql",
+    "trackId": "datos-sql",
+    "title": "Mini data warehouse de ventas y consultas analíticas",
+    "emoji": "📊",
+    "level": "avanzado",
+    "summary": "Diseñas un almacén de datos de ventas con tablas de hechos y dimensiones, lo cargas con datos de ejemplo y respondes preguntas de negocio con consultas.",
+    "why": "Modelar un almacén y escribir consultas analíticas que responden preguntas reales es lo que piden en roles de datos; el repo demuestra criterio de modelado.",
+    "features": [
+      "Esquema con tabla de hechos de ventas y dimensiones",
+      "Carga de datos de ejemplo realista",
+      "Consultas de ventas por mes, producto y región",
+      "Vistas para las preguntas más frecuentes"
+    ],
+    "acceptance": [
+      "Las consultas devuelven los mismos totales que una suma manual de la muestra",
+      "El esquema evita duplicar textos de producto y región",
+      "Cada consulta responde una pregunta de negocio nombrada"
+    ],
+    "milestones": [
+      {
+        "title": "Semana 1: modelado",
+        "tasks": [
+          "Diseñar la tabla de hechos y las dimensiones",
+          "Documentar el grano de la tabla de hechos"
+        ]
+      },
+      {
+        "title": "Semana 2: carga y limpieza",
+        "tasks": [
+          "Generar y cargar datos de ejemplo",
+          "Comprobar integridad y nulos"
+        ]
+      },
+      {
+        "title": "Semana 3: análisis",
+        "tasks": [
+          "Escribir consultas de ventas por tiempo, producto y región",
+          "Crear vistas para las preguntas frecuentes"
+        ]
+      }
+    ],
+    "deliverables": [
+      "Repositorio con el esquema y los datos de carga",
+      "Archivo de consultas comentadas por pregunta",
+      "README que explica el modelo y cómo ejecutarlo"
+    ],
+    "stretch": [
+      "Consulta de productos que más crecen mes a mes",
+      "Índices para acelerar las consultas lentas"
+    ],
+    "aiGuide": {
+      "steps": [
+        "Pide a la IA que te ayude a definir el grano de la tabla de hechos antes de crear columnas",
+        "Para cada consulta, descríbele la pregunta de negocio y revisa que el resultado tenga sentido con los datos",
+        "Verifica un total contra una suma manual de una muestra pequeña",
+        "Haz que la IA explique el plan de una consulta lenta antes de añadir índices al azar"
+      ],
+      "samplePrompts": [
+        "Ayúdame a definir el grano de una tabla de hechos de ventas y qué dimensiones necesito para analizar por tiempo, producto y región.",
+        "Escribe una consulta que muestre las ventas totales por mes y región, y explícame cómo verificar el resultado con una muestra pequeña.",
+        "Esta consulta de ventas por producto tarda demasiado. Aquí está el esquema y la consulta. Explica qué la hace lenta antes de proponer índices."
+      ]
+    }
+  },
+  {
+    "id": "cap-soporte-ti",
+    "trackId": "soporte-ti",
+    "title": "Manual y base de conocimiento de soporte TI",
+    "emoji": "🛠️",
+    "level": "principiante",
+    "summary": "Entregas el kit de soporte de una pequeña empresa: runbook de incidencias comunes, base de conocimiento, guiones de atención y una plantilla de tickets.",
+    "why": "Un runbook claro y una base de conocimiento ordenada demuestran que sabes resolver y documentar, lo que buscan los equipos de soporte por encima del clic suelto.",
+    "features": [
+      "Runbook de 10 incidencias comunes con pasos",
+      "Base de conocimiento buscable por tema",
+      "Guion de atención con escalado por niveles",
+      "Plantilla de ticket con prioridad e impacto"
+    ],
+    "acceptance": [
+      "Cada incidencia del runbook tiene causa, pasos y verificación",
+      "Un compañero nuevo resuelve una incidencia siguiendo el runbook",
+      "La prioridad del ticket se decide con una regla clara, no al gusto"
+    ],
+    "milestones": [
+      {
+        "title": "Semana 1: incidencias y runbook",
+        "tasks": [
+          "Listar las 10 incidencias más comunes",
+          "Escribir pasos y verificación de cada una"
+        ]
+      },
+      {
+        "title": "Semana 2: conocimiento y atención",
+        "tasks": [
+          "Organizar la base de conocimiento por temas",
+          "Redactar el guion de atención y el escalado"
+        ]
+      },
+      {
+        "title": "Semana 3: tickets y cierre",
+        "tasks": [
+          "Diseñar la plantilla de ticket con prioridad e impacto",
+          "Publicar el kit en el repo con un índice"
+        ]
+      }
+    ],
+    "deliverables": [
+      "Repositorio con runbook, base de conocimiento y plantillas",
+      "Índice navegable por tema",
+      "Ejemplo de un ticket resuelto de principio a fin"
+    ],
+    "stretch": [
+      "Guiones cortos de autoservicio para el usuario final",
+      "Lista de comandos útiles para diagnóstico"
+    ],
+    "aiGuide": {
+      "steps": [
+        "Pide a la IA borradores de pasos de una incidencia y verifica cada paso contra una fuente oficial",
+        "Haz que ordene tu base de conocimiento por temas, pero decide tú la estructura final",
+        "Pídele que redacte el guion de atención con tono amable y revisa que no prometa lo que no puedes cumplir",
+        "No incluyas datos reales de usuarios ni contraseñas en los documentos"
+      ],
+      "samplePrompts": [
+        "Escribe los pasos de diagnóstico para 'el usuario no puede imprimir en red', con causa probable, pasos y cómo verificar que quedó resuelto.",
+        "Propón una estructura de base de conocimiento por temas para una empresa de 30 personas con Windows y correo en la nube.",
+        "Redacta un guion de atención telefónica para una caída de internet, con tono amable y los puntos de escalado a un nivel superior."
+      ]
+    }
+  },
+  {
+    "id": "cap-ingenieria-ia",
+    "trackId": "ingenieria-ia",
+    "title": "Asistente que responde sobre tus propios documentos",
+    "emoji": "🤖",
+    "level": "avanzado",
+    "summary": "Construyes un asistente que busca en tus apuntes y documentos y responde citando de dónde sacó cada dato, con una interfaz simple para preguntar.",
+    "why": "Un asistente que responde sobre documentos propios y cita fuentes es el proyecto estrella para mostrar que sabes construir con IA, no solo usarla.",
+    "features": [
+      "Carga de documentos propios en varios formatos",
+      "Búsqueda del fragmento relevante antes de responder",
+      "Respuesta con la cita de la fuente usada",
+      "Interfaz simple para preguntar y ver fuentes"
+    ],
+    "acceptance": [
+      "La respuesta siempre muestra de qué documento salió",
+      "Ante una pregunta sin respuesta en los documentos, lo dice en vez de inventar",
+      "Un documento nuevo queda disponible sin reiniciar todo"
+    ],
+    "milestones": [
+      {
+        "title": "Semana 1: ingesta",
+        "tasks": [
+          "Cargar y trocear los documentos",
+          "Guardar los fragmentos para poder buscarlos"
+        ]
+      },
+      {
+        "title": "Semana 2: búsqueda y respuesta",
+        "tasks": [
+          "Buscar los fragmentos más cercanos a la pregunta",
+          "Construir la respuesta con la cita de la fuente"
+        ]
+      },
+      {
+        "title": "Semana 3: interfaz y guardas",
+        "tasks": [
+          "Montar la interfaz de pregunta y respuesta",
+          "Añadir la guarda de 'no lo sé' cuando no hay fuente"
+        ]
+      }
+    ],
+    "deliverables": [
+      "Repositorio con README y pasos de ejecución",
+      "Demo con documentos de ejemplo",
+      "Ejemplos de preguntas con sus citas"
+    ],
+    "stretch": [
+      "Memoria de conversación para preguntas seguidas",
+      "Evaluación con un set de preguntas y respuestas esperadas"
+    ],
+    "aiGuide": {
+      "steps": [
+        "Especifica el comportamiento ante preguntas sin respuesta antes de escribir el prompt del asistente",
+        "Pide a la IA dos estrategias de troceado y elige según tus documentos",
+        "Verifica con preguntas trampa que el asistente no inventa cuando no hay fuente",
+        "No subas documentos con datos personales a servicios externos sin revisarlos"
+      ],
+      "samplePrompts": [
+        "Diseña el flujo de un asistente que responde sobre documentos propios: desde que llega la pregunta hasta la respuesta con cita. Marca dónde decide que no sabe.",
+        "Escribe el prompt del sistema para que el asistente responda solo con los fragmentos dados y diga 'no está en los documentos' si no encuentra la respuesta.",
+        "Dame 10 preguntas trampa para comprobar que mi asistente no inventa respuestas fuera de los documentos cargados."
+      ]
+    }
+  },
+  {
+    "id": "cap-javascript",
+    "trackId": "javascript",
+    "title": "App de clima con JavaScript puro y una API pública",
+    "emoji": "🌦️",
+    "level": "intermedio",
+    "summary": "Construyes una app que busca una ciudad, consulta el clima de una API pública y muestra el pronóstico, hecha con JavaScript puro y manejo de errores.",
+    "why": "Consumir una API real, manejar errores de red y pintar datos con JavaScript puro muestra que entiendes lo básico sin esconderte tras un framework.",
+    "features": [
+      "Búsqueda de ciudad con sugerencias",
+      "Clima actual y pronóstico de varios días",
+      "Manejo de errores de red y de ciudad no encontrada",
+      "Guardado de la última ciudad buscada"
+    ],
+    "acceptance": [
+      "Una ciudad inexistente muestra un mensaje claro, no un error en consola",
+      "Si la red falla, la app lo comunica y se puede reintentar",
+      "Al volver a abrir, aparece la última ciudad buscada"
+    ],
+    "milestones": [
+      {
+        "title": "Semana 1: estructura y datos",
+        "tasks": [
+          "Maquetar la interfaz y los estados vacío y de carga",
+          "Consultar la API y mostrar el clima actual"
+        ]
+      },
+      {
+        "title": "Semana 2: pronóstico y errores",
+        "tasks": [
+          "Añadir el pronóstico de varios días",
+          "Manejar errores de red y de ciudad no encontrada"
+        ]
+      },
+      {
+        "title": "Semana 3: pulido y guardado",
+        "tasks": [
+          "Guardar y recuperar la última ciudad",
+          "Pulir estados de carga y vacío"
+        ]
+      }
+    ],
+    "deliverables": [
+      "Repositorio con README y demo publicada",
+      "Capturas de los estados de carga y error",
+      "Código organizado por funciones claras"
+    ],
+    "stretch": [
+      "Ubicación automática con permiso del usuario",
+      "Cambio entre grados Celsius y Fahrenheit"
+    ],
+    "aiGuide": {
+      "steps": [
+        "Pide la estructura de funciones antes de la lógica de red, y separa el dibujo de los datos",
+        "Para los errores, lista con la IA los casos y maneja tú cada uno de forma visible",
+        "Verifica el manejo de errores apagando la red y buscando una ciudad falsa",
+        "No pongas tu clave de la API en el código que subes; usa una variable"
+      ],
+      "samplePrompts": [
+        "Diseña la estructura de funciones de una app de clima en JavaScript puro: una para pedir datos, una para dibujar y una para manejar errores.",
+        "Escribe la función que consulta una API de clima por ciudad y maneja ciudad no encontrada y error de red con mensajes distintos.",
+        "Revisa este código que pinta el pronóstico y dime cómo mostrar un estado de carga mientras llegan los datos sin bloquear la interfaz."
+      ]
+    }
+  },
+  {
+    "id": "cap-seguridad-web",
+    "trackId": "seguridad-web",
+    "title": "Auditoría de seguridad de una app vulnerable",
+    "emoji": "🔓",
+    "level": "avanzado",
+    "summary": "Auditas una aplicación deliberadamente vulnerable, explotas sus fallos en un entorno controlado y entregas un informe con riesgos, pruebas y arreglos.",
+    "why": "Un informe de auditoría con hallazgos reproducibles y arreglos es lo que entrega un profesional de seguridad; demuestra mentalidad ofensiva y defensiva a la vez.",
+    "features": [
+      "Hallazgos ordenados por gravedad",
+      "Pasos para reproducir cada fallo",
+      "Arreglo propuesto para cada hallazgo",
+      "Resumen ejecutivo para quien no es técnico"
+    ],
+    "acceptance": [
+      "Cada hallazgo se puede reproducir siguiendo los pasos del informe",
+      "Los arreglos propuestos cierran el fallo sin romper la función",
+      "La gravedad se justifica por impacto y facilidad de explotación"
+    ],
+    "milestones": [
+      {
+        "title": "Semana 1: reconocimiento",
+        "tasks": [
+          "Montar la app vulnerable en un entorno aislado",
+          "Mapear las entradas y los puntos de ataque"
+        ]
+      },
+      {
+        "title": "Semana 2: explotación",
+        "tasks": [
+          "Explotar inyección y control de acceso",
+          "Documentar pasos y evidencia de cada fallo"
+        ]
+      },
+      {
+        "title": "Semana 3: informe y arreglos",
+        "tasks": [
+          "Proponer el arreglo de cada hallazgo",
+          "Redactar el informe con resumen ejecutivo"
+        ]
+      }
+    ],
+    "deliverables": [
+      "Repositorio o PDF con el informe de auditoría",
+      "Evidencias de cada hallazgo",
+      "Tabla de hallazgos por gravedad"
+    ],
+    "stretch": [
+      "Prueba de que el arreglo cierra el fallo",
+      "Lista de recomendaciones de endurecimiento general"
+    ],
+    "aiGuide": {
+      "steps": [
+        "Trabaja siempre sobre apps hechas para practicar y en tu propio entorno, nunca sobre sistemas ajenos",
+        "Pide a la IA que explique una clase de vulnerabilidad para entenderla, no para atacar sistemas reales",
+        "Verifica cada arreglo volviendo a intentar el ataque; si aún funciona, el arreglo no sirve",
+        "No publiques datos ni credenciales reales que encuentres durante la práctica"
+      ],
+      "samplePrompts": [
+        "Explícame cómo funciona una inyección en formularios y cómo reproducirla en una app de práctica montada en mi equipo, con fines de aprendizaje.",
+        "Tengo un fallo de control de acceso donde un usuario ve datos de otro. Propón el arreglo y cómo volver a probar que ya no ocurre.",
+        "Redacta el resumen ejecutivo de una auditoría para un gerente no técnico, explicando tres hallazgos y su riesgo en lenguaje claro."
+      ]
+    }
+  },
+  {
+    "id": "cap-node-backend",
+    "trackId": "node-backend",
+    "title": "Backend de una plataforma de cursos con Node",
+    "emoji": "🎓",
+    "level": "avanzado",
+    "summary": "Construyes la API de una mini plataforma de cursos: usuarios, cursos, inscripciones y progreso, con autenticación y base de datos en Node y Express.",
+    "why": "Una API con autenticación, relaciones y reglas de inscripción cubre lo que evalúan en backend Node junior y da un dominio distinto al del ecommerce.",
+    "features": [
+      "Registro y login de usuarios con token",
+      "Cursos con lecciones y catálogo",
+      "Inscripción y seguimiento de progreso",
+      "Rutas de instructor separadas de las de alumno"
+    ],
+    "acceptance": [
+      "Un alumno no puede marcar progreso de un curso en el que no está inscrito",
+      "Solo el instructor dueño edita su curso",
+      "El progreso se calcula sobre las lecciones completadas"
+    ],
+    "milestones": [
+      {
+        "title": "Semana 1: datos y auth",
+        "tasks": [
+          "Modelar usuarios, cursos, lecciones e inscripciones",
+          "Implementar registro y login con token"
+        ]
+      },
+      {
+        "title": "Semana 2: catálogo e inscripción",
+        "tasks": [
+          "Crear el catálogo y el detalle de curso",
+          "Implementar la inscripción y sus reglas"
+        ]
+      },
+      {
+        "title": "Semana 3: progreso y pruebas",
+        "tasks": [
+          "Registrar y calcular el progreso por alumno",
+          "Escribir pruebas de permisos y de progreso"
+        ]
+      }
+    ],
+    "deliverables": [
+      "Repositorio con README y pasos de ejecución",
+      "Colección de la API para probar los flujos",
+      "Pruebas de permisos pasando"
+    ],
+    "stretch": [
+      "Certificado al completar el 100 por ciento del curso",
+      "Reseñas de curso con promedio de estrellas"
+    ],
+    "aiGuide": {
+      "steps": [
+        "Pide el modelo de datos y las relaciones antes que las rutas, y revisa las claves foráneas",
+        "Para la autenticación, confirma tú qué rutas quedan protegidas y cuáles públicas",
+        "Escribe una prueba que intente marcar progreso sin inscripción y confirma que falla",
+        "Usa variables de entorno para el secreto del token, no lo escribas en el código"
+      ],
+      "samplePrompts": [
+        "Diseña el modelo de datos de una plataforma de cursos en Node: usuarios, cursos, lecciones, inscripciones y progreso, con relaciones.",
+        "Escribe el middleware que protege las rutas de instructor y verifica que el usuario es dueño del curso que edita.",
+        "Escribe una prueba que compruebe que un alumno no inscrito no puede registrar progreso en un curso, y explica dónde se valida."
+      ]
+    }
+  },
+  {
+    "id": "cap-ia-aplicada",
+    "trackId": "ia-aplicada",
+    "title": "Clasificador de tickets de soporte con IA",
+    "emoji": "🎫",
+    "level": "avanzado",
+    "summary": "Creas un servicio que recibe un ticket de soporte, lo clasifica por tema y urgencia con un modelo y sugiere una respuesta para que un humano la apruebe.",
+    "why": "Integrar un modelo en un flujo con control humano y medir su acierto es lo que pide un rol de IA aplicada; muestra que piensas en producto, no solo en el modelo.",
+    "features": [
+      "Clasificación de ticket por tema y urgencia",
+      "Sugerencia de respuesta para revisión humana",
+      "Registro de aciertos y fallos para medir",
+      "Reglas de respaldo cuando el modelo duda"
+    ],
+    "acceptance": [
+      "Un ticket muy urgente nunca se marca como bajo sin aviso",
+      "La respuesta sugerida siempre pasa por aprobación humana",
+      "Se puede medir el acierto con un set de tickets de prueba"
+    ],
+    "milestones": [
+      {
+        "title": "Semana 1: datos y clasificación",
+        "tasks": [
+          "Reunir tickets de ejemplo etiquetados",
+          "Clasificar por tema y urgencia con el modelo"
+        ]
+      },
+      {
+        "title": "Semana 2: respuesta y control",
+        "tasks": [
+          "Generar la respuesta sugerida para revisión",
+          "Añadir la regla de respaldo cuando el modelo duda"
+        ]
+      },
+      {
+        "title": "Semana 3: medición",
+        "tasks": [
+          "Medir el acierto contra el set de prueba",
+          "Ajustar el prompt y volver a medir"
+        ]
+      }
+    ],
+    "deliverables": [
+      "Repositorio con README y demo",
+      "Set de tickets de prueba con sus etiquetas",
+      "Reporte de acierto del clasificador"
+    ],
+    "stretch": [
+      "Panel con los tickets por tema del día",
+      "Detección de tickets duplicados"
+    ],
+    "aiGuide": {
+      "steps": [
+        "Define las categorías y qué es urgente antes de pedir nada al modelo",
+        "Mide el acierto con un set etiquetado por ti; no confíes en la impresión",
+        "Mantén a un humano aprobando cada respuesta sugerida",
+        "No envíes datos personales de clientes a servicios externos sin anonimizar"
+      ],
+      "samplePrompts": [
+        "Diseña el flujo de un clasificador de tickets de soporte con IA, desde que llega el ticket hasta que un humano aprueba la respuesta. Marca dónde actúa el respaldo.",
+        "Escribe el prompt para clasificar un ticket por tema y urgencia devolviendo un formato fijo que mi código pueda leer.",
+        "Tengo 50 tickets etiquetados a mano. Explícame cómo medir el acierto del clasificador y qué hacer con los que clasifica mal."
+      ]
+    }
+  },
+  {
+    "id": "cap-entrevistas",
+    "trackId": "entrevistas",
+    "title": "Repositorio de preparación para entrevistas",
+    "emoji": "🎯",
+    "level": "intermedio",
+    "summary": "Armas un repositorio de preparación: fichas de tus proyectos, respuestas con método STAR, soluciones comentadas de problemas y tu guion en inglés técnico.",
+    "why": "Un repo de preparación ordenado te hace llegar a la entrevista con todo listo y, además, demuestra orden y comunicación a quien lo revise.",
+    "features": [
+      "Ficha de cada proyecto con problema, solución y aprendizaje",
+      "Respuestas conductuales con método STAR",
+      "Soluciones comentadas de problemas de código",
+      "Guion en inglés técnico para presentarte"
+    ],
+    "acceptance": [
+      "Cada ficha de proyecto explica tu aporte concreto, no el del equipo",
+      "Cada respuesta STAR tiene situación, tarea, acción y resultado medible",
+      "Las soluciones de código explican el porqué, no solo el código"
+    ],
+    "milestones": [
+      {
+        "title": "Semana 1: proyectos y logros",
+        "tasks": [
+          "Escribir la ficha de 3 proyectos con tu aporte",
+          "Preparar 5 respuestas STAR de situaciones reales"
+        ]
+      },
+      {
+        "title": "Semana 2: código y conceptos",
+        "tasks": [
+          "Resolver y comentar 8 problemas de código",
+          "Anotar explicaciones de los conceptos que más preguntan"
+        ]
+      },
+      {
+        "title": "Semana 3: inglés y simulacro",
+        "tasks": [
+          "Escribir y practicar tu presentación en inglés",
+          "Hacer un simulacro grabado y anotar mejoras"
+        ]
+      }
+    ],
+    "deliverables": [
+      "Repositorio con las fichas, las respuestas y las soluciones",
+      "Guion de presentación en inglés",
+      "Notas de los simulacros con mejoras"
+    ],
+    "stretch": [
+      "Preguntas tuyas para el entrevistador por tipo de empresa",
+      "Lista de tus debilidades con un plan para cada una"
+    ],
+    "aiGuide": {
+      "steps": [
+        "Pide a la IA que actúe de entrevistador y te repregunte, luego mejora tus respuestas",
+        "Haz que critique tus respuestas STAR buscando dónde falta el resultado medible",
+        "Verifica tus soluciones de código ejecutándolas; no confíes en que la IA diga que funcionan",
+        "Practica explicar en voz alta; la IA puede darte preguntas, pero la soltura la das tú"
+      ],
+      "samplePrompts": [
+        "Actúa como entrevistador técnico. Hazme una pregunta conductual sobre trabajo en equipo y repregunta dos veces buscando el resultado concreto.",
+        "Aquí está mi respuesta STAR sobre un conflicto en un proyecto. Dime qué parte falla y dónde falta un resultado medible.",
+        "Dame 10 preguntas frecuentes de entrevista de frontend junior en 2026, incluyendo cómo uso y reviso código generado con IA."
+      ]
+    }
+  },
+  {
+    "id": "cap-devops",
+    "trackId": "devops",
+    "title": "Despliegue automático de una app con contenedor",
+    "emoji": "🚀",
+    "level": "avanzado",
+    "summary": "Tomas una app pequeña, la empaquetas en un contenedor y montas una tubería que corre pruebas y la despliega sola cuando subes cambios al repositorio.",
+    "why": "Empaquetar, probar y desplegar solo es lo que buscan los equipos que trabajan con entregas continuas; el repo demuestra que sabes llevar código a producción.",
+    "features": [
+      "Contenedor que corre la app igual en cualquier máquina",
+      "Tubería que instala, construye y prueba al subir cambios",
+      "Fusión bloqueada si una prueba falla",
+      "Despliegue automático a un entorno al pasar las pruebas"
+    ],
+    "acceptance": [
+      "La app arranca igual en una máquina limpia con el contenedor",
+      "Un cambio que rompe una prueba no llega a desplegarse",
+      "Se puede volver a la versión anterior sin editar a mano"
+    ],
+    "milestones": [
+      {
+        "title": "Semana 1: contenedor",
+        "tasks": [
+          "Empaquetar la app con sus dependencias",
+          "Arrancarla en una máquina limpia para comprobarlo"
+        ]
+      },
+      {
+        "title": "Semana 2: tubería de pruebas",
+        "tasks": [
+          "Configurar la tubería que corre las pruebas al subir",
+          "Bloquear la fusión cuando algo falla"
+        ]
+      },
+      {
+        "title": "Semana 3: despliegue",
+        "tasks": [
+          "Desplegar solo al pasar las pruebas",
+          "Dejar documentada la vuelta a la versión anterior"
+        ]
+      }
+    ],
+    "deliverables": [
+      "Repositorio con el contenedor y la tubería",
+      "README con cómo correr y desplegar",
+      "Captura de la tubería en verde y en rojo"
+    ],
+    "stretch": [
+      "Despliegue poco a poco con vigilancia de señales",
+      "Aviso automático al equipo cuando falla el despliegue"
+    ],
+    "aiGuide": {
+      "steps": [
+        "Pide a la IA una base del contenedor y revisa que no incluya cosas que no van, como secretos o archivos de prueba",
+        "Para la tubería, dale tus pasos y pide el archivo; confirma tú el orden y que bloquea ante fallos",
+        "Verifica arrancando la app desde el contenedor en limpio, no confíes en que la IA diga que funciona",
+        "No pongas claves ni tokens en los archivos de la tubería; usa secretos del repositorio"
+      ],
+      "samplePrompts": [
+        "Escribe un archivo de contenedor para una app de Node con sus dependencias, dejando fuera archivos de prueba y de desarrollo. Explica cada línea.",
+        "Dame la configuración de una tubería que, al subir cambios, instale, corra las pruebas y bloquee la fusión si fallan.",
+        "Revisa esta tubería y dime si algún paso expone secretos o permite desplegar aunque fallen las pruebas."
+      ]
+    }
+  },
+  {
+    "id": "cap-diseno-sistemas",
+    "trackId": "diseno-sistemas",
+    "title": "Diseño de un acortador de enlaces a gran escala",
+    "emoji": "🔗",
+    "level": "avanzado",
+    "summary": "Diseñas en papel un acortador de enlaces que aguanta muchos usuarios: cómo guardas los enlaces, cómo rediriges rápido y cómo creces sin caerte.",
+    "why": "El diseño de sistemas es la ronda que define entrevistas de semi senior en adelante; un documento claro con decisiones y números demuestra criterio de arquitectura.",
+    "features": [
+      "Estimación de carga: enlaces creados y redirecciones por segundo",
+      "Diseño de cómo se genera y guarda cada enlace corto",
+      "Camino de redirección rápido con caché",
+      "Plan de crecimiento y puntos de fallo"
+    ],
+    "acceptance": [
+      "Cada decisión se justifica con un número o un supuesto claro",
+      "El diseño explica qué pasa si una parte se cae",
+      "La redirección no depende de una sola máquina"
+    ],
+    "milestones": [
+      {
+        "title": "Semana 1: requisitos y números",
+        "tasks": [
+          "Definir qué hace y qué no hace el sistema",
+          "Estimar carga de escritura y de lectura"
+        ]
+      },
+      {
+        "title": "Semana 2: datos y redirección",
+        "tasks": [
+          "Diseñar cómo se genera y guarda el enlace corto",
+          "Diseñar el camino de redirección con caché"
+        ]
+      },
+      {
+        "title": "Semana 3: escala y fallos",
+        "tasks": [
+          "Plantear cómo crece ante más carga",
+          "Marcar los puntos de fallo y cómo mitigarlos"
+        ]
+      }
+    ],
+    "deliverables": [
+      "Documento de diseño en el repo con diagramas",
+      "Tabla de decisiones con su justificación",
+      "Lista de preguntas abiertas y supuestos"
+    ],
+    "stretch": [
+      "Cómo medir enlaces más usados sin frenar la redirección",
+      "Qué cambiaría si hubiera que expirar enlaces"
+    ],
+    "aiGuide": {
+      "steps": [
+        "Empieza preguntando a la IA qué requisitos aclarar antes de diseñar, como harías en la entrevista",
+        "Pide dos opciones para guardar los enlaces y compara ventajas tú mismo",
+        "Verifica tus números a mano: carga por segundo contra lo que aguanta una parte",
+        "Usa la IA para ensayar la defensa del diseño, pero decide tú cada compromiso"
+      ],
+      "samplePrompts": [
+        "Actúa como entrevistador de diseño de sistemas. Dame las preguntas que aclararías antes de diseñar un acortador de enlaces.",
+        "Compara dos formas de generar un código corto único para cada enlace, con sus ventajas y sus riesgos a gran escala.",
+        "Revisa mi estimación: 100 redirecciones por segundo y una base que aguanta 50. Dime qué parte falla y cómo lo resolverías."
+      ]
+    }
+  }
+]

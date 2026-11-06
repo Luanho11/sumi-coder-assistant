@@ -1,0 +1,772 @@
+[
+  {
+    "language": "javascript",
+    "area": "fundamentos",
+    "emoji": "➕",
+    "id": "ch-js-suma",
+    "trackId": "javascript",
+    "lessonId": "js-l1",
+    "title": "Suma de un arreglo",
+    "difficulty": "principiante",
+    "xp": 10,
+    "prompt": "Devuelve la suma de todos los números del arreglo.\n\nEjemplo: `[2, 4, 6]` → `12`. El arreglo vacío suma `0`.",
+    "functionName": "suma",
+    "starter": "function suma(nums) {\n  // completa\n  return null\n}",
+    "solution": "function suma(nums) {\n  return nums.reduce((t, n) => t + n, 0)\n}",
+    "tests": [
+      {
+        "name": "tres números",
+        "args": [
+          [
+            2,
+            4,
+            6
+          ]
+        ],
+        "expected": 12
+      },
+      {
+        "name": "arreglo vacío",
+        "args": [
+          []
+        ],
+        "expected": 0
+      },
+      {
+        "name": "con negativos",
+        "args": [
+          [
+            5,
+            -3,
+            1
+          ]
+        ],
+        "expected": 3
+      }
+    ],
+    "hints": [
+      "Puedes recorrer con un bucle o con reduce.",
+      "Empieza el total en 0 para que el vacío funcione.",
+      "reduce recibe (acumulado, actual) y un valor inicial 0."
+    ],
+    "analysis": "reduce es la herramienta natural para \"plegar\" una lista en un solo valor. El patrón (acumulador, elemento) => acumulador + elemento con inicial 0 sirve para sumar, contar o concatenar. Un bucle for con una variable total hace lo mismo; reduce solo lo dice más corto."
+  },
+  {
+    "language": "javascript",
+    "area": "fundamentos",
+    "emoji": "🔢",
+    "id": "ch-js-pares",
+    "trackId": "javascript",
+    "lessonId": "js-l4",
+    "title": "Solo los pares",
+    "difficulty": "principiante",
+    "xp": 10,
+    "prompt": "Devuelve un arreglo nuevo solo con los números pares, en el mismo orden.\n\nEjemplo: `[1, 2, 3, 4]` → `[2, 4]`.",
+    "functionName": "pares",
+    "starter": "function pares(nums) {\n  return null\n}",
+    "solution": "function pares(nums) {\n  return nums.filter((n) => n % 2 === 0)\n}",
+    "tests": [
+      {
+        "name": "mezcla",
+        "args": [
+          [
+            1,
+            2,
+            3,
+            4
+          ]
+        ],
+        "expected": [
+          2,
+          4
+        ]
+      },
+      {
+        "name": "ninguno",
+        "args": [
+          [
+            1,
+            3,
+            5
+          ]
+        ],
+        "expected": []
+      },
+      {
+        "name": "el cero es par",
+        "args": [
+          [
+            0,
+            7,
+            8
+          ]
+        ],
+        "expected": [
+          0,
+          8
+        ]
+      }
+    ],
+    "hints": [
+      "Un número es par si el resto de dividir entre 2 es 0.",
+      "filter deja pasar los elementos cuya condición es verdadera.",
+      "La condición es n % 2 === 0."
+    ],
+    "analysis": "filter construye un arreglo nuevo con los elementos que cumplen una condición, sin tocar el original. La clave es la condición de paridad n % 2 === 0 (el resto de dividir entre 2 es 0). Error típico: usar map, que devuelve siempre la misma cantidad de elementos."
+  },
+  {
+    "language": "javascript",
+    "area": "fundamentos",
+    "emoji": "🔄",
+    "id": "ch-js-invierte",
+    "trackId": "javascript",
+    "lessonId": "js-l6",
+    "title": "Palabra al revés",
+    "difficulty": "principiante",
+    "xp": 10,
+    "prompt": "Devuelve el texto con sus letras invertidas.\n\nEjemplo: `\"hola\"` → `\"aloh\"`.",
+    "functionName": "invierte",
+    "starter": "function invierte(texto) {\n  return null\n}",
+    "solution": "function invierte(texto) {\n  return [...texto].reverse().join(\"\")\n}",
+    "tests": [
+      {
+        "name": "palabra",
+        "args": [
+          "hola"
+        ],
+        "expected": "aloh"
+      },
+      {
+        "name": "vacío",
+        "args": [
+          ""
+        ],
+        "expected": ""
+      },
+      {
+        "name": "una letra",
+        "args": [
+          "a"
+        ],
+        "expected": "a"
+      }
+    ],
+    "hints": [
+      "Un texto se puede convertir en arreglo de letras.",
+      "Los arreglos tienen reverse().",
+      "Separa en letras, invierte y vuelve a unir con join(\"\")."
+    ],
+    "analysis": "El spread [...texto] parte el string respetando caracteres completos; luego reverse() invierte y join(\"\") vuelve a unir. Hacerlo con texto.split(\"\") también funciona, pero el spread maneja mejor emojis y acentos."
+  },
+  {
+    "language": "javascript",
+    "area": "fundamentos",
+    "emoji": "🧮",
+    "id": "ch-js-frecuencia",
+    "trackId": "javascript",
+    "lessonId": "js-l5",
+    "title": "¿Cuántas veces aparece?",
+    "difficulty": "intermedio",
+    "xp": 20,
+    "prompt": "Cuenta cuántas veces aparece cada palabra y devuelve un objeto.\n\nEjemplo: `[\"sol\", \"mar\", \"sol\"]` → `{ sol: 2, mar: 1 }`.",
+    "functionName": "frecuencia",
+    "starter": "function frecuencia(palabras) {\n  return null\n}",
+    "solution": "function frecuencia(palabras) {\n  const conteo = {}\n  for (const p of palabras) conteo[p] = (conteo[p] || 0) + 1\n  return conteo\n}",
+    "tests": [
+      {
+        "name": "repetidas",
+        "args": [
+          [
+            "sol",
+            "mar",
+            "sol"
+          ]
+        ],
+        "expected": {
+          "sol": 2,
+          "mar": 1
+        }
+      },
+      {
+        "name": "vacío",
+        "args": [
+          []
+        ],
+        "expected": {}
+      },
+      {
+        "name": "todas distintas",
+        "args": [
+          [
+            "a",
+            "b"
+          ]
+        ],
+        "expected": {
+          "a": 1,
+          "b": 1
+        }
+      }
+    ],
+    "hints": [
+      "Un objeto puede guardar palabra → número.",
+      "La primera vez que ves una palabra, su cuenta aún no existe.",
+      "Usa (conteo[p] || 0) + 1 para arrancar en 0."
+    ],
+    "analysis": "Contar ocurrencias es el patrón \"mapa de conteo\": un objeto donde la clave es el elemento y el valor cuántas veces apareció. La expresión (conteo[p] || 0) + 1 arranca en 0 la primera vez. Es la base de histogramas y de detectar duplicados."
+  },
+  {
+    "language": "javascript",
+    "area": "fundamentos",
+    "emoji": "🔤",
+    "id": "ch-js-anagrama",
+    "trackId": "javascript",
+    "lessonId": "js-l16",
+    "title": "¿Son anagramas?",
+    "difficulty": "intermedio",
+    "xp": 20,
+    "prompt": "Devuelve true si las dos palabras usan exactamente las mismas letras.\n\nEjemplo: `\"roma\"`, `\"amor\"` → `true`; `\"casa\"`, `\"saco\"` → `false`.",
+    "functionName": "anagrama",
+    "starter": "function anagrama(a, b) {\n  return null\n}",
+    "solution": "function anagrama(a, b) {\n  const ordenar = (s) => [...s].sort().join(\"\")\n  return ordenar(a) === ordenar(b)\n}",
+    "tests": [
+      {
+        "name": "sí lo son",
+        "args": [
+          "roma",
+          "amor"
+        ],
+        "expected": true
+      },
+      {
+        "name": "no lo son",
+        "args": [
+          "casa",
+          "saco"
+        ],
+        "expected": false
+      },
+      {
+        "name": "distinta longitud",
+        "args": [
+          "sol",
+          "solo"
+        ],
+        "expected": false
+      }
+    ],
+    "hints": [
+      "Si ordenas las letras de ambas, ¿cómo quedan?",
+      "Dos anagramas ordenados son idénticos.",
+      "Ordena las letras de cada palabra y compáralas."
+    ],
+    "analysis": "Dos palabras son anagramas si tienen exactamente las mismas letras. Ordenar ambas y compararlas las vuelve comparables sin importar el orden original. Alternativa más eficiente para textos largos: contar letras con un mapa de frecuencia en vez de ordenar."
+  },
+  {
+    "language": "javascript",
+    "area": "fundamentos",
+    "emoji": "🎲",
+    "id": "ch-js-fizzbuzz",
+    "trackId": "javascript",
+    "lessonId": "js-l2",
+    "title": "FizzBuzz",
+    "difficulty": "principiante",
+    "xp": 10,
+    "prompt": "Devuelve un arreglo del 1 al n: múltiplos de 3 → \"Fizz\", de 5 → \"Buzz\", de ambos → \"FizzBuzz\", el resto el número.\n\nEjemplo n=5 → `[1, 2, \"Fizz\", 4, \"Buzz\"]`.",
+    "functionName": "fizzbuzz",
+    "starter": "function fizzbuzz(n) {\n  return null\n}",
+    "solution": "function fizzbuzz(n) {\n  const out = []\n  for (let i = 1; i <= n; i++) {\n    if (i % 15 === 0) out.push(\"FizzBuzz\")\n    else if (i % 3 === 0) out.push(\"Fizz\")\n    else if (i % 5 === 0) out.push(\"Buzz\")\n    else out.push(i)\n  }\n  return out\n}",
+    "tests": [
+      {
+        "name": "hasta 5",
+        "args": [
+          5
+        ],
+        "expected": [
+          1,
+          2,
+          "Fizz",
+          4,
+          "Buzz"
+        ]
+      },
+      {
+        "name": "hasta 15",
+        "args": [
+          15
+        ],
+        "expected": [
+          1,
+          2,
+          "Fizz",
+          4,
+          "Buzz",
+          "Fizz",
+          7,
+          8,
+          "Fizz",
+          "Buzz",
+          11,
+          "Fizz",
+          13,
+          14,
+          "FizzBuzz"
+        ]
+      },
+      {
+        "name": "hasta 1",
+        "args": [
+          1
+        ],
+        "expected": [
+          1
+        ]
+      }
+    ],
+    "hints": [
+      "Comprueba primero el caso de los dos a la vez.",
+      "Múltiplo de 3 y de 5 es múltiplo de 15.",
+      "Ordena los if: 15, luego 3, luego 5, luego el número."
+    ],
+    "analysis": "El orden de los if importa: hay que comprobar el múltiplo de 15 (3 y 5 a la vez) ANTES que 3 o 5 por separado, o nunca saldría \"FizzBuzz\". Es el clásico de entrevista que mide si piensas los casos en el orden correcto."
+  },
+  {
+    "language": "javascript",
+    "area": "fundamentos",
+    "emoji": "📏",
+    "id": "ch-js-mayor",
+    "trackId": "javascript",
+    "lessonId": "js-l3",
+    "title": "El más largo",
+    "difficulty": "principiante",
+    "xp": 10,
+    "prompt": "Devuelve la palabra más larga del arreglo. Si hay empate, la primera. Arreglo vacío → \"\".",
+    "functionName": "masLarga",
+    "starter": "function masLarga(palabras) {\n  return null\n}",
+    "solution": "function masLarga(palabras) {\n  let mejor = \"\"\n  for (const p of palabras) if (p.length > mejor.length) mejor = p\n  return mejor\n}",
+    "tests": [
+      {
+        "name": "normal",
+        "args": [
+          [
+            "sol",
+            "planeta",
+            "luna"
+          ]
+        ],
+        "expected": "planeta"
+      },
+      {
+        "name": "empate toma la primera",
+        "args": [
+          [
+            "casa",
+            "mesa"
+          ]
+        ],
+        "expected": "casa"
+      },
+      {
+        "name": "vacío",
+        "args": [
+          []
+        ],
+        "expected": ""
+      }
+    ],
+    "hints": [
+      "Guarda la mejor hasta ahora.",
+      "Solo reemplazas si la nueva es ESTRICTAMENTE más larga.",
+      "Con > (no >=) el empate se queda con la primera."
+    ],
+    "analysis": "Es el patrón \"mejor hasta ahora\": guardas un candidato y lo reemplazas cuando aparece uno mejor. Arrancar mejor en \"\" (longitud 0) es seguro aquí porque cualquier palabra es más larga; con números negativos ese truco fallaría."
+  },
+  {
+    "language": "javascript",
+    "area": "fundamentos",
+    "emoji": "🪞",
+    "id": "ch-js-capicua",
+    "trackId": "javascript",
+    "lessonId": "js-l6",
+    "title": "¿Es capicúa?",
+    "difficulty": "intermedio",
+    "xp": 20,
+    "prompt": "Devuelve true si el texto se lee igual al derecho y al revés, ignorando mayúsculas y espacios.\n\nEjemplo: `\"Anita lava la tina\"` → `true`.",
+    "functionName": "capicua",
+    "starter": "function capicua(texto) {\n  return null\n}",
+    "solution": "function capicua(texto) {\n  const limpio = texto.toLowerCase().replace(/\\s/g, \"\")\n  return limpio === [...limpio].reverse().join(\"\")\n}",
+    "tests": [
+      {
+        "name": "frase",
+        "args": [
+          "Anita lava la tina"
+        ],
+        "expected": true
+      },
+      {
+        "name": "no capicúa",
+        "args": [
+          "hola"
+        ],
+        "expected": false
+      },
+      {
+        "name": "una letra",
+        "args": [
+          "a"
+        ],
+        "expected": true
+      }
+    ],
+    "hints": [
+      "Primero normaliza: minúsculas y sin espacios.",
+      "Compara el texto limpio con su versión invertida.",
+      "replace(/\\s/g, \"\") quita los espacios."
+    ],
+    "analysis": "Antes de comparar hay que normalizar: minúsculas y sin espacios, para que \"Anita lava la tina\" cuente como capicúa. Comparar el texto limpio con su inverso es directo. Normalizar antes de comparar es una idea que vuelve una y otra vez."
+  },
+  {
+    "language": "sql",
+    "area": "datos",
+    "emoji": "🎂",
+    "ordered": false,
+    "id": "ch-sql-mayores",
+    "trackId": "datos-sql",
+    "lessonId": "mod-11-s1",
+    "title": "Clientes mayores de edad",
+    "difficulty": "principiante",
+    "xp": 10,
+    "prompt": "La tabla `clientes(id, nombre, edad)`. Devuelve `nombre` y `edad` de los clientes con 18 años o más.",
+    "setup": "CREATE TABLE clientes (id INTEGER, nombre TEXT, edad INTEGER);\nINSERT INTO clientes VALUES (1,'Ana',17),(2,'Beto',25),(3,'Caro',18),(4,'Dani',15);",
+    "starter": "SELECT nombre, edad FROM clientes;",
+    "solution": "SELECT nombre, edad FROM clientes WHERE edad >= 18;",
+    "hints": [
+      "Necesitas filtrar filas: eso es WHERE.",
+      "\"Mayor o igual\" es el operador >=.",
+      "WHERE edad >= 18."
+    ],
+    "analysis": "Filtrar filas es trabajo de WHERE, no de SELECT (SELECT elige columnas, WHERE elige filas). El operador >= incluye el límite: \"18 o más\" es >= 18, no > 18. Confundir > con >= es un error de borde habitual."
+  },
+  {
+    "language": "sql",
+    "area": "datos",
+    "emoji": "🧾",
+    "ordered": true,
+    "id": "ch-sql-ventas",
+    "trackId": "datos-sql",
+    "lessonId": "mod-12-s1",
+    "title": "Ventas por cliente",
+    "difficulty": "intermedio",
+    "xp": 20,
+    "prompt": "Tablas `clientes(id, nombre)` y `ventas(id, cliente_id, monto)`. Devuelve `nombre` y el total vendido (`total`) de cada cliente, de mayor a menor total.",
+    "setup": "CREATE TABLE clientes (id INTEGER, nombre TEXT);\nCREATE TABLE ventas (id INTEGER, cliente_id INTEGER, monto INTEGER);\nINSERT INTO clientes VALUES (1,'Ana'),(2,'Beto');\nINSERT INTO ventas VALUES (1,1,100),(2,1,50),(3,2,300);",
+    "starter": "SELECT nombre, monto AS total FROM clientes JOIN ventas ON ventas.cliente_id = clientes.id;",
+    "solution": "SELECT c.nombre, SUM(v.monto) AS total\nFROM clientes c JOIN ventas v ON v.cliente_id = c.id\nGROUP BY c.id, c.nombre\nORDER BY total DESC;",
+    "hints": [
+      "Hay que unir las dos tablas y luego sumar por cliente.",
+      "Sumar por grupos: SUM(...) con GROUP BY.",
+      "Agrupa por cliente y ordena por el total con ORDER BY total DESC."
+    ],
+    "analysis": "Para totales por grupo se combinan JOIN (unir clientes con sus ventas), SUM (agregar los montos) y GROUP BY (una fila por cliente). Regla: lo que va en SELECT sin función de agregado debe ir también en GROUP BY. ORDER BY total DESC pone arriba al que más compró."
+  },
+  {
+    "language": "sql",
+    "area": "datos",
+    "emoji": "🕳️",
+    "ordered": false,
+    "id": "ch-sql-sinventas",
+    "trackId": "datos-sql",
+    "lessonId": "mod-12-s1",
+    "title": "Clientes que no compraron",
+    "difficulty": "intermedio",
+    "xp": 20,
+    "prompt": "Tablas `clientes(id, nombre)` y `ventas(id, cliente_id, monto)`. Devuelve el `nombre` de los clientes que no tienen ninguna venta.",
+    "setup": "CREATE TABLE clientes (id INTEGER, nombre TEXT);\nCREATE TABLE ventas (id INTEGER, cliente_id INTEGER, monto INTEGER);\nINSERT INTO clientes VALUES (1,'Ana'),(2,'Beto'),(3,'Caro');\nINSERT INTO ventas VALUES (1,1,100),(2,1,50);",
+    "starter": "SELECT nombre FROM clientes;",
+    "solution": "SELECT c.nombre\nFROM clientes c LEFT JOIN ventas v ON v.cliente_id = c.id\nWHERE v.id IS NULL;",
+    "hints": [
+      "Un INNER JOIN deja fuera a los que no compraron; necesitas conservarlos.",
+      "LEFT JOIN mantiene todos los clientes y deja NULL donde no hay venta.",
+      "Filtra con WHERE v.id IS NULL."
+    ],
+    "analysis": "Encontrar \"los que no tienen\" es el patrón LEFT JOIN + IS NULL: traes todos los clientes, enganchas sus ventas (si las hay) y te quedas con las filas donde la venta quedó en NULL, es decir, los que no compraron. Un INNER JOIN los dejaría fuera."
+  },
+  {
+    "id": "ch-bug-promedio",
+    "kind": "bug",
+    "trackId": "javascript",
+    "language": "javascript",
+    "area": "fundamentos",
+    "emoji": "🐛",
+    "title": "El promedio sale torcido",
+    "difficulty": "intermedio",
+    "xp": 20,
+    "prompt": "Esta función debería devolver el promedio de los números, pero siempre da un poco de más. Encuentra el fallo, entiende por qué pasa y arréglalo.",
+    "functionName": "promedio",
+    "starter": "function promedio(nums) {\n  let suma = 1\n  for (const n of nums) suma += n\n  return suma / nums.length\n}",
+    "solution": "function promedio(nums) {\n  let suma = 0\n  for (const n of nums) suma += n\n  return suma / nums.length\n}",
+    "tests": [
+      {
+        "name": "tres números",
+        "args": [
+          [
+            2,
+            4,
+            6
+          ]
+        ],
+        "expected": 4
+      },
+      {
+        "name": "uno solo",
+        "args": [
+          [
+            10
+          ]
+        ],
+        "expected": 10
+      },
+      {
+        "name": "con decimales",
+        "args": [
+          [
+            1,
+            2,
+            3,
+            4
+          ]
+        ],
+        "expected": 2.5
+      }
+    ],
+    "hints": [
+      "Suma a mano [2, 4, 6]: son 12, y 12 / 3 = 4. ¿Qué número te da la función?",
+      "Mira con qué valor empieza la variable suma antes del bucle.",
+      "Si suma arranca en 1, estás sumando un 1 de regalo. Debe empezar en 0."
+    ],
+    "analysis": "El bug está en `let suma = 1`. El acumulador de una suma siempre empieza en 0 (el elemento neutro de la suma); empezar en 1 mete un valor fantasma. Es un error clásico de \"valor inicial equivocado\": en una multiplicación el neutro sería 1, en una suma es 0."
+  },
+  {
+    "id": "ch-bug-maximo",
+    "kind": "bug",
+    "trackId": "javascript",
+    "language": "javascript",
+    "area": "fundamentos",
+    "emoji": "🐛",
+    "title": "El máximo falla con negativos",
+    "difficulty": "intermedio",
+    "xp": 20,
+    "prompt": "Busca el número más grande de la lista. Funciona con positivos, pero con una lista toda de negativos devuelve 0, que ni siquiera está en la lista. Encuentra por qué y corrígelo.",
+    "functionName": "maximo",
+    "starter": "function maximo(nums) {\n  let max = 0\n  for (const n of nums) if (n > max) max = n\n  return max\n}",
+    "solution": "function maximo(nums) {\n  let max = nums[0]\n  for (const n of nums) if (n > max) max = n\n  return max\n}",
+    "tests": [
+      {
+        "name": "positivos",
+        "args": [
+          [
+            3,
+            9,
+            2
+          ]
+        ],
+        "expected": 9
+      },
+      {
+        "name": "todos negativos",
+        "args": [
+          [
+            -5,
+            -1,
+            -8
+          ]
+        ],
+        "expected": -1
+      },
+      {
+        "name": "uno solo",
+        "args": [
+          [
+            4
+          ]
+        ],
+        "expected": 4
+      }
+    ],
+    "hints": [
+      "Con [-5, -1, -8] ningún número es mayor que 0, así que max se queda en 0. Pero 0 no está en la lista.",
+      "El problema es el punto de partida: ¿por qué 0 y no un valor que sí esté en la lista?",
+      "Arranca max con el primer elemento: `let max = nums[0]`."
+    ],
+    "analysis": "Inicializar el máximo en 0 asume que siempre habrá algo mayor que 0. Con datos negativos esa suposición se rompe. La regla segura: para buscar un máximo (o un mínimo) arranca con el primer elemento real de la colección, no con una constante inventada."
+  },
+  {
+    "id": "ch-bug-vocales",
+    "kind": "bug",
+    "trackId": "javascript",
+    "language": "javascript",
+    "area": "fundamentos",
+    "emoji": "🐛",
+    "title": "Se le escapan las vocales",
+    "difficulty": "principiante",
+    "xp": 10,
+    "prompt": "Esta función cuenta las vocales de un texto, pero se le escapan las que van en mayúscula. Encuentra el fallo y arréglalo para que cuente A y a por igual.",
+    "functionName": "vocales",
+    "starter": "function vocales(texto) {\n  let n = 0\n  for (const c of texto) if ('aeiou'.includes(c)) n++\n  return n\n}",
+    "solution": "function vocales(texto) {\n  let n = 0\n  for (const c of texto) if ('aeiou'.includes(c.toLowerCase())) n++\n  return n\n}",
+    "tests": [
+      {
+        "name": "minúsculas",
+        "args": [
+          "murcielago"
+        ],
+        "expected": 5
+      },
+      {
+        "name": "todas mayúsculas",
+        "args": [
+          "AEIOU"
+        ],
+        "expected": 5
+      },
+      {
+        "name": "mezcla",
+        "args": [
+          "Ave"
+        ],
+        "expected": 2
+      }
+    ],
+    "hints": [
+      "La cadena 'aeiou' solo tiene minúsculas, así que una 'A' nunca coincide.",
+      "Necesitas comparar cada letra en minúscula contra la lista.",
+      "Usa c.toLowerCase() dentro del includes."
+    ],
+    "analysis": "Comparar contra 'aeiou' solo funciona si la letra ya está en minúscula. El arreglo es normalizar antes de comparar: `c.toLowerCase()`. Normalizar (mayúsculas/minúsculas, acentos, espacios) antes de comparar evita media clase de bugs con texto."
+  },
+  {
+    "id": "ch-explica-reduce",
+    "kind": "explica",
+    "trackId": "javascript",
+    "language": "javascript",
+    "area": "fundamentos",
+    "emoji": "🔎",
+    "title": "Explica este reduce",
+    "difficulty": "intermedio",
+    "xp": 20,
+    "prompt": "Lee esta función y explica con tus palabras qué hace y cómo. ¿Qué papel juega `acum`? ¿Para qué sirve el `0` del final? Cuando tengas tu explicación, compárala con los puntos clave.",
+    "starter": "function total(precios) {\n  return precios.reduce((acum, p) => acum + p, 0)\n}",
+    "solution": "function total(precios) {\n  return precios.reduce((acum, p) => acum + p, 0)\n}",
+    "explainPoints": [
+      "reduce recorre el arreglo y lo va reduciendo a un solo valor",
+      "acum es el acumulador: arrastra el total de lo ya recorrido",
+      "p es cada precio, uno por vuelta",
+      "el 0 es el valor inicial del acumulador, con lo que empieza",
+      "al final devuelve la suma de todos los precios"
+    ],
+    "hints": [
+      "Imagina que vas sumando precios en una calculadora: acum es lo que llevas acumulado.",
+      "En cada vuelta la función recibe lo que llevas (acum) y el siguiente precio (p).",
+      "El segundo argumento de reduce, el 0, es el punto de partida de acum."
+    ],
+    "analysis": "reduce es el patrón \"pliega una lista en un valor\". Recibe una función (acumulador, elemento) y un valor inicial. Aquí pliega los precios en su suma. Si quitaras el 0, reduce tomaría el primer elemento como inicial: con un arreglo vacío eso lanza error, por eso dar el inicial es más seguro."
+  },
+  {
+    "id": "ch-explica-closure",
+    "kind": "explica",
+    "trackId": "javascript",
+    "language": "javascript",
+    "area": "fundamentos",
+    "emoji": "🔎",
+    "title": "El contador que recuerda",
+    "difficulty": "avanzado",
+    "xp": 30,
+    "prompt": "Explica qué hace este código. Si `n` se declara dentro de contador(), ¿por qué siguiente() devuelve 1, luego 2, luego 3 en vez de 1 siempre? ¿Cómo se llama esto?",
+    "starter": "function contador() {\n  let n = 0\n  return () => ++n\n}\nconst siguiente = contador()\n// siguiente() -> 1, siguiente() -> 2, siguiente() -> 3",
+    "solution": "function contador() {\n  let n = 0\n  return () => ++n\n}\nconst siguiente = contador()",
+    "explainPoints": [
+      "contador() crea una variable n y devuelve una función",
+      "esa función devuelta recuerda la n aunque contador() ya terminó",
+      "n no se reinicia entre llamadas a siguiente(), por eso sube 1, 2, 3",
+      "cada vez que llamas a contador() se crea una n nueva e independiente",
+      "a esto se le llama clausura (closure)"
+    ],
+    "hints": [
+      "La función que devuelve contador() \"se lleva consigo\" la variable n.",
+      "n vive mientras alguien siga usando la función que la usa, no se borra al terminar contador().",
+      "Ese recuerdo de las variables de alrededor tiene un nombre: clausura o closure."
+    ],
+    "analysis": "Una clausura es una función que recuerda el entorno donde nació. Aquí la flecha `() => ++n` guarda una referencia viva a n. Mientras `siguiente` exista, n existe y se conserva entre llamadas. Es la base de contadores, cachés y datos privados en JavaScript."
+  },
+  {
+    "id": "ch-explica-recursion",
+    "kind": "explica",
+    "trackId": "javascript",
+    "language": "javascript",
+    "area": "fundamentos",
+    "emoji": "🔎",
+    "title": "Una función que se llama a sí misma",
+    "difficulty": "avanzado",
+    "xp": 30,
+    "prompt": "Explica cómo funciona este factorial. ¿Qué pasa cuando n llega a 0? ¿Qué pasaría si borraras esa primera línea? Compara tu explicación con los puntos clave.",
+    "starter": "function factorial(n) {\n  if (n === 0) return 1\n  return n * factorial(n - 1)\n}",
+    "solution": "function factorial(n) {\n  if (n === 0) return 1\n  return n * factorial(n - 1)\n}",
+    "explainPoints": [
+      "la función se llama a sí misma con un número más pequeño cada vez",
+      "el if n === 0 es el caso base: donde para de llamarse",
+      "multiplica n por el factorial de n menos 1",
+      "sin el caso base se llamaría para siempre y reventaría",
+      "las llamadas se van apilando y se resuelven de abajo hacia arriba"
+    ],
+    "hints": [
+      "Sigue factorial(3) a mano: 3 * factorial(2), y factorial(2) es 2 * factorial(1)...",
+      "La primera línea es la que hace que la cadena de llamadas termine.",
+      "Sin esa línea, n bajaría a -1, -2... sin parar nunca."
+    ],
+    "analysis": "La recursión resuelve un problema en términos de una versión más pequeña de sí mismo. Siempre necesita un caso base (aquí n === 0) que corte la cadena; si falta, la pila de llamadas crece hasta desbordarse (\"Maximum call stack size exceeded\"). Factorial(3) = 3*2*1*1 = 6."
+  },
+  {
+    "id": "ch-css-centrar",
+    "kind": "css",
+    "trackId": "html-css",
+    "language": "css",
+    "area": "frontend",
+    "emoji": "🎯",
+    "title": "Centra el texto en la caja",
+    "difficulty": "principiante",
+    "xp": 10,
+    "prompt": "Este CSS pinta una caja alta, pero el texto se queda pegado arriba a la izquierda. Corrígelo para que \"Hola\" quede justo en el centro, como en el modelo. Ves el cambio en vivo a la derecha.",
+    "html": "<div class=\"caja\"><p>Hola</p></div>",
+    "model": "Una caja de 200px de alto con el texto \"Hola\" centrado tanto horizontal como verticalmente, justo en el medio.",
+    "starter": ".caja {\n  height: 200px;\n  background: #eef;\n}",
+    "solution": ".caja {\n  height: 200px;\n  background: #eef;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}",
+    "hints": [
+      "Para centrar en los dos ejes a la vez, flexbox es el camino corto: empieza con display: flex.",
+      "align-items centra en vertical (el eje de arriba a abajo).",
+      "justify-content centra en horizontal (el eje de izquierda a derecha)."
+    ],
+    "analysis": "El truco moderno para centrar es `display: flex` + `align-items: center` + `justify-content: center` en el contenedor. align-items manda en el eje transversal (vertical por defecto) y justify-content en el eje principal (horizontal). Es el patrón de centrado más usado hoy."
+  },
+  {
+    "id": "ch-css-tarjeta",
+    "kind": "css",
+    "trackId": "html-css",
+    "language": "css",
+    "area": "frontend",
+    "emoji": "🪪",
+    "title": "Arregla la tarjeta",
+    "difficulty": "intermedio",
+    "xp": 20,
+    "prompt": "La tarjeta se ve plana y apretada: sin aire, esquinas cuadradas y el botón se confunde con el fondo. Déjala como el modelo. El resultado se actualiza en vivo a la derecha.",
+    "html": "<div class=\"tarjeta\">\n  <h3>Plan Pro</h3>\n  <p>Todo lo que necesitas para aprender.</p>\n  <button>Empezar</button>\n</div>",
+    "model": "Una tarjeta blanca con esquinas redondeadas, espacio interior cómodo y una sombra suave. El botón tiene fondo azul, texto blanco y esquinas redondeadas.",
+    "starter": ".tarjeta {\n  background: #fff;\n  width: 220px;\n}\n.tarjeta button {\n  border: none;\n}",
+    "solution": ".tarjeta {\n  background: #fff;\n  width: 220px;\n  padding: 20px;\n  border-radius: 14px;\n  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);\n}\n.tarjeta button {\n  border: none;\n  background: #0071e3;\n  color: #fff;\n  padding: 10px 16px;\n  border-radius: 8px;\n}",
+    "hints": [
+      "El \"aire\" interior es padding; las esquinas suaves, border-radius; la sombra, box-shadow.",
+      "Para el botón: dale background de color, color de texto blanco y su propio padding.",
+      "Un border-radius pequeño (8px) en el botón lo integra con la tarjeta."
+    ],
+    "analysis": "Tres propiedades convierten un bloque plano en una tarjeta: padding (espacio interior que da respiro), border-radius (esquinas suaves, más amables) y box-shadow (profundidad que la separa del fondo). El botón repite el patrón: fondo de color + texto contrastado + padding + radius."
+  }
+]

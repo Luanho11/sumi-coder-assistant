@@ -1,0 +1,1621 @@
+{
+  "track": {
+    "id": "javascript",
+    "title": "JavaScript y TypeScript: de cero a entrevista",
+    "description": "Del primer let a resolver algoritmos en una entrevista: datos, POO, asincronía, TypeScript y patrones que te piden en 2026.",
+    "area": "fundamentos",
+    "color": "#FF9F0A",
+    "source": "xara",
+    "modules": [
+      {
+        "id": "js-m1",
+        "trackId": "javascript",
+        "title": "Fundamentos",
+        "description": "Variables, tipos, decisiones, repeticiones y funciones: lo mínimo para escribir lógica que funciona y que puedes explicar.",
+        "level": "principiante",
+        "lessons": [
+          {
+            "id": "js-l1",
+            "title": "Variables y tipos",
+            "objective": "Elegir entre const y let, reconocer los tipos de JavaScript y evitar las trampas de comparación y conversión.",
+            "slides": [
+              {
+                "title": "🏷️ const, let y el viejo var",
+                "content": "- **const**: el nombre no se puede reasignar. Úsalo por defecto.\n- **let**: el valor va a cambiar (un contador, un total).\n- **var**: código antiguo; evítalo, se salta los bloques `{}`.\n\n```js\nconst iva = 0.19\nlet total = 0\ntotal = total + 100 * (1 + iva) // ✅\niva = 0.21 // ❌ TypeError\n```\n⚠️ `const` no congela objetos: `const carrito = []` sí acepta `carrito.push('pan')`."
+              },
+              {
+                "title": "🧬 Los 7 tipos primitivos y los objetos",
+                "content": "| Tipo | Ejemplo |\n|---|---|\n| string | `'Ana'` |\n| number | `42`, `3.5`, `NaN` |\n| boolean | `true` |\n| undefined | variable sin valor |\n| null | vacío a propósito |\n| bigint | `10n` |\n| symbol | `Symbol('id')` |\n\nTodo lo demás (arrays, funciones, fechas) es **object**.\n`typeof null` da `'object'`: es un error histórico del lenguaje, no lo uses para detectar null."
+              },
+              {
+                "title": "⚖️ === y la conversión automática",
+                "content": "- `==` convierte antes de comparar: `'0' == 0` → **true** 😬\n- `===` compara valor **y** tipo: `'0' === 0` → **false** ✅\n- El `+` con un string concatena: `'5' + 1` → `'51'`\n- El `-` convierte a número: `'5' - 1` → `4`\n\n```js\nconst cantidad = Number(input.value) // convierte tú, explícito\nif (cantidad === 0) mostrarAviso()\n```\n🎯 Regla de equipo: siempre `===` y conversiones explícitas con `Number()` o `String()`."
+              }
+            ],
+            "videos": [
+              {
+                "kind": "video",
+                "title": "Buscar en YouTube: variables let const tipos javascript",
+                "url": "https://www.youtube.com/results?search_query=variables+let+const+tipos+javascript"
+              }
+            ],
+            "quiz": {
+              "id": "quiz-js-l1",
+              "area": "fundamentos",
+              "difficulty": "principiante",
+              "question": "En el carrito de una tienda escribes `const carrito = []` y luego `carrito.push('café')`. ¿Qué pasa?",
+              "options": [
+                "Lanza TypeError porque carrito es const",
+                "Funciona: const impide reasignar, no modificar el array",
+                "Crea una copia nueva del array",
+                "Funciona solo si cambias const por var"
+              ],
+              "correctIndex": 1,
+              "explanation": "const fija a qué apunta el nombre, no el contenido. push modifica el mismo array. Lo que falla es `carrito = ['otro']`."
+            },
+            "exerciseIds": [
+              "js-l1-e1"
+            ]
+          },
+          {
+            "id": "js-l2",
+            "title": "Condicionales y bucles",
+            "objective": "Tomar decisiones con if, ternario y switch, entender truthy/falsy y recorrer listas con el bucle adecuado.",
+            "slides": [
+              {
+                "title": "🚦 Decidir: if, ternario y switch",
+                "content": "```js\nif (stock === 0) mostrar('Agotado')\nelse if (stock < 5) mostrar('Últimas unidades')\nelse mostrar('Disponible')\n\nconst etiqueta = esVip ? 'Envío gratis' : 'Envío $5'\n```\n- **if/else**: varias condiciones con lógica distinta.\n- **Ternario**: elegir entre **dos valores**, no para ejecutar bloques largos.\n- **switch**: un mismo valor contra muchos casos fijos (`'pendiente'`, `'pagado'`…). No olvides `break`."
+              },
+              {
+                "title": "🫥 Truthy y falsy: la trampa del 0",
+                "content": "Valores que cuentan como **false** en un `if`:\n`false` · `0` · `''` · `null` · `undefined` · `NaN`\n\nTodo lo demás es truthy, incluso `'0'`, `[]` y `{}`.\n\n```js\nconst stock = 0\nif (stock) vender()        // ❌ nunca vende... ni avisa\nif (stock > 0) vender()    // ✅ intención clara\n```\n🎯 Si el 0 es un valor válido (precio, stock, descuento), compara de forma explícita."
+              },
+              {
+                "title": "🔁 Elegir el bucle",
+                "content": "```mermaid\nflowchart LR\n  A[Recorrer lista]:::azul --> B{Necesitas índice?}:::amarillo\n  B -- No --> C[for...of]:::verde\n  B -- Sí --> D[for clásico]:::verde\n  E[Repetir hasta condición]:::azul --> F[while]:::naranja\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n  classDef amarillo fill:#FFD60A,stroke:#FFD60A,color:#1d1d1f\n  classDef naranja fill:#FF9F0A,stroke:#FF9F0A,color:#fff\n```\n`break` sale del bucle; `continue` salta a la siguiente vuelta."
+              }
+            ],
+            "videos": [
+              {
+                "kind": "video",
+                "title": "Buscar en YouTube: condicionales y bucles javascript",
+                "url": "https://www.youtube.com/results?search_query=condicionales+y+bucles+javascript"
+              }
+            ],
+            "quiz": {
+              "id": "quiz-js-l2",
+              "area": "fundamentos",
+              "difficulty": "principiante",
+              "question": "Un consultorio guarda `turnosLibres = 0` y el código hace `if (turnosLibres) reservar() else mostrar('Sin turnos')`. Hay 0 turnos. ¿Qué se muestra?",
+              "options": [
+                "Se ejecuta reservar() porque 0 es un número",
+                "Lanza un error porque 0 no es boolean",
+                "Se muestra 'Sin turnos' porque 0 es falsy",
+                "No hace nada: if ignora los números"
+              ],
+              "correctIndex": 2,
+              "explanation": "0 es falsy, así que entra al else. Aquí funciona, pero el riesgo aparece al revés: si 0 fuera un valor válido (precio 0), un if así lo trataría como 'no hay dato'."
+            },
+            "exerciseIds": [
+              "js-l2-e1"
+            ]
+          },
+          {
+            "id": "js-l3",
+            "title": "Funciones",
+            "objective": "Escribir funciones con parámetros, valores por defecto y return, y distinguir funciones puras de las que tienen efectos.",
+            "slides": [
+              {
+                "title": "🧪 Anatomía de una función",
+                "content": "```js\nfunction calcularEnvio(peso, zona = 'local') {\n  const base = zona === 'local' ? 3 : 8\n  return base + peso * 0.5\n}\ncalcularEnvio(4)          // 5\ncalcularEnvio(4, 'otra')  // 10\n```\n- **Parámetros**: los huecos que llenas al llamar.\n- **Por defecto**: `zona = 'local'` si no la pasas.\n- **return**: lo que devuelve. Sin return devuelve `undefined`."
+              },
+              {
+                "title": "➡️ Funciones flecha",
+                "content": "```js\nconst doble = (n) => n * 2          // return implícito\nconst conIva = (p) => { p * 1.19 }  // ❌ devuelve undefined\nconst conIva2 = (p) => { return p * 1.19 } // ✅\n```\n- Sin llaves: devuelve la expresión.\n- Con llaves: necesitas `return`.\n- Las funciones son **valores**: se guardan en variables y se pasan a otras funciones (`boton.addEventListener('click', pagar)`)."
+              },
+              {
+                "title": "🧼 Puras vs con efectos",
+                "content": "**Pura** = misma entrada → misma salida, y no toca nada de fuera.\n\n```js\n// ✅ pura: fácil de probar\nconst total = (items) => items.length * 10\n\n// ⚠️ con efectos: depende y modifica algo externo\nlet contador = 0\nfunction registrarVisita() { contador++ }\n```\n🎯 Deja la lógica en funciones puras y aísla los efectos (guardar, imprimir, llamar al servidor) en pocos lugares. Así los tests son triviales."
+              }
+            ],
+            "videos": [
+              {
+                "kind": "video",
+                "title": "Buscar en YouTube: funciones javascript flecha parametros",
+                "url": "https://www.youtube.com/results?search_query=funciones+javascript+flecha+parametros"
+              }
+            ],
+            "quiz": {
+              "id": "quiz-js-l3",
+              "area": "fundamentos",
+              "difficulty": "principiante",
+              "question": "Escribes `const aplicarCupon = (precio) => { precio * 0.9 }` y `aplicarCupon(100)` devuelve undefined. ¿Por qué?",
+              "options": [
+                "Porque 0.9 debe escribirse como 90/100",
+                "Porque las flechas no aceptan parámetros",
+                "Porque falta llamar con new",
+                "Porque con llaves la flecha necesita return explícito"
+              ],
+              "correctIndex": 3,
+              "explanation": "Con llaves el cuerpo es un bloque y sin return devuelve undefined. Quita las llaves o escribe `return precio * 0.9`."
+            },
+            "exerciseIds": [
+              "js-l3-e1"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "js-m2",
+        "trackId": "javascript",
+        "title": "Datos",
+        "description": "Transformar listas, objetos, JSON, textos y fechas como lo hace una app real: sin mutar por accidente y sin errores de zona horaria.",
+        "level": "principiante",
+        "lessons": [
+          {
+            "id": "js-l4",
+            "title": "Arrays: map, filter y reduce",
+            "objective": "Transformar, filtrar y resumir listas con map, filter y reduce sin modificar el array original.",
+            "slides": [
+              {
+                "title": "🏭 La cadena de montaje",
+                "content": "```mermaid\nflowchart LR\n  A[Pedidos]:::azul --> B[filter: pagados]:::naranja\n  B --> C[map: solo total]:::morado\n  C --> D[reduce: suma]:::verde\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef naranja fill:#FF9F0A,stroke:#FF9F0A,color:#fff\n  classDef morado fill:#BF5AF2,stroke:#BF5AF2,color:#fff\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n```\n- **filter** → menos elementos, mismos objetos.\n- **map** → mismos elementos, otra forma.\n- **reduce** → un solo valor.\nNinguno modifica el array original."
+              },
+              {
+                "title": "💻 En código",
+                "content": "```js\nconst pedidos = [\n  { id: 1, total: 30, pagado: true },\n  { id: 2, total: 15, pagado: false },\n  { id: 3, total: 45, pagado: true },\n]\nconst ingresos = pedidos\n  .filter((p) => p.pagado)\n  .map((p) => p.total)\n  .reduce((suma, t) => suma + t, 0) // 75\n```\n🎯 El `0` final es el valor inicial: sin él, un array vacío lanza TypeError."
+              },
+              {
+                "title": "🧰 Los otros que vas a usar",
+                "content": "- `find(fn)` → el **primer** elemento que cumple, o `undefined`.\n- `some(fn)` / `every(fn)` → true/false.\n- `includes(x)` → ¿está este valor?\n- `forEach(fn)` → solo efectos, **no devuelve nada**.\n\n⚠️ `sort()` sí **modifica** el original y ordena como texto:\n`[10, 9, 1].sort()` → `[1, 10, 9]`\nUsa `[...lista].sort((a, b) => a - b)` o `toSorted`."
+              }
+            ],
+            "videos": [
+              {
+                "kind": "video",
+                "title": "Buscar en YouTube: map filter reduce javascript",
+                "url": "https://www.youtube.com/results?search_query=map+filter+reduce+javascript"
+              }
+            ],
+            "quiz": {
+              "id": "quiz-js-l4",
+              "area": "fundamentos",
+              "difficulty": "principiante",
+              "question": "Quieres los nombres de productos agotados: `productos.map(p => p.stock === 0)`. ¿Qué obtienes?",
+              "options": [
+                "Los nombres de los productos agotados",
+                "Un array de true/false del mismo tamaño",
+                "Solo los productos con stock 0",
+                "Un único número con cuántos están agotados"
+              ],
+              "correctIndex": 1,
+              "explanation": "map siempre devuelve un elemento por cada entrada; aquí, el resultado de la comparación. Lo correcto: `filter(p => p.stock === 0).map(p => p.nombre)`."
+            },
+            "exerciseIds": [
+              "js-l4-e1"
+            ]
+          },
+          {
+            "id": "js-l5",
+            "title": "Objetos y JSON",
+            "objective": "Leer y actualizar objetos sin mutarlos por accidente, y convertir datos a JSON sabiendo qué se pierde por el camino.",
+            "slides": [
+              {
+                "title": "🗂️ Leer objetos",
+                "content": "```js\nconst paciente = { nombre: 'Rosa', edad: 34, contacto: { tel: '555-01' } }\n\npaciente.nombre          // 'Rosa'\npaciente['edad']         // 34 (útil si la clave está en una variable)\npaciente.alergias?.length // undefined, sin romperse\n\nconst { nombre, contacto: { tel } } = paciente // destructuring\n```\n🎯 `?.` evita el clásico *Cannot read properties of undefined*."
+              },
+              {
+                "title": "📋 Copiar sin romper el original",
+                "content": "```js\nconst editado = { ...paciente, edad: 35 } // ✅ copia + cambio\neditado.contacto.tel = '555-99'           // 😱 también cambia paciente\n```\nEl spread `...` hace una **copia superficial**: los objetos de adentro se comparten.\n\n- Copia profunda: `structuredClone(paciente)`\n- O copia también el nivel interno: `{ ...paciente, contacto: { ...paciente.contacto, tel: '555-99' } }`"
+              },
+              {
+                "title": "📦 JSON: el formato de viaje",
+                "content": "```js\nconst texto = JSON.stringify({ id: 7, fecha: new Date(), avisar() {} })\n// '{\"id\":7,\"fecha\":\"2026-10-24T15:00:00.000Z\"}'\nconst datos = JSON.parse(texto)\ntypeof datos.fecha // 'string' ⚠️\n```\n- Las **funciones** y los `undefined` desaparecen.\n- Las **fechas** llegan como texto: vuelve a crear `new Date(datos.fecha)`.\n- `JSON.parse` lanza error con texto inválido: envuélvelo en try/catch."
+              }
+            ],
+            "videos": [
+              {
+                "kind": "video",
+                "title": "Buscar en YouTube: objetos y JSON javascript",
+                "url": "https://www.youtube.com/results?search_query=objetos+y+JSON+javascript"
+              }
+            ],
+            "quiz": {
+              "id": "quiz-js-l5",
+              "area": "fundamentos",
+              "difficulty": "principiante",
+              "question": "Haces `const copia = { ...pedido }` y luego `copia.cliente.email = 'nuevo@x.com'`. ¿Qué pasa con `pedido.cliente.email`?",
+              "options": [
+                "Sigue igual porque spread copia todo",
+                "Lanza error porque copia es const",
+                "Se borra porque spread no copia objetos internos",
+                "También cambia porque cliente es el mismo objeto"
+              ],
+              "correctIndex": 3,
+              "explanation": "Spread copia solo el primer nivel; `cliente` sigue siendo una referencia compartida. Usa structuredClone o copia ese nivel con otro spread."
+            },
+            "exerciseIds": [
+              "js-l5-e1"
+            ]
+          },
+          {
+            "id": "js-l6",
+            "title": "Texto y fechas",
+            "objective": "Limpiar y formatear textos, mostrar precios con moneda local y manejar fechas sin errores de mes ni de zona horaria.",
+            "slides": [
+              {
+                "title": "✂️ Texto: limpiar y armar",
+                "content": "```js\nconst email = '  Ana@Correo.COM '.trim().toLowerCase() // 'ana@correo.com'\nconst msg = `Hola ${nombre}, tu cita es a las ${hora}` // template literal\n'ped-0042'.split('-')     // ['ped', '0042']\nString(42).padStart(5, '0') // '00042'\n'Café con leche'.includes('leche') // true\n```\n🎯 Normaliza (trim + minúsculas) **antes** de comparar o guardar emails y búsquedas."
+              },
+              {
+                "title": "💲 Números como dinero",
+                "content": "```js\nconst precio = new Intl.NumberFormat('es-MX', {\n  style: 'currency', currency: 'MXN',\n}).format(1234.5) // '$1,234.50'\n\n0.1 + 0.2 === 0.3 // false 😬 (0.30000000000000004)\n```\n- Formatea **solo al mostrar**; guarda el número.\n- Para sumar dinero, trabaja en centavos enteros: `1050` en vez de `10.50`."
+              },
+              {
+                "title": "📅 Fechas: dos trampas clásicas",
+                "content": "```js\nnew Date(2026, 0, 15)   // 15 de ENERO: los meses empiezan en 0\nnew Date('2026-01-15')  // medianoche UTC → en México se ve 14 de enero\nnew Date('2026-01-15T09:00') // hora local ✅\n\nnew Intl.DateTimeFormat('es', { dateStyle: 'full', timeStyle: 'short' })\n  .format(cita) // 'jueves, 15 de enero de 2026, 9:00'\n```\n🎯 Guarda en ISO UTC (`toISOString()`), muestra en hora local con `Intl`."
+              }
+            ],
+            "videos": [
+              {
+                "kind": "video",
+                "title": "Buscar en YouTube: fechas Date Intl javascript",
+                "url": "https://www.youtube.com/results?search_query=fechas+Date+Intl+javascript"
+              }
+            ],
+            "quiz": {
+              "id": "quiz-js-l6",
+              "area": "fundamentos",
+              "difficulty": "principiante",
+              "question": "Un paciente en Colombia (UTC-5) agenda para '2026-03-10' y la app hace `new Date('2026-03-10')`. ¿Qué día ve en su pantalla?",
+              "options": [
+                "El 10 de marzo a las 00:00",
+                "El 9 de marzo por la noche",
+                "El 10 de abril, porque los meses empiezan en 0",
+                "Un error: falta la hora"
+              ],
+              "correctIndex": 1,
+              "explanation": "Una fecha ISO sin hora se interpreta como medianoche UTC; en UTC-5 eso es el 9 a las 19:00. El desfase de mes solo ocurre con new Date(año, mes, día)."
+            },
+            "exerciseIds": [
+              "js-l6-e1"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "js-m3",
+        "trackId": "javascript",
+        "title": "Programación orientada a objetos",
+        "description": "Qué es la POO de verdad: clases, objetos, herencia, composición, encapsulación y los principios SOLID que te preguntan en entrevistas.",
+        "level": "intermedio",
+        "lessons": [
+          {
+            "id": "js-l7",
+            "title": "Clases y objetos",
+            "objective": "Explicar qué es la programación orientada a objetos y modelar una entidad real con una clase, su constructor y sus métodos.",
+            "slides": [
+              {
+                "title": "🧩 ¿Qué es la POO?",
+                "content": "Organizar el código en **objetos** que juntan lo que algo **es** (datos) y lo que **hace** (métodos).\n\n```mermaid\nflowchart LR\n  P[Problema real]:::naranja --> O[Objetos]:::azul\n  O --> D[Datos: estado]:::cian\n  O --> M[Métodos: acciones]:::verde\n  classDef naranja fill:#FF9F0A,stroke:#FF9F0A,color:#fff\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef cian fill:#64D2FF,stroke:#64D2FF,color:#1d1d1f\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n```\n🛒 Un producto **tiene** precio y stock, y **sabe** venderse."
+              },
+              {
+                "title": "🍪 Clase = molde, objeto = galleta",
+                "content": "```mermaid\nflowchart LR\n  C[class Producto]:::azul -- new --> A[café · $4 · 10u]:::verde\n  C -- new --> B[torta · $12 · 2u]:::verde\n  C -- new --> T[té · $3 · 0u]:::verde\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n```\n- La **clase** describe la forma; no es un producto.\n- Cada **objeto** (instancia) tiene sus propios datos.\n- Cambiar el stock del café no toca la torta."
+              },
+              {
+                "title": "🛠️ La clase en código",
+                "content": "```js\nclass Producto {\n  constructor(nombre, precio, stock) {\n    this.nombre = nombre   // this = el objeto que se está creando\n    this.precio = precio\n    this.stock = stock\n  }\n  hayStock() { return this.stock > 0 }\n  vender(cantidad) {\n    if (cantidad > this.stock) throw new Error('Stock insuficiente')\n    this.stock -= cantidad\n  }\n}\nconst cafe = new Producto('Café', 4, 10)\ncafe.vender(3) // cafe.stock → 7\n```"
+              },
+              {
+                "title": "🗺️ El plano: diagrama de clase",
+                "content": "```mermaid\nclassDiagram\n  class Producto {\n    +nombre\n    +precio\n    +stock\n    +hayStock() bool\n    +vender(cantidad)\n  }\n  class Producto:::azul\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n```\nArriba los **datos**, abajo los **métodos**. Es el dibujo que se hace en la pizarra de una entrevista.\n\n🏛️ Los 4 pilares: **abstracción** (modelar solo lo útil), **encapsulación**, **herencia** y **polimorfismo**: los verás en las próximas clases."
+              }
+            ],
+            "videos": [
+              {
+                "kind": "video",
+                "title": "Buscar en YouTube: programacion orientada a objetos javascript clases",
+                "url": "https://www.youtube.com/results?search_query=programacion+orientada+a+objetos+javascript+clases"
+              }
+            ],
+            "quiz": {
+              "id": "quiz-js-l7",
+              "area": "fundamentos",
+              "difficulty": "intermedio",
+              "question": "Creas `const a = new Producto('Café', 4, 10)` y `const b = new Producto('Café', 4, 10)`, y luego `a.vender(10)`. ¿Cuánto vale `b.stock`?",
+              "options": [
+                "0, porque vienen de la misma clase",
+                "10, porque cada objeto guarda sus propios datos",
+                "undefined, porque b no se vendió",
+                "Error, no puede haber dos productos iguales"
+              ],
+              "correctIndex": 1,
+              "explanation": "La clase es solo el molde: cada new crea un objeto independiente con su propio stock. a y b se parecen, pero no son el mismo objeto (a === b es false)."
+            },
+            "exerciseIds": [
+              "js-l7-e1",
+              "js-l7-e2"
+            ]
+          },
+          {
+            "id": "js-l8",
+            "title": "Herencia vs composición",
+            "objective": "Usar extends y super cuando hay una relación 'es un', y preferir composición cuando la relación es 'tiene un' o 'usa un'.",
+            "slides": [
+              {
+                "title": "🧬 Herencia: «es un»",
+                "content": "```js\nclass Usuario {\n  constructor(nombre) { this.nombre = nombre }\n  saludo() { return `Hola, ${this.nombre}` }\n}\nclass Medico extends Usuario {\n  constructor(nombre, especialidad) {\n    super(nombre)                // llama al constructor padre\n    this.especialidad = especialidad\n  }\n  saludo() { return `Dr. ${this.nombre}` } // sobrescribe\n}\n```\nUn médico **es un** usuario: hereda `nombre` y puede cambiar `saludo()`.\n🎭 **Polimorfismo**: `usuarios.map(u => u.saludo())` funciona igual con pacientes y médicos, cada uno a su manera."
+              },
+              {
+                "title": "🌳 El árbol de herencia",
+                "content": "```mermaid\nclassDiagram\n  class Usuario {\n    +nombre\n    +saludo()\n  }\n  class Paciente {\n    +historial\n  }\n  class Medico {\n    +especialidad\n    +saludo()\n  }\n  Usuario <|-- Paciente\n  Usuario <|-- Medico\n  class Usuario:::azul\n  class Paciente:::verde\n  class Medico:::verde\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n```\nAzul = padre con lo común. Verde = hijos con lo propio."
+              },
+              {
+                "title": "⚠️ Cuándo la herencia duele",
+                "content": "Pides notificaciones y nace esto:\n`Notificacion` → `NotificacionEmail` → `NotificacionEmailUrgente` → `NotificacionEmailUrgenteConSms` 😵\n\n- Cada combinación nueva = otra subclase.\n- Cambiar el padre rompe a todos los hijos.\n- Heredas métodos que no quieres.\n\n🍌 «Querías un plátano y te llegó el gorila sosteniéndolo, con toda la selva»."
+              },
+              {
+                "title": "🧱 Composición: «tiene un»",
+                "content": "```js\nconst porEmail = { enviar: (msg) => email.send(msg) }\nconst porSms   = { enviar: (msg) => sms.send(msg) }\n\nclass Cita {\n  constructor(fecha, canales) { this.fecha = fecha; this.canales = canales }\n  confirmar() { this.canales.forEach((c) => c.enviar(`Cita ${this.fecha}`)) }\n}\nnew Cita('3 nov', [porEmail, porSms]) // combinas piezas, sin subclases\n```\n🎯 Regla: **«es un» estable** → herencia. **«tiene/usa un»** → composición."
+              }
+            ],
+            "videos": [
+              {
+                "kind": "video",
+                "title": "Buscar en YouTube: herencia vs composicion programacion",
+                "url": "https://www.youtube.com/results?search_query=herencia+vs+composicion+programacion"
+              }
+            ],
+            "quiz": {
+              "id": "quiz-js-l8",
+              "area": "fundamentos",
+              "difficulty": "intermedio",
+              "question": "La tienda quiere productos que se puedan combinar: con envío refrigerado, con garantía, con regalo… en cualquier mezcla. ¿Qué diseño escala mejor?",
+              "options": [
+                "Una subclase por cada combinación posible",
+                "Una sola clase con un if por cada combinación",
+                "Producto que tiene una lista de extras, cada uno un objeto pequeño",
+                "Heredar de Array para guardar los extras"
+              ],
+              "correctIndex": 2,
+              "explanation": "Las mezclas libres son 'tiene un', no 'es un'. Con subclases, 3 extras ya son 7 combinaciones; con composición agregas un objeto nuevo y listo."
+            },
+            "exerciseIds": [
+              "js-l8-e1"
+            ]
+          },
+          {
+            "id": "js-l9",
+            "title": "Encapsulación y principios SOLID básicos",
+            "objective": "Proteger el estado de un objeto con campos privados y aplicar responsabilidad única, abierto/cerrado e inversión de dependencias.",
+            "slides": [
+              {
+                "title": "🔒 Encapsulación: la ventanilla del banco",
+                "content": "```js\nclass Monedero {\n  #saldo = 0                         // privado: nadie lo toca desde fuera\n  get saldo() { return this.#saldo } // se puede leer\n  recargar(monto) {\n    if (monto <= 0) throw new Error('Monto inválido')\n    this.#saldo += monto\n  }\n}\nconst m = new Monedero()\nm.recargar(50)\nm.#saldo = 1e6 // ❌ SyntaxError\n```\n🎯 La regla (saldo nunca negativo) vive **dentro** del objeto y no se puede saltar."
+              },
+              {
+                "title": "🧱 SOLID en una línea cada uno",
+                "content": "- **S** · Responsabilidad única: una clase, **una razón para cambiar**.\n- **O** · Abierto/cerrado: agregas casos **sin editar** lo que ya funciona.\n- **L** · Liskov: un hijo debe poder **reemplazar** al padre sin sorpresas.\n- **I** · Interfaces pequeñas: nadie depende de métodos que no usa.\n- **D** · Inversión de dependencias: depende de **lo que hace** algo, no de **quién** lo hace.\n\nEn entrevistas junior, domina **S**, **O** y **D** con un ejemplo propio."
+              },
+              {
+                "title": "✂️ S: separa responsabilidades",
+                "content": "```js\n// ❌ 3 razones para cambiar\nclass Pedido {\n  calcularTotal() {}\n  guardarEnBaseDeDatos() {}\n  enviarFacturaPorEmail() {}\n}\n// ✅ cada pieza cambia por su cuenta\nclass Pedido { calcularTotal() {} }\nclass PedidoRepositorio { guardar(pedido) {} }\nclass Facturador { enviar(pedido) {} }\n```\nSi contabilidad cambia la factura, no arriesgas el cálculo del total."
+              },
+              {
+                "title": "🔌 D y O: enchufes, no cables soldados",
+                "content": "```mermaid\nflowchart LR\n  P[Checkout]:::azul --> I[pasarela.cobrar]:::morado\n  I --> A[MercadoPago]:::verde\n  I --> B[Stripe]:::verde\n  I --> F[Pasarela falsa tests]:::amarillo\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef morado fill:#BF5AF2,stroke:#BF5AF2,color:#fff\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n  classDef amarillo fill:#FFD60A,stroke:#FFD60A,color:#1d1d1f\n```\n```js\nclass Checkout {\n  constructor(pasarela) { this.pasarela = pasarela } // se inyecta\n  pagar(total) { return this.pasarela.cobrar(total) }\n}\n```\nNueva pasarela = nuevo objeto, Checkout **no se toca** (O). En tests pasas una falsa (D)."
+              }
+            ],
+            "videos": [
+              {
+                "kind": "video",
+                "title": "Buscar en YouTube: principios SOLID javascript ejemplos",
+                "url": "https://www.youtube.com/results?search_query=principios+SOLID+javascript+ejemplos"
+              }
+            ],
+            "quiz": {
+              "id": "quiz-js-l9",
+              "area": "fundamentos",
+              "difficulty": "intermedio",
+              "question": "En el Checkout está escrito `const mp = new MercadoPagoSDK(clave)` dentro de `pagar()`. Quieres probarlo sin cobrar de verdad. ¿Qué cambio aplica SOLID?",
+              "options": [
+                "Agregar un if (modoTest) dentro de pagar()",
+                "Recibir la pasarela por el constructor e inyectar una falsa en los tests",
+                "Hacer privado el método pagar()",
+                "Copiar Checkout en una clase CheckoutTest"
+              ],
+              "correctIndex": 1,
+              "explanation": "Es inversión de dependencias: Checkout depende de 'algo que cobra', no de MercadoPago. El if de modo test mezcla código de pruebas con producción."
+            },
+            "exerciseIds": [
+              "js-l9-e1",
+              "js-l9-e2"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "js-m4",
+        "trackId": "javascript",
+        "title": "Asincronía",
+        "description": "Cómo JavaScript espera sin bloquearse: callbacks, promesas, async/await, fetch y errores que no se pierden en el camino.",
+        "level": "intermedio",
+        "lessons": [
+          {
+            "id": "js-l10",
+            "title": "Callbacks y promesas",
+            "objective": "Entender por qué JavaScript no se bloquea al esperar, predecir el orden de ejecución y usar promesas con then, catch y Promise.all.",
+            "slides": [
+              {
+                "title": "🧵 Un solo hilo, muchas esperas",
+                "content": "JavaScript ejecuta **una cosa a la vez**. Lo que tarda (timers, red, archivos) se delega y vuelve después.\n\n```js\nconsole.log('1 pedir')\nsetTimeout(() => console.log('3 llegó'), 0)\nPromise.resolve().then(() => console.log('2 promesa'))\nconsole.log('1 seguir')\n// 1 pedir · 1 seguir · 2 promesa · 3 llegó\n```\n- Primero todo el código **síncrono**.\n- Luego las **promesas** (microtareas).\n- Luego los **timers** (tareas), aunque digan 0 ms."
+              },
+              {
+                "title": "📞 Callbacks y su pirámide",
+                "content": "Un callback es una función que pasas para que te **llamen cuando termine**.\n```js\nbuscarPaciente(id, (p) => {\n  buscarCitas(p, (citas) => {\n    enviarRecordatorio(citas[0], (ok) => {\n      // 😵 pirámide: difícil de leer y de manejar errores\n    })\n  })\n})\n```\nCada nivel necesita su propio manejo de error: fácil que uno se pierda."
+              },
+              {
+                "title": "🎟️ Promesas: el ticket de espera",
+                "content": "```mermaid\nflowchart LR\n  A[pending]:::amarillo -->|resolve| B[fulfilled]:::verde\n  A -->|reject| C[rejected]:::rosa\n  B --> D[then]:::azul\n  C --> E[catch]:::rosa\n  classDef amarillo fill:#FFD60A,stroke:#FFD60A,color:#1d1d1f\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n  classDef rosa fill:#FF375F,stroke:#FF375F,color:#fff\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n```\n```js\nbuscarPaciente(id)\n  .then((p) => buscarCitas(p))   // devuelve otra promesa: cadena plana\n  .then((citas) => mostrar(citas))\n  .catch((e) => avisar(e))       // un solo catch para toda la cadena\n```"
+              },
+              {
+                "title": "🏁 Varias a la vez: Promise.all",
+                "content": "```js\nconst [paciente, citas] = await Promise.all([\n  buscarPaciente(id),\n  buscarCitas(id),\n])\n```\n- Lanza todas **en paralelo** y espera a que terminen.\n- Si **una falla**, todo falla → `Promise.allSettled` si quieres los resultados parciales.\n- `Promise.race` → gana la primera (útil para timeouts)."
+              }
+            ],
+            "videos": [
+              {
+                "kind": "video",
+                "title": "Buscar en YouTube: promesas javascript event loop",
+                "url": "https://www.youtube.com/results?search_query=promesas+javascript+event+loop"
+              }
+            ],
+            "quiz": {
+              "id": "quiz-js-l10",
+              "area": "fundamentos",
+              "difficulty": "intermedio",
+              "question": "¿Qué imprime? `console.log('A'); setTimeout(() => console.log('B'), 0); Promise.resolve().then(() => console.log('C')); console.log('D')`",
+              "options": [
+                "A B C D",
+                "A D B C",
+                "A D C B",
+                "A C D B"
+              ],
+              "correctIndex": 2,
+              "explanation": "Primero lo síncrono (A, D), luego las microtareas de promesas (C) y al final el timer (B), aunque sea de 0 ms."
+            },
+            "exerciseIds": [
+              "js-l10-e1"
+            ]
+          },
+          {
+            "id": "js-l11",
+            "title": "async/await y fetch",
+            "objective": "Pedir datos a un servidor con fetch y async/await, revisar la respuesta y decidir cuándo esperar en serie o en paralelo.",
+            "slides": [
+              {
+                "title": "⏳ async/await: promesas que se leen de arriba abajo",
+                "content": "```js\nasync function cargarPerfil(id) {\n  const paciente = await buscarPaciente(id) // pausa ESTA función, no la app\n  const citas = await buscarCitas(paciente.id)\n  return { paciente, citas }\n}\ncargarPerfil(7).then(console.log) // async SIEMPRE devuelve una promesa\n```\n- `await` solo dentro de `async` (o en módulos).\n- Lo que haces con `return` llega como valor resuelto."
+              },
+              {
+                "title": "🌐 fetch paso a paso",
+                "content": "```js\nasync function horarios(medicoId) {\n  const res = await fetch(`/api/medicos/${medicoId}/horarios`)\n  if (!res.ok) throw new Error(`HTTP ${res.status}`) // 👈 clave\n  return res.json() // también es una promesa\n}\n```\n⚠️ fetch **no** falla con 404 ni 500: solo rechaza si no hay red. Revisa `res.ok` siempre.\n\n📤 Enviar datos:\n```js\nfetch('/api/citas', { method: 'POST',\n  headers: { 'Content-Type': 'application/json' },\n  body: JSON.stringify(cita) })\n```"
+              },
+              {
+                "title": "🏎️ En serie o en paralelo",
+                "content": "```mermaid\nflowchart LR\n  A[await médicos 1s]:::naranja --> B[await sedes 1s]:::naranja --> C[2s total]:::rosa\n  D[Promise.all]:::azul --> E[médicos + sedes]:::verde --> F[1s total]:::verde\n  classDef naranja fill:#FF9F0A,stroke:#FF9F0A,color:#fff\n  classDef rosa fill:#FF375F,stroke:#FF375F,color:#fff\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n```\n- Si B **necesita** el resultado de A → en serie.\n- Si son **independientes** → `Promise.all`.\n- ⚠️ `forEach(async ...)` no espera: usa `for...of` con await o `Promise.all(lista.map(...))`."
+              }
+            ],
+            "videos": [
+              {
+                "kind": "video",
+                "title": "Buscar en YouTube: async await fetch javascript",
+                "url": "https://www.youtube.com/results?search_query=async+await+fetch+javascript"
+              }
+            ],
+            "quiz": {
+              "id": "quiz-js-l11",
+              "area": "fundamentos",
+              "difficulty": "intermedio",
+              "question": "Tu código hace `const res = await fetch('/api/turnos')` y luego `const turnos = await res.json()`. El servidor responde 404 con un HTML de error. ¿Qué pasa?",
+              "options": [
+                "fetch rechaza y salta directo al catch",
+                "res.json() falla al intentar leer el HTML como JSON",
+                "turnos queda como un array vacío",
+                "await espera hasta que el servidor responda 200"
+              ],
+              "correctIndex": 1,
+              "explanation": "fetch resuelve aunque el status sea 404; el error aparece después, al parsear HTML como JSON. Revisa res.ok antes de leer el cuerpo."
+            },
+            "exerciseIds": [
+              "js-l11-e1"
+            ]
+          },
+          {
+            "id": "js-l12",
+            "title": "Manejo de errores",
+            "objective": "Lanzar, capturar y clasificar errores con try/catch/finally y clases de error propias, sin tragártelos en silencio.",
+            "slides": [
+              {
+                "title": "🧯 try, catch y finally",
+                "content": "```js\nasync function guardarCita(cita) {\n  mostrarSpinner()\n  try {\n    validar(cita)\n    return await api.crear(cita)  // 👈 con await, el catch sí lo atrapa\n  } catch (error) {\n    avisar('No pudimos guardar la cita')\n    throw error                   // relanza si no sabes resolverlo\n  } finally {\n    ocultarSpinner()              // corre siempre, haya error o no\n  }\n}\n```\n⚠️ Sin `await`, la promesa rechazada se escapa del try."
+              },
+              {
+                "title": "🏷️ Errores con nombre propio",
+                "content": "```js\nclass ValidacionError extends Error {\n  constructor(campo, mensaje) {\n    super(mensaje)\n    this.name = 'ValidacionError'\n    this.campo = campo\n  }\n}\ntry { guardar(form) } catch (e) {\n  if (e instanceof ValidacionError) marcarCampo(e.campo, e.message)\n  else reportar(e) // fallo inesperado: a los logs\n}\n```\n🎯 Distinguir **error del usuario** (se muestra) de **error del sistema** (se registra)."
+              },
+              {
+                "title": "🚫 Antipatrones que esconden bugs",
+                "content": "```mermaid\nflowchart LR\n  E[Error]:::rosa --> A{Sabes resolverlo?}:::amarillo\n  A -- Sí --> B[Recupera y avisa]:::verde\n  A -- No --> C[Relanza o registra]:::naranja\n  E -.-> X[catch vacío]:::rosa\n  classDef rosa fill:#FF375F,stroke:#FF375F,color:#fff\n  classDef amarillo fill:#FFD60A,stroke:#FFD60A,color:#1d1d1f\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n  classDef naranja fill:#FF9F0A,stroke:#FF9F0A,color:#fff\n```\n- `catch (e) {}` vacío: el bug sigue, pero ya nadie lo ve.\n- `throw 'texto'`: pierdes el stack. Usa `throw new Error('...')`.\n- Mensajes útiles: **qué** falló y **con qué dato**."
+              }
+            ],
+            "videos": [
+              {
+                "kind": "video",
+                "title": "Buscar en YouTube: manejo de errores try catch javascript",
+                "url": "https://www.youtube.com/results?search_query=manejo+de+errores+try+catch+javascript"
+              }
+            ],
+            "quiz": {
+              "id": "quiz-js-l12",
+              "area": "fundamentos",
+              "difficulty": "intermedio",
+              "question": "Dentro de un try escribes `return api.crear(cita)` (sin await) en una función async, y la promesa se rechaza. ¿Se ejecuta el catch de esa función?",
+              "options": [
+                "Sí, todo rechazo dentro del try llega al catch",
+                "Sí, pero solo si el error es instancia de Error",
+                "No: la promesa se devuelve antes de rechazar y el error sale de la función",
+                "No, porque async ignora los errores"
+              ],
+              "correctIndex": 2,
+              "explanation": "Sin await, el try termina al devolver la promesa pendiente; cuando rechaza, ya salió del bloque. Con `return await` el rechazo ocurre dentro del try."
+            },
+            "exerciseIds": [
+              "js-l12-e1"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "js-m5",
+        "trackId": "javascript",
+        "title": "TypeScript",
+        "description": "JavaScript con tipos: que el editor te avise antes de que el error llegue al cliente, y modelar estados imposibles de confundir.",
+        "level": "intermedio",
+        "lessons": [
+          {
+            "id": "js-l13",
+            "title": "Tipos e interfaces",
+            "objective": "Anotar variables y funciones, describir objetos con interface y type, y saber qué protege TypeScript y qué no.",
+            "slides": [
+              {
+                "title": "🛡️ Qué hace TypeScript",
+                "content": "```ts\nfunction total(precio: number, cantidad: number): number {\n  return precio * cantidad\n}\ntotal('12', 3) // ❌ error en el editor, antes de ejecutar\n```\n- Revisa tipos **al escribir y compilar**.\n- Al compilar, los tipos **desaparecen**: queda JavaScript normal.\n- Por eso **no valida datos en ejecución**: lo que llega de fetch puede mentir.\n- La inferencia trabaja por ti: `const iva = 0.19` ya es `number`."
+              },
+              {
+                "title": "📐 Describir objetos",
+                "content": "```ts\ninterface Producto {\n  readonly id: number\n  nombre: string\n  precio: number\n  descripcion?: string   // opcional\n}\ntype Moneda = 'MXN' | 'COP' | 'USD' // type: también uniones\n\nconst cafe: Producto = { id: 1, nombre: 'Café', precio: 4 }\ncafe.id = 2 // ❌ readonly\n```\n🎯 `interface` para formas de objetos que se extienden; `type` para uniones y combinaciones. En un equipo, elige una convención."
+              },
+              {
+                "title": "❓ any vs unknown",
+                "content": "```ts\nconst a: any = JSON.parse(texto)\na.loQueSea.explota() // compila 😬 y falla en ejecución\n\nconst u: unknown = JSON.parse(texto)\nu.nombre // ❌ te obliga a revisar primero\nif (typeof u === 'object' && u !== null && 'nombre' in u) { /* ✅ */ }\n```\n- `any` apaga TypeScript.\n- `unknown` dice «no sé qué es, compruébalo».\nPara datos externos, valida con una librería (zod) o con comprobaciones manuales."
+              }
+            ],
+            "videos": [
+              {
+                "kind": "video",
+                "title": "Buscar en YouTube: typescript tipos interfaces",
+                "url": "https://www.youtube.com/results?search_query=typescript+tipos+interfaces"
+              }
+            ],
+            "quiz": {
+              "id": "quiz-js-l13",
+              "area": "fundamentos",
+              "difficulty": "intermedio",
+              "question": "Tipas `const p: Producto = await res.json()` y el servidor por error manda `{ nombre: 'Café' }` sin precio. ¿Qué pasa?",
+              "options": [
+                "TypeScript lanza un error en ejecución al asignar",
+                "El compilador detecta que falta precio en la respuesta",
+                "Compila y corre; p.precio es undefined y el fallo aparece después",
+                "res.json() rechaza la promesa"
+              ],
+              "correctIndex": 2,
+              "explanation": "Los tipos se borran al compilar: TypeScript confía en tu anotación. Para datos externos hay que validar en ejecución."
+            },
+            "exerciseIds": [
+              "js-l13-e1"
+            ]
+          },
+          {
+            "id": "js-l14",
+            "title": "Genéricos y uniones",
+            "objective": "Modelar estados con uniones discriminadas, estrechar tipos con comprobaciones y escribir funciones genéricas reutilizables.",
+            "slides": [
+              {
+                "title": "🔀 Uniones y estrechamiento",
+                "content": "```ts\nfunction formatear(valor: string | number) {\n  if (typeof valor === 'number') return valor.toFixed(2) // aquí es number\n  return valor.trim()                                    // aquí es string\n}\n```\nTypeScript **sigue tus if**: dentro de cada rama sabe qué tipo queda. A eso se le llama *narrowing*."
+              },
+              {
+                "title": "🚥 Uniones discriminadas: estados imposibles",
+                "content": "```ts\ntype Carga<T> =\n  | { estado: 'cargando' }\n  | { estado: 'ok'; datos: T }\n  | { estado: 'error'; mensaje: string }\n\nfunction render(c: Carga<string[]>) {\n  switch (c.estado) {\n    case 'cargando': return 'Cargando…'\n    case 'ok': return c.datos.join(', ')  // solo aquí existe datos\n    case 'error': return c.mensaje\n  }\n}\n```\n🎯 Ya no puede existir «cargando y con error a la vez»."
+              },
+              {
+                "title": "🧰 Genéricos: la caja que guarda cualquier cosa, con etiqueta",
+                "content": "```mermaid\nflowchart LR\n  A[\"primero de number[]\"]:::azul --> T[T = number]:::morado --> R[number o undefined]:::verde\n  B[\"primero de Cita[]\"]:::azul --> U[T = Cita]:::morado --> S[Cita o undefined]:::verde\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef morado fill:#BF5AF2,stroke:#BF5AF2,color:#fff\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n```\n```ts\nfunction primero<T>(lista: T[]): T | undefined { return lista[0] }\nprimero([3, 4])       // number | undefined\nprimero(citas)        // Cita | undefined\n```\nCon `any` perderías el tipo de salida; con `T` se conserva."
+              }
+            ],
+            "videos": [
+              {
+                "kind": "video",
+                "title": "Buscar en YouTube: typescript genericos union types",
+                "url": "https://www.youtube.com/results?search_query=typescript+genericos+union+types"
+              }
+            ],
+            "quiz": {
+              "id": "quiz-js-l14",
+              "area": "fundamentos",
+              "difficulty": "intermedio",
+              "question": "Tienes `type Pago = { tipo: 'tarjeta'; ultimos4: string } | { tipo: 'efectivo' }`. ¿Dónde puedes leer `pago.ultimos4` sin error de compilación?",
+              "options": [
+                "En cualquier parte, porque está en el tipo Pago",
+                "Solo dentro de `if (pago.tipo === 'tarjeta')`",
+                "Solo si declaras pago con any",
+                "Dentro de `if (pago)`, porque ya no es undefined"
+              ],
+              "correctIndex": 1,
+              "explanation": "ultimos4 solo existe en una rama de la unión. Al comprobar el discriminante tipo, TypeScript estrecha a esa rama; `if (pago)` no distingue entre ellas."
+            },
+            "exerciseIds": [
+              "js-l14-e1"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "js-m6",
+        "trackId": "javascript",
+        "title": "Algoritmos para entrevistas",
+        "description": "Big O, hash maps, dos punteros y recursión: los patrones que más salen en entrevistas técnicas, explicados con datos de apps reales.",
+        "level": "avanzado",
+        "lessons": [
+          {
+            "id": "js-l15",
+            "title": "Big O sin miedo",
+            "objective": "Estimar cómo crece el tiempo y la memoria de una función contando bucles, y reconocer los costos ocultos de los métodos de array.",
+            "slides": [
+              {
+                "title": "📈 Qué mide Big O",
+                "content": "Cómo **crece** el trabajo cuando crecen los datos (n). No mide segundos.\n\n| Big O | Ejemplo | n = 1 000 |\n|---|---|---|\n| O(1) | `lista[0]`, `map.get(k)` | 1 |\n| O(log n) | búsqueda binaria | ~10 |\n| O(n) | un bucle | 1 000 |\n| O(n log n) | `sort` | ~10 000 |\n| O(n²) | bucle dentro de bucle | 1 000 000 😱 |"
+              },
+              {
+                "title": "🔍 Cómo contarlo",
+                "content": "```js\nfunction hayDuplicados(ids) {\n  for (let i = 0; i < ids.length; i++)        // n\n    for (let j = i + 1; j < ids.length; j++)  // × n\n      if (ids[i] === ids[j]) return true\n  return false\n} // O(n²)\n```\n- Bucles **seguidos** se suman: O(n + n) = O(n).\n- Bucles **anidados** se multiplican: O(n²).\n- Se ignoran constantes: O(2n) = O(n).\n- Se cuenta el **peor caso**."
+              },
+              {
+                "title": "🕳️ Costos escondidos",
+                "content": "```js\npedidos.filter((p) => clientesVip.includes(p.clienteId)) // O(n × m) 😬\nconst vip = new Set(clientesVip)\npedidos.filter((p) => vip.has(p.clienteId))              // O(n + m) ✅\n```\n- `includes`, `indexOf`, `find` recorren: son **O(n)**.\n- Dentro de un bucle, se vuelven O(n²).\n- `Set.has` y `Map.get` son **O(1)** en promedio.\n- 💾 El Set usa memoria extra: cambias espacio por tiempo, y en entrevista se dice en voz alta."
+              }
+            ],
+            "videos": [
+              {
+                "kind": "video",
+                "title": "Buscar en YouTube: big O notation explicacion",
+                "url": "https://www.youtube.com/results?search_query=big+O+notation+explicacion"
+              }
+            ],
+            "quiz": {
+              "id": "quiz-js-l15",
+              "area": "fundamentos",
+              "difficulty": "avanzado",
+              "question": "Una tienda tiene n pedidos y m productos. Para cada pedido haces `productos.find(p => p.id === pedido.productoId)`. ¿Complejidad y mejora?",
+              "options": [
+                "O(n), ya está bien",
+                "O(n log m); ordenar productos primero",
+                "O(n × m); crear antes un Map de productos por id",
+                "O(1), porque find corta al encontrarlo"
+              ],
+              "correctIndex": 2,
+              "explanation": "find recorre productos en cada pedido: n × m en el peor caso. Un Map por id cuesta O(m) una vez y cada búsqueda pasa a O(1): total O(n + m)."
+            },
+            "exerciseIds": [
+              "js-l15-e1"
+            ]
+          },
+          {
+            "id": "js-l16",
+            "title": "Hash maps y dos punteros",
+            "objective": "Resolver problemas de búsqueda y conteo en O(n) con Map y Set, y recorrer arrays ordenados con dos punteros.",
+            "slides": [
+              {
+                "title": "🗃️ Hash map: el casillero numerado",
+                "content": "```js\nconst stock = new Map()\nstock.set('SKU-12', 8)\nstock.get('SKU-12') // 8 en O(1)\nstock.has('SKU-99') // false\n\n// contar frecuencias en una pasada\nconst conteo = new Map()\nfor (const p of pedidos) conteo.set(p.sku, (conteo.get(p.sku) ?? 0) + 1)\n```\n🎯 Pregunta mágica en entrevista: «¿qué necesito **recordar** de lo que ya vi?». Eso va al Map."
+              },
+              {
+                "title": "🎯 Patrón clásico: dos productos que suman el presupuesto",
+                "content": "```js\nfunction parConPresupuesto(precios, presupuesto) {\n  const vistos = new Map() // precio → índice\n  for (let i = 0; i < precios.length; i++) {\n    const falta = presupuesto - precios[i]\n    if (vistos.has(falta)) return [vistos.get(falta), i]\n    vistos.set(precios[i], i)\n  }\n  return null\n}\n```\nDe O(n²) (probar todos los pares) a **O(n)** con O(n) de memoria."
+              },
+              {
+                "title": "👉👈 Dos punteros en array ordenado",
+                "content": "```mermaid\nflowchart LR\n  S[suma = a + b]:::azul --> C{vs objetivo}:::amarillo\n  C -- menor --> I[mover izquierda →]:::verde\n  C -- mayor --> D[mover derecha ←]:::naranja\n  C -- igual --> R[encontrado]:::morado\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef amarillo fill:#FFD60A,stroke:#FFD60A,color:#1d1d1f\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n  classDef naranja fill:#FF9F0A,stroke:#FF9F0A,color:#fff\n  classDef morado fill:#BF5AF2,stroke:#BF5AF2,color:#fff\n```\n- Solo sirve si el array **está ordenado** (o el problema es simétrico, como palíndromos).\n- O(n) de tiempo y **O(1)** de memoria: mejor que el Map en espacio."
+              }
+            ],
+            "videos": [
+              {
+                "kind": "video",
+                "title": "Buscar en YouTube: two sum hash map two pointers javascript",
+                "url": "https://www.youtube.com/results?search_query=two+sum+hash+map+two+pointers+javascript"
+              }
+            ],
+            "quiz": {
+              "id": "quiz-js-l16",
+              "area": "fundamentos",
+              "difficulty": "avanzado",
+              "question": "Debes encontrar si dos precios suman 100 en una lista NO ordenada de 1 millón. Memoria no es problema. ¿Qué eliges?",
+              "options": [
+                "Dos punteros directamente sobre la lista",
+                "Probar todos los pares con dos bucles",
+                "Ordenar con sort y luego búsqueda lineal de cada par",
+                "Una pasada guardando precios vistos en un Set o Map"
+              ],
+              "correctIndex": 3,
+              "explanation": "Con un Map/Set es O(n). Dos punteros exige orden: sin ordenar da resultados incorrectos, y ordenar cuesta O(n log n). Dos bucles son O(n²)."
+            },
+            "exerciseIds": [
+              "js-l16-e1"
+            ]
+          },
+          {
+            "id": "js-l17",
+            "title": "Recursión",
+            "objective": "Escribir funciones recursivas con caso base claro, recorrer estructuras anidadas y saber cuándo memoizar o usar un bucle.",
+            "slides": [
+              {
+                "title": "🪆 Una función que se llama a sí misma",
+                "content": "```js\nfunction cuentaRegresiva(n) {\n  if (n === 0) return 'Despegue 🚀' // caso base: aquí para\n  return cuentaRegresiva(n - 1)    // caso recursivo: problema más chico\n}\n```\nDos piezas obligatorias:\n1. **Caso base**: la respuesta sin volver a llamarse.\n2. **Paso que acerca** al caso base.\nSin caso base → `RangeError: Maximum call stack size exceeded`."
+              },
+              {
+                "title": "📚 La pila de llamadas",
+                "content": "```mermaid\nflowchart TD\n  A[\"sumar de 1,2,3\"]:::azul --> B[\"1 + sumar de 2,3\"]:::azul\n  B --> C[\"2 + sumar de 3\"]:::azul\n  C --> D[\"3 + sumar de vacío\"]:::azul\n  D --> E[caso base: 0]:::verde\n  E -.-> F[devuelve 3, 5, 6]:::morado\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n  classDef morado fill:#BF5AF2,stroke:#BF5AF2,color:#fff\n```\nCada llamada espera a la de abajo. Al llegar al caso base, los resultados **suben** de vuelta."
+              },
+              {
+                "title": "🌳 Donde brilla: datos anidados",
+                "content": "```js\nconst menu = { nombre: 'Tienda', hijos: [\n  { nombre: 'Bebidas', hijos: [{ nombre: 'Café', hijos: [] }] },\n  { nombre: 'Postres', hijos: [] },\n]}\nconst contar = (cat) => 1 + cat.hijos.reduce((s, h) => s + contar(h), 0)\ncontar(menu) // 4\n```\nCategorías, comentarios con respuestas, carpetas: **no sabes cuántos niveles hay**, la recursión no necesita saberlo."
+              },
+              {
+                "title": "🧠 Memoizar: no repitas cuentas",
+                "content": "```js\nconst memo = new Map()\nfunction fib(n) {\n  if (n <= 1) return n\n  if (memo.has(n)) return memo.get(n)\n  const r = fib(n - 1) + fib(n - 2)\n  memo.set(n, r)\n  return r\n}\n```\n- Sin memo: **O(2ⁿ)**, fib(45) tarda segundos.\n- Con memo: **O(n)**.\n- Si la profundidad puede ser enorme (100 000 niveles), un bucle es más seguro."
+              }
+            ],
+            "videos": [
+              {
+                "kind": "video",
+                "title": "Buscar en YouTube: recursion javascript explicacion",
+                "url": "https://www.youtube.com/results?search_query=recursion+javascript+explicacion"
+              }
+            ],
+            "quiz": {
+              "id": "quiz-js-l17",
+              "area": "fundamentos",
+              "difficulty": "avanzado",
+              "question": "Una función recorre categorías anidadas y se cuelga con 'Maximum call stack size exceeded' en una categoría sin hijos. ¿Causa más probable?",
+              "options": [
+                "La recursión no sirve para árboles",
+                "Falta o está mal el caso base para la lista vacía de hijos",
+                "Hay que usar var en lugar de const",
+                "El árbol tiene demasiadas categorías en el primer nivel"
+              ],
+              "correctIndex": 1,
+              "explanation": "El desbordamiento indica llamadas infinitas: la función no se detiene en el caso base. Muchos hermanos en un nivel no aumentan la profundidad de la pila."
+            },
+            "exerciseIds": [
+              "js-l17-e1"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "exercises": [
+    {
+      "id": "js-l1-e1",
+      "trackId": "javascript",
+      "moduleId": "js-m1",
+      "lessonId": "js-l1",
+      "title": "Calcula el total de un pedido sin trampas de tipos",
+      "description": "Una tienda online recibe del formulario `cantidad = '3'` (texto) y `precioUnitario = 12.5`. El código actual hace `const total = cantidad + precioUnitario * 1` y muestra '312.5'.\n\n1. Explica por qué sale '312.5'.\n2. Reescribe el cálculo con conversión explícita y const/let correctos.\n3. Añade una comprobación: si la cantidad no es un número válido, devuelve el texto 'Cantidad inválida'.",
+      "objective": "Detectar conversiones implícitas y escribir cálculos con tipos explícitos.",
+      "difficulty": "principiante",
+      "kind": "guiado",
+      "theory": false,
+      "aiPolicy": "sin_ia",
+      "constraints": [],
+      "hints": [
+        "Mira qué hace el operador + cuando uno de los lados es texto.",
+        "Hay una función global que convierte texto a número y devuelve NaN si no puede.",
+        "Para saber si algo es NaN no sirve `=== NaN`: busca Number.isNaN."
+      ],
+      "solution": "Sale '312.5' porque `cantidad` es string: primero se calcula `12.5 * 1 = 12.5` y luego `'3' + 12.5` concatena.\n\n```js\nfunction totalPedido(cantidadTexto, precioUnitario) {\n  const cantidad = Number(cantidadTexto)\n  if (Number.isNaN(cantidad) || cantidad <= 0) return 'Cantidad inválida'\n  const total = cantidad * precioUnitario\n  return total // 37.5\n}\n```",
+      "criteria": [
+        "Explica que + con un string concatena",
+        "Convierte con Number() antes de operar",
+        "Valida NaN con Number.isNaN y rechaza cantidades ≤ 0",
+        "Usa const para valores que no cambian"
+      ],
+      "commonErrors": [
+        "Comparar con `=== NaN` (siempre es false)",
+        "Usar parseInt y perder los decimales",
+        "Declarar todo con let o var"
+      ],
+      "resources": [
+        {
+          "kind": "doc",
+          "title": "MDN: Gramática y tipos",
+          "url": "https://developer.mozilla.org/es/docs/Web/JavaScript/Guide/Grammar_and_types"
+        },
+        {
+          "kind": "doc",
+          "title": "MDN: Tipos de datos y estructuras",
+          "url": "https://developer.mozilla.org/es/docs/Web/JavaScript/Data_structures"
+        }
+      ]
+    },
+    {
+      "id": "js-l2-e1",
+      "trackId": "javascript",
+      "moduleId": "js-m1",
+      "lessonId": "js-l2",
+      "title": "Clasifica los turnos del día de un consultorio",
+      "description": "Tienes un array de turnos: `[{ hora: '09:00', paciente: null }, { hora: '09:30', paciente: 'Luis' }, { hora: '10:00', paciente: null }, { hora: '10:30', paciente: 'Marta' }]`.\n\nEscribe una función `resumenTurnos(turnos)` que, usando un bucle `for...of` e `if`, devuelva `{ libres: 2, ocupados: 2, primerLibre: '09:00' }`. Si no hay turnos libres, `primerLibre` debe ser `null`. No uses métodos de array todavía (map/filter llegan en el módulo 2).",
+      "objective": "Combinar bucles y condicionales para resumir datos.",
+      "difficulty": "principiante",
+      "kind": "practica_autonoma",
+      "theory": false,
+      "aiPolicy": "ia_tutor",
+      "constraints": [],
+      "hints": [
+        "Empieza con contadores en 0 y una variable para el primer libre.",
+        "En cada vuelta pregunta si `paciente` es null y suma al contador correcto.",
+        "Asigna primerLibre solo la primera vez: comprueba si todavía vale null."
+      ],
+      "solution": "```js\nfunction resumenTurnos(turnos) {\n  let libres = 0\n  let ocupados = 0\n  let primerLibre = null\n  for (const turno of turnos) {\n    if (turno.paciente === null) {\n      libres++\n      if (primerLibre === null) primerLibre = turno.hora\n    } else {\n      ocupados++\n    }\n  }\n  return { libres, ocupados, primerLibre }\n}\n```",
+      "criteria": [
+        "Devuelve el objeto con las tres claves correctas",
+        "Usa for...of y no métodos de array",
+        "primerLibre es null cuando todos están ocupados",
+        "Compara con === null en lugar de confiar en truthy/falsy"
+      ],
+      "commonErrors": [
+        "Sobrescribir primerLibre en cada turno libre (queda el último)",
+        "Usar `if (!turno.paciente)` y tratar '' como libre sin decidirlo"
+      ],
+      "resources": [
+        {
+          "kind": "doc",
+          "title": "MDN: Bucles e iteración",
+          "url": "https://developer.mozilla.org/es/docs/Web/JavaScript/Guide/Loops_and_iteration"
+        },
+        {
+          "kind": "doc",
+          "title": "MDN: Falsy",
+          "url": "https://developer.mozilla.org/es/docs/Glossary/Falsy"
+        }
+      ]
+    },
+    {
+      "id": "js-l3-e1",
+      "trackId": "javascript",
+      "moduleId": "js-m1",
+      "lessonId": "js-l3",
+      "title": "Función pura de costo de envío para la tienda",
+      "description": "La tienda calcula el envío así: zona 'local' cuesta $3, 'nacional' $8; cada kilo suma $0.5; pedidos de $50 o más tienen envío gratis.\n\nEscribe `costoEnvio(totalPedido, pesoKg, zona = 'local')` como función **pura** (sin variables globales ni console.log dentro). Después escribe 4 llamadas de prueba con su resultado esperado, incluido el caso límite de exactamente $50.",
+      "objective": "Diseñar una función pura con parámetro por defecto y probar sus casos límite.",
+      "difficulty": "principiante",
+      "kind": "practica_autonoma",
+      "theory": false,
+      "aiPolicy": "ia_tutor",
+      "constraints": [],
+      "hints": [
+        "Primero resuelve el caso que corta antes: el envío gratis.",
+        "La tarifa base depende de la zona: un ternario o un objeto de tarifas sirve.",
+        "Para el límite fíjate si la condición es > o >= 50."
+      ],
+      "solution": "```js\nfunction costoEnvio(totalPedido, pesoKg, zona = 'local') {\n  if (totalPedido >= 50) return 0\n  const base = zona === 'nacional' ? 8 : 3\n  return base + pesoKg * 0.5\n}\ncostoEnvio(20, 2)              // 4\ncostoEnvio(20, 2, 'nacional')  // 9\ncostoEnvio(50, 10)             // 0\ncostoEnvio(49.99, 0)           // 3\n```",
+      "criteria": [
+        "La función no lee ni modifica nada externo",
+        "Usa parámetro por defecto para zona",
+        "El caso de $50 exacto devuelve 0",
+        "Incluye al menos 4 pruebas con resultado esperado"
+      ],
+      "commonErrors": [
+        "Usar > 50 y cobrar envío en exactamente $50",
+        "Hacer console.log en lugar de return"
+      ],
+      "resources": [
+        {
+          "kind": "doc",
+          "title": "MDN: Funciones",
+          "url": "https://developer.mozilla.org/es/docs/Web/JavaScript/Guide/Functions"
+        },
+        {
+          "kind": "doc",
+          "title": "MDN: Funciones flecha",
+          "url": "https://developer.mozilla.org/es/docs/Web/JavaScript/Reference/Functions/Arrow_functions"
+        }
+      ]
+    },
+    {
+      "id": "js-l4-e1",
+      "trackId": "javascript",
+      "moduleId": "js-m2",
+      "lessonId": "js-l4",
+      "title": "Reporte de ventas de la pyme con map, filter y reduce",
+      "description": "El panel de una pyme recibe `ventas = [{ producto: 'Café', categoria: 'bebidas', monto: 4, estado: 'pagada' }, { producto: 'Torta', categoria: 'postres', monto: 12, estado: 'anulada' }, ...]`.\n\nEscribe funciones (sin bucles for) que devuelvan:\n1. `totalPagado(ventas)` → suma de montos con estado 'pagada'.\n2. `productosDe(ventas, categoria)` → nombres sin repetir de esa categoría.\n3. `ventaMayor(ventas)` → el objeto de la venta pagada con mayor monto, o null si no hay.\n\nComprueba que el array original no cambia.",
+      "objective": "Encadenar métodos de array y elegir el adecuado para cada pregunta.",
+      "difficulty": "principiante",
+      "kind": "practica_autonoma",
+      "theory": false,
+      "aiPolicy": "ia_tutor",
+      "constraints": [],
+      "hints": [
+        "Para cada función pregúntate: ¿quiero menos elementos, otra forma o un solo valor?",
+        "Para quitar repetidos, un Set convertido de nuevo a array con spread funciona.",
+        "En ventaMayor, reduce puede ir guardando la mejor venta vista; piensa qué devuelve con lista vacía."
+      ],
+      "solution": "```js\nconst totalPagado = (ventas) =>\n  ventas.filter((v) => v.estado === 'pagada').reduce((s, v) => s + v.monto, 0)\n\nconst productosDe = (ventas, categoria) =>\n  [...new Set(ventas.filter((v) => v.categoria === categoria).map((v) => v.producto))]\n\nconst ventaMayor = (ventas) =>\n  ventas\n    .filter((v) => v.estado === 'pagada')\n    .reduce((mejor, v) => (mejor === null || v.monto > mejor.monto ? v : mejor), null)\n```",
+      "criteria": [
+        "No usa for ni while",
+        "reduce tiene valor inicial en todos los casos",
+        "ventaMayor devuelve null con lista vacía o sin pagadas",
+        "El array original queda igual"
+      ],
+      "commonErrors": [
+        "reduce sin valor inicial",
+        "Usar map cuando se quería filter",
+        "Ordenar con sort() y modificar el array del panel"
+      ],
+      "resources": [
+        {
+          "kind": "doc",
+          "title": "MDN: Array.prototype.reduce()",
+          "url": "https://developer.mozilla.org/es/docs/Web/JavaScript/Reference/Global_Objects/Array/reduce"
+        },
+        {
+          "kind": "doc",
+          "title": "MDN: Array.prototype.map()",
+          "url": "https://developer.mozilla.org/es/docs/Web/JavaScript/Reference/Global_Objects/Array/map"
+        }
+      ]
+    },
+    {
+      "id": "js-l5-e1",
+      "trackId": "javascript",
+      "moduleId": "js-m2",
+      "lessonId": "js-l5",
+      "title": "Actualiza el perfil de un paciente sin mutar el original",
+      "description": "La app del consultorio guarda pacientes como `{ id, nombre, contacto: { email, tel }, citas: [...] }`.\n\n1. Escribe `actualizarTelefono(paciente, tel)` que devuelva un paciente nuevo con el teléfono cambiado, dejando el original intacto.\n2. Escribe `exportar(paciente)` que devuelva el JSON en texto, y `importar(texto)` que lo vuelva a objeto y convierta cada `cita.fecha` de string a Date.\n3. Si `importar` recibe un texto inválido debe devolver null en lugar de romper la app.",
+      "objective": "Practicar copias inmutables y el viaje ida y vuelta a JSON.",
+      "difficulty": "principiante",
+      "kind": "guiado",
+      "theory": false,
+      "aiPolicy": "ia_tutor",
+      "constraints": [],
+      "hints": [
+        "Necesitas copiar dos niveles: el paciente y su contacto.",
+        "Después de JSON.parse las fechas son strings: recórrelas con map.",
+        "JSON.parse lanza con texto inválido: ¿qué estructura captura errores?"
+      ],
+      "solution": "```js\nconst actualizarTelefono = (p, tel) => ({ ...p, contacto: { ...p.contacto, tel } })\n\nconst exportar = (p) => JSON.stringify(p)\n\nfunction importar(texto) {\n  try {\n    const p = JSON.parse(texto)\n    return { ...p, citas: p.citas.map((c) => ({ ...c, fecha: new Date(c.fecha) })) }\n  } catch {\n    return null\n  }\n}\n```",
+      "criteria": [
+        "El paciente original no cambia (se puede comprobar con ===)",
+        "Copia también el nivel contacto",
+        "Las fechas importadas son instancias de Date",
+        "importar('{roto') devuelve null"
+      ],
+      "commonErrors": [
+        "Copiar solo el primer nivel",
+        "Asumir que JSON.parse devuelve Date"
+      ],
+      "resources": [
+        {
+          "kind": "doc",
+          "title": "MDN: JSON",
+          "url": "https://developer.mozilla.org/es/docs/Web/JavaScript/Reference/Global_Objects/JSON"
+        },
+        {
+          "kind": "doc",
+          "title": "MDN: Sintaxis de propagación",
+          "url": "https://developer.mozilla.org/es/docs/Web/JavaScript/Reference/Operators/Spread_syntax"
+        }
+      ]
+    },
+    {
+      "id": "js-l6-e1",
+      "trackId": "javascript",
+      "moduleId": "js-m2",
+      "lessonId": "js-l6",
+      "title": "Recordatorio de cita con fecha y precio bien formateados",
+      "description": "El consultorio envía un recordatorio por WhatsApp. Recibes `{ paciente: '  maría PÉREZ ', inicioISO: '2026-11-03T14:30:00.000Z', precioCentavos: 45000 }`.\n\nEscribe `armarRecordatorio(cita, locale, zonaHoraria, moneda)` que devuelva un texto como:\n'Hola María Pérez, te esperamos el martes, 3 de noviembre de 2026, 9:30 a. m. Valor: $450.00'\n\nRequisitos: nombre con trim y cada palabra con mayúscula inicial; fecha con Intl.DateTimeFormat usando la opción timeZone; precio con Intl.NumberFormat a partir de centavos.",
+      "objective": "Combinar métodos de string, Intl.DateTimeFormat e Intl.NumberFormat en un caso real.",
+      "difficulty": "principiante",
+      "kind": "aplicacion_real",
+      "theory": false,
+      "aiPolicy": "ia_par",
+      "constraints": [],
+      "hints": [
+        "Separa el problema en tres funciones pequeñas: nombre, fecha y precio.",
+        "Para capitalizar: split por espacios, filtra vacíos, y en cada palabra combina la primera letra en mayúscula con el resto en minúscula.",
+        "Intl.DateTimeFormat acepta { dateStyle, timeStyle, timeZone }; divide los centavos entre 100 solo al formatear."
+      ],
+      "solution": "```js\nconst capitalizar = (t) =>\n  t.trim().split(' ').filter(Boolean)\n    .map((p) => p[0].toUpperCase() + p.slice(1).toLowerCase()).join(' ')\n\nfunction armarRecordatorio(cita, locale, timeZone, currency) {\n  const fecha = new Intl.DateTimeFormat(locale, { dateStyle: 'full', timeStyle: 'short', timeZone })\n    .format(new Date(cita.inicioISO))\n  const valor = new Intl.NumberFormat(locale, { style: 'currency', currency }).format(cita.precioCentavos / 100)\n  return `Hola ${capitalizar(cita.paciente)}, te esperamos el ${fecha}. Valor: ${valor}`\n}\n// armarRecordatorio(cita, 'es-CO', 'America/Bogota', 'COP')\n```",
+      "criteria": [
+        "El nombre sale limpio y capitalizado",
+        "La hora corresponde a la zona horaria pedida, no a UTC",
+        "El precio se formatea desde centavos con Intl",
+        "Usa template literal para armar el mensaje"
+      ],
+      "commonErrors": [
+        "Mostrar la hora UTC sin timeZone",
+        "Sumar 1 al mes a mano",
+        "Formatear el precio con toFixed y concatenar '$'"
+      ],
+      "resources": [
+        {
+          "kind": "doc",
+          "title": "MDN: Date",
+          "url": "https://developer.mozilla.org/es/docs/Web/JavaScript/Reference/Global_Objects/Date"
+        },
+        {
+          "kind": "doc",
+          "title": "MDN: Intl.NumberFormat",
+          "url": "https://developer.mozilla.org/es/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat"
+        }
+      ]
+    },
+    {
+      "id": "js-l7-e1",
+      "trackId": "javascript",
+      "moduleId": "js-m3",
+      "lessonId": "js-l7",
+      "title": "Tu primera clase: Producto de la tienda online",
+      "description": "Crea la clase `Producto` para una tienda online con:\n- constructor(nombre, precio, stock)\n- `hayStock()` → true si stock > 0\n- `aplicarDescuento(porcentaje)` → baja el precio; rechaza porcentajes fuera de 0-90 lanzando un Error\n- `vender(cantidad)` → resta stock; lanza Error si no alcanza\n- `etiqueta()` → 'Café · $3.60 · 7 en stock' (o 'AGOTADO' si no hay)\n\nCrea dos productos, opera con ellos y muestra que modificar uno no afecta al otro. Explica en 2 líneas qué es la clase y qué es el objeto en tu código.",
+      "objective": "Modelar una entidad con datos y comportamiento en una clase.",
+      "difficulty": "intermedio",
+      "kind": "guiado",
+      "theory": false,
+      "aiPolicy": "sin_ia",
+      "constraints": [],
+      "hints": [
+        "Empieza por el constructor: ¿qué datos necesita un producto para existir?",
+        "Cada método usa this para leer o cambiar los datos de ESE producto.",
+        "Primero valida (y lanza el error) y después modifica: así nunca queda un estado a medias."
+      ],
+      "solution": "```js\nclass Producto {\n  constructor(nombre, precio, stock) {\n    this.nombre = nombre\n    this.precio = precio\n    this.stock = stock\n  }\n  hayStock() { return this.stock > 0 }\n  aplicarDescuento(pct) {\n    if (pct < 0 || pct > 90) throw new Error('Descuento fuera de rango')\n    this.precio = this.precio * (1 - pct / 100)\n  }\n  vender(cantidad) {\n    if (cantidad > this.stock) throw new Error('Stock insuficiente')\n    this.stock -= cantidad\n  }\n  etiqueta() {\n    if (!this.hayStock()) return `${this.nombre} · AGOTADO`\n    return `${this.nombre} · $${this.precio.toFixed(2)} · ${this.stock} en stock`\n  }\n}\nconst cafe = new Producto('Café', 4, 10)\nconst te = new Producto('Té', 3, 5)\ncafe.aplicarDescuento(10); cafe.vender(3)\n// cafe.etiqueta() → 'Café · $3.60 · 7 en stock'; te no cambió\n```\nLa clase Producto es el molde; cafe y te son objetos (instancias) con sus propios datos.",
+      "criteria": [
+        "Los cuatro métodos usan this y funcionan",
+        "Valida antes de modificar y lanza Error con mensaje claro",
+        "Demuestra que dos instancias son independientes",
+        "Explica con sus palabras clase vs objeto"
+      ],
+      "commonErrors": [
+        "Olvidar new al crear el objeto",
+        "Usar una variable global en vez de this.stock",
+        "Modificar el stock antes de validar"
+      ],
+      "resources": [
+        {
+          "kind": "doc",
+          "title": "MDN: Clases",
+          "url": "https://developer.mozilla.org/es/docs/Web/JavaScript/Reference/Classes"
+        },
+        {
+          "kind": "doc",
+          "title": "MDN: Programación orientada a objetos",
+          "url": "https://developer.mozilla.org/es/docs/Learn_web_development/Extensions/Advanced_JavaScript_objects/Object-oriented_programming"
+        }
+      ],
+      "interviewQuestion": "¿Qué diferencia hay entre una clase y un objeto? Ponme un ejemplo de tu código."
+    },
+    {
+      "id": "js-l7-e2",
+      "trackId": "javascript",
+      "moduleId": "js-m3",
+      "lessonId": "js-l7",
+      "title": "Reto: la clase Carrito que usa objetos Producto",
+      "description": "Ahora modela el carrito de compras. Crea `Carrito` con:\n- una lista interna de líneas `{ producto, cantidad }`\n- `agregar(producto, cantidad)`: si el producto ya está, suma la cantidad; si no hay stock suficiente, lanza Error\n- `quitar(nombreProducto)`\n- `total()`: suma precio × cantidad\n- `confirmar()`: llama a `producto.vender(cantidad)` en cada línea y vacía el carrito\n\nDibuja (en texto o mermaid) el diagrama con las dos clases y la relación 'Carrito tiene Productos'. Explica por qué el carrito le pide al producto que se venda en vez de restar el stock él mismo.",
+      "objective": "Hacer que objetos colaboren y decidir qué responsabilidad es de cada clase.",
+      "difficulty": "intermedio",
+      "kind": "reto",
+      "theory": false,
+      "aiPolicy": "ia_tutor",
+      "constraints": [],
+      "hints": [
+        "Piensa qué sabe cada objeto: el carrito conoce cantidades, el producto conoce su stock.",
+        "Para 'si ya está, suma', busca la línea con find por nombre o por referencia al objeto.",
+        "En confirmar, revisa todo el stock antes de vender: si una línea falla a mitad, ¿qué queda vendido?"
+      ],
+      "solution": "```js\nclass Carrito {\n  constructor() { this.lineas = [] }\n  agregar(producto, cantidad) {\n    const linea = this.lineas.find((l) => l.producto === producto)\n    const nueva = (linea?.cantidad ?? 0) + cantidad\n    if (nueva > producto.stock) throw new Error(`Sin stock de ${producto.nombre}`)\n    if (linea) linea.cantidad = nueva\n    else this.lineas.push({ producto, cantidad })\n  }\n  quitar(nombre) { this.lineas = this.lineas.filter((l) => l.producto.nombre !== nombre) }\n  total() { return this.lineas.reduce((s, l) => s + l.producto.precio * l.cantidad, 0) }\n  confirmar() {\n    if (this.lineas.some((l) => l.cantidad > l.producto.stock)) throw new Error('Stock cambió')\n    this.lineas.forEach((l) => l.producto.vender(l.cantidad))\n    this.lineas = []\n  }\n}\n```\nEl carrito delega en producto.vender porque la regla 'no vender sin stock' pertenece al producto: si mañana cambia, se corrige en un solo lugar.",
+      "criteria": [
+        "agregar acumula cantidades del mismo producto",
+        "total() es correcto con varias líneas",
+        "confirmar valida todo antes de vender nada",
+        "Incluye diagrama y explica la delegación"
+      ],
+      "commonErrors": [
+        "Copiar la lógica de stock dentro del carrito",
+        "Vender línea por línea y dejar ventas a medias si una falla"
+      ],
+      "resources": [
+        {
+          "kind": "doc",
+          "title": "MDN: Clases",
+          "url": "https://developer.mozilla.org/es/docs/Web/JavaScript/Reference/Classes"
+        }
+      ],
+      "interviewQuestion": "Si el carrito necesita saber el stock, ¿por qué no lo resta directamente?"
+    },
+    {
+      "id": "js-l8-e1",
+      "trackId": "javascript",
+      "moduleId": "js-m3",
+      "lessonId": "js-l8",
+      "title": "Refactoriza notificaciones del consultorio: de herencia a composición",
+      "description": "El consultorio tiene esta jerarquía:\n`class Recordatorio` → `class RecordatorioEmail extends Recordatorio` → `class RecordatorioEmailYSms extends RecordatorioEmail`.\nAhora piden WhatsApp y que cada paciente elija sus canales.\n\n1. Explica en 3 viñetas por qué la herencia no escala aquí.\n2. Rediseña con composición: una clase `Recordatorio` que recibe una lista de canales, donde cada canal es un objeto con `enviar(mensaje)`.\n3. Dibuja el diagrama de clases (mermaid classDiagram) del antes y del después.\n4. Di un caso de esta app donde sí usarías herencia y por qué.",
+      "objective": "Detectar herencia forzada y reemplazarla por composición defendible.",
+      "difficulty": "intermedio",
+      "kind": "sintesis",
+      "theory": false,
+      "aiPolicy": "ia_tutor",
+      "constraints": [],
+      "hints": [
+        "Cuenta cuántas subclases harían falta con 4 canales en cualquier combinación.",
+        "Lo que cambia entre canales es solo cómo se envía: eso es lo que debe ser una pieza aparte.",
+        "Para el caso de herencia busca una relación 'es un' que no vaya a mezclarse (piensa en tipos de usuario)."
+      ],
+      "solution": "1. Con 4 canales hay 15 combinaciones = 15 subclases; un cambio en el padre afecta a todas; no se puede elegir canales en tiempo de ejecución.\n\n```js\nconst email = { nombre: 'email', enviar: (m) => console.log('📧', m) }\nconst sms = { nombre: 'sms', enviar: (m) => console.log('📱', m) }\nconst whatsapp = { nombre: 'whatsapp', enviar: (m) => console.log('💬', m) }\n\nclass Recordatorio {\n  constructor(canales) { this.canales = canales }\n  enviar(paciente, cita) {\n    const msg = `Hola ${paciente.nombre}, tu cita es el ${cita.fecha}`\n    this.canales.forEach((c) => c.enviar(msg))\n  }\n}\nnew Recordatorio([whatsapp, email]).enviar({ nombre: 'Luis' }, { fecha: '3 nov' })\n```\nHerencia sí: `Medico extends Usuario` y `Paciente extends Usuario`, porque comparten identidad y login y un médico nunca 'se convierte' en otra mezcla.",
+      "criteria": [
+        "Justifica el problema con el número de combinaciones",
+        "Recordatorio recibe canales y no sabe cuáles son",
+        "Agregar WhatsApp no obliga a tocar Recordatorio",
+        "Da un ejemplo válido de herencia con relación 'es un'"
+      ],
+      "commonErrors": [
+        "Mantener un if por canal dentro de Recordatorio",
+        "Decir que la herencia está siempre mal"
+      ],
+      "resources": [
+        {
+          "kind": "doc",
+          "title": "MDN: extends",
+          "url": "https://developer.mozilla.org/es/docs/Web/JavaScript/Reference/Classes/extends"
+        },
+        {
+          "kind": "doc",
+          "title": "MDN: super",
+          "url": "https://developer.mozilla.org/es/docs/Web/JavaScript/Reference/Operators/super"
+        }
+      ],
+      "interviewQuestion": "¿Por qué se dice 'favorece la composición sobre la herencia'? Dame un ejemplo donde sí heredarías."
+    },
+    {
+      "id": "js-l9-e1",
+      "trackId": "javascript",
+      "moduleId": "js-m3",
+      "lessonId": "js-l9",
+      "title": "Monedero de puntos encapsulado para la tienda",
+      "description": "La tienda da puntos de fidelidad. Hoy cualquiera hace `cliente.puntos = 99999`.\n\nCrea la clase `MonederoPuntos` con:\n- campo privado `#puntos` y otro `#historial` (lista de movimientos)\n- getter `puntos` (solo lectura)\n- `sumar(cantidad, motivo)` y `canjear(cantidad, motivo)`; canjear no puede dejar saldo negativo; las cantidades deben ser enteros positivos\n- `historial()` que devuelva una **copia** de los movimientos\n\nDemuestra con código que desde fuera no se pueden alterar los puntos ni el historial.",
+      "objective": "Proteger invariantes con campos privados y getters.",
+      "difficulty": "intermedio",
+      "kind": "practica_autonoma",
+      "theory": false,
+      "aiPolicy": "sin_ia",
+      "constraints": [],
+      "hints": [
+        "Escribe primero la regla que nunca debe romperse y ubica dónde se verifica.",
+        "Number.isInteger te ayuda a validar las cantidades.",
+        "Si devuelves el array privado tal cual, el que lo recibe puede hacerle push: devuelve una copia."
+      ],
+      "solution": "```js\nclass MonederoPuntos {\n  #puntos = 0\n  #historial = []\n  get puntos() { return this.#puntos }\n  #validar(c) {\n    if (!Number.isInteger(c) || c <= 0) throw new Error('Cantidad inválida')\n  }\n  sumar(cantidad, motivo) {\n    this.#validar(cantidad)\n    this.#puntos += cantidad\n    this.#historial.push({ tipo: 'suma', cantidad, motivo })\n  }\n  canjear(cantidad, motivo) {\n    this.#validar(cantidad)\n    if (cantidad > this.#puntos) throw new Error('Puntos insuficientes')\n    this.#puntos -= cantidad\n    this.#historial.push({ tipo: 'canje', cantidad, motivo })\n  }\n  historial() { return this.#historial.map((m) => ({ ...m })) }\n}\nconst m = new MonederoPuntos()\nm.sumar(100, 'compra')\nm.puntos = 5        // se ignora: no hay setter\nm.historial().push({}) // no afecta al interno\n```",
+      "criteria": [
+        "#puntos y #historial son privados",
+        "canjear no permite saldo negativo",
+        "historial() devuelve copia",
+        "Valida enteros positivos y lo demuestra con ejemplos"
+      ],
+      "commonErrors": [
+        "Usar _puntos (solo convención, sigue siendo accesible)",
+        "Devolver el array interno directamente"
+      ],
+      "resources": [
+        {
+          "kind": "doc",
+          "title": "MDN: Propiedades privadas",
+          "url": "https://developer.mozilla.org/es/docs/Web/JavaScript/Reference/Classes/Private_properties"
+        },
+        {
+          "kind": "doc",
+          "title": "MDN: get",
+          "url": "https://developer.mozilla.org/es/docs/Web/JavaScript/Reference/Functions/get"
+        }
+      ]
+    },
+    {
+      "id": "js-l9-e2",
+      "trackId": "javascript",
+      "moduleId": "js-m3",
+      "lessonId": "js-l9",
+      "title": "Entrevista: aplica S, O y D a un ReporteVentas",
+      "description": "En una entrevista te muestran:\n```js\nclass ReporteVentas {\n  generar(formato) {\n    const ventas = db.query('SELECT * FROM ventas')\n    const total = ventas.reduce((s, v) => s + v.monto, 0)\n    if (formato === 'pdf') return crearPdf(total)\n    if (formato === 'excel') return crearExcel(total)\n  }\n}\n```\n1. Señala qué principio rompe cada parte (S, O, D).\n2. Propón el rediseño en código: quién obtiene datos, quién calcula, quién formatea.\n3. Muestra cómo se agrega el formato 'csv' sin editar las clases existentes.\n4. Prepara tu explicación oral en máximo 5 frases.",
+      "objective": "Diagnosticar y corregir violaciones de SOLID y explicarlo en voz alta.",
+      "difficulty": "intermedio",
+      "kind": "entrevista",
+      "theory": false,
+      "aiPolicy": "ia_tutor",
+      "constraints": [],
+      "hints": [
+        "Cuenta las razones por las que esta clase podría cambiar.",
+        "Cada if por formato es una pista de que se puede reemplazar por objetos con el mismo método.",
+        "La base de datos debería llegar desde fuera, por el constructor."
+      ],
+      "solution": "1. S: lee datos, calcula y formatea (3 razones). O: cada formato nuevo obliga a editar el if. D: depende directamente de `db`.\n\n```js\nclass ReporteVentas {\n  constructor(repo, formateadores) { this.repo = repo; this.formateadores = formateadores }\n  generar(formato) {\n    const total = this.repo.ventas().reduce((s, v) => s + v.monto, 0)\n    const f = this.formateadores[formato]\n    if (!f) throw new Error(`Formato no soportado: ${formato}`)\n    return f.formatear(total)\n  }\n}\nconst formateadores = {\n  pdf: { formatear: (t) => crearPdf(t) },\n  excel: { formatear: (t) => crearExcel(t) },\n  csv: { formatear: (t) => `total\\n${t}` }, // nuevo, sin tocar la clase\n}\nnew ReporteVentas(repoVentas, formateadores).generar('csv')\n```\nOral: 'La clase tenía tres motivos de cambio; separé obtención de datos, cálculo y formato; los formatos son objetos intercambiables, así agrego CSV sin editar código probado; y como el repositorio se inyecta, lo pruebo con datos falsos'.",
+      "criteria": [
+        "Identifica correctamente S, O y D en el código original",
+        "El rediseño inyecta el repositorio",
+        "Agregar csv no modifica ReporteVentas",
+        "La explicación oral es breve y usa el ejemplo"
+      ],
+      "commonErrors": [
+        "Recitar las siglas sin señalar líneas concretas",
+        "Crear una subclase por formato con el mismo if adentro"
+      ],
+      "resources": [
+        {
+          "kind": "doc",
+          "title": "MDN: Clases",
+          "url": "https://developer.mozilla.org/es/docs/Web/JavaScript/Reference/Classes"
+        }
+      ],
+      "interviewQuestion": "Explícame un principio SOLID con un ejemplo de código que hayas escrito."
+    },
+    {
+      "id": "js-l10-e1",
+      "trackId": "javascript",
+      "moduleId": "js-m4",
+      "lessonId": "js-l10",
+      "title": "Convierte un callback del consultorio en promesa",
+      "description": "Una librería vieja del consultorio expone `consultarAgenda(fecha, callback)`, donde el callback recibe `(error, turnos)`.\n\n1. Escribe `consultarAgendaPromesa(fecha)` que devuelva una Promise (resolve con turnos, reject con el error).\n2. Usa Promise.all para consultar lunes, martes y miércoles en paralelo y sumar los turnos libres.\n3. Explica qué pasa si el martes falla, y cambia a Promise.allSettled para mostrar los días que sí respondieron.\n4. Predice y justifica el orden de 3 console.log que pongas dentro y fuera de la promesa.",
+      "objective": "Envolver APIs con callbacks en promesas y coordinar varias en paralelo.",
+      "difficulty": "intermedio",
+      "kind": "guiado",
+      "theory": false,
+      "aiPolicy": "ia_tutor",
+      "constraints": [],
+      "hints": [
+        "new Promise recibe una función con dos parámetros: uno para éxito y otro para fallo.",
+        "Dentro del callback, decide con el primer argumento cuál de los dos llamar.",
+        "allSettled devuelve objetos con status 'fulfilled' o 'rejected': filtra por eso."
+      ],
+      "solution": "```js\nconst consultarAgendaPromesa = (fecha) =>\n  new Promise((resolve, reject) => {\n    consultarAgenda(fecha, (error, turnos) => (error ? reject(error) : resolve(turnos)))\n  })\n\nconst dias = ['2026-11-02', '2026-11-03', '2026-11-04']\nconst agendas = await Promise.all(dias.map(consultarAgendaPromesa)) // si uno falla, rechaza todo\nconst libres = agendas.flat().filter((t) => !t.paciente).length\n\nconst resultados = await Promise.allSettled(dias.map(consultarAgendaPromesa))\nconst ok = resultados.filter((r) => r.status === 'fulfilled').map((r) => r.value)\n```",
+      "criteria": [
+        "La promesa rechaza cuando hay error y resuelve con los turnos",
+        "Las tres consultas van en paralelo",
+        "Explica que Promise.all rechaza si una falla",
+        "Usa allSettled para resultados parciales"
+      ],
+      "commonErrors": [
+        "Olvidar llamar reject y dejar la promesa pendiente para siempre",
+        "Hacer las consultas una tras otra sin necesidad"
+      ],
+      "resources": [
+        {
+          "kind": "doc",
+          "title": "MDN: Usar promesas",
+          "url": "https://developer.mozilla.org/es/docs/Web/JavaScript/Guide/Using_promises"
+        },
+        {
+          "kind": "doc",
+          "title": "MDN: Promise.all()",
+          "url": "https://developer.mozilla.org/es/docs/Web/JavaScript/Reference/Global_Objects/Promise/all"
+        }
+      ]
+    },
+    {
+      "id": "js-l11-e1",
+      "trackId": "javascript",
+      "moduleId": "js-m4",
+      "lessonId": "js-l11",
+      "title": "Pantalla de horarios disponibles con fetch robusto",
+      "description": "La app de reservas del consultorio necesita `cargarDisponibilidad(medicoId)` que:\n1. Pida en paralelo `/api/medicos/:id` y `/api/medicos/:id/horarios`.\n2. Lance un Error con el status si alguna respuesta no es ok.\n3. Devuelva `{ medico: nombre, libres: [...] }` solo con horarios futuros donde `ocupado === false`.\n4. Además escribe `reservar(horarioId, pacienteId)` que haga POST con JSON y devuelva la cita creada.\n\nPuedes probar con un servidor falso o mockeando fetch. Explica por qué usaste paralelo y no serie.",
+      "objective": "Escribir llamadas de red completas y defendibles con async/await.",
+      "difficulty": "intermedio",
+      "kind": "aplicacion_real",
+      "theory": false,
+      "aiPolicy": "ia_par",
+      "constraints": [],
+      "hints": [
+        "Crea una función auxiliar que haga fetch, revise ok y devuelva json: la usarás tres veces.",
+        "Las dos lecturas no dependen entre sí: pueden lanzarse juntas.",
+        "Para el POST necesitas method, headers con Content-Type y body con JSON.stringify."
+      ],
+      "solution": "```js\nasync function pedirJson(url, opciones) {\n  const res = await fetch(url, opciones)\n  if (!res.ok) throw new Error(`HTTP ${res.status} en ${url}`)\n  return res.json()\n}\n\nasync function cargarDisponibilidad(id) {\n  const [medico, horarios] = await Promise.all([\n    pedirJson(`/api/medicos/${id}`),\n    pedirJson(`/api/medicos/${id}/horarios`),\n  ])\n  const ahora = Date.now()\n  const libres = horarios.filter((h) => !h.ocupado && new Date(h.inicio).getTime() > ahora)\n  return { medico: medico.nombre, libres }\n}\n\nconst reservar = (horarioId, pacienteId) =>\n  pedirJson('/api/citas', {\n    method: 'POST',\n    headers: { 'Content-Type': 'application/json' },\n    body: JSON.stringify({ horarioId, pacienteId }),\n  })\n```\nParalelo porque los datos del médico y los horarios son independientes: la pantalla tarda lo que la petición más lenta, no la suma.",
+      "criteria": [
+        "Revisa res.ok en todas las llamadas",
+        "Las dos lecturas van en paralelo",
+        "Filtra horarios ocupados y pasados",
+        "El POST envía JSON con el header correcto"
+      ],
+      "commonErrors": [
+        "Confiar en que fetch rechaza con 404",
+        "Olvidar el await de res.json()",
+        "Mandar el body sin JSON.stringify"
+      ],
+      "resources": [
+        {
+          "kind": "doc",
+          "title": "MDN: Usando Fetch",
+          "url": "https://developer.mozilla.org/es/docs/Web/API/Fetch_API/Using_Fetch"
+        },
+        {
+          "kind": "doc",
+          "title": "MDN: async function",
+          "url": "https://developer.mozilla.org/es/docs/Web/JavaScript/Reference/Statements/async_function"
+        }
+      ]
+    },
+    {
+      "id": "js-l12-e1",
+      "trackId": "javascript",
+      "moduleId": "js-m4",
+      "lessonId": "js-l12",
+      "title": "Formulario de reserva con errores de validación propios",
+      "description": "Escribe para la app de reservas:\n1. `class ValidacionError extends Error` con propiedad `campo`.\n2. `validarReserva({ nombre, email, fechaISO })` que lance ValidacionError si: nombre vacío, email sin '@', o fecha en el pasado.\n3. `async enviarReserva(datos, api)` que valide, llame a `api.crear(datos)` y devuelva `{ ok: true, cita }`; si es ValidacionError devuelva `{ ok: false, campo, mensaje }`; si es otro error, lo registre con console.error y devuelva `{ ok: false, mensaje: 'Intenta de nuevo más tarde' }`.\n4. Prueba los 3 caminos con un `api` falso.",
+      "objective": "Clasificar errores y responder distinto a cada tipo.",
+      "difficulty": "intermedio",
+      "kind": "practica_autonoma",
+      "theory": false,
+      "aiPolicy": "ia_tutor",
+      "constraints": [],
+      "hints": [
+        "La clase propia necesita llamar a super con el mensaje y fijar this.name.",
+        "La validación lanza en el primer problema que encuentra, en orden.",
+        "En el catch usa instanceof para decidir el camino; no olvides el await en la llamada a la api."
+      ],
+      "solution": "```js\nclass ValidacionError extends Error {\n  constructor(campo, mensaje) { super(mensaje); this.name = 'ValidacionError'; this.campo = campo }\n}\nfunction validarReserva({ nombre, email, fechaISO }) {\n  if (!nombre?.trim()) throw new ValidacionError('nombre', 'Escribe tu nombre')\n  if (!email?.includes('@')) throw new ValidacionError('email', 'Email inválido')\n  if (new Date(fechaISO) <= new Date()) throw new ValidacionError('fecha', 'Elige una fecha futura')\n}\nasync function enviarReserva(datos, api) {\n  try {\n    validarReserva(datos)\n    const cita = await api.crear(datos)\n    return { ok: true, cita }\n  } catch (e) {\n    if (e instanceof ValidacionError) return { ok: false, campo: e.campo, mensaje: e.message }\n    console.error('Fallo al crear reserva', e)\n    return { ok: false, mensaje: 'Intenta de nuevo más tarde' }\n  }\n}\n```",
+      "criteria": [
+        "ValidacionError hereda de Error y tiene campo y name",
+        "Las tres validaciones funcionan",
+        "Distingue error de validación de error del sistema",
+        "Usa await para que el catch atrape fallos de la api"
+      ],
+      "commonErrors": [
+        "catch vacío",
+        "Mostrar al usuario el mensaje técnico del servidor",
+        "Lanzar strings en lugar de Error"
+      ],
+      "resources": [
+        {
+          "kind": "doc",
+          "title": "MDN: try...catch",
+          "url": "https://developer.mozilla.org/es/docs/Web/JavaScript/Reference/Statements/try...catch"
+        },
+        {
+          "kind": "doc",
+          "title": "MDN: Error",
+          "url": "https://developer.mozilla.org/es/docs/Web/JavaScript/Reference/Global_Objects/Error"
+        }
+      ]
+    },
+    {
+      "id": "js-l13-e1",
+      "trackId": "javascript",
+      "moduleId": "js-m5",
+      "lessonId": "js-l13",
+      "title": "Tipa el carrito de la tienda en TypeScript",
+      "description": "Convierte a TypeScript este modelo de la tienda:\n- `Producto` (id solo lectura, nombre, precio, categoria que solo puede ser 'bebidas' | 'postres' | 'snacks', descripcion opcional)\n- `LineaCarrito` (producto y cantidad)\n- `Carrito` (lineas y cupon opcional)\n- `totalCarrito(carrito: Carrito): number` que aplica el 10% si hay cupón\n\nLuego escribe 3 líneas que **deban** dar error de compilación (comentadas con el error esperado) y explica por qué TypeScript no te protege si el carrito llega de `localStorage`.",
+      "objective": "Modelar datos con interfaces y tipos literales y conocer sus límites.",
+      "difficulty": "intermedio",
+      "kind": "guiado",
+      "theory": false,
+      "aiPolicy": "ia_tutor",
+      "constraints": [],
+      "hints": [
+        "Para categoria usa una unión de strings literales.",
+        "Para que la función compile, todo lo que lees debe existir en las interfaces.",
+        "Piensa qué queda del código después de compilar."
+      ],
+      "solution": "```ts\ntype Categoria = 'bebidas' | 'postres' | 'snacks'\ninterface Producto { readonly id: number; nombre: string; precio: number; categoria: Categoria; descripcion?: string }\ninterface LineaCarrito { producto: Producto; cantidad: number }\ninterface Carrito { lineas: LineaCarrito[]; cupon?: string }\n\nfunction totalCarrito(c: Carrito): number {\n  const bruto = c.lineas.reduce((s, l) => s + l.producto.precio * l.cantidad, 0)\n  return c.cupon ? bruto * 0.9 : bruto\n}\n// const x: Producto = { id: 1, nombre: 'Té', precio: 3, categoria: 'frutas' } // ❌ 'frutas' no es Categoria\n// x.id = 2                                                                    // ❌ readonly\n// totalCarrito({ lineas: [{ producto: x, cantidad: '2' }] })                 // ❌ string no es number\n```\nDe localStorage sale texto que conviertes con JSON.parse: TypeScript no lo revisa en ejecución, así que hay que validarlo.",
+      "criteria": [
+        "Usa unión literal para categoria",
+        "Marca id como readonly y descripcion como opcional",
+        "totalCarrito compila y aplica el cupón",
+        "Explica que los tipos no existen en ejecución"
+      ],
+      "commonErrors": [
+        "Usar any para salir del paso",
+        "Creer que el tipo valida lo que llega de fuera"
+      ],
+      "resources": [
+        {
+          "kind": "doc",
+          "title": "TypeScript: Everyday Types",
+          "url": "https://www.typescriptlang.org/docs/handbook/2/everyday-types.html"
+        },
+        {
+          "kind": "doc",
+          "title": "TypeScript: Object Types",
+          "url": "https://www.typescriptlang.org/docs/handbook/2/objects.html"
+        }
+      ]
+    },
+    {
+      "id": "js-l14-e1",
+      "trackId": "javascript",
+      "moduleId": "js-m5",
+      "lessonId": "js-l14",
+      "title": "Estado de carga tipado y agruparPor genérico",
+      "description": "Para el panel de la pyme:\n1. Define `type Carga<T>` como unión discriminada con 'inactivo', 'cargando', 'ok' (con datos: T) y 'error' (con mensaje).\n2. Escribe `describir(c: Carga<Venta[]>): string` con un switch que cubra todos los casos y añade un `default` que use `never` para que el compilador avise si mañana se agrega un estado nuevo.\n3. Escribe `agruparPor<T, K extends string>(lista: T[], clave: (item: T) => K): Record<K, T[]>` y úsala para agrupar ventas por categoría.\n4. Muestra un ejemplo donde el compilador detecta que olvidaste un caso.",
+      "objective": "Usar uniones discriminadas, comprobación exhaustiva y genéricos con restricción.",
+      "difficulty": "avanzado",
+      "kind": "reto",
+      "theory": false,
+      "aiPolicy": "ia_par",
+      "constraints": [],
+      "hints": [
+        "Cada variante de la unión necesita la misma propiedad discriminante con un literal distinto.",
+        "En el default, asigna c a una variable de tipo never: si queda algún caso sin cubrir, no compila.",
+        "En agruparPor, empieza con un objeto vacío tipado como Partial<Record<K, T[]>> y ve empujando cada item a su grupo."
+      ],
+      "solution": "```ts\ntype Carga<T> =\n  | { estado: 'inactivo' }\n  | { estado: 'cargando' }\n  | { estado: 'ok'; datos: T }\n  | { estado: 'error'; mensaje: string }\n\nfunction describir(c: Carga<Venta[]>): string {\n  switch (c.estado) {\n    case 'inactivo': return 'Elige un rango de fechas'\n    case 'cargando': return 'Cargando ventas…'\n    case 'ok': return `${c.datos.length} ventas`\n    case 'error': return `Error: ${c.mensaje}`\n    default: {\n      const nunca: never = c\n      return nunca\n    }\n  }\n}\n\nfunction agruparPor<T, K extends string>(lista: T[], clave: (item: T) => K): Record<K, T[]> {\n  const grupos = {} as Record<K, T[]>\n  for (const item of lista) {\n    const k = clave(item)\n    ;(grupos[k] ??= []).push(item)\n  }\n  return grupos\n}\nagruparPor(ventas, (v) => v.categoria)\n```\nSi agregas `{ estado: 'vacio' }` a Carga, la línea `const nunca: never = c` deja de compilar.",
+      "criteria": [
+        "La unión tiene un discriminante literal por variante",
+        "El switch es exhaustivo con never",
+        "agruparPor conserva el tipo T en la salida",
+        "Demuestra el error al olvidar un caso"
+      ],
+      "commonErrors": [
+        "Usar estado: string en vez de literales",
+        "Tipar agruparPor con any y perder el tipo"
+      ],
+      "resources": [
+        {
+          "kind": "doc",
+          "title": "TypeScript: Narrowing",
+          "url": "https://www.typescriptlang.org/docs/handbook/2/narrowing.html"
+        },
+        {
+          "kind": "doc",
+          "title": "TypeScript: Generics",
+          "url": "https://www.typescriptlang.org/docs/handbook/2/generics.html"
+        }
+      ]
+    },
+    {
+      "id": "js-l15-e1",
+      "trackId": "javascript",
+      "moduleId": "js-m6",
+      "lessonId": "js-l15",
+      "title": "Analiza y mejora tres funciones del panel de la pyme",
+      "description": "Para cada función, escribe su Big O de tiempo y espacio justificando con los bucles, y propón una versión más rápida cuando se pueda:\n\nA) `const nombres = clientes.map(c => c.nombre)`\nB) `const comunes = ventasHoy.filter(v => ventasAyer.includes(v))`\nC) `function masVendido(ventas) { let mejor = null; for (const v of ventas) { const veces = ventas.filter(x => x.producto === v.producto).length; if (!mejor || veces > mejor.veces) mejor = { producto: v.producto, veces } } return mejor }`\n\nPara C escribe la versión O(n) y explica el intercambio de memoria.",
+      "objective": "Calcular Big O leyendo código y optimizar con estructuras adecuadas.",
+      "difficulty": "avanzado",
+      "kind": "entrevista",
+      "theory": false,
+      "aiPolicy": "sin_ia",
+      "constraints": [],
+      "hints": [
+        "Marca cada bucle y cada método que recorre, y fíjate si están anidados.",
+        "En B, includes dentro de filter es un bucle dentro de otro.",
+        "En C puedes contar todo en una pasada guardando contadores por producto."
+      ],
+      "solution": "A) O(n) tiempo, O(n) espacio.\nB) O(n × m) tiempo. Mejora: `const ayer = new Set(ventasAyer); ventasHoy.filter(v => ayer.has(v))` → O(n + m) tiempo, O(m) espacio.\nC) O(n²): filter dentro del for. Versión O(n):\n```js\nfunction masVendido(ventas) {\n  const conteo = new Map()\n  let mejor = null\n  for (const v of ventas) {\n    const veces = (conteo.get(v.producto) ?? 0) + 1\n    conteo.set(v.producto, veces)\n    if (!mejor || veces > mejor.veces) mejor = { producto: v.producto, veces }\n  }\n  return mejor\n}\n```\nUsa O(k) memoria extra (k productos distintos) a cambio de pasar de n² a n.",
+      "criteria": [
+        "Big O correcto en las tres con justificación",
+        "Detecta includes como bucle oculto en B",
+        "Versión O(n) de C correcta",
+        "Menciona el costo de memoria"
+      ],
+      "commonErrors": [
+        "Decir que B es O(n) porque 'hay un solo filter'",
+        "Olvidar el espacio extra del Map"
+      ],
+      "resources": [
+        {
+          "kind": "doc",
+          "title": "MDN: Set",
+          "url": "https://developer.mozilla.org/es/docs/Web/JavaScript/Reference/Global_Objects/Set"
+        },
+        {
+          "kind": "doc",
+          "title": "MDN: Array.prototype.includes()",
+          "url": "https://developer.mozilla.org/es/docs/Web/JavaScript/Reference/Global_Objects/Array/includes"
+        }
+      ],
+      "interviewQuestion": "¿Cuál es la complejidad de tu solución y podrías mejorarla?"
+    },
+    {
+      "id": "js-l16-e1",
+      "trackId": "javascript",
+      "moduleId": "js-m6",
+      "lessonId": "js-l16",
+      "title": "Entrevista: primer cliente que repite compra",
+      "description": "La tienda tiene la lista de compras del día en orden: `['ana', 'luis', 'marta', 'luis', 'ana']`.\n\n1. Escribe `primerRepetido(compras)` que devuelva el primer nombre que aparece por segunda vez ('luis' en el ejemplo) o null, en O(n).\n2. Escribe `esPalindromo(codigo)` con dos punteros, ignorando mayúsculas y caracteres que no sean letras o números ('Anita lava la tina' → true), en O(1) de memoria extra.\n3. Para cada una, di complejidad de tiempo y espacio y qué solución O(n²) evitaste.\n\nPractícalo en voz alta como si estuvieras en una entrevista: primero el enfoque, luego el código.",
+      "objective": "Aplicar Set/Map y dos punteros y explicar su complejidad.",
+      "difficulty": "avanzado",
+      "kind": "entrevista",
+      "theory": false,
+      "aiPolicy": "sin_ia",
+      "constraints": [],
+      "hints": [
+        "Para el repetido: ¿qué tienes que recordar de los nombres ya vistos?",
+        "Para el palíndromo: un índice al inicio, otro al final, y se acercan.",
+        "Cuando un carácter no es letra ni número, mueve solo ese puntero y vuelve a comparar."
+      ],
+      "solution": "```js\nfunction primerRepetido(compras) {\n  const vistos = new Set()\n  for (const nombre of compras) {\n    if (vistos.has(nombre)) return nombre\n    vistos.add(nombre)\n  }\n  return null\n} // O(n) tiempo, O(n) espacio; evita comparar cada par O(n²)\n\nconst esAlfanum = (c) => /[a-z0-9]/i.test(c)\nfunction esPalindromo(texto) {\n  let i = 0\n  let j = texto.length - 1\n  while (i < j) {\n    if (!esAlfanum(texto[i])) { i++; continue }\n    if (!esAlfanum(texto[j])) { j--; continue }\n    if (texto[i].toLowerCase() !== texto[j].toLowerCase()) return false\n    i++; j--\n  }\n  return true\n} // O(n) tiempo, O(1) espacio; evita crear el string limpio e invertido\n```",
+      "criteria": [
+        "primerRepetido es O(n) con Set",
+        "esPalindromo usa dos punteros sin crear strings nuevos",
+        "Ignora mayúsculas y signos",
+        "Declara tiempo y espacio de ambas"
+      ],
+      "commonErrors": [
+        "Usar indexOf dentro del bucle (vuelve a O(n²))",
+        "Invertir el string y decir que es O(1) de memoria"
+      ],
+      "resources": [
+        {
+          "kind": "doc",
+          "title": "MDN: Map",
+          "url": "https://developer.mozilla.org/es/docs/Web/JavaScript/Reference/Global_Objects/Map"
+        },
+        {
+          "kind": "doc",
+          "title": "MDN: Set",
+          "url": "https://developer.mozilla.org/es/docs/Web/JavaScript/Reference/Global_Objects/Set"
+        }
+      ],
+      "interviewQuestion": "Dado un array de precios y un presupuesto, ¿hay dos productos que sumen exactamente el presupuesto? Explica tu enfoque antes de codificar."
+    },
+    {
+      "id": "js-l17-e1",
+      "trackId": "javascript",
+      "moduleId": "js-m6",
+      "lessonId": "js-l17",
+      "title": "Recorre el menú de categorías de la tienda",
+      "description": "El menú de la tienda es un árbol: `{ nombre, productos: number, hijos: [...] }`.\n\nEscribe con recursión:\n1. `totalProductos(cat)` → suma los productos de la categoría y todas sus descendientes.\n2. `rutaHasta(cat, nombre)` → array con el camino, p. ej. `['Tienda', 'Bebidas', 'Café']`, o null si no existe.\n3. `aplanar(cat)` → lista de todos los nombres en orden.\n\nPara cada función escribe en un comentario cuál es el caso base y cuál el paso recursivo. Luego explica cuándo cambiarías a un bucle con una pila propia.",
+      "objective": "Diseñar funciones recursivas con caso base explícito sobre datos anidados.",
+      "difficulty": "avanzado",
+      "kind": "practica_autonoma",
+      "theory": false,
+      "aiPolicy": "ia_tutor",
+      "constraints": [],
+      "hints": [
+        "En un árbol, el caso base suele ser 'no tengo hijos' o 'encontré lo que buscaba'.",
+        "En rutaHasta, si un hijo devuelve un camino, antepón el nombre actual; si ninguno lo encuentra, devuelve null.",
+        "aplanar: el nombre actual seguido de lo que devuelve aplanar en cada hijo (flatMap ayuda)."
+      ],
+      "solution": "```js\n// base: sin hijos, el reduce devuelve solo cat.productos\nconst totalProductos = (cat) =>\n  cat.productos + cat.hijos.reduce((s, h) => s + totalProductos(h), 0)\n\nfunction rutaHasta(cat, nombre) {\n  if (cat.nombre === nombre) return [cat.nombre] // base: encontrado\n  for (const hijo of cat.hijos) {\n    const ruta = rutaHasta(hijo, nombre)           // paso: buscar en subárbol\n    if (ruta) return [cat.nombre, ...ruta]\n  }\n  return null                                      // base: no está aquí\n}\n\nconst aplanar = (cat) => [cat.nombre, ...cat.hijos.flatMap(aplanar)]\n```\nCambiaría a un bucle con pila propia si el árbol pudiera tener miles de niveles de profundidad (riesgo de desbordar la pila de llamadas).",
+      "criteria": [
+        "Las tres funciones son correctas en un árbol de 3 niveles",
+        "Cada una documenta caso base y paso recursivo",
+        "rutaHasta devuelve null si no existe",
+        "Explica cuándo preferir un bucle"
+      ],
+      "commonErrors": [
+        "Olvidar devolver el resultado de la llamada recursiva",
+        "Usar una variable global para acumular"
+      ],
+      "resources": [
+        {
+          "kind": "doc",
+          "title": "MDN: Recursión",
+          "url": "https://developer.mozilla.org/es/docs/Glossary/Recursion"
+        },
+        {
+          "kind": "doc",
+          "title": "MDN: Array.prototype.flatMap()",
+          "url": "https://developer.mozilla.org/es/docs/Web/JavaScript/Reference/Global_Objects/Array/flatMap"
+        }
+      ]
+    }
+  ]
+}

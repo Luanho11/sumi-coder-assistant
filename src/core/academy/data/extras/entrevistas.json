@@ -1,0 +1,514 @@
+{
+  "trackId": "entrevistas",
+  "lessons": {
+    "car-l1": {
+      "emoji": "🗣️",
+      "summary": "Explicas tu código en inglés con verbos precisos y sin caer en falsos amigos.",
+      "analogy": "Es como aprender las frases del menú antes de viajar: con 20 bien dichas pides cualquier plato sin sacar el diccionario.",
+      "learned": [
+        "🗣️ Puedes contar en inglés qué hace un trozo de tu trabajo en cuatro frases claras",
+        "🪤 Distingues palabras que parecen iguales al español pero significan otra cosa",
+        "🔊 Pronuncias sin dudar las palabras que más se escuchan en una reunión técnica",
+        "🎯 Empiezas por la intención y dejas los detalles para cuando te pregunten"
+      ],
+      "check": [
+        {
+          "question": "En una code review en inglés quieres decir \"Esta función se encarga de enviar el correo de confirmación\". ¿Cuál suena natural?",
+          "options": [
+            "This function is responsible for sending the confirmation email.",
+            "This function realizes the sending of the confirmation email.",
+            "This function assists to send the confirmation email.",
+            "This function actually sends eventually the confirmation email."
+          ],
+          "correctIndex": 0,
+          "explanation": "'Is responsible for' es la plantilla de la clase. 'Realize' significa darse cuenta, 'assist' es ayudar y 'eventually' no es eventualmente."
+        },
+        {
+          "question": "Un compañero de EE. UU. te pregunta por la *cache* de la app y tú dices \"cachei\". No te entiende. ¿Cómo se pronuncia?",
+          "options": [
+            "Como \"caché\" en español",
+            "Como \"cash\"",
+            "Como \"queich\"",
+            "Como \"cachí\""
+          ],
+          "correctIndex": 1,
+          "explanation": "Cache suena igual que cash. Es de los errores más frecuentes de hispanohablantes porque en español se dice caché."
+        }
+      ]
+    },
+    "car-l2": {
+      "emoji": "🎬",
+      "summary": "Cuentas un proyecto en 2 minutos: problema, solución, decisión, resultado y lección.",
+      "analogy": "Como el tráiler de una película: no cuenta todo, enseña el conflicto, una escena fuerte y deja ganas de preguntar más.",
+      "learned": [
+        "🎬 Puedes resumir meses de trabajo en una historia de dos minutos que se entiende",
+        "📏 Sabes cuántas palabras caben en dos minutos y cómo recortar lo que sobra",
+        "🙋 Dejas claro qué hiciste tú dentro de un trabajo de grupo",
+        "🔢 Cierras con un cambio que se puede medir en vez de un 'y ya'"
+      ],
+      "check": [
+        {
+          "question": "Tu pitch empieza así: *So, basically, I used React, Node, Mongo and Docker…*. ¿Qué bloque de la estructura falta al inicio?",
+          "options": [
+            "El aprendizaje",
+            "La lista de tecnologías",
+            "El problema que resolvía",
+            "El resultado"
+          ],
+          "correctIndex": 2,
+          "explanation": "Se empieza por el problema: da contexto y hace que la solución importe. Las tecnologías van en el 'cómo', y solo con una decisión explicada."
+        },
+        {
+          "question": "No tienes métricas de tu proyecto personal. ¿Qué haces con el bloque *Result*?",
+          "options": [
+            "Me invento un número creíble",
+            "Lo quito del pitch",
+            "Digo 'it was a success'",
+            "Cuento un cambio observable o cómo lo mediría"
+          ],
+          "correctIndex": 3,
+          "explanation": "Inventar se descubre al repreguntar y 'it was a success' no dice nada. Un cambio observable ('ya no llaman por teléfono') o cómo medirlo es honesto y concreto."
+        }
+      ]
+    },
+    "car-l3": {
+      "emoji": "⭐",
+      "summary": "Respondes 'cuéntame una vez que…' con historias reales ordenadas con STAR.",
+      "analogy": "Como contar a un amigo cómo arreglaste una gotera: dónde estaba, qué te tocaba, qué hiciste paso a paso y si dejó de gotear.",
+      "learned": [
+        "⭐ Puedes ordenar una anécdota para que se entienda a la primera",
+        "🗂️ Tienes un puñado de historias listas para casi cualquier pregunta personal",
+        "🙋 Hablas de lo que hiciste tú sin esconderte detrás del 'nosotros'",
+        "💥 Cuentas un error propio sin culpar a nadie y mostrando qué cambiaste"
+      ],
+      "check": [
+        {
+          "question": "Respondes una pregunta conductual: 60 segundos de contexto, 10 de lo que hiciste y 5 de resultado. ¿Qué ajustas?",
+          "options": [
+            "Recorto el contexto y dedico la mayor parte a mis acciones",
+            "Añado más contexto para que se entienda mejor",
+            "Quito el resultado para ir más rápido",
+            "Lo cambio a una respuesta hipotética"
+          ],
+          "correctIndex": 0,
+          "explanation": "La Action pesa ~60%: es lo que evalúan. Más contexto o quitar el resultado empeora justo lo que falta."
+        },
+        {
+          "question": "Te preguntan *Tell me about your biggest weakness* y quieres usar tu banco STAR. ¿Qué historia encaja mejor?",
+          "options": [
+            "Una en la que trabajaste demasiadas horas",
+            "Un error real que cometiste, qué hiciste para arreglarlo y qué cambiaste",
+            "Una en la que un compañero falló y tú lo salvaste",
+            "Ninguna: se responde que no tienes debilidades"
+          ],
+          "correctIndex": 1,
+          "explanation": "Un error real con acción y cambio demuestra autocrítica. 'Trabajo demasiado' suena ensayado y culpar a otro resta confianza."
+        }
+      ],
+      "diagram": "flowchart LR\n  P[Pregunta conductual]:::morado --> S[Situation 10%]:::azul\n  S --> T[Task 10%]:::azul\n  T --> A[Action 60% con I]:::naranja\n  A --> R[Result 20%]:::verde\n  A -.-> W[We sin rol propio]:::rosa\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n  classDef naranja fill:#FF9F0A,stroke:#FF9F0A,color:#fff\n  classDef rosa fill:#FF375F,stroke:#FF375F,color:#fff\n  classDef morado fill:#BF5AF2,stroke:#BF5AF2,color:#fff"
+    },
+    "car-l4": {
+      "emoji": "🧠",
+      "summary": "En un live coding narras cada paso para que vean cómo piensas, no solo el resultado.",
+      "analogy": "Como un copiloto de rally que va cantando cada curva: aunque el piloto se equivoque, todos saben qué estaba intentando hacer.",
+      "learned": [
+        "🧭 Sigues un orden de pasos cuando te ponen un problema delante y el reloj corre",
+        "💬 Piensas en voz alta en inglés en lugar de quedarte en silencio",
+        "🆘 Pides una pista de forma elegante cuando te atascas",
+        "🔍 Encuentras y anuncias tu propio fallo antes de que te lo señalen"
+      ],
+      "check": [
+        {
+          "question": "Te dan un problema y empiezas a escribir código de inmediato. A los 10 minutos descubres que entendiste mal la entrada. ¿Qué paso del proceso te saltaste?",
+          "options": [
+            "Optimize",
+            "Complexity",
+            "Test",
+            "Clarify"
+          ],
+          "correctIndex": 3,
+          "explanation": "Aclarar al principio ('Can I assume…?') evita resolver el problema equivocado. Test y Complexity van al final y no lo habrían evitado a tiempo."
+        },
+        {
+          "question": "En una prueba con asistente de IA permitido, la IA te propone un bucle que parece correcto. ¿Qué espera ver el entrevistador?",
+          "options": [
+            "Que lo pegues rápido para ahorrar tiempo",
+            "Que lo leas, lo pruebes con un caso borde y expliques qué comprobaste",
+            "Que lo rechaces porque usar IA está mal",
+            "Que pidas a la IA que lo explique por ti"
+          ],
+          "correctIndex": 1,
+          "explanation": "Cuando se permite IA, evalúan tu criterio: leer, probar casos borde y explicar. Pegar a ciegas o delegar la explicación muestra lo contrario."
+        }
+      ],
+      "diagram": "flowchart LR\n  C[Clarify]:::azul --> E[Example]:::azul\n  E --> B[Brute force]:::naranja\n  B --> O[Optimize]:::naranja\n  O --> K[Code]:::morado\n  K --> T[Test]:::verde\n  T --> X[Complexity]:::verde\n  T -.bug.-> K\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n  classDef naranja fill:#FF9F0A,stroke:#FF9F0A,color:#fff\n  classDef rosa fill:#FF375F,stroke:#FF375F,color:#fff\n  classDef morado fill:#BF5AF2,stroke:#BF5AF2,color:#fff"
+    },
+    "car-l5": {
+      "emoji": "💵",
+      "summary": "Investigas el mercado, razonas tu rango y negocias en inglés sin aceptar a ciegas.",
+      "analogy": "Como vender tu coche: miras precios de modelos y años parecidos, decides tu mínimo y abres un poco más arriba, sin inventar otro comprador.",
+      "learned": [
+        "🔎 Sabes dónde mirar cuánto se paga por un puesto parecido al tuyo",
+        "🧮 Conviertes cifras sueltas en tres números propios: mínimo, objetivo y primera petición",
+        "🙂 Pides más dinero con educación y argumentos, sin sentir que molestas",
+        "⏳ Pides días para pensar una oferta en vez de responder con prisa"
+      ],
+      "check": [
+        {
+          "question": "En la primera llamada el reclutador pregunta *What are your salary expectations?* y aún no sabes bien el alcance del puesto. ¿Qué respondes?",
+          "options": [
+            "Digo el número más bajo para no asustarlo",
+            "Digo que cualquier cosa está bien",
+            "Pregunto por el rango previsto y, si insiste, doy mi rango basado en datos",
+            "Me niego a hablar de dinero en todo el proceso"
+          ],
+          "correctIndex": 2,
+          "explanation": "Pedir el rango primero te da información; si insiste, un rango con respaldo es profesional. Bajar el número o decir 'cualquier cosa' te ancla abajo."
+        },
+        {
+          "question": "Comparas: encuesta de Stack Overflow (salario anual, tu país) y Glassdoor (mensual, EE. UU., 3 respuestas). ¿Cuál es el error que debes evitar?",
+          "options": [
+            "Mezclar cifras mensuales y anuales de lugares distintos como si fueran lo mismo",
+            "Usar dos fuentes en lugar de una",
+            "Mirar el año de la encuesta",
+            "Descartar filas que no se parecen a tu caso"
+          ],
+          "correctIndex": 0,
+          "explanation": "Hay que normalizar periodo, país y nivel antes de comparar. Mirar el año, usar varias fuentes y descartar filas ajenas son justo lo correcto."
+        }
+      ],
+      "diagram": "flowchart LR\n  O[Llega la oferta]:::azul --> G[Agradece]:::verde\n  G --> P[Pide tiempo]:::azul\n  P --> D[Compara con tus datos]:::morado\n  D --> C[Contraoferta con razon]:::naranja\n  C --> F{Supera tu piso?}:::morado\n  F -- si --> A[Acepta por escrito]:::verde\n  F -- no --> N[Declina con respeto]:::rosa\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n  classDef naranja fill:#FF9F0A,stroke:#FF9F0A,color:#fff\n  classDef rosa fill:#FF375F,stroke:#FF375F,color:#fff\n  classDef morado fill:#BF5AF2,stroke:#BF5AF2,color:#fff"
+    },
+    "car-l6": {
+      "emoji": "🔁",
+      "summary": "Sabes quién hace qué en Scrum y detectas cuándo un equipo lo está aplicando mal.",
+      "analogy": "Como la cocina de un restaurante: el dueño decide el menú, los cocineros cómo preparar cada plato y el jefe de sala quita estorbos para que todo fluya.",
+      "learned": [
+        "👥 Sabes quién decide qué se hace y quién decide cómo se hace en un equipo",
+        "🔁 Entiendes para qué sirve cada reunión del ciclo y cuánto debería durar",
+        "🚩 Reconoces reuniones que se han convertido en informes al jefe",
+        "🧩 Explicas cómo trabajas en equipo con ejemplos y no con definiciones"
+      ],
+      "check": [
+        {
+          "question": "Al terminar el sprint, el equipo se reúne para hablar de por qué las revisiones de código tardan tanto. ¿Qué evento es?",
+          "options": [
+            "Sprint Review",
+            "Daily Scrum",
+            "Sprint Planning",
+            "Sprint Retrospective"
+          ],
+          "correctIndex": 3,
+          "explanation": "La Retro inspecciona cómo trabaja el equipo. La Review, la trampa típica, inspecciona el producto con los interesados."
+        },
+        {
+          "question": "El Product Owner quiere que una tarea entre ya, a mitad de sprint. ¿Cómo se maneja según Scrum?",
+          "options": [
+            "La mete en el Sprint Backlog sin avisar",
+            "La habla con los Developers; si cambia el Sprint Goal se puede replanificar",
+            "El Scrum Master decide si entra",
+            "Se espera al próximo año"
+          ],
+          "correctIndex": 1,
+          "explanation": "El Sprint Backlog es de los Developers: el PO negocia con ellos. El Scrum Master facilita, no decide el alcance."
+        }
+      ],
+      "diagram": "flowchart LR\n  PB[Product Backlog]:::azul --> SP[Sprint Planning]:::morado\n  SP --> SB[Sprint Backlog]:::azul\n  SB --> D[Daily 15 min]:::naranja\n  D --> D\n  D --> I[Incremento]:::verde\n  I --> RV[Sprint Review]:::morado\n  RV --> RT[Retrospective]:::morado\n  RT --> SP\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n  classDef naranja fill:#FF9F0A,stroke:#FF9F0A,color:#fff\n  classDef rosa fill:#FF375F,stroke:#FF375F,color:#fff\n  classDef morado fill:#BF5AF2,stroke:#BF5AF2,color:#fff"
+    },
+    "car-l7": {
+      "emoji": "🧾",
+      "summary": "Escribes historias con criterios comprobables y las estimas comparando tamaños.",
+      "analogy": "Como pedir una tarta por encargo: dices para quién es y para qué fiesta, y acuerdas cómo sabrás que está bien, no la receta exacta.",
+      "learned": [
+        "🧾 Conviertes un deseo vago de un cliente en frases que el equipo puede construir",
+        "✅ Escribes condiciones de terminado que se responden con sí o no",
+        "✂️ Partes un encargo enorme en piezas que ya sirven por separado",
+        "🃏 Estimas comparando tamaños y usas las diferencias de opinión para destapar riesgos"
+      ],
+      "check": [
+        {
+          "question": "¿Cuál de estos es un criterio de aceptación útil para 'reservar cita'?",
+          "options": [
+            "La reserva debe ser intuitiva",
+            "El sistema debe ser rápido",
+            "Dado un hueco libre, cuando el paciente confirma, entonces recibe un correo y el hueco se bloquea",
+            "Usar la mejor tecnología disponible"
+          ],
+          "correctIndex": 2,
+          "explanation": "Se puede comprobar con sí o no. 'Intuitiva' o 'rápido' no tienen forma objetiva de verificarse."
+        },
+        {
+          "question": "Para dividir la épica 'devoluciones' alguien propone: historia 1 'crear la tabla', historia 2 'hacer la pantalla'. ¿Qué problema tiene?",
+          "options": [
+            "Ninguno, así se trabaja",
+            "Divide por capas técnicas: ninguna entrega valor sola",
+            "Son demasiado pequeñas",
+            "Les falta la estimación en horas"
+          ],
+          "correctIndex": 1,
+          "explanation": "Dividir por capas rompe la V de INVEST. Mejor dividir por pasos del flujo: pedir devolución, aprobar, reembolsar."
+        }
+      ]
+    },
+    "car-l8": {
+      "emoji": "📋",
+      "summary": "Trabajas con un tablero, límites de tareas en curso y métricas de flujo.",
+      "analogy": "Como una cocina de restaurante con sitio para solo tres platos en el pase: si está lleno, nadie empieza otro hasta servir.",
+      "learned": [
+        "📋 Mueves tareas por columnas sin esperar a un sprint",
+        "🚧 Respetas el máximo de tareas en curso de cada columna",
+        "⏱️ Mides cuánto tarda una tarea desde que alguien la empieza"
+      ],
+      "check": [
+        {
+          "question": "La columna \"En revisión\" tiene límite 3 y ya hay 3 tareas. Terminas la tuya. ¿Qué haces?",
+          "options": [
+            "Empiezas otra tarea nueva",
+            "Subes el límite a 5",
+            "Ayudas a revisar las que esperan",
+            "Mueves tu tarea a Hecho sin revisión"
+          ],
+          "correctIndex": 2,
+          "explanation": "El límite obliga a terminar antes de empezar: ayudar a vaciar la columna atasca menos el flujo."
+        },
+        {
+          "question": "¿Qué mide el lead time?",
+          "options": [
+            "Las horas que trabajó una persona",
+            "Las tareas por semana",
+            "Lo que dura una reunión diaria",
+            "Desde que se pide algo hasta que está hecho"
+          ],
+          "correctIndex": 3,
+          "explanation": "El lead time es lo que espera el cliente: incluye el tiempo en cola, no solo el trabajo."
+        }
+      ]
+    }
+  },
+  "modules": {
+    "car-m1": {
+      "emoji": "🌎",
+      "exam": [
+        {
+          "question": "En una entrevista dices: *Actually I am working in a booking app, and eventually I fix bugs.* ¿Qué querías decir en realidad?",
+          "options": [
+            "Currently I'm working on a booking app, and occasionally I fix bugs.",
+            "In fact I'm working in a booking app and at the end I fix bugs.",
+            "Actually I work on a booking app and eventually I fix bugs.",
+            "Currently I work in a booking app and finally I fix bugs."
+          ],
+          "correctIndex": 0,
+          "explanation": "Actualmente = currently; eventualmente = occasionally; se trabaja *on* un proyecto. Las otras mantienen algún falso amigo."
+        },
+        {
+          "question": "Tu pitch en inglés dura 3 minutos. ¿Qué recortas primero sin perder fuerza?",
+          "options": [
+            "El problema inicial",
+            "El resultado medible",
+            "La decisión técnica",
+            "Parte de la lista de herramientas que usaste"
+          ],
+          "correctIndex": 3,
+          "explanation": "La lista de herramientas aporta poco; problema, decisión y resultado son lo que hace memorable el pitch."
+        },
+        {
+          "question": "¿Qué frase describe mejor la intención de una función que lee los pedidos y los muestra en una tabla?",
+          "options": [
+            "It fetches the orders and renders them in a table.",
+            "It catches the orders and paints them in a board.",
+            "It brings the orders and draws a table of them actually.",
+            "It takes orders and gives back a table to the screen."
+          ],
+          "correctIndex": 0,
+          "explanation": "Fetch y render son los verbos estándar. 'Catch' tiene otro sentido en código y 'paint/board' no son la forma habitual."
+        },
+        {
+          "question": "En tu pitch dices 'we built', 'we decided', 'we shipped'. El entrevistador pregunta qué hiciste tú. ¿Qué ajuste evita esa pregunta?",
+          "options": [
+            "Decir 'the team' en vez de 'we'",
+            "Usar 'I' en las partes que fueron tuyas y nombrar tu papel",
+            "Hablar en pasiva: 'it was built'",
+            "Quitar las partes de equipo"
+          ],
+          "correctIndex": 1,
+          "explanation": "Nombrar tu papel con 'I' responde lo que quieren saber. La pasiva o 'the team' lo esconden igual que 'we'."
+        },
+        {
+          "question": "Vas a decir *width*, *height* y *queue* en una explicación. ¿Qué pronunciación es correcta?",
+          "options": [
+            "uid · jeit · cueue",
+            "guidz · jéiguet · kiu",
+            "uidz · jait · kiu",
+            "uich · jit · cuí"
+          ],
+          "correctIndex": 2,
+          "explanation": "Width suena 'uidz', height 'jait' y queue como la letra Q, 'kiu'."
+        },
+        {
+          "question": "Un reclutador te interrumpe a mitad del pitch: *Sorry, what was the hardest part?* ¿Por qué ayuda haber ensayado con 5 frases clave en vez de un guion memorizado?",
+          "options": [
+            "Porque puedes saltar al bloque de la decisión técnica sin perder el hilo",
+            "Porque así hablas más rápido",
+            "Porque no hace falta escuchar la pregunta",
+            "Porque el guion memorizado siempre es más largo"
+          ],
+          "correctIndex": 0,
+          "explanation": "Con bloques puedes moverte por la historia según lo que te pregunten. Un guion memorizado se rompe con la primera interrupción."
+        }
+      ]
+    },
+    "car-m2": {
+      "emoji": "🎯",
+      "exam": [
+        {
+          "question": "Te preguntan *Tell me about a time you had to learn something quickly*. ¿Qué parte de STAR debería durar más?",
+          "options": [
+            "Situation",
+            "Task",
+            "Action",
+            "Result"
+          ],
+          "correctIndex": 2,
+          "explanation": "La Action (~60%) muestra cómo aprendiste: qué recursos, en qué orden, qué probaste. El contexto largo es el error típico."
+        },
+        {
+          "question": "En un live coding das con la solución O(n²) y no ves otra. ¿Qué es lo más profesional?",
+          "options": [
+            "Decirla, programarla bien y comentar dónde buscarías mejorarla",
+            "Quedarte callado buscando la óptima",
+            "Decir que no sabes y rendirte",
+            "Escribir la óptima de memoria sin explicarla"
+          ],
+          "correctIndex": 0,
+          "explanation": "Una solución que funciona y bien explicada puntúa; el silencio y el código sin explicación no dejan ver tu razonamiento."
+        },
+        {
+          "question": "Una startup te ofrece menos de tu objetivo pero más que tu piso. ¿Qué respuesta sigue la clase?",
+          "options": [
+            "Aceptar ya para no perderla",
+            "Decir que tienes otra oferta mayor aunque no sea verdad",
+            "Rechazarla sin explicar",
+            "Agradecer, mostrar interés y pedir acercarse al objetivo con tus datos"
+          ],
+          "correctIndex": 3,
+          "explanation": "Agradecer y justificar con datos abre la conversación. Inventar ofertas es arriesgado y aceptar ya deja dinero sobre la mesa."
+        },
+        {
+          "question": "Tu banco STAR tiene la historia del descuento duplicado en la tienda. ¿A qué pareja de preguntas responde mejor?",
+          "options": [
+            "*Why do you want this job?* y *Where do you see yourself in 5 years?*",
+            "*Tell me about a mistake* y *Tell me about working under pressure*",
+            "*What's your salary expectation?* y *When can you start?*",
+            "*Do you have any questions for us?* y *What's your notice period?*"
+          ],
+          "correctIndex": 1,
+          "explanation": "Un error con respuesta rápida sirve para 'mistake' y 'pressure'. Las otras parejas no son conductuales de tipo 'cuéntame una vez'."
+        },
+        {
+          "question": "En la prueba técnica te atascas. ¿Qué frase usarías?",
+          "options": [
+            "Just tell me the answer, please.",
+            "This problem is badly written.",
+            "I'm stuck on avoiding duplicates. Could I get a small hint?",
+            "Can we skip this one?"
+          ],
+          "correctIndex": 2,
+          "explanation": "Nombrar dónde estás atascado y pedir una pista pequeña muestra autonomía. Pedir la respuesta o culpar al enunciado resta."
+        },
+        {
+          "question": "Encuentras sueldos para tu rol: uno de Levels.fyi en una gran tecnológica, otro de la encuesta de Stack Overflow de tu país y nivel. ¿Cuál pesa más para tu objetivo como junior remoto en una startup?",
+          "options": [
+            "El de la gran tecnológica, porque es el más alto",
+            "Ninguno, se decide por intuición",
+            "Los dos por igual, haciendo la media",
+            "El de la encuesta filtrado por tu país y nivel, usando el otro como techo"
+          ],
+          "correctIndex": 3,
+          "explanation": "Las filas parecidas a tu caso marcan el objetivo; la cifra de una gran tecnológica es un techo. Promediar mezcla casos distintos."
+        },
+        {
+          "question": "Entrevista en inglés: después de tu respuesta STAR te preguntan *What would you do differently?* ¿Qué buscan?",
+          "options": [
+            "Que admitas que todo salió perfecto",
+            "Que muestres que sacaste una lección concreta",
+            "Que culpes al contexto",
+            "Que cambies de historia"
+          ],
+          "correctIndex": 1,
+          "explanation": "Quieren ver reflexión: una mejora concreta que aplicarías. Decir que todo fue perfecto o culpar al contexto suena defensivo."
+        }
+      ]
+    },
+    "car-m3": {
+      "emoji": "🏃",
+      "exam": [
+        {
+          "question": "En tu equipo el Scrum Master reparte las tareas a cada desarrollador al empezar el sprint. ¿Qué principio se rompe?",
+          "options": [
+            "Los Developers se autoorganizan para decidir cómo hacer el trabajo",
+            "El Product Owner debe repartirlas",
+            "Las tareas se reparten en la Retro",
+            "Nada, es su función"
+          ],
+          "correctIndex": 0,
+          "explanation": "Los Developers deciden cómo hacer el trabajo. El SM facilita y quita obstáculos; el PO decide qué, no quién."
+        },
+        {
+          "question": "En la Sprint Review se muestra una función que funciona pero no tiene tests y la Definition of Done los exige. ¿Qué pasa?",
+          "options": [
+            "Se presenta como terminada",
+            "No cuenta como parte del Incremento terminado; vuelve al Product Backlog",
+            "El Scrum Master la aprueba igualmente",
+            "Se elimina la Definition of Done"
+          ],
+          "correctIndex": 1,
+          "explanation": "Sin cumplir la Definition of Done no es Incremento. Vuelve al Product Backlog para planificarse de nuevo."
+        },
+        {
+          "question": "¿Cuál es una historia de usuario bien escrita para el panel de ventas de una pyme?",
+          "options": [
+            "Como desarrollador quiero crear la tabla ventas",
+            "El panel debe tener gráficos bonitos",
+            "Hacer el login con contraseña",
+            "Como dueña de la tienda quiero ver las ventas de la semana para decidir qué reponer"
+          ],
+          "correctIndex": 3,
+          "explanation": "Nombra a una persona real, lo que quiere y para qué. Las otras son tareas técnicas o deseos sin comprobar."
+        },
+        {
+          "question": "El equipo A tiene velocidad 40 y el B 20. El gerente concluye que A trabaja el doble. ¿Qué responde alguien que entiende los puntos?",
+          "options": [
+            "Tiene razón: más puntos, más trabajo",
+            "Hay que bajar los puntos de A",
+            "Los puntos son relativos a cada equipo; la velocidad sirve para planear, no para comparar",
+            "B debe estimar en horas"
+          ],
+          "correctIndex": 2,
+          "explanation": "Cada equipo calibra sus puntos. Compararlos invita a inflar estimaciones y no mide productividad."
+        },
+        {
+          "question": "En la Daily alguien empieza a debatir 20 minutos cómo diseñar la base de datos de reservas. ¿Qué haces?",
+          "options": [
+            "Seguir hasta que se decida",
+            "Proponer hablarlo justo después con quienes hagan falta y cerrar la Daily en 15 minutos",
+            "Cancelar la Daily",
+            "Pedir al Product Owner que decida"
+          ],
+          "correctIndex": 1,
+          "explanation": "La Daily es corta y de coordinación; los debates técnicos se hacen después con las personas implicadas."
+        },
+        {
+          "question": "En el Planning Poker una historia recibe votos de 2, 3, 3 y 13. Tras hablar, se descubre que hay que integrar un pago externo. ¿Qué ha demostrado el proceso?",
+          "options": [
+            "Que el 13 era un error",
+            "Que la estimación debe hacerla una sola persona",
+            "Que hay que promediar siempre",
+            "Que la diferencia de votos destapó un riesgo que la mayoría no veía"
+          ],
+          "correctIndex": 3,
+          "explanation": "El valor del Planning Poker es esa conversación: el voto extremo traía información. Promediar o ignorarlo la habría perdido."
+        }
+      ]
+    }
+  }
+}

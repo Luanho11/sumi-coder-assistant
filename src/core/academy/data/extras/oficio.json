@@ -1,0 +1,842 @@
+{
+  "trackId": "oficio",
+  "lessons": {
+    "of-l1": {
+      "emoji": "🖥️",
+      "summary": "Te mueves, creas y encadenas comandos en la terminal sin depender del ratón.",
+      "analogy": "La terminal es como hablar con el sistema por walkie-talkie: frases cortas y exactas, y responde al instante sin menús por medio.",
+      "learned": [
+        "🧭 Sabes dónde estás y te mueves entre carpetas con rutas",
+        "🔗 Encadenas comandos pequeños para contestar preguntas grandes",
+        "⚠️ Lees un comando antes de ejecutarlo, sobre todo si borra"
+      ],
+      "check": [
+        {
+          "question": "Quieres saber cuántas líneas con ERROR tiene app.log. ¿Qué comando lo hace?",
+          "options": [
+            "cat app.log > ERROR",
+            "grep ERROR app.log | wc -l",
+            "ls ERROR app.log",
+            "rm app.log | grep ERROR"
+          ],
+          "correctIndex": 1,
+          "explanation": "grep filtra las líneas con ERROR y wc -l las cuenta. El > sobrescribiría un archivo llamado ERROR y rm borraría el log."
+        },
+        {
+          "question": "Estás en /home/lm/app/src. ¿Qué hace cd ..?",
+          "options": [
+            "Va a la raíz del disco",
+            "Borra la carpeta src",
+            "Sube a /home/lm/app",
+            "Entra en una carpeta llamada .."
+          ],
+          "correctIndex": 2,
+          "explanation": "Los dos puntos son la carpeta padre: subes un nivel, a /home/lm/app."
+        }
+      ],
+      "diagram": "flowchart LR\n  A[cat app.log]:::azul -->|pipe| B[grep ERROR]:::morado\n  B -->|pipe| C[wc -l]:::verde\n  C --> D[42 errores]:::naranja\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef morado fill:#BF5AF2,stroke:#BF5AF2,color:#fff\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n  classDef naranja fill:#FF9F0A,stroke:#FF9F0A,color:#fff"
+    },
+    "of-l2": {
+      "emoji": "🐞",
+      "summary": "Depuras con método: reproduces, aíslas, lees la traza y usas breakpoints.",
+      "analogy": "Como un mecánico que no cambia piezas al azar: escucha el ruido, lo reproduce, aísla la pieza y solo entonces la cambia.",
+      "learned": [
+        "📜 Lees un mensaje de error y encuentras la línea exacta del fallo",
+        "🔴 Pausas el programa con un breakpoint y miras los valores reales",
+        "🦆 Explicas el código en voz alta para ver el fallo por ti mismo"
+      ],
+      "check": [
+        {
+          "question": "Una traza de error muestra 8 líneas; las 5 primeras son de librerías y la sexta es perfil.js:12. ¿Por dónde empiezas?",
+          "options": [
+            "Por la primera línea de la librería",
+            "Reinstalando las librerías",
+            "Por la última línea de la traza",
+            "Por perfil.js:12, la primera línea de tu código"
+          ],
+          "correctIndex": 3,
+          "explanation": "Las librerías rara vez fallan solas: lo habitual es que tu código les pase un dato erróneo. Empieza por la primera línea tuya."
+        },
+        {
+          "question": "Algo funcionaba hace una semana y hoy falla, con 40 commits en medio. ¿Qué técnica encuentra el commit culpable más rápido?",
+          "options": [
+            "Búsqueda binaria con git bisect",
+            "Reescribir el módulo entero",
+            "Revisar los 40 commits uno a uno",
+            "Añadir console.log en todos los archivos"
+          ],
+          "correctIndex": 0,
+          "explanation": "git bisect parte los commits por la mitad en cada paso: con 40 commits lo encuentras en unos 6 pasos."
+        }
+      ]
+    },
+    "of-l3": {
+      "emoji": "🗂️",
+      "summary": "Eliges pila, cola, árbol o grafo según cómo entran y salen tus datos.",
+      "analogy": "Una pila es la torre de platos, una cola la fila del súper, un árbol las carpetas del ordenador y un grafo el mapa del metro.",
+      "learned": [
+        "📚 Reconoces una pila en el botón Deshacer y en la traza de errores",
+        "🚶 Usas una cola cuando el primero que llega debe salir primero",
+        "🕸️ Distingues una jerarquía (árbol) de una red de conexiones (grafo)"
+      ],
+      "check": [
+        {
+          "question": "Implementas el botón Deshacer de un editor. ¿Qué estructura usas?",
+          "options": [
+            "Una cola",
+            "Una pila",
+            "Un grafo",
+            "Un árbol binario"
+          ],
+          "correctIndex": 1,
+          "explanation": "Deshacer revierte primero lo último que hiciste: último en entrar, primero en salir. Eso es una pila."
+        },
+        {
+          "question": "Quieres el camino con menos transbordos entre dos estaciones de metro. ¿Qué modelo y recorrido encajan?",
+          "options": [
+            "Un árbol recorrido en preorden",
+            "Una pila con pop",
+            "Un grafo recorrido por niveles (BFS)",
+            "Un array ordenado con sort"
+          ],
+          "correctIndex": 2,
+          "explanation": "Las estaciones forman un grafo y BFS explora por niveles: lo primero que alcanza es el camino con menos saltos."
+        }
+      ],
+      "diagram": "flowchart TD\n  A[Raiz: src]:::azul --> B[components]:::morado\n  A --> C[views]:::morado\n  B --> D[Button.tsx]:::verde\n  B --> E[Card.tsx]:::verde\n  C --> F[Home.tsx]:::verde\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef morado fill:#BF5AF2,stroke:#BF5AF2,color:#fff\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff"
+    },
+    "of-l4": {
+      "emoji": "🔍",
+      "summary": "Sabes cuánto cuesta buscar y ordenar, y cuándo la búsqueda binaria te salva.",
+      "analogy": "Buscar una palabra en el diccionario: no lees página por página, abres por la mitad y descartas la parte que no toca.",
+      "learned": [
+        "🔍 Usas la búsqueda binaria solo cuando los datos están ordenados",
+        "📊 Explicas por qué ordenar bien cuesta n por log de n",
+        "⚠️ Ordenas números en JavaScript con función de comparación"
+      ],
+      "check": [
+        {
+          "question": "¿Qué devuelve [10, 9, 1].sort() en JavaScript?",
+          "options": [
+            "[1, 9, 10]",
+            "[10, 9, 1]",
+            "Un error",
+            "[1, 10, 9]"
+          ],
+          "correctIndex": 3,
+          "explanation": "Sin función de comparación, sort compara como texto: \"10\" va antes que \"9\". Usa sort((a, b) => a - b)."
+        },
+        {
+          "question": "Tienes una lista de un millón de correos sin ordenar y buscas uno una sola vez. ¿Qué es más razonable?",
+          "options": [
+            "Búsqueda lineal: recorrerla una vez",
+            "Ordenarla y luego hacer búsqueda binaria",
+            "Convertirla en pila",
+            "Búsqueda binaria directamente"
+          ],
+          "correctIndex": 0,
+          "explanation": "Ordenar cuesta más que recorrerla una vez. La binaria compensa cuando vas a buscar muchas veces en datos ya ordenados."
+        }
+      ]
+    },
+    "of-l5": {
+      "emoji": "🧪",
+      "summary": "Escribes la prueba antes que el código y la usas como especificación.",
+      "analogy": "Como fijar la diana antes de disparar: primero decides qué es acertar y luego apuntas, no al revés.",
+      "learned": [
+        "🔴 Empiezas por una prueba pequeña que falla",
+        "🟢 Escribes solo el código necesario para que pase",
+        "🤖 Usas tus pruebas para juzgar el código que propone la IA"
+      ],
+      "check": [
+        {
+          "question": "En TDD, ¿qué haces justo después de ver una prueba en rojo?",
+          "options": [
+            "Refactorizar todo el módulo",
+            "Escribir el código mínimo para que pase",
+            "Escribir diez pruebas más",
+            "Borrar la prueba"
+          ],
+          "correctIndex": 1,
+          "explanation": "El ciclo es rojo, verde, refactor: tras el rojo, el mínimo código que lo pone en verde. La limpieza viene después."
+        },
+        {
+          "question": "Pides a una IA el código y sus pruebas a la vez, y todo pasa en verde. ¿Cuál es el riesgo?",
+          "options": [
+            "Ninguno, si todo está en verde",
+            "Que las pruebas sean lentas",
+            "Que las pruebas confirmen el mismo error que el código",
+            "Que el código sea demasiado corto"
+          ],
+          "correctIndex": 2,
+          "explanation": "Si el mismo autor escribe prueba e implementación con la misma idea equivocada, ambas coinciden y el error pasa en verde."
+        }
+      ]
+    },
+    "of-l6": {
+      "emoji": "♻️",
+      "summary": "Mejoras la estructura del código sin cambiar lo que hace y explicas la deuda técnica.",
+      "analogy": "Refactorizar es ordenar la cocina mientras cocinas: no cambias la receta, pero el siguiente plato sale más rápido.",
+      "learned": [
+        "♻️ Refactorizas solo cuando hay pruebas que te protegen",
+        "🏷️ Cambias números mágicos por constantes con nombre",
+        "💳 Explicas la deuda técnica en días y dinero, no en gustos"
+      ],
+      "check": [
+        {
+          "question": "¿Cuál de estos cambios NO es refactorizar?",
+          "options": [
+            "Renombrar una variable para que se entienda",
+            "Extraer un bloque a una función con nombre",
+            "Sustituir un número mágico por una constante",
+            "Cambiar el descuento del 10% al 15%"
+          ],
+          "correctIndex": 3,
+          "explanation": "Refactorizar no cambia el comportamiento. Cambiar el porcentaje cambia lo que hace el programa: es una funcionalidad nueva."
+        },
+        {
+          "question": "Tu responsable pregunta por qué pedir dos días para \"limpiar\" el carrito. ¿Qué argumento convence más?",
+          "options": [
+            "Cada cambio tarda 3 días en vez de 1; tras limpiarlo, las próximas tareas salen el doble de rápido",
+            "Así lo dice el libro Clean Code",
+            "El código del carrito está muy feo",
+            "Es lo que hacen las empresas grandes"
+          ],
+          "correctIndex": 0,
+          "explanation": "La deuda técnica se defiende con su coste concreto en tiempo. Las opiniones sobre estética no ayudan a decidir."
+        }
+      ]
+    },
+    "of-l7": {
+      "emoji": "🧩",
+      "summary": "Reconoces Observer, Strategy y Factory en código real y sabes cuándo usarlos.",
+      "analogy": "Los patrones son como las jugadas ensayadas del fútbol: tienen nombre y todo el equipo sabe qué hacer cuando alguien grita \"córner corto\".",
+      "learned": [
+        "👀 Ves el patrón Observer en cada escucha de eventos",
+        "🎯 Sustituyes un if gigante por un objeto de estrategias",
+        "🏭 Creas objetos con una función fábrica que oculta los detalles"
+      ],
+      "check": [
+        {
+          "question": "Tienes un if/else con 8 formas de calcular el envío y cada mes se añade una. ¿Qué patrón encaja?",
+          "options": [
+            "Singleton",
+            "Strategy",
+            "Observer",
+            "Ninguno, más if/else"
+          ],
+          "correctIndex": 1,
+          "explanation": "Strategy encapsula cada cálculo por separado: añadir uno nuevo no obliga a tocar los demás."
+        },
+        {
+          "question": "Un carrito avisa al contador del icono, a las analíticas y al guardado automático cuando cambia, sin conocerlos. ¿Qué patrón es?",
+          "options": [
+            "Factory",
+            "Strategy",
+            "Observer",
+            "Builder"
+          ],
+          "correctIndex": 2,
+          "explanation": "El carrito publica el cambio y quien se suscribió reacciona. Eso es Observer, o publicar y suscribirse."
+        }
+      ]
+    },
+    "of-l8": {
+      "emoji": "🌍",
+      "summary": "Explicas qué pasa desde que escribes una dirección hasta que ves la página.",
+      "analogy": "El DNS es la agenda del móvil (nombre a número), la IP es la dirección del edificio y el puerto es la puerta a la que llamas.",
+      "learned": [
+        "📖 Explicas qué hace el DNS cuando escribes una dirección web",
+        "🚪 Sabes qué puerto usa cada servicio habitual",
+        "🔢 Interpretas los códigos de respuesta 2xx, 4xx y 5xx"
+      ],
+      "check": [
+        {
+          "question": "Tu app recibe un 401 al pedir /api/pedidos. ¿Qué indica?",
+          "options": [
+            "El servidor se cayó",
+            "La ruta no existe",
+            "Hiciste demasiadas peticiones",
+            "La petición no lleva una identificación válida"
+          ],
+          "correctIndex": 3,
+          "explanation": "401 significa no autenticado: falta el token o no es válido. 404 sería ruta inexistente, 429 exceso de peticiones y 5xx fallo del servidor."
+        },
+        {
+          "question": "Un compañero dice que la web no carga. ¿Qué compruebas primero?",
+          "options": [
+            "Si el DNS resuelve el dominio a una IP",
+            "El color del botón principal",
+            "La versión de Node de tu equipo",
+            "Si hay deuda técnica"
+          ],
+          "correctIndex": 0,
+          "explanation": "El orden lógico es DNS, conexión y código de respuesta. Sin resolver el nombre no hay petición posible."
+        }
+      ],
+      "diagram": "flowchart LR\n  A[Escribes tienda.com]:::azul --> B[DNS: nombre a IP]:::morado\n  B --> C[Conexion al puerto 443 con TLS]:::verde\n  C --> D[Peticion HTTP]:::naranja\n  D --> E[Respuesta 200 con HTML]:::verde\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef morado fill:#BF5AF2,stroke:#BF5AF2,color:#fff\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n  classDef naranja fill:#FF9F0A,stroke:#FF9F0A,color:#fff"
+    },
+    "of-l9": {
+      "emoji": "🧱",
+      "summary": "Entiendes por qué el navegador bloquea otros orígenes y lo configuras en el servidor.",
+      "analogy": "CORS es el portero del edificio: tu página puede salir a preguntar, pero solo entra la respuesta si el otro servidor dijo que te conoce.",
+      "learned": [
+        "🌐 Sabes que un origen es protocolo, dominio y puerto",
+        "🔑 Arreglas CORS en el servidor con una lista de orígenes permitidos",
+        "🚫 Evitas las extensiones que quitan la protección del navegador"
+      ],
+      "check": [
+        {
+          "question": "Tu frontend en localhost:5173 llama a localhost:3000 y salta el error CORS. ¿Por qué, si es la misma máquina?",
+          "options": [
+            "Porque localhost no permite peticiones",
+            "Porque el puerto distinto es otro origen",
+            "Porque falta HTTPS",
+            "Porque el servidor está caído"
+          ],
+          "correctIndex": 1,
+          "explanation": "El origen incluye el puerto: 5173 y 3000 son orígenes distintos aunque estén en el mismo equipo."
+        },
+        {
+          "question": "En Postman la API responde bien, pero en el navegador falla por CORS. ¿Qué concluyes?",
+          "options": [
+            "La API está rota",
+            "Postman tiene un error",
+            "El servidor no permite tu origen; Postman no aplica CORS",
+            "Hay que reinstalar el navegador"
+          ],
+          "correctIndex": 2,
+          "explanation": "CORS lo aplica solo el navegador. Que funcione en Postman no prueba nada: falta que el servidor declare tu origen como permitido."
+        }
+      ]
+    },
+    "of-l10": {
+      "emoji": "🔤",
+      "summary": "Lees y escribes expresiones regulares cortas para validar y buscar texto.",
+      "analogy": "Una regex es un molde de galletas: describe la forma, y todo lo que encaja exactamente en ella pasa.",
+      "learned": [
+        "🔤 Lees las piezas básicas de una expresión regular",
+        "✅ Validas formatos fijos como códigos postales o matrículas",
+        "🧰 Pruebas cada expresión en una herramienta antes de usarla"
+      ],
+      "check": [
+        {
+          "question": "¿Qué textos acepta /^\\d{5}$/?",
+          "options": [
+            "Cualquier texto con 5 dígitos dentro",
+            "Cinco letras",
+            "Hasta 5 dígitos",
+            "Exactamente 5 dígitos y nada más"
+          ],
+          "correctIndex": 3,
+          "explanation": "^ y $ anclan inicio y fin, y \\d{5} exige exactamente cinco dígitos. \"28013\" pasa; \"28013A\" no."
+        },
+        {
+          "question": "¿Para qué NO conviene una regex casera?",
+          "options": [
+            "Analizar HTML completo de una página",
+            "Validar un código postal de 5 dígitos",
+            "Quitar espacios dobles",
+            "Buscar fechas AAAA-MM-DD en un log"
+          ],
+          "correctIndex": 0,
+          "explanation": "El HTML anidado es demasiado irregular para una regex: se usa un parser. Las otras tres son patrones simples y fijos."
+        }
+      ]
+    },
+    "of-l11": {
+      "emoji": "⏳",
+      "summary": "Controlas eventos repetidos con debounce y throttle y evitas respuestas cruzadas.",
+      "analogy": "Debounce es el ascensor que espera a que deje de entrar gente para cerrar; throttle, el semáforo que deja pasar coches cada cierto tiempo.",
+      "learned": [
+        "⏳ Esperas a que el usuario termine de escribir antes de buscar",
+        "🚦 Limitas cuántas veces por segundo reaccionas al scroll",
+        "🏁 Ignoras respuestas que llegan tarde y pisarían la buena"
+      ],
+      "check": [
+        {
+          "question": "Un buscador lanza una petición por cada tecla. ¿Qué técnica la reduce a una al terminar de escribir?",
+          "options": [
+            "Throttle",
+            "Debounce",
+            "Un bucle while",
+            "Un Singleton"
+          ],
+          "correctIndex": 1,
+          "explanation": "Debounce reinicia la espera con cada tecla y solo ejecuta cuando hay una pausa. Throttle seguiría lanzando peticiones periódicas."
+        },
+        {
+          "question": "Escribes \"za\" y luego \"zap\", y la respuesta de \"za\" llega la última y se pinta. ¿Cómo se llama el problema?",
+          "options": [
+            "Error de CORS",
+            "Fuga de memoria",
+            "Condición de carrera",
+            "Deuda técnica"
+          ],
+          "correctIndex": 2,
+          "explanation": "Dos operaciones asíncronas compiten y el orden de llegada cambia el resultado. Se evita ignorando o cancelando la respuesta vieja."
+        }
+      ]
+    },
+    "of-l12": {
+      "emoji": "🔭",
+      "summary": "Registras lo justo, con nivel y contexto, para entender producción sin depurar.",
+      "analogy": "Los logs son la caja negra del avión: si algo pasa, es lo único que te cuenta qué ocurrió y en qué orden.",
+      "learned": [
+        "🧾 Eliges el nivel adecuado para cada mensaje del registro",
+        "🔒 Nunca registras contraseñas, tokens ni datos de tarjetas",
+        "🧵 Sigues una petición entera gracias a su identificador"
+      ],
+      "check": [
+        {
+          "question": "¿Qué línea de log es mejor para un pago rechazado?",
+          "options": [
+            "console.log(\"error\")",
+            "No registrar nada para no ocupar espacio",
+            "logger.info con el número de tarjeta completo",
+            "logger.error con pedidoId, importe, motivo y requestId"
+          ],
+          "correctIndex": 3,
+          "explanation": "Un log útil lleva nivel y contexto para filtrar y correlacionar. El número de tarjeta jamás debe registrarse."
+        },
+        {
+          "question": "Quieres enterarte de que los errores han subido antes de que se queje un cliente. ¿Qué necesitas?",
+          "options": [
+            "Una métrica del porcentaje de errores con una alerta",
+            "Logs en DEBUG en producción",
+            "Más console.log",
+            "Revisar los logs cada lunes"
+          ],
+          "correctIndex": 0,
+          "explanation": "Las métricas con alertas avisan en el momento. Leer logs a mano llega tarde y DEBUG en producción solo añade ruido."
+        }
+      ]
+    },
+    "of-l13": {
+      "emoji": "🚩",
+      "summary": "Separas entornos, configuras con variables y activas funciones con interruptores.",
+      "analogy": "Los entornos son el ensayo, el ensayo general y el estreno de una obra: nadie prueba un decorado nuevo por primera vez en el estreno.",
+      "learned": [
+        "🏗️ Separas desarrollo, pruebas y producción con datos distintos",
+        "🔧 Guardas la configuración en variables fuera del código",
+        "🚩 Enciendes una función nueva para pocos usuarios y la apagas si falla"
+      ],
+      "check": [
+        {
+          "question": "Subiste por error tu .env con la clave de pagos a un repositorio público. ¿Qué es imprescindible?",
+          "options": [
+            "Borrar el archivo en un nuevo commit",
+            "Rotar la clave en el proveedor de pagos",
+            "Hacer el repositorio privado",
+            "Cambiar el nombre del archivo"
+          ],
+          "correctIndex": 1,
+          "explanation": "La clave ya pudo copiarse: sigue en el historial y en copias ajenas. Solo invalidarla y emitir otra cierra el riesgo."
+        },
+        {
+          "question": "Quieres probar un checkout nuevo con el 5% de los usuarios y apagarlo al instante si falla. ¿Qué usas?",
+          "options": [
+            "Un comentario en el código",
+            "Una rama de Git aparte",
+            "Un feature flag",
+            "Un nuevo entorno de desarrollo"
+          ],
+          "correctIndex": 2,
+          "explanation": "Un feature flag activa la función por porcentaje y se apaga sin desplegar. Una rama no llega a los usuarios."
+        }
+      ]
+    },
+    "of-l14": {
+      "emoji": "🏛️",
+      "summary": "Organizas una app en partes con responsabilidades claras y lo justificas.",
+      "analogy": "Como un restaurante: el camarero (controlador) toma el pedido, la cocina (servicio) decide cómo prepararlo y la despensa (repositorio) guarda los ingredientes.",
+      "learned": [
+        "🧱 Separas qué ve el usuario, las reglas del negocio y los datos",
+        "🔌 Pruebas las reglas del negocio sin base de datos real",
+        "⚖️ Justificas empezar con un monolito bien organizado"
+      ],
+      "check": [
+        {
+          "question": "En una arquitectura por capas, ¿dónde va la regla \"envío gratis desde 50 €\"?",
+          "options": [
+            "En el controlador HTTP",
+            "En la vista",
+            "En el repositorio",
+            "En la capa de servicios"
+          ],
+          "correctIndex": 3,
+          "explanation": "Las reglas de negocio viven en los servicios: así no dependen de cómo llega la petición ni de dónde se guardan los datos."
+        },
+        {
+          "question": "Una startup de 3 personas pregunta si empezar con microservicios. ¿Qué respuesta es más sensata?",
+          "options": [
+            "Un monolito separado en módulos; dividir cuando el equipo o la carga lo pidan",
+            "Sí, uno por cada tabla",
+            "Da igual",
+            "Sí, porque escalan mejor"
+          ],
+          "correctIndex": 0,
+          "explanation": "Los microservicios añaden red, despliegues y fallos parciales que un equipo pequeño no necesita pagar todavía."
+        }
+      ],
+      "diagram": "flowchart TD\n  A[Rutas y controladores]:::azul --> B[Servicios con reglas de negocio]:::morado\n  B --> C[Repositorios]:::verde\n  C --> D[(Base de datos)]:::naranja\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef morado fill:#BF5AF2,stroke:#BF5AF2,color:#fff\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n  classDef naranja fill:#FF9F0A,stroke:#FF9F0A,color:#fff"
+    }
+  },
+  "modules": {
+    "of-m1": {
+      "emoji": "🧰",
+      "exam": [
+        {
+          "question": "¿Qué hace npm test > resultado.txt?",
+          "options": [
+            "Guarda la salida en resultado.txt, sobrescribiéndolo",
+            "Muestra los tests en pantalla",
+            "Añade la salida al final de resultado.txt",
+            "Borra resultado.txt"
+          ],
+          "correctIndex": 0,
+          "explanation": "> redirige la salida a un archivo y lo sobrescribe. Para añadir al final se usa >>."
+        },
+        {
+          "question": "Un agente de IA te propone ejecutar rm -rf ./build ./src. ¿Qué haces?",
+          "options": [
+            "Ejecutarlo, la IA sabe lo que hace",
+            "Leerlo: también borraría src, tu código fuente",
+            "Añadir sudo para que funcione",
+            "Ejecutarlo dos veces por si acaso"
+          ],
+          "correctIndex": 1,
+          "explanation": "rm -rf borra sin papelera. Aquí se llevaría src entero: siempre lee un comando destructivo antes de ejecutarlo."
+        },
+        {
+          "question": "El error dice: TypeError: Cannot read properties of undefined (reading \"precio\") at total (carrito.js:8). ¿Qué ocurre?",
+          "options": [
+            "carrito.js no existe",
+            "precio es un texto",
+            "En la línea 8 se lee .precio de algo que vale undefined",
+            "Falta instalar una librería"
+          ],
+          "correctIndex": 2,
+          "explanation": "El objeto del que se lee .precio es undefined en carrito.js línea 8. Toca averiguar por qué llega vacío."
+        },
+        {
+          "question": "Un bucle falla solo cuando id vale 9137 de 10 000 registros. ¿Qué herramienta te ahorra más tiempo?",
+          "options": [
+            "Un console.log en cada vuelta",
+            "Reescribir el bucle",
+            "Reiniciar el equipo",
+            "Un breakpoint condicional con id === 9137"
+          ],
+          "correctIndex": 3,
+          "explanation": "El breakpoint condicional pausa justo en el caso que falla, sin recorrer a mano miles de vueltas."
+        },
+        {
+          "question": "¿Qué atajo busca en el historial de comandos de la terminal?",
+          "options": [
+            "Ctrl+R",
+            "Ctrl+C",
+            "Tab",
+            "Ctrl+Z"
+          ],
+          "correctIndex": 0,
+          "explanation": "Ctrl+R busca en comandos anteriores. Ctrl+C corta un proceso y Tab autocompleta."
+        },
+        {
+          "question": "Al explicar tu función línea a línea a un compañero, ves el fallo antes de que diga nada. ¿Cómo se llama la técnica?",
+          "options": [
+            "Pair programming",
+            "Depuración del patito de goma",
+            "Code review",
+            "Búsqueda binaria"
+          ],
+          "correctIndex": 1,
+          "explanation": "Explicar el código en voz alta obliga a revisar cada paso: así salta la suposición equivocada."
+        }
+      ]
+    },
+    "of-m2": {
+      "emoji": "🧮",
+      "exam": [
+        {
+          "question": "Una impresora atiende los trabajos en el orden en que llegan. ¿Qué estructura modela eso?",
+          "options": [
+            "Pila",
+            "Cola",
+            "Árbol",
+            "Conjunto"
+          ],
+          "correctIndex": 1,
+          "explanation": "Primero en entrar, primero en salir: una cola."
+        },
+        {
+          "question": "¿Cuántos pasos necesita, como mucho, una búsqueda binaria en un millón de elementos ordenados?",
+          "options": [
+            "Un millón",
+            "Unos 1 000",
+            "Unos 20",
+            "Exactamente 2"
+          ],
+          "correctIndex": 2,
+          "explanation": "Cada paso descarta la mitad: 2 elevado a 20 supera el millón, así que bastan unos 20 pasos."
+        },
+        {
+          "question": "¿Qué requisito tiene la búsqueda binaria?",
+          "options": [
+            "Que quepan en memoria caché",
+            "Que no haya repetidos",
+            "Que sean números",
+            "Que los datos estén ordenados"
+          ],
+          "correctIndex": 3,
+          "explanation": "Sin orden no puedes descartar la mitad en cada paso."
+        },
+        {
+          "question": "¿Por qué un índice hace rápida la búsqueda por email en una tabla grande?",
+          "options": [
+            "Porque usa un árbol que evita recorrer todas las filas",
+            "Porque comprime la tabla",
+            "Porque guarda la tabla en la nube",
+            "Porque borra filas viejas"
+          ],
+          "correctIndex": 0,
+          "explanation": "Los índices suelen ser B-trees: bajan por niveles en vez de recorrer fila a fila."
+        },
+        {
+          "question": "Las dependencias de npm donde A usa B y B usa C forman…",
+          "options": [
+            "Una pila",
+            "Un grafo dirigido",
+            "Una cola",
+            "Una tupla"
+          ],
+          "correctIndex": 1,
+          "explanation": "Son nodos con aristas con dirección (quién depende de quién): un grafo dirigido, que puede tener ciclos."
+        },
+        {
+          "question": "¿Qué complejidad tienen merge sort y quick sort en el caso medio?",
+          "options": [
+            "O(n)",
+            "O(n²)",
+            "O(n log n)",
+            "O(1)"
+          ],
+          "correctIndex": 2,
+          "explanation": "Ambos dividen el problema en mitades (log n niveles) y en cada nivel recorren los n elementos."
+        }
+      ]
+    },
+    "of-m3": {
+      "emoji": "🛠️",
+      "exam": [
+        {
+          "question": "¿Cuál es el orden del ciclo de TDD?",
+          "options": [
+            "Verde, rojo, refactor",
+            "Refactor, rojo, verde",
+            "Rojo, verde, refactor",
+            "Rojo, refactor, verde"
+          ],
+          "correctIndex": 2,
+          "explanation": "Primero una prueba que falla, luego el mínimo código que pasa, y al final se limpia."
+        },
+        {
+          "question": "¿Qué tipo de prueba debería haber en mayor cantidad según la pirámide?",
+          "options": [
+            "End-to-end",
+            "De carga",
+            "Manuales",
+            "Unitarias"
+          ],
+          "correctIndex": 3,
+          "explanation": "Las unitarias son rápidas y baratas: forman la base. Las end-to-end son lentas y frágiles, pocas y en la cima."
+        },
+        {
+          "question": "¿Cuándo es mal momento para refactorizar?",
+          "options": [
+            "Sin pruebas y justo antes de una entrega",
+            "Al arreglar un bug en zona confusa",
+            "Antes de añadir una función a código enredado",
+            "Cuando copias lo mismo por tercera vez"
+          ],
+          "correctIndex": 0,
+          "explanation": "Sin pruebas no sabes si rompiste algo, y antes de entregar no hay margen para arreglarlo."
+        },
+        {
+          "question": "¿Qué es la deuda técnica deliberada?",
+          "options": [
+            "Código con bugs que nadie vio",
+            "Un atajo consciente que se anota para pagarlo después",
+            "Pagar por una librería",
+            "Código sin comentarios"
+          ],
+          "correctIndex": 1,
+          "explanation": "Es una decisión informada: se acepta el atajo y se apunta. La accidental es la que nadie detectó."
+        },
+        {
+          "question": "React vuelve a ejecutar tu efecto cuando cambia una dependencia. ¿A qué patrón se parece?",
+          "options": [
+            "Factory",
+            "Singleton",
+            "Observer",
+            "Builder"
+          ],
+          "correctIndex": 2,
+          "explanation": "El componente reacciona a cambios a los que está suscrito: es la idea de Observer."
+        },
+        {
+          "question": "crearPago(\"paypal\") devuelve un objeto distinto según el método, y quien llama no sabe qué clase recibe. ¿Qué patrón es?",
+          "options": [
+            "Strategy",
+            "Observer",
+            "Decorator",
+            "Factory"
+          ],
+          "correctIndex": 3,
+          "explanation": "Una función que decide qué objeto crear y oculta la clase concreta es una Factory."
+        }
+      ]
+    },
+    "of-m4": {
+      "emoji": "🌐",
+      "exam": [
+        {
+          "question": "¿Qué hace el DNS?",
+          "options": [
+            "Cifra la conexión",
+            "Comprime las imágenes",
+            "Guarda las cookies",
+            "Traduce un nombre de dominio a una dirección IP"
+          ],
+          "correctIndex": 3,
+          "explanation": "El DNS es la agenda de internet: convierte tienda.com en una IP. El cifrado lo hace TLS."
+        },
+        {
+          "question": "¿Qué código devuelve un servidor cuando superas el límite de peticiones?",
+          "options": [
+            "429",
+            "404",
+            "200",
+            "500"
+          ],
+          "correctIndex": 0,
+          "explanation": "429 Too Many Requests indica que hay que esperar antes de reintentar."
+        },
+        {
+          "question": "¿Dónde se arregla de verdad un error de CORS?",
+          "options": [
+            "En el navegador del usuario",
+            "En el servidor, declarando los orígenes permitidos",
+            "Con una extensión que lo desactiva",
+            "Cambiando fetch por axios"
+          ],
+          "correctIndex": 1,
+          "explanation": "El servidor decide qué orígenes pueden leer sus respuestas con Access-Control-Allow-Origin."
+        },
+        {
+          "question": "¿Qué texto acepta /^[A-Z]{3}-\\d{4}$/?",
+          "options": [
+            "abc-1234",
+            "ABC1234",
+            "ABC-1234",
+            "AB-12345"
+          ],
+          "correctIndex": 2,
+          "explanation": "Tres mayúsculas, un guion y cuatro dígitos, de principio a fin. Solo ABC-1234 cumple."
+        },
+        {
+          "question": "Actualizas una barra de progreso mientras el usuario hace scroll. ¿Qué técnica limita las actualizaciones a una cada 100 ms?",
+          "options": [
+            "Debounce",
+            "Un índice",
+            "Recursión",
+            "Throttle"
+          ],
+          "correctIndex": 3,
+          "explanation": "Throttle ejecuta como mucho una vez por intervalo mientras el evento sigue. Debounce esperaría a que pare el scroll."
+        },
+        {
+          "question": "¿Qué evita que una respuesta antigua pise a una nueva en un buscador?",
+          "options": [
+            "Ignorar o cancelar las peticiones anteriores",
+            "Usar var en lugar de let",
+            "Hacer las peticiones más lentas",
+            "Quitar el await"
+          ],
+          "correctIndex": 0,
+          "explanation": "Quedarte solo con la última petición, por contador o con AbortController, elimina la condición de carrera."
+        }
+      ]
+    },
+    "of-m5": {
+      "emoji": "🚀",
+      "exam": [
+        {
+          "question": "¿Qué nivel de log usarías para \"pedido 812 creado\"?",
+          "options": [
+            "INFO",
+            "DEBUG",
+            "ERROR",
+            "FATAL"
+          ],
+          "correctIndex": 0,
+          "explanation": "Es un evento normal que conviene registrar: INFO. ERROR se reserva para operaciones que fallan."
+        },
+        {
+          "question": "¿Para qué sirve un requestId en los logs?",
+          "options": [
+            "Para cifrar el log",
+            "Para unir todas las líneas de una misma petición",
+            "Para borrar logs viejos",
+            "Para contar usuarios"
+          ],
+          "correctIndex": 1,
+          "explanation": "Es un id de correlación: filtras por él y ves el recorrido completo de una petición."
+        },
+        {
+          "question": "¿Qué archivo sí debe subirse al repositorio?",
+          "options": [
+            ".env con claves reales",
+            "Un volcado de la base de producción",
+            ".env.example con los nombres de variables sin valores",
+            "La clave privada SSH"
+          ],
+          "correctIndex": 2,
+          "explanation": ".env.example documenta qué variables hacen falta sin exponer secretos."
+        },
+        {
+          "question": "¿Qué ventaja da la arquitectura hexagonal?",
+          "options": [
+            "Menos archivos",
+            "Que todo vaya en un archivo",
+            "Evitar usar interfaces",
+            "Probar el negocio con adaptadores falsos, sin base de datos ni internet"
+          ],
+          "correctIndex": 3,
+          "explanation": "El núcleo depende de puertos; en las pruebas conectas adaptadores falsos."
+        },
+        {
+          "question": "En MVC, ¿quién recibe la petición y decide qué vista mostrar?",
+          "options": [
+            "El controlador",
+            "La vista",
+            "El modelo",
+            "La base de datos"
+          ],
+          "correctIndex": 0,
+          "explanation": "El controlador coordina: recibe la petición, usa el modelo y elige la vista."
+        },
+        {
+          "question": "Un feature flag lleva un año encendido para todos. ¿Qué haces?",
+          "options": [
+            "Dejarlo por si acaso",
+            "Borrar el flag y el código antiguo",
+            "Crear otro flag encima",
+            "Apagarlo para ver qué pasa"
+          ],
+          "correctIndex": 1,
+          "explanation": "Un flag que ya no se usa es deuda técnica: se elimina junto con la rama de código vieja."
+        }
+      ]
+    }
+  }
+}

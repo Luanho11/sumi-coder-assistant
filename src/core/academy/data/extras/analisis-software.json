@@ -1,0 +1,2542 @@
+{
+  "trackId": "analisis-software",
+  "lessons": {
+    "mod-as-1-s1": {
+      "emoji": "🔭",
+      "summary": "Entiendes por qué el analista decide qué se construye antes de que alguien escriba código.",
+      "analogy": "Como el enfermero de triaje en emergencias: no opera, pero decide qué tiene cada paciente y a quién derivarlo antes de que actúe el médico.",
+      "learned": [
+        "🔭 Puedes explicar en una frase qué hace un analista y por qué lo contratan",
+        "🧩 Reconoces qué persona del equipo debe atender cada tipo de problema",
+        "❓ Cuestionas un pedido antes de aceptarlo tal como llega"
+      ],
+      "check": [
+        {
+          "question": "'Necesito entender por qué los usuarios abandonan el carrito antes de pagar.' ¿A qué rol le toca?",
+          "options": [
+            "Analista: investigar la necesidad y definir qué cambiar",
+            "Desarrollador: revisar el código del carrito",
+            "QA: ejecutar pruebas de regresión del pago",
+            "Scrum Master: organizar una reunión del equipo"
+          ],
+          "correctIndex": 0,
+          "explanation": "Entender el porqué de un comportamiento del usuario es analizar. El dev y QA entran después, cuando ya se sabe qué cambiar."
+        },
+        {
+          "question": "El cliente pide 'un botón para exportar todo a Excel'. ¿Qué hace primero un buen analista?",
+          "options": [
+            "Pedirle al dev que agregue el botón hoy",
+            "Anotarlo tal cual en el backlog",
+            "Proponer un dashboard sin consultarlo",
+            "Preguntar qué decisión quiere tomar con esos datos"
+          ],
+          "correctIndex": 3,
+          "explanation": "El pedido es una solución; la necesidad puede ser otra, como un reporte o una alerta. Anotarlo sin preguntar arriesga construir algo que nadie usa."
+        }
+      ]
+    },
+    "mod-as-1-s2": {
+      "emoji": "🔄",
+      "summary": "Ubicas cada actividad en su fase del ciclo y eliges entre cascada, V o ágil según el proyecto.",
+      "analogy": "Como construir una casa: planos, cimientos, paredes, inspección y mudanza. Cascada entrega la casa entera de una vez; ágil, cuarto por cuarto.",
+      "learned": [
+        "🔄 Puedes ubicar en qué etapa está un proyecto escuchando lo que hace el equipo",
+        "🧱 Eliges entre planificar todo de una vez o avanzar con entregas cortas",
+        "🩺 Reconoces cuándo un error cuesta tanto que conviene avanzar lento y con control"
+      ],
+      "check": [
+        {
+          "question": "'Estamos entrevistando a los gerentes de ventas para entender qué reportes necesitan.' ¿Qué fase es?",
+          "options": [
+            "Planificación",
+            "Análisis de requisitos",
+            "Diseño",
+            "Pruebas"
+          ],
+          "correctIndex": 1,
+          "explanation": "Recopilar y documentar necesidades es la fase de análisis. Planificación define alcance y viabilidad; diseño ya crea modelos y prototipos."
+        },
+        {
+          "question": "Software para un marcapasos: requisitos fijos, auditoría estricta y cada fase con su prueba. ¿Qué modelo encaja?",
+          "options": [
+            "Ágil con sprints de dos semanas",
+            "V-Model",
+            "Iterativo sin documentación formal",
+            "Prototipado rápido sin fases"
+          ],
+          "correctIndex": 1,
+          "explanation": "V-Model empareja cada fase con su prueba: ideal si un fallo es grave y los requisitos no cambian. Ágil brilla cuando el negocio cambia rápido."
+        }
+      ],
+      "diagram": "flowchart LR\n  P[Planificación]:::cian --> A[Análisis]:::verde\n  A --> D[Diseño]:::azul\n  D --> V[Desarrollo]:::azul\n  V --> T[Pruebas]:::naranja\n  T --> I[Implementación]:::morado\n  I --> M[Mantenimiento]:::morado\n  M -.-> P\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n  classDef naranja fill:#FF9F0A,stroke:#FF9F0A,color:#fff\n  classDef morado fill:#BF5AF2,stroke:#BF5AF2,color:#fff\n  classDef cian fill:#64D2FF,stroke:#64D2FF,color:#1d1d1f"
+    },
+    "mod-as-2-s1": {
+      "emoji": "🧾",
+      "summary": "Separas lo que el sistema hace de qué tan bien lo hace, y escribes requisitos con ID y criterios.",
+      "analogy": "Como comprar un auto: 'que tenga 5 asientos' es lo que hace; 'que frene de 100 a 0 en 40 metros' es qué tan bien lo hace.",
+      "learned": [
+        "🧾 Puedes convertir un pedido vago en una ficha con número, prioridad y forma de comprobarlo",
+        "🚗 Distingues lo que algo debe hacer de qué tan bien debe hacerlo",
+        "📐 Reemplazas 'que sea rápido' por un número que cualquiera puede medir"
+      ],
+      "check": [
+        {
+          "question": "¿Cuál es un requisito no funcional bien escrito?",
+          "options": [
+            "El cliente puede filtrar productos por categoría",
+            "El sistema debe ser rápido y seguro",
+            "El admin puede eliminar usuarios inactivos",
+            "El 95% de las búsquedas responde en menos de 2 segundos"
+          ],
+          "correctIndex": 3,
+          "explanation": "Mide calidad con un número verificable. Filtrar y eliminar son acciones (funcionales); 'rápido y seguro' es no funcional pero no se puede probar."
+        },
+        {
+          "question": "REQ-001 Registro exige email único y contraseña de 8 caracteres o más. QA ve que se aceptan claves de 6. ¿Qué es?",
+          "options": [
+            "Un defecto: falla un criterio de aceptación del requisito",
+            "Algo aceptable si el registro funciona",
+            "Un requisito no funcional opcional",
+            "Una señal para cambiar el requisito a 6 caracteres"
+          ],
+          "correctIndex": 0,
+          "explanation": "Los criterios definen cuándo el requisito está cumplido; violarlos es un defecto. Cambiar el requisito para que calce con el bug sería esconderlo."
+        }
+      ],
+      "diagram": "flowchart TD\n  R[Requisito]:::morado --> F[\"Funcional: qué hace\"]:::azul\n  R --> N[\"No funcional: qué tan bien\"]:::naranja\n  N --> P[Rendimiento]:::amarillo\n  N --> S[Seguridad]:::amarillo\n  N --> U[Usabilidad]:::amarillo\n  N --> D[Disponibilidad]:::amarillo\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef naranja fill:#FF9F0A,stroke:#FF9F0A,color:#fff\n  classDef morado fill:#BF5AF2,stroke:#BF5AF2,color:#fff\n  classDef amarillo fill:#FFD60A,stroke:#FFD60A,color:#1d1d1f"
+    },
+    "mod-as-2-s2": {
+      "emoji": "🕵️",
+      "summary": "Eliges la técnica correcta para sacar requisitos, incluso los que el usuario no sabe decir.",
+      "analogy": "Como un médico: no basta preguntar '¿qué tiene?'; también te mira caminar, revisa tus exámenes y te pide mover el brazo.",
+      "learned": [
+        "🕵️ Puedes descubrir necesidades que la gente no menciona mirando cómo trabaja",
+        "🎙️ Eliges entre conversar, observar o encuestar según cuántas personas y qué quieres saber",
+        "🧪 Usas un boceto para que alguien diga 'así no' antes de construir"
+      ],
+      "check": [
+        {
+          "question": "Debes entender cómo 50 cajeros usan el sistema de caja en hora punta. ¿Qué técnica priorizas?",
+          "options": [
+            "Entrevista individual a cada cajero",
+            "Cuestionario en línea para los 50",
+            "Observación directa en caja durante la hora punta",
+            "Revisar el manual del sistema de caja"
+          ],
+          "correctIndex": 2,
+          "explanation": "Los atajos y errores en hora punta solo se ven en vivo. Un cuestionario da volumen pero no lo implícito, y el manual describe lo ideal, no lo real."
+        },
+        {
+          "question": "En una entrevista, la administrativa dice: 'cada mañana imprimo la agenda para anotar cambios a mano'. ¿Qué es?",
+          "options": [
+            "Un dato irrelevante de su rutina",
+            "Un requisito explícito de imprimir agendas",
+            "Un problema de capacitación del personal",
+            "Un requisito implícito: necesita modificar la agenda de forma rápida"
+          ],
+          "correctIndex": 3,
+          "explanation": "No lo pide, pero revela que el sistema no le deja ajustar rápido. Copiar 'imprimir' como requisito automatizaría el parche en vez de la necesidad."
+        }
+      ]
+    },
+    "mod-as-3-s1": {
+      "emoji": "🎭",
+      "summary": "Dibujas actores, casos y relaciones include y extend que un stakeholder entiende sin ayuda.",
+      "analogy": "Como el menú de un restaurante: muestra qué puedes pedir, no la receta. 'Incluye papas' siempre viene; 'agregar queso' solo si lo pides.",
+      "learned": [
+        "🎭 Puedes dibujar quién usa un sistema y qué puede hacer con él",
+        "🍟 Distingues lo que siempre viene incluido de lo que pasa solo a veces",
+        "📦 Marcas el borde entre lo que el sistema hace y lo que queda fuera"
+      ],
+      "check": [
+        {
+          "question": "En la biblioteca, 'Registrar préstamo' siempre verifica que el lector no tenga multas. ¿Qué relación usas?",
+          "options": [
+            "«extend» de Verificar multas hacia Registrar préstamo",
+            "«include» de Registrar préstamo hacia Verificar multas",
+            "Generalización entre ambos casos",
+            "Asociación directa del Lector con Verificar multas"
+          ],
+          "correctIndex": 1,
+          "explanation": "Siempre se ejecuta, así que es include. Extend es para lo condicional, como 'Cobrar multa' solo si la devolución llega tarde."
+        },
+        {
+          "question": "En una app de viajes, una pasarela de pagos externa cobra al pasajero. ¿Cómo la modelas?",
+          "options": [
+            "Como un caso de uso dentro del sistema",
+            "Como atributo del actor Pasajero",
+            "Como actor secundario fuera del límite del sistema",
+            "No se modela porque no es una persona"
+          ],
+          "correctIndex": 2,
+          "explanation": "Un actor puede ser otro sistema que interactúa con el tuyo. Si lo metes dentro del límite, das a entender que tú construyes la pasarela."
+        }
+      ],
+      "diagram": "flowchart LR\n  L[Lector]:::naranja --> R[Registrar préstamo]:::azul\n  R -.->|include| V[Verificar multas]:::verde\n  D[Devolver libro]:::azul\n  L --> D\n  C[Cobrar multa]:::rosa -.->|extend| D\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n  classDef naranja fill:#FF9F0A,stroke:#FF9F0A,color:#fff\n  classDef rosa fill:#FF375F,stroke:#FF375F,color:#fff"
+    },
+    "mod-as-4-s1": {
+      "emoji": "🦴",
+      "summary": "Sacas entidades, atributos y cardinalidades de un texto de negocio y armas su modelo ER.",
+      "analogy": "Como un árbol genealógico: personas con sus datos y líneas que dicen quién es hijo, pareja o hermano de quién.",
+      "learned": [
+        "🦴 Puedes leer un párrafo de negocio y subrayar las cosas que hay que guardar",
+        "🔗 Dices cuántos de un lado se conectan con cuántos del otro",
+        "🧩 Detectas cuando una relación necesita una pieza intermedia para funcionar"
+      ],
+      "check": [
+        {
+          "question": "'Un alumno se inscribe en varios cursos y un curso tiene muchos alumnos.' ¿Qué cardinalidad es y qué implica?",
+          "options": [
+            "N:M, que en el modelo físico pide una tabla intermedia",
+            "1:N, con la clave del curso guardada en el alumno",
+            "1:1, porque cada inscripción es única",
+            "N:M, resuelta con una lista de cursos en una columna del alumno"
+          ],
+          "correctIndex": 0,
+          "explanation": "Muchos a muchos se resuelve con Inscripción en medio. Una lista en una celda rompe la 1FN, y 1:N limitaría al alumno a un solo curso."
+        },
+        {
+          "question": "En un modelo de alquiler de coches, 'precio_total' está en Cliente. ¿Dónde debería ir?",
+          "options": [
+            "En Cliente, porque es quien paga",
+            "En Coche, porque cada coche tiene su precio",
+            "En Alquiler, porque cambia con cada alquiler",
+            "En una entidad Precio sin relaciones"
+          ],
+          "correctIndex": 2,
+          "explanation": "Un atributo vive en la entidad que describe. Un cliente tiene muchos alquileres con totales distintos; el coche tiene tarifa, pero el total es del alquiler."
+        }
+      ],
+      "diagram": "flowchart LR\n  C[Cliente]:::azul -->|hace 1 a N| P[Pedido]:::azul\n  P -->|1 a N| D[DetallePedido]:::naranja\n  R[Producto]:::azul -->|1 a N| D\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef naranja fill:#FF9F0A,stroke:#FF9F0A,color:#fff"
+    },
+    "mod-as-5-s1": {
+      "emoji": "🏉",
+      "summary": "Ubicas roles, artefactos y eventos de Scrum y detectas cuando un equipo se los está saltando.",
+      "analogy": "Como una cocina con menú semanal: el dueño elige los platos, el jefe de cocina quita trabas y cada viernes se prueba lo cocinado.",
+      "learned": [
+        "🏉 Puedes organizar trabajo en ciclos cortos con una meta clara cada vez",
+        "🪞 Propones una charla para mejorar cómo trabaja el equipo, no solo qué hace",
+        "🚧 Notas cuando un equipo se salta un paso y explicas qué pierde"
+      ],
+      "check": [
+        {
+          "question": "El PO dice: 'No hay tiempo para la Sprint Review, mostramos todo al final del proyecto'. ¿Qué se pierde?",
+          "options": [
+            "El feedback de los stakeholders sobre el incremento de cada sprint",
+            "La estimación de las historias del backlog",
+            "La sincronización diaria del equipo",
+            "La mejora del proceso interno del equipo"
+          ],
+          "correctIndex": 0,
+          "explanation": "La Review muestra lo hecho y ajusta el backlog con feedback real. Mejorar el proceso es la Retrospectiva, y la sincronización diaria es la Daily."
+        },
+        {
+          "question": "Un gerente mete una historia nueva a mitad de sprint sin hablar con nadie. ¿Quién decide qué entra y en qué orden en el Product Backlog?",
+          "options": [
+            "El Scrum Master",
+            "El gerente, por jerarquía",
+            "Cualquier stakeholder interesado",
+            "El Product Owner"
+          ],
+          "correctIndex": 3,
+          "explanation": "El PO es dueño del Product Backlog y negocia con el equipo los cambios. El Scrum Master facilita, pero no decide prioridades."
+        }
+      ],
+      "diagram": "flowchart LR\n  PB[Product Backlog]:::naranja --> SP[Sprint Planning]:::azul\n  SP --> SB[Sprint Backlog]:::naranja\n  SB --> S[\"Sprint con Daily\"]:::azul\n  S --> I[Incremento]:::verde\n  I --> R[Review]:::morado\n  R --> RE[Retrospectiva]:::morado\n  RE -.-> SP\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n  classDef naranja fill:#FF9F0A,stroke:#FF9F0A,color:#fff\n  classDef morado fill:#BF5AF2,stroke:#BF5AF2,color:#fff"
+    },
+    "mod-as-5-s2": {
+      "emoji": "🎫",
+      "summary": "Escribes historias con rol, acción y beneficio, y criterios Dado-Cuando-Entonces para cerrarlas.",
+      "analogy": "Como la nota de un pedido de delivery: 'es para un niño alérgico al maní' cambia cómo cocinan, igual que el 'para' de una historia.",
+      "learned": [
+        "🎫 Puedes contar lo que alguien necesita poniendo a esa persona al centro",
+        "🥜 Explicas el motivo de un pedido para que otros tomen mejores decisiones",
+        "🏁 Acuerdas antes de empezar cómo se sabrá que algo quedó listo"
+      ],
+      "check": [
+        {
+          "question": "¿Cuál historia está mejor escrita?",
+          "options": [
+            "El sistema debe tener un mapa de direcciones",
+            "Como repartidor, quiero ver la dirección en un mapa para llegar sin llamar al cliente",
+            "Como usuario, quiero un mapa",
+            "Como desarrollador, quiero integrar un mapa de terceros"
+          ],
+          "correctIndex": 1,
+          "explanation": "Tiene rol concreto, acción y beneficio. 'El sistema debe' no pone a la persona, 'quiero un mapa' no dice para qué, y la última es una tarea técnica."
+        },
+        {
+          "question": "Criterio: 'Dado un usuario registrado, cuando ingresa mal la clave 3 veces, entonces...'. ¿Qué lo completa mejor?",
+          "options": [
+            "...el sistema funciona correctamente",
+            "...su cuenta se bloquea 15 minutos y ve un mensaje que lo explica",
+            "...se guarda un registro interno en la base de datos",
+            "...el usuario se siente seguro"
+          ],
+          "correctIndex": 1,
+          "explanation": "El Entonces debe ser observable y verificable. 'Funciona correctamente' y 'se siente seguro' no se prueban; el registro interno no es lo que el usuario ve."
+        }
+      ]
+    },
+    "mod-as-6-s1": {
+      "emoji": "🏗️",
+      "summary": "Lees y dibujas clases con atributos, métodos y relaciones, y eliges bien entre agregación y composición.",
+      "analogy": "Composición es un edificio y sus departamentos: si lo demuelen, desaparecen. Agregación es una playlist: si la borras, las canciones siguen.",
+      "learned": [
+        "🏗️ Puedes dibujar las piezas de un sistema y cómo se conectan",
+        "🎵 Distingues cuando una parte sobrevive sola y cuando desaparece con el todo",
+        "🧬 Reconoces cuando algo es un tipo especial de otra cosa"
+      ],
+      "check": [
+        {
+          "question": "En el hotel, si se elimina una Reserva, sus líneas de detalle no tienen sentido solas. ¿Qué relación es?",
+          "options": [
+            "Agregación, con rombo vacío del lado de Reserva",
+            "Herencia de Detalle hacia Reserva",
+            "Dependencia punteada de Reserva a Detalle",
+            "Composición, con rombo lleno del lado de Reserva"
+          ],
+          "correctIndex": 3,
+          "explanation": "La parte no existe sin el todo: composición. Sería agregación si el detalle pudiera vivir sin la reserva, como un Cliente que existe sin reservas."
+        },
+        {
+          "question": "Cliente y Empleado comparten nombre, email y teléfono. ¿Qué haces?",
+          "options": [
+            "Crear una clase Persona y que ambos hereden de ella",
+            "Componer Cliente dentro de Empleado",
+            "Copiar los tres atributos en ambas clases",
+            "Crear una dependencia de Cliente a Empleado"
+          ],
+          "correctIndex": 0,
+          "explanation": "Ambos 'son una' Persona, así que la herencia evita duplicar. Un Cliente no es parte de un Empleado, y copiar atributos repite lo mismo en dos sitios."
+        }
+      ]
+    },
+    "mod-as-7-s1": {
+      "emoji": "💬",
+      "summary": "Dibujas quién le manda qué mensaje a quién y en qué orden, distinguiendo esperas y respuestas.",
+      "analogy": "Como el chat del grupo para organizar un asado: cada mensaje tiene quién lo envía, a quién y en qué orden; las respuestas llegan debajo.",
+      "learned": [
+        "💬 Puedes contar en orden la conversación entre las partes de un sistema",
+        "⏳ Distingues cuando alguien espera una respuesta y cuando sigue sin esperar",
+        "🔍 Encuentras en qué paso de una conversación se rompe un proceso"
+      ],
+      "check": [
+        {
+          "question": "En el checkout, PagoService manda un correo de confirmación y sigue sin esperar respuesta. ¿Qué flecha usas?",
+          "options": [
+            "Mensaje síncrono, con flecha continua",
+            "Retorno, con línea punteada",
+            "Mensaje asíncrono, con flecha abierta",
+            "Ninguna: los correos no se modelan"
+          ],
+          "correctIndex": 2,
+          "explanation": "No espera respuesta: asíncrono. El síncrono bloquea hasta recibir respuesta, y la punteada es la respuesta a un mensaje anterior."
+        },
+        {
+          "question": "Login con 2FA: ¿qué paso debe ir antes de que AuthService pida el código?",
+          "options": [
+            "Crear la sesión del usuario",
+            "Mostrar el dashboard",
+            "Enviar el email de bienvenida",
+            "Validar usuario y contraseña contra la base de datos"
+          ],
+          "correctIndex": 3,
+          "explanation": "El segundo factor solo tiene sentido si pasó el primero. Crear sesión o mostrar el dashboard antes del código anularía la protección del 2FA."
+        }
+      ],
+      "diagram": "flowchart LR\n  U[Usuario]:::naranja -->|1 credenciales| A[App]:::azul\n  A -->|2 validar| S[AuthService]:::morado\n  S -->|3 buscar usuario| D[(Base de datos)]:::cian\n  D -.->|4 datos| S\n  S -.->|5 token| A\n  A -.->|6 dashboard| U\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef naranja fill:#FF9F0A,stroke:#FF9F0A,color:#fff\n  classDef morado fill:#BF5AF2,stroke:#BF5AF2,color:#fff\n  classDef cian fill:#64D2FF,stroke:#64D2FF,color:#1d1d1f"
+    },
+    "mod-as-7-s2": {
+      "emoji": "🏊",
+      "summary": "Modelas flujos con decisiones, tareas en paralelo y carriles que muestran quién hace cada paso.",
+      "analogy": "Como un almuerzo con dos cocineros: uno hierve la pasta mientras el otro hace la salsa, y se juntan para servir.",
+      "learned": [
+        "🏊 Puedes separar en carriles quién hace cada paso de un proceso",
+        "🍝 Muestras qué tareas avanzan al mismo tiempo y dónde se juntan",
+        "🚪 Marcas cada punto donde alguien decide y qué pasa con cada respuesta"
+      ],
+      "check": [
+        {
+          "question": "Contratación: tras aprobar, RRHH prepara el contrato y TI crea la cuenta al mismo tiempo. ¿Qué elemento usas?",
+          "options": [
+            "Una decisión con dos salidas excluyentes",
+            "Una bifurcación y luego una unión antes de seguir",
+            "Dos nodos finales, uno por área",
+            "Un solo carril para ambas tareas"
+          ],
+          "correctIndex": 1,
+          "explanation": "La bifurcación abre caminos paralelos y la unión espera a ambos. Una decisión elegiría uno solo, y dos nodos finales cortarían el proceso antes de tiempo."
+        },
+        {
+          "question": "Tu diagrama tiene 20 acciones de RRHH, jefe y candidato mezcladas y nadie sabe quién hace qué. ¿Qué agregas?",
+          "options": [
+            "Más nodos de decisión",
+            "Colores al azar en cada acción",
+            "Swimlanes, un carril por rol",
+            "Un diagrama de clases aparte"
+          ],
+          "correctIndex": 2,
+          "explanation": "Los swimlanes separan responsabilidades por rol. Más decisiones complican el flujo, y un diagrama de clases muestra estructura, no quién hace qué."
+        }
+      ],
+      "diagram": "flowchart TD\n  A((Inicio)):::verde --> B[Recibir CV]:::azul\n  B --> C{\"¿Cumple requisitos?\"}:::amarillo\n  C -->|No| R[Rechazar]:::rosa\n  C -->|Sí| E[Entrevista técnica]:::azul\n  E --> F{\"¿Aprueba?\"}:::amarillo\n  F -->|No| R\n  F -->|Sí| O[Enviar oferta]:::verde\n  O --> Z((Fin)):::morado\n  R --> Z\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n  classDef rosa fill:#FF375F,stroke:#FF375F,color:#fff\n  classDef morado fill:#BF5AF2,stroke:#BF5AF2,color:#fff\n  classDef amarillo fill:#FFD60A,stroke:#FFD60A,color:#1d1d1f"
+    },
+    "mod-as-8-s1": {
+      "emoji": "🏛️",
+      "summary": "Eliges entre monolito, capas, microservicios o eventos según el equipo y el problema, no según la moda.",
+      "analogy": "Monolito es un food truck: una cocina hace todo. Microservicios es un patio de comidas: cada local va aparte, pero hay que coordinar mesas y pagos.",
+      "learned": [
+        "🏛️ Puedes defender por qué empezar simple es una buena decisión",
+        "🚚 Explicas qué se gana y qué se complica al dividir algo en piezas sueltas",
+        "💸 Reconoces las decisiones que salen caras de cambiar más adelante"
+      ],
+      "check": [
+        {
+          "question": "Una startup de 3 personas lanza un MVP de recetas en 2 meses. ¿Qué recomiendas?",
+          "options": [
+            "Un monolito bien organizado en capas",
+            "Microservicios desde el primer día para escalar",
+            "Arquitectura orientada a eventos con colas",
+            "Un microservicio por cada pantalla"
+          ],
+          "correctIndex": 0,
+          "explanation": "Equipo chico y plazo corto: el monolito es simple de crear y desplegar. Los microservicios traen coordinación y operación que 3 personas no sostienen."
+        },
+        {
+          "question": "Un banco necesita escalar pagos sin tocar reportes y tiene equipos separados por dominio. ¿Qué estilo encaja?",
+          "options": [
+            "Un monolito único con un solo equipo",
+            "Un script por lotes cada noche",
+            "Microservicios por dominio de negocio",
+            "Capas desplegadas como una sola pieza"
+          ],
+          "correctIndex": 2,
+          "explanation": "Escalar partes por separado con equipos por dominio es el caso de los microservicios. Capas en una sola pieza obliga a escalar todo junto."
+        }
+      ]
+    },
+    "mod-as-9-s1": {
+      "emoji": "🔺",
+      "summary": "Ubicas pruebas unitarias, de integración, de sistema y de aceptación, y por qué la base es la más ancha.",
+      "analogy": "Como revisar un auto: primero cada bujía (unitaria), luego el motor armado (integración), después manejarlo (sistema) y que el dueño lo apruebe.",
+      "learned": [
+        "🔺 Puedes decidir qué revisar primero: cada pieza o el conjunto armado",
+        "🧯 Encuentras problemas antes de que los sufra quien usa el producto",
+        "🎯 Repartes el esfuerzo entre muchas revisiones chicas y pocas grandes"
+      ],
+      "check": [
+        {
+          "question": "Verificas que calcularDescuento(100, 10%) devuelva 90, sin base de datos ni pantalla. ¿Qué nivel es?",
+          "options": [
+            "Prueba unitaria",
+            "Prueba de integración",
+            "Prueba de sistema",
+            "Prueba de aceptación"
+          ],
+          "correctIndex": 0,
+          "explanation": "Prueba una función aislada. Integración revisaría que el descuento se guarde bien en la base, y aceptación sería el cliente validando el flujo."
+        },
+        {
+          "question": "Un equipo tiene 200 pruebas de punta a punta lentas y 10 unitarias. ¿Qué problema tiene?",
+          "options": [
+            "Ninguno: más pruebas de punta a punta es más realista",
+            "Le faltan pruebas de aceptación",
+            "Debería borrar las unitarias",
+            "Pirámide invertida: feedback lento y pruebas frágiles"
+          ],
+          "correctIndex": 3,
+          "explanation": "La base de la pirámide son unitarias rápidas y baratas. Muchas de punta a punta tardan, se rompen con cambios de pantalla y no dicen dónde está el fallo."
+        }
+      ],
+      "diagram": "flowchart TD\n  A[\"Aceptación: pocas\"]:::morado --> S[Sistema]:::azul\n  S --> I[Integración]:::cian\n  I --> U[\"Unitarias: muchas\"]:::verde\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n  classDef morado fill:#BF5AF2,stroke:#BF5AF2,color:#fff\n  classDef cian fill:#64D2FF,stroke:#64D2FF,color:#1d1d1f"
+    },
+    "mod-as-9-s2": {
+      "emoji": "🐞",
+      "summary": "Escribes casos de prueba reproducibles y reportes de bug que un dev arregla sin tener que preguntarte.",
+      "analogy": "Como describirle una falla al mecánico: 'hace ruido' no sirve; 'chirría al frenar en bajada con lluvia' le ahorra una hora.",
+      "learned": [
+        "🐞 Puedes describir un problema para que otro lo repita a la primera",
+        "📋 Escribes los pasos para comprobar algo como una receta que cualquiera sigue",
+        "⚖️ Separas qué tan grave es una falla de qué tan urgente es arreglarla"
+      ],
+      "check": [
+        {
+          "question": "El logo de la portada sale pixelado y mañana es el lanzamiento con la prensa. ¿Severidad y prioridad?",
+          "options": [
+            "Severidad crítica, prioridad alta",
+            "Severidad menor, prioridad alta",
+            "Severidad menor, prioridad baja",
+            "Severidad crítica, prioridad baja"
+          ],
+          "correctIndex": 1,
+          "explanation": "No rompe ninguna función (menor), pero el lanzamiento lo vuelve urgente (alta). Confundir severidad con prioridad es el error típico al reportar."
+        },
+        {
+          "question": "¿Qué reporte de bug es más útil?",
+          "options": [
+            "El login no funciona, revisar urgente",
+            "Chrome 120: login con clave válida de usuario de Google da error 500 en vez del dashboard",
+            "A veces el login falla con algunos usuarios",
+            "Error en el login, ver captura adjunta"
+          ],
+          "correctIndex": 1,
+          "explanation": "Tiene entorno, condición, resultado esperado y actual. Los otros obligan al dev a adivinar cómo reproducirlo."
+        }
+      ]
+    },
+    "mod-as-10-s1": {
+      "emoji": "🤖",
+      "summary": "Decides qué pruebas automatizar y cuáles dejar manuales, y qué herramienta sirve para cada caso.",
+      "analogy": "Como un lavavajillas: perfecto para los platos de todos los días, pero la copa de cristal de la abuela la lavas tú a mano.",
+      "learned": [
+        "🤖 Puedes decidir qué revisión repetitiva vale la pena dejarle a una máquina",
+        "🖐️ Reconoces lo que conviene seguir revisando con ojos humanos",
+        "🧰 Eliges la herramienta según revises pantallas, conexiones o carga"
+      ],
+      "check": [
+        {
+          "question": "Sistema bancario: '¿el saldo se actualiza tras una transferencia?' se prueba en cada versión. ¿Qué haces?",
+          "options": [
+            "Dejarla manual porque se trata de dinero",
+            "Probarla una sola vez antes del lanzamiento",
+            "Cubrirla solo con pruebas exploratorias",
+            "Automatizarla como prueba de regresión"
+          ],
+          "correctIndex": 3,
+          "explanation": "Se repite en cada versión y es un flujo crítico: candidata ideal. Que sea dinero es razón para automatizarla, no para depender de que alguien se acuerde."
+        },
+        {
+          "question": "El equipo rediseña la pantalla de registro cada semana. ¿Conviene automatizar ya su prueba de pantalla?",
+          "options": [
+            "Todavía no: cambia tanto que el script se rompería cada semana",
+            "Sí: todo lo que se repite se automatiza",
+            "Sí, con Postman para revisar la pantalla",
+            "No, porque las pantallas nunca se automatizan"
+          ],
+          "correctIndex": 0,
+          "explanation": "Lo que cambia constantemente rompe el script y el costo supera el ahorro. Postman es para APIs, y las pantallas sí se automatizan cuando están estables."
+        }
+      ]
+    },
+    "mod-as-11-s1": {
+      "emoji": "🔌",
+      "summary": "Diseñas URLs con sustantivos, métodos HTTP correctos y códigos de respuesta que no engañan.",
+      "analogy": "Como los casilleros de un correo: la dirección dice qué cosa (/pedidos/42) y el verbo qué haces con ella: mirar, dejar, cambiar o retirar.",
+      "learned": [
+        "🔌 Puedes nombrar direcciones claras para que otros sepan dónde está cada cosa",
+        "📬 Eliges la acción correcta según quieras ver, crear, cambiar o borrar algo",
+        "🚥 Respondes con señales claras: creado, no encontrado o no permitido"
+      ],
+      "check": [
+        {
+          "question": "¿Qué diseño sigue REST para obtener los pedidos del cliente 7?",
+          "options": [
+            "GET /obtenerPedidosCliente?id=7",
+            "POST /clientes/7/pedidos/listar",
+            "GET /clientes/7/pedidos",
+            "GET /cliente_pedidos_7"
+          ],
+          "correctIndex": 2,
+          "explanation": "Recursos con sustantivos en plural y anidados; la acción la pone el método HTTP. Meter 'obtener' o 'listar' en la URL repite lo que ya dice GET."
+        },
+        {
+          "question": "El cliente solo quiere cambiar el teléfono de su perfil. ¿Qué método usas?",
+          "options": [
+            "PUT /clientes/7 con solo el teléfono",
+            "POST /clientes/7/telefono",
+            "GET /clientes/7?telefono=nuevo",
+            "PATCH /clientes/7 con solo el teléfono"
+          ],
+          "correctIndex": 3,
+          "explanation": "PATCH actualiza parcialmente. PUT reemplaza el recurso entero: mandar solo el teléfono podría borrar el resto. GET nunca debe modificar datos."
+        }
+      ]
+    },
+    "mod-as-12-s1": {
+      "emoji": "🧩",
+      "summary": "Reconoces cuándo un problema ya tiene solución probada: Strategy, Observer, Adapter, Facade y más.",
+      "analogy": "Como el adaptador de enchufe en un viaje: tu cargador no cambia, el adaptador conecta dos formas incompatibles. Eso hace el patrón Adapter.",
+      "learned": [
+        "🔌 Puedes conectar dos piezas que no encajan sin modificar ninguna",
+        "📣 Haces que varios se enteren de un cambio sin avisarles uno por uno",
+        "🔁 Cambias de método, como la forma de pago, sin reescribir todo"
+      ],
+      "check": [
+        {
+          "question": "Varios servicios deben enterarse cuando un pedido cambia de estado. ¿Qué patrón usas?",
+          "options": [
+            "Singleton",
+            "Observer",
+            "Adapter",
+            "Factory"
+          ],
+          "correctIndex": 1,
+          "explanation": "Observer avisa a todos los suscritos cuando algo cambia. Singleton limita instancias, Adapter traduce interfaces y Factory crea objetos."
+        },
+        {
+          "question": "Una tienda acepta tarjeta, Yape y efectivo, y sumará más medios. ¿Qué patrón evita un if gigante?",
+          "options": [
+            "Singleton: una sola instancia de pago",
+            "Facade: esconder los pagos detrás de un menú",
+            "Strategy: cada forma de pago en su propia clase intercambiable",
+            "Repository: guardar los pagos en la base"
+          ],
+          "correctIndex": 2,
+          "explanation": "Strategy encapsula algoritmos intercambiables; agregar un medio es sumar una clase. Facade simplifica un subsistema, pero no elimina el if de adentro."
+        }
+      ]
+    },
+    "mod-as-12-s2": {
+      "emoji": "🌿",
+      "summary": "Trabajas con ramas, commits y merges para colaborar sin pisar el trabajo de nadie.",
+      "analogy": "Como guardar partida en un videojuego: cada commit es un punto al que puedes volver, y una rama es probar otra ruta sin perder la principal.",
+      "learned": [
+        "💾 Puedes guardar puntos de tu trabajo y volver atrás si algo sale mal",
+        "🌿 Pruebas una idea por separado sin estropear la versión que funciona",
+        "🤝 Juntas tu trabajo con el de otros sin borrar lo que hicieron"
+      ],
+      "check": [
+        {
+          "question": "Empiezas la tarea 'historias-usuario'. ¿Qué comando crea la rama y te cambia a ella?",
+          "options": [
+            "git checkout -b historias-usuario",
+            "git branch historias-usuario",
+            "git merge historias-usuario",
+            "git pull historias-usuario"
+          ],
+          "correctIndex": 0,
+          "explanation": "checkout -b crea y cambia en un paso (también git switch -c). git branch solo la crea y te deja donde estabas: el error típico es commitear en main."
+        },
+        {
+          "question": "Hiciste 3 commits en tu rama, pero tu compañera no los ve en GitHub. ¿Qué te falta?",
+          "options": [
+            "Hacer git commit otra vez",
+            "Hacer git pull desde main",
+            "Hacer git push de tu rama al remoto",
+            "Hacer git add de los archivos"
+          ],
+          "correctIndex": 2,
+          "explanation": "Los commits viven en tu máquina hasta que haces push. pull trae cambios ajenos, no envía los tuyos, y add y commit ya los hiciste."
+        }
+      ],
+      "diagram": "flowchart LR\n  M[main]:::verde --> B[\"rama historias-usuario\"]:::azul\n  B --> C1[commit 1]:::cian\n  C1 --> C2[commit 2]:::cian\n  C2 --> PR[Pull request]:::naranja\n  PR --> R{\"¿Aprobado?\"}:::amarillo\n  R -->|Sí| M2[merge a main]:::verde\n  R -->|No| C2\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n  classDef naranja fill:#FF9F0A,stroke:#FF9F0A,color:#fff\n  classDef cian fill:#64D2FF,stroke:#64D2FF,color:#1d1d1f\n  classDef amarillo fill:#FFD60A,stroke:#FFD60A,color:#1d1d1f"
+    },
+    "mod-as-13-s1": {
+      "emoji": "☕",
+      "summary": "Arrancas CaféOnline: contexto, usuarios y entregables de requisitos, casos de uso y prioridades.",
+      "analogy": "Como abrir un local nuevo: antes de comprar la cafetera defines a quién le vendes, qué menú tendrás y en qué horario.",
+      "learned": [
+        "☕ Puedes empezar un proyecto real ordenando quién lo usa y qué necesita",
+        "🥇 Decides qué hacer primero cuando todo parece urgente",
+        "🗂️ Planeas un trabajo grande en etapas con un resultado claro en cada una"
+      ],
+      "check": [
+        {
+          "question": "La gerencia de CaféOnline dice: 'Primero elijamos la tecnología'. ¿Qué respondes?",
+          "options": [
+            "Primero los requisitos: la tecnología se elige según lo que hay que resolver",
+            "De acuerdo: la tecnología define los requisitos",
+            "Primero el modelo de datos completo",
+            "Primero el diseño visual de la app"
+          ],
+          "correctIndex": 0,
+          "explanation": "Sin requisitos no sabes si necesitas pedidos programados o pagos digitales. El modelo de datos es la fase 2 y se construye sobre los requisitos."
+        },
+        {
+          "question": "¿Qué requisito funcional responde al objetivo de fidelización de CaféOnline?",
+          "options": [
+            "La app responde en menos de 2 segundos",
+            "El barista ve los pedidos de su sucursal",
+            "Los pagos con tarjeta viajan cifrados",
+            "El cliente acumula puntos por compra y los canjea por productos"
+          ],
+          "correctIndex": 3,
+          "explanation": "Los puntos canjeables apuntan directo a que el cliente vuelva. El tiempo de respuesta y el cifrado son no funcionales; la vista del barista sirve a la operación."
+        }
+      ]
+    },
+    "mod-as-13-s2": {
+      "emoji": "🧱",
+      "summary": "Conviertes los requisitos de CaféOnline en entidades con claves, relaciones y clases.",
+      "analogy": "Como ordenar el almacén de la cafetería: cada producto con su etiqueta única, y un ticket que une al cliente con lo que se llevó.",
+      "learned": [
+        "🏷️ Puedes darle a cada cosa una etiqueta única para no confundirla con otra",
+        "🧾 Resuelves cómo un pedido guarda varios productos con su cantidad",
+        "🕰️ Dejas registro de cuándo se creó y cuándo cambió cada dato"
+      ],
+      "check": [
+        {
+          "question": "Un pedido tiene muchos productos y un producto aparece en muchos pedidos. ¿Cómo lo modelas?",
+          "options": [
+            "Una columna productos con IDs separados por comas",
+            "Con PedidoProducto: Pedido 1:N PedidoProducto N:1 Producto",
+            "Una FK de producto dentro de Pedido",
+            "Una FK de pedido dentro de Producto"
+          ],
+          "correctIndex": 1,
+          "explanation": "La N:M necesita tabla intermedia, que además guarda cantidad y precio. Las comas rompen la 1FN y una sola FK limita a un producto por pedido."
+        },
+        {
+          "question": "Un reclamo pregunta cuándo cambió el precio del latte. ¿Qué campo te habría ayudado?",
+          "options": [
+            "La PK de Producto",
+            "updated_at en Producto",
+            "created_at en Pedido",
+            "La FK a Categoría"
+          ],
+          "correctIndex": 1,
+          "explanation": "updated_at marca la última modificación. created_at de Pedido dice cuándo se compró, no cuándo cambió el precio; para todo el historial haría falta una tabla de precios."
+        }
+      ]
+    },
+    "mod-as-13-s3": {
+      "emoji": "📡",
+      "summary": "Diseñas los endpoints de CaféOnline y los flujos de pedido y pago con códigos HTTP correctos.",
+      "analogy": "Como la caja de la cafetería: pides, el cajero responde 'tu pedido es el 42' y te da un ticket que prueba que existe.",
+      "learned": [
+        "📡 Puedes describir paso a paso cómo viaja un pedido del celular a la barra",
+        "🔢 Respondes con la señal correcta cuando algo se crea, falla o no existe",
+        "🧵 Unes requisitos, datos y conversaciones en un solo diseño coherente"
+      ],
+      "check": [
+        {
+          "question": "POST /pedidos crea el pedido 42. ¿Qué respuesta devuelves?",
+          "options": [
+            "200 OK con el mensaje 'pedido creado'",
+            "204 No Content sin cuerpo",
+            "301 Moved Permanently a /pedidos/42",
+            "201 Created con el pedido y su ubicación /pedidos/42"
+          ],
+          "correctIndex": 3,
+          "explanation": "201 indica que se creó un recurso. 200 funciona pero esconde el dato, 204 no devuelve el pedido y 301 es una redirección permanente."
+        },
+        {
+          "question": "En el diagrama de pago, la pasarela rechaza la tarjeta. ¿Qué debe mostrar el flujo?",
+          "options": [
+            "Un camino alternativo: pedido sin confirmar y aviso al cliente para reintentar",
+            "El mismo camino feliz, porque el rechazo es raro",
+            "El pedido confirmado con el cobro pendiente",
+            "Solo un error 500 del servidor"
+          ],
+          "correctIndex": 0,
+          "explanation": "Un buen diagrama de secuencia cubre el rechazo. Confirmar sin cobrar regala café, y un 500 culpa al servidor de algo que es un rechazo esperado."
+        }
+      ]
+    },
+    "mod-as-14-s1": {
+      "emoji": "🎓",
+      "summary": "Analizas un sistema escolar con cuatro tipos de usuario, permisos distintos y cinco módulos.",
+      "analogy": "Como un colegio con llaves: el director abre todo, el profe su aula, el alumno su casillero y el papá solo mira la vitrina de su hijo.",
+      "learned": [
+        "🔑 Puedes decidir quién puede ver y quién puede cambiar cada información",
+        "👪 Diseñas pensando en alguien que solo mira, como un papá que sigue las notas",
+        "🏫 Ordenas un sistema grande en partes que se entienden por separado"
+      ],
+      "check": [
+        {
+          "question": "Un padre tiene dos hijos en el colegio. ¿Qué regla de acceso escribes?",
+          "options": [
+            "El padre ve las notas de todo el grado de sus hijos",
+            "El padre puede editar notas para corregir errores",
+            "El padre ve notas y asistencia solo de los alumnos vinculados a él",
+            "El padre entra con la cuenta del alumno"
+          ],
+          "correctIndex": 2,
+          "explanation": "Relación Padre N:M Alumno con permiso de solo lectura. Ver todo el grado expone datos ajenos, y compartir cuenta impide saber quién hizo qué."
+        },
+        {
+          "question": "En el modelo ER, un alumno tiene una nota por curso y por periodo. ¿Dónde vive la nota?",
+          "options": [
+            "En Alumno, con una columna por curso",
+            "En Curso, como lista de notas",
+            "En Profesor, porque él la registra",
+            "En Calificación, que une Alumno, Curso y Periodo"
+          ],
+          "correctIndex": 3,
+          "explanation": "La nota depende de la combinación alumno-curso-periodo. Una columna por curso se rompe al agregar cursos; que el profe la registre no la hace suya."
+        }
+      ]
+    },
+    "mod-as-15-s1": {
+      "emoji": "🧹",
+      "summary": "Detectas dependencias y llevas una tabla desordenada hasta 3FN sin perder datos.",
+      "analogy": "Como tu agenda del celular: si guardas la dirección de tu tía en cada chat, cuando se muda tienes que cambiarla 20 veces.",
+      "learned": [
+        "🧹 Puedes ordenar una tabla para que cada dato viva en un solo lugar",
+        "🔎 Descubres qué dato depende de cuál y lo mueves a donde corresponde",
+        "🚫 Evitas que cambiar un dato en un sitio lo deje distinto en otro"
+      ],
+      "check": [
+        {
+          "question": "Tabla (id_pedido, id_producto, cantidad, nombre_producto). ¿Qué forma normal viola y por qué?",
+          "options": [
+            "1FN: hay más de un valor por celda",
+            "2FN: nombre_producto depende solo de id_producto, parte de la clave",
+            "3FN: hay una dependencia transitiva",
+            "Ninguna: todo depende de la clave"
+          ],
+          "correctIndex": 1,
+          "explanation": "La clave es compuesta y nombre_producto depende de una parte: dependencia parcial. Cantidad sí depende de ambos campos, por eso se queda."
+        },
+        {
+          "question": "Empleado(id_empleado, nombre, id_depto, nombre_depto). ¿Cómo queda en 3FN?",
+          "options": [
+            "Empleado(id_empleado, nombre) y Departamento(id_depto, nombre_depto, id_empleado)",
+            "Igual que está, porque la clave es simple",
+            "Empleado(id_empleado, nombre, id_depto) y Departamento(id_depto, nombre_depto)",
+            "Empleado(id_empleado, nombre, nombre_depto)"
+          ],
+          "correctIndex": 2,
+          "explanation": "nombre_depto depende de id_depto, no del empleado: transitiva. Se separa y Empleado guarda la FK. Poner id_empleado en Departamento dejaría un empleado por área."
+        }
+      ],
+      "diagram": "flowchart LR\n  T[Tabla desordenada]:::rosa --> F1[\"1FN: un valor por celda\"]:::naranja\n  F1 --> F2[\"2FN: sin dependencias parciales\"]:::amarillo\n  F2 --> F3[\"3FN: sin transitivas\"]:::verde\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n  classDef naranja fill:#FF9F0A,stroke:#FF9F0A,color:#fff\n  classDef rosa fill:#FF375F,stroke:#FF375F,color:#fff\n  classDef amarillo fill:#FFD60A,stroke:#FFD60A,color:#1d1d1f"
+    },
+    "mod-as-16-s1": {
+      "emoji": "⚙️",
+      "summary": "Lees un procedimiento T-SQL con transacción y decides cuándo un trigger ayuda y cuándo estorba.",
+      "analogy": "Un trigger es como el sensor de una puerta automática: nadie lo llama, se activa solo cuando alguien pasa. Útil, pero sorprende si no sabes que está.",
+      "learned": [
+        "🏦 Puedes asegurar que una operación de dos pasos se haga completa o no se haga",
+        "🚪 Reconoces acciones automáticas que se disparan solas y cuándo confunden",
+        "♻️ Guardas una tarea repetida en un solo lugar para reutilizarla"
+      ],
+      "check": [
+        {
+          "question": "En sp_RegistrarPedido, el INSERT funciona pero el UPDATE de stock falla. Con la transacción bien manejada, ¿qué debe pasar?",
+          "options": [
+            "Se revierte todo: no queda un pedido sin descontar stock",
+            "Queda el pedido y el stock se corrige después",
+            "Queda el stock descontado sin pedido",
+            "Se reintenta el UPDATE hasta que funcione"
+          ],
+          "correctIndex": 0,
+          "explanation": "Atomicidad: todo o nada. Ojo: el ejemplo del slide no tiene TRY/CATCH con ROLLBACK, y sin eso un error podría dejar la mitad hecha."
+        },
+        {
+          "question": "Quieres registrar en auditoría cada pedido insertado, venga de la app o de un script. ¿Qué usas?",
+          "options": [
+            "Un cursor que recorra los pedidos cada hora",
+            "Un trigger INSTEAD OF que reemplace el INSERT",
+            "Un trigger AFTER INSERT en Pedido",
+            "Una función que devuelva el total del pedido"
+          ],
+          "correctIndex": 2,
+          "explanation": "AFTER INSERT se dispara solo, sin importar quién inserta: ideal para auditoría. INSTEAD OF reemplaza la operación, y el cursor llega tarde y es lento."
+        }
+      ]
+    },
+    "mod-as-16-s2": {
+      "emoji": "🔶",
+      "summary": "Lees bloques PL/SQL, usas cursores explícitos y agrupas código en paquetes, prefiriendo SQL por conjuntos.",
+      "analogy": "Un cursor es atender la fila del banco persona por persona. Si todos piden lo mismo, conviene un anuncio general: eso es un UPDATE por conjuntos.",
+      "learned": [
+        "🙋 Puedes procesar una lista caso por caso cuando cada uno es distinto",
+        "📢 Prefieres resolver todo de una vez cuando el cambio es igual para todos",
+        "📦 Agrupas tareas relacionadas en un solo paquete fácil de encontrar"
+      ],
+      "check": [
+        {
+          "question": "Subir 10% a todos los empleados que ganan menos de 3000, sin lógica distinta por fila. ¿Qué es más eficiente?",
+          "options": [
+            "Un solo UPDATE con WHERE salario < 3000",
+            "Un cursor explícito que actualice fila por fila",
+            "Un trigger AFTER UPDATE en Empleado",
+            "Un paquete con una función por empleado"
+          ],
+          "correctIndex": 0,
+          "explanation": "SQL por conjuntos hace el cambio en una sentencia. El cursor se justifica si cada fila necesita algo distinto, como registrar cada aumento con su detalle."
+        },
+        {
+          "question": "¿Qué parte de un bloque PL/SQL captura un NO_DATA_FOUND?",
+          "options": [
+            "La sección DECLARE",
+            "El BEGIN, antes de la consulta",
+            "La especificación del paquete",
+            "La sección EXCEPTION"
+          ],
+          "correctIndex": 3,
+          "explanation": "EXCEPTION maneja los errores del bloque. DECLARE solo define variables, y la especificación del paquete declara qué se expone."
+        }
+      ]
+    },
+    "mod-as-17-s1": {
+      "emoji": "🛎️",
+      "summary": "Distingues incidente, problema y cambio, y sabes qué meta y qué métrica sigue cada uno.",
+      "analogy": "Incidente es secar el agua del piso ya; problema es encontrar la cañería rota; cambio es reemplazarla un domingo sin cortar el agua a todos.",
+      "learned": [
+        "🧽 Puedes separar apagar un incendio de averiguar por qué empezó",
+        "🗓️ Planeas un arreglo para que no rompa nada a quienes lo usan",
+        "📈 Mides si un servicio mejora viendo cuánto tarda en volver a funcionar"
+      ],
+      "check": [
+        {
+          "question": "La facturación se cae cada lunes a las 9 am durante 20 minutos. ¿Cómo lo gestionas?",
+          "options": [
+            "Es un incidente semanal que se arregla reiniciando",
+            "Cada caída es un incidente; el patrón abre un problema para hallar la causa raíz",
+            "Es un cambio de emergencia cada lunes",
+            "Es un problema, así que no se registran incidentes"
+          ],
+          "correctIndex": 1,
+          "explanation": "Restauras cada lunes (incidente) y el patrón repetido pide investigar la causa (problema). Sin registrar incidentes se pierde la evidencia del análisis."
+        },
+        {
+          "question": "Actualizar la base de datos a v12 el sábado, con plan de vuelta atrás y aprobación previa. ¿Qué es?",
+          "options": [
+            "Un incidente mayor",
+            "Un cambio normal",
+            "Un problema conocido",
+            "Un cambio de emergencia"
+          ],
+          "correctIndex": 1,
+          "explanation": "Es una modificación planificada y evaluada: cambio normal. Sería de emergencia si hubiera que hacerlo ya porque el servicio está caído."
+        }
+      ],
+      "diagram": "flowchart LR\n  I1[Incidente lunes]:::rosa --> P[Problema]:::naranja\n  I2[Incidente lunes]:::rosa --> P\n  P --> C[Causa raíz]:::amarillo\n  C --> CB[Cambio planificado]:::azul\n  CB --> OK[Sin caídas]:::verde\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n  classDef naranja fill:#FF9F0A,stroke:#FF9F0A,color:#fff\n  classDef rosa fill:#FF375F,stroke:#FF375F,color:#fff\n  classDef amarillo fill:#FFD60A,stroke:#FFD60A,color:#1d1d1f"
+    },
+    "mod-as-18-s1": {
+      "emoji": "🧮",
+      "summary": "Usas WBS para partir el trabajo, RACI para repartir responsabilidades y valor ganado para medir avance.",
+      "analogy": "Como una mudanza: la WBS lista cajas por cuarto; la RACI dice quién carga, quién decide y a quién avisar; el valor ganado compara cajas listas con lo gastado.",
+      "learned": [
+        "📦 Puedes partir un proyecto enorme en paquetes que alguien puede terminar",
+        "🙋 Aclaras quién hace, quién decide, a quién consultar y a quién avisar",
+        "🧮 Sabes si un proyecto va atrasado o caro comparando lo hecho con lo gastado"
+      ],
+      "check": [
+        {
+          "question": "En la RACI del sistema de reservas, ¿qué fila tiene un error?",
+          "options": [
+            "Casos de prueba: R = QA, A = PO",
+            "Código de reservas: R = Dev, A = PO, C = Analista",
+            "Despliegue: R = Dev, A = PO, I = Analista",
+            "Historias de usuario: A = PO y A = Scrum Master"
+          ],
+          "correctIndex": 3,
+          "explanation": "La regla es un solo Accountable por tarea; dos A diluyen quién aprueba. Las otras filas tienen exactamente un A y roles coherentes."
+        },
+        {
+          "question": "Presupuesto total: 20.000. A hoy debías llevar 50% (10.000). Llevas 40% hecho y gastaste 12.000. ¿Qué dice el valor ganado?",
+          "options": [
+            "Vas atrasado y sobre costo",
+            "Vas adelantado y bajo costo",
+            "Vas a tiempo pero sobre costo",
+            "Vas atrasado pero bajo costo"
+          ],
+          "correctIndex": 0,
+          "explanation": "Valor ganado = 40% de 20.000 = 8.000. Es menor que lo planeado (10.000): atrasado. Es menor que lo gastado (12.000): sobre costo."
+        }
+      ]
+    },
+    "mod-as-19-s1": {
+      "emoji": "🛡️",
+      "summary": "Reconoces los riesgos del OWASP Top 10 y pruebas inyección, XSS y CSRF como lo haría un QA.",
+      "analogy": "Concatenar texto en SQL es como dejar que un desconocido llene a mano la orden del cajero del banco: puede agregar 'y vacía la caja'.",
+      "learned": [
+        "🛡️ Puedes probar un formulario pensando como alguien que quiere abusar de él",
+        "📝 Exiges que lo que escribe un usuario se trate como dato, nunca como orden",
+        "🎣 Reconoces trampas que hacen que alguien actúe sin darse cuenta"
+      ],
+      "check": [
+        {
+          "question": "En el login escribes admin' OR '1'='1 y entras sin clave. ¿Qué arreglo pides?",
+          "options": [
+            "Ocultar el mensaje de error del login",
+            "Limitar el campo a 20 caracteres",
+            "Consultas parametrizadas en vez de concatenar el texto",
+            "Agregar un CAPTCHA al formulario"
+          ],
+          "correctIndex": 2,
+          "explanation": "La causa es concatenar la entrada en el SQL; parametrizar la trata como dato. Ocultar errores o acortar el campo dificulta el ataque, pero no lo elimina."
+        },
+        {
+          "question": "Un comentario con <script> se ejecuta en el navegador de otros usuarios y les roba la sesión. ¿Qué es y cómo se previene?",
+          "options": [
+            "CSRF: agregar tokens anti-CSRF al formulario",
+            "SQL Injection: parametrizar las consultas",
+            "Broken Access Control: revisar permisos por rol",
+            "XSS: escapar la salida HTML y usar Content Security Policy"
+          ],
+          "correctIndex": 3,
+          "explanation": "Código inyectado que corre en el navegador de la víctima es XSS. Los tokens CSRF protegen de acciones forzadas, no de scripts guardados en comentarios."
+        }
+      ]
+    },
+    "mod-as-20-s1": {
+      "emoji": "🧼",
+      "summary": "Detectas violaciones de SOLID, DRY, KISS y YAGNI en una clase real y propones cómo partirla.",
+      "analogy": "Como una navaja suiza de 40 piezas: hace de todo, pero si se rompe la tijera mandas la navaja entera al taller. SRP prefiere herramientas separadas.",
+      "learned": [
+        "🧼 Puedes notar cuando una sola pieza está haciendo demasiadas cosas",
+        "✂️ Prefieres la solución simple y construyes solo lo que hace falta ahora",
+        "🔁 Detectas pedazos copiados y propones dejarlos en un solo lugar"
+      ],
+      "check": [
+        {
+          "question": "UsuarioManager guarda en la base, envía emails y genera PDFs. ¿Qué principio viola primero?",
+          "options": [
+            "Liskov Substitution: los hijos no reemplazan al padre",
+            "Single Responsibility: tiene tres razones para cambiar",
+            "Interface Segregation: la interfaz es pequeña",
+            "Open/Closed: no usa herencia"
+          ],
+          "correctIndex": 1,
+          "explanation": "Cambios en emails, base o PDFs tocan la misma clase: SRP. Liskov trata de herencia, y Open/Closed no exige herencia sino extender sin modificar."
+        },
+        {
+          "question": "Un dev agrega soporte para 5 monedas 'por si algún día', y el cliente solo vende en soles. ¿Qué principio rompe?",
+          "options": [
+            "DRY",
+            "Liskov Substitution",
+            "YAGNI",
+            "Dependency Inversion"
+          ],
+          "correctIndex": 2,
+          "explanation": "YAGNI: no construyas lo que no necesitas ahora. DRY trata de repetición, no de funciones de más; cuando llegue la segunda moneda, se agrega."
+        }
+      ]
+    },
+    "mod-as-21-s1": {
+      "emoji": "🐳",
+      "summary": "Entiendes imagen, contenedor y Dockerfile, y armas un pipeline que prueba cada cambio antes de publicarlo.",
+      "analogy": "Una imagen es el molde de un queque y el contenedor, el queque horneado: del mismo molde salen idénticos en tu horno o en el de tu vecina.",
+      "learned": [
+        "📦 Puedes explicar por qué algo que corre en tu computadora correrá igual en otra",
+        "🏭 Describes una línea que revisa cada cambio antes de que llegue al público",
+        "🧪 Pones las revisiones automáticas antes de publicar, no después"
+      ],
+      "check": [
+        {
+          "question": "Tu app funciona en tu laptop pero falla en el servidor porque tiene otra versión de Node. ¿Qué resuelve Docker?",
+          "options": [
+            "Empaqueta la app con su versión de Node en una imagen que corre igual en ambos",
+            "Instala una VM completa con su propio kernel",
+            "Sube el código a GitHub automáticamente",
+            "Ejecuta los tests unitarios en cada commit"
+          ],
+          "correctIndex": 0,
+          "explanation": "La imagen lleva la app y sus dependencias exactas. Una VM también aislaría, pero con kernel propio y más peso; correr tests en cada commit es tarea del CI."
+        },
+        {
+          "question": "En el pipeline, ¿dónde deben ir los tests automáticos?",
+          "options": [
+            "Después de desplegar a producción",
+            "Antes de hacer push a Git, y nunca en el pipeline",
+            "Después del build y antes de desplegar a staging",
+            "Solo cuando alguien los pida a mano"
+          ],
+          "correctIndex": 2,
+          "explanation": "CI corre build y tests en cada cambio; si fallan, no se despliega. Probar después de producción es descubrir el bug junto con los usuarios."
+        }
+      ],
+      "diagram": "flowchart LR\n  P[Push]:::azul --> B[Build]:::cian\n  B --> T[Tests]:::amarillo\n  T --> D{\"¿Pasan?\"}:::amarillo\n  D -->|No| X[Avisar al autor]:::rosa\n  D -->|Sí| S[Staging]:::morado\n  S --> PR[Producción]:::verde\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n  classDef rosa fill:#FF375F,stroke:#FF375F,color:#fff\n  classDef morado fill:#BF5AF2,stroke:#BF5AF2,color:#fff\n  classDef cian fill:#64D2FF,stroke:#64D2FF,color:#1d1d1f\n  classDef amarillo fill:#FFD60A,stroke:#FFD60A,color:#1d1d1f"
+    },
+    "mod-as-22-s1": {
+      "emoji": "⏱️",
+      "summary": "Estimas cómo crece el tiempo de un algoritmo y eliges la estructura de datos según la operación.",
+      "analogy": "Buscar un nombre en la guía telefónica abriéndola a la mitad y descartando una mitad cada vez es O(log n); leerla página por página es O(n).",
+      "learned": [
+        "📖 Puedes encontrar algo en una lista ordenada partiéndola a la mitad cada vez",
+        "⏱️ Anticipas si algo que hoy va rápido se volverá lento con miles de datos",
+        "🗄️ Eliges cómo guardar la información según vayas a buscar, ordenar o conectar"
+      ],
+      "check": [
+        {
+          "question": "Debes verificar si un username ya existe entre 1M de usuarios en cada registro. ¿Qué estructura usas?",
+          "options": [
+            "Un hash set, con búsqueda O(1) en promedio",
+            "Un array recorrido de inicio a fin, O(n)",
+            "Una pila, porque el último registrado se busca más",
+            "Un árbol sin balancear, que siempre es O(log n)"
+          ],
+          "correctIndex": 0,
+          "explanation": "El hash da búsqueda constante en promedio. Recorrer 1M en cada registro es lento, y un árbol sin balancear puede degradarse a O(n)."
+        },
+        {
+          "question": "Un código compara cada producto con todos los demás usando dos for anidados. ¿Qué complejidad tiene?",
+          "options": [
+            "O(n)",
+            "O(n log n)",
+            "O(2^n)",
+            "O(n²)"
+          ],
+          "correctIndex": 3,
+          "explanation": "Por cada uno de los n elementos recorres n: n × n. O(n log n) es de ordenamientos como mergesort; O(2^n) aparece en recursión que se ramifica."
+        }
+      ]
+    },
+    "mod-as-23-s1": {
+      "emoji": "📚",
+      "summary": "Integras las diez fases, de requisitos a despliegue, en un portafolio que puedes defender en entrevistas.",
+      "analogy": "Como el cuaderno de obra de un ingeniero: no basta mostrar la casa terminada; cuentas por qué elegiste cada viga y cómo comprobaste que aguanta.",
+      "learned": [
+        "📚 Puedes llevar un proyecto de la idea al plan de entrega sin saltarte etapas",
+        "🎤 Defiendes cada decisión de tu trabajo frente a alguien que pregunta por qué",
+        "🧵 Conectas cada pedido inicial con la prueba de que quedó cumplido"
+      ],
+      "check": [
+        {
+          "question": "Un libro tiene 3 copias físicas y un lector pide prestada una. ¿Qué entidad evita confundir el título con la copia?",
+          "options": [
+            "Un campo copias = 3 dentro de Libro",
+            "Ejemplar, relacionado 1:N con Libro y usado por Préstamo",
+            "Tres filas repetidas del mismo Libro",
+            "Una lista de préstamos dentro de Libro"
+          ],
+          "correctIndex": 1,
+          "explanation": "El préstamo es de una copia concreta, no del título. Un contador no dice qué copia salió, y repetir filas de Libro rompe la normalización."
+        },
+        {
+          "question": "BiblioTech cobra multas por atraso. ¿Qué parte del portafolio demuestra que esa regla se verificó?",
+          "options": [
+            "El diagrama de clases con la clase Multa",
+            "Un caso de prueba trazado al requisito de multas, con su resultado esperado",
+            "El Dockerfile del plan de despliegue",
+            "La lista de riesgos OWASP del sistema"
+          ],
+          "correctIndex": 1,
+          "explanation": "La trazabilidad requisito → prueba demuestra que la regla se comprobó. La clase Multa solo muestra que existe en el diseño, no que el cálculo funcione."
+        }
+      ]
+    }
+  },
+  "modules": {
+    "mod-as-1": {
+      "emoji": "🧭",
+      "exam": [
+        {
+          "question": "Un equipo lanza una función que nadie usa porque nadie preguntó a los usuarios. ¿Qué fase falló?",
+          "options": [
+            "Pruebas, responsabilidad de QA",
+            "Desarrollo, responsabilidad del programador",
+            "Análisis, responsabilidad del analista",
+            "Mantenimiento, responsabilidad de soporte"
+          ],
+          "correctIndex": 2,
+          "explanation": "Construir lo que nadie necesita es un fallo de análisis. QA puede verificar que la función anda, pero no que fuera lo correcto de construir."
+        },
+        {
+          "question": "Una app de delivery debe salir en 3 meses y cambiará según el feedback. ¿Qué modelo eliges?",
+          "options": [
+            "Ágil, con sprints e incrementos",
+            "Cascada con todos los requisitos cerrados al inicio",
+            "V-Model con una prueba por fase",
+            "Ninguno: programar directo"
+          ],
+          "correctIndex": 0,
+          "explanation": "Plazo corto y requisitos cambiantes piden entregas frecuentes. Cascada congela requisitos al inicio y descubre los errores al final."
+        },
+        {
+          "question": "En plena fase de desarrollo, un dev no entiende un criterio de aceptación. ¿Qué hace el analista?",
+          "options": [
+            "Le dice que lo interprete como pueda",
+            "Espera a la fase de pruebas para revisarlo",
+            "Reescribe el código él mismo",
+            "Aclara la duda y ajusta el requisito si hace falta"
+          ],
+          "correctIndex": 3,
+          "explanation": "En desarrollo el analista resuelve dudas y ajusta requisitos. Si el dev interpreta solo, QA descubre la diferencia tarde y caro."
+        },
+        {
+          "question": "'Antes de aceptar el pedido, pregunté para qué lo necesitaban.' ¿Qué habilidad del analista muestra?",
+          "options": [
+            "Modelado",
+            "Pensamiento crítico",
+            "Documentación",
+            "Programación"
+          ],
+          "correctIndex": 1,
+          "explanation": "Cuestionar el pedido hasta llegar a la necesidad es pensamiento crítico. Modelar y documentar vienen después, cuando ya sabes qué resolver."
+        },
+        {
+          "question": "Con el sistema en mantenimiento, llega el pedido de agregar pagos con QR. ¿Qué hace el analista?",
+          "options": [
+            "Se lo pasa al dev para hacerlo hoy",
+            "Lo evalúa como requisito nuevo: impacto, prioridad y criterios",
+            "Lo rechaza porque el proyecto ya terminó",
+            "Espera a que algo falle para revisarlo"
+          ],
+          "correctIndex": 1,
+          "explanation": "En mantenimiento el analista evalúa cambios y requisitos nuevos. El ciclo vuelve a empezar en pequeño: analizar antes de construir."
+        }
+      ]
+    },
+    "mod-as-2": {
+      "emoji": "🧾",
+      "exam": [
+        {
+          "question": "Requisito: 'Soporta muchos usuarios'. ¿Cómo lo reescribes?",
+          "options": [
+            "Soporta la mayor cantidad de usuarios posible",
+            "El servidor tiene buena capacidad",
+            "Los usuarios pueden registrarse sin límite",
+            "Soporta 1.000 usuarios simultáneos con respuesta menor a 2 segundos"
+          ],
+          "correctIndex": 3,
+          "explanation": "Un no funcional verificable tiene número y condición. 'La mayor cantidad posible' no se prueba, y 'registrarse' es una función, no capacidad."
+        },
+        {
+          "question": "El CEO quiere 'un tablero', pero no sabe explicar qué debe mostrar. ¿Qué técnica usas?",
+          "options": [
+            "Un prototipo rápido para que reaccione",
+            "Un cuestionario de 30 preguntas",
+            "Análisis de documentos legales",
+            "Observar sus reuniones durante un mes"
+          ],
+          "correctIndex": 0,
+          "explanation": "'Muéstrame, no me cuentes': ver un boceto le hace decir qué sobra y qué falta. Un cuestionario largo no ayuda a quien aún no sabe lo que quiere."
+        },
+        {
+          "question": "App de turnos médicos: 5 médicos y 50 pacientes. ¿Qué combinación es más eficiente?",
+          "options": [
+            "Entrevistar a los 50 pacientes uno por uno",
+            "Cuestionario solo a los 5 médicos",
+            "Entrevistas a los médicos y cuestionario a los pacientes",
+            "Solo análisis de la competencia"
+          ],
+          "correctIndex": 2,
+          "explanation": "Pocos con mucho contexto: entrevista. Muchos con preguntas cerradas: cuestionario. Entrevistar a 50 cuesta demasiado para lo que aporta."
+        },
+        {
+          "question": "Un requisito tiene ID, nombre y descripción, pero no criterios de aceptación. ¿Qué problema genera?",
+          "options": [
+            "No se le puede asignar prioridad",
+            "No se puede incluir en el documento",
+            "Pasa a ser no funcional",
+            "Nadie puede decir con objetividad cuándo está cumplido"
+          ],
+          "correctIndex": 3,
+          "explanation": "Sin criterios, 'listo' depende de opiniones. La prioridad y las dependencias se asignan igual, pero no hay cómo verificarlo."
+        },
+        {
+          "question": "'Los datos se guardan cifrados con AES-256.' ¿Qué tipo de requisito es?",
+          "options": [
+            "Funcional del módulo de usuarios",
+            "No funcional de seguridad",
+            "No funcional de rendimiento",
+            "Un caso de uso del administrador"
+          ],
+          "correctIndex": 1,
+          "explanation": "Dice cómo se protege la información, no qué acción hace el usuario. Es seguridad, no rendimiento: no mide tiempos ni carga."
+        },
+        {
+          "question": "En una entrevista, el gerente cuenta: 'cada mes armamos el reporte juntando 4 Excel a mano'. ¿Qué extraes?",
+          "options": [
+            "Un requisito explícito: el sistema debe usar Excel",
+            "Nada: es solo su forma de trabajar",
+            "Un requisito implícito: necesita un reporte consolidado automático",
+            "Un no funcional: el reporte debe ser rápido"
+          ],
+          "correctIndex": 2,
+          "explanation": "El dolor está en juntar 4 archivos a mano. Pedir 'usar Excel' copiaría el parche en vez de resolver la necesidad."
+        }
+      ]
+    },
+    "mod-as-3": {
+      "emoji": "🎭",
+      "exam": [
+        {
+          "question": "Al devolver un libro con atraso, a veces se cobra multa. ¿Cómo lo modelas?",
+          "options": [
+            "Devolver libro «include» Cobrar multa",
+            "Cobrar multa como actor secundario",
+            "Cobrar multa «extend» Devolver libro, con la condición de atraso",
+            "Generalización de Devolver libro hacia Cobrar multa"
+          ],
+          "correctIndex": 2,
+          "explanation": "Solo ocurre bajo condición: extend. Include significaría que toda devolución cobra multa, aunque llegue a tiempo."
+        },
+        {
+          "question": "Pasajero y Conductor pueden 'Iniciar sesión' y 'Calificar viaje'. ¿Qué simplifica el diagrama?",
+          "options": [
+            "Un actor Usuario general del que heredan ambos",
+            "Duplicar los casos para cada actor",
+            "Fusionar Pasajero y Conductor en un solo actor",
+            "Quitar los casos compartidos"
+          ],
+          "correctIndex": 0,
+          "explanation": "La generalización de actores hereda los casos comunes. Fusionarlos perdería lo propio de cada uno, como 'Aceptar viaje', que es solo del conductor."
+        },
+        {
+          "question": "Un junior pone 'Validar SQL del préstamo' como caso de uso. ¿Qué está mal?",
+          "options": [
+            "Debería ser un actor secundario",
+            "Le falta un include hacia el lector",
+            "Es un detalle técnico interno, no algo que el actor quiere lograr",
+            "Los casos de uso no llevan verbos"
+          ],
+          "correctIndex": 2,
+          "explanation": "Un caso de uso es un objetivo del actor visto desde fuera, como 'Registrar préstamo'. Cómo se valida por dentro va en el diseño."
+        },
+        {
+          "question": "Un stakeholder pregunta qué es el rectángulo grande de tu diagrama. ¿Qué le dices?",
+          "options": [
+            "Es el límite del sistema: lo de adentro es lo que se construye",
+            "Es un actor colectivo",
+            "Es el caso de uso principal",
+            "Es un paquete de clases"
+          ],
+          "correctIndex": 0,
+          "explanation": "La caja delimita el alcance. Los actores quedan fuera porque interactúan con el sistema, no son parte de él."
+        },
+        {
+          "question": "Para 'Registrar préstamo', ¿qué va en la especificación escrita y no en el diagrama?",
+          "options": [
+            "El nombre del caso en el óvalo",
+            "La línea entre el actor y el caso",
+            "El límite del sistema",
+            "El flujo principal paso a paso y los flujos alternativos"
+          ],
+          "correctIndex": 3,
+          "explanation": "El diagrama muestra quién hace qué a grandes rasgos; el paso a paso, las precondiciones y las postcondiciones van en la especificación."
+        }
+      ]
+    },
+    "mod-as-4": {
+      "emoji": "🗃️",
+      "exam": [
+        {
+          "question": "'Cada curso lo dicta un profesor; un profesor dicta varios cursos.' ¿Dónde va la FK?",
+          "options": [
+            "id_curso en Profesor",
+            "id_profesor en Curso",
+            "En una tabla intermedia Profesor_Curso",
+            "En ambas tablas a la vez"
+          ],
+          "correctIndex": 1,
+          "explanation": "En 1:N la FK va del lado N (Curso). En Profesor limitaría a un curso por profesor, y la intermedia solo hace falta en N:M."
+        },
+        {
+          "question": "¿En qué nivel del modelo aparece 'VARCHAR(100)'?",
+          "options": [
+            "Conceptual",
+            "Físico",
+            "Lógico",
+            "En todos por igual"
+          ],
+          "correctIndex": 1,
+          "explanation": "Los tipos de datos concretos son implementación: modelo físico. El conceptual ve entidades y relaciones; el lógico, atributos y cardinalidad."
+        },
+        {
+          "question": "Un modelo de alquiler une Cliente y Coche con una N:M sin nada más. ¿Qué falta?",
+          "options": [
+            "Un atributo coches en Cliente",
+            "Una herencia entre Cliente y Coche",
+            "Nada: la N:M basta",
+            "Una entidad Alquiler con fechas y precio entre ambos"
+          ],
+          "correctIndex": 3,
+          "explanation": "La relación tiene datos propios (fechas, precio), así que se vuelve la entidad Alquiler. Sin ella no sabes cuándo ni por cuánto alquiló cada cliente."
+        },
+        {
+          "question": "En una cafetería, ¿cuál es un atributo y no una entidad?",
+          "options": [
+            "precio",
+            "Producto",
+            "Categoría",
+            "Cliente"
+          ],
+          "correctIndex": 0,
+          "explanation": "Precio describe a un Producto y no tiene identidad propia. Categoría sí es entidad: tiene sus datos y agrupa productos."
+        },
+        {
+          "question": "Cada cliente tiene una sola tarjeta de fidelidad y cada tarjeta pertenece a un cliente. ¿Qué cardinalidad es?",
+          "options": [
+            "1:N",
+            "N:M",
+            "1:1",
+            "N:1"
+          ],
+          "correctIndex": 2,
+          "explanation": "Uno a uno en ambos sentidos. Si un cliente pudiera tener varias tarjetas, sería 1:N."
+        }
+      ]
+    },
+    "mod-as-5": {
+      "emoji": "🏉",
+      "exam": [
+        {
+          "question": "Velocidad del equipo: 20 puntos. Historias: carrito 13, login 5, pagos 8, perfil 3. El PO prioriza el carrito. ¿Qué plan cabe?",
+          "options": [
+            "Carrito y pagos: 21 puntos",
+            "Las cuatro: 29 puntos",
+            "Solo perfil: 3 puntos",
+            "Carrito y login: 18 puntos"
+          ],
+          "correctIndex": 3,
+          "explanation": "Carrito más login suma 18 y respeta la prioridad. 21 y 29 superan la velocidad, y solo perfil desperdicia capacidad e ignora la prioridad."
+        },
+        {
+          "question": "En la Daily, un dev cuenta que lleva 3 días bloqueado esperando acceso a un servidor. ¿Quién actúa?",
+          "options": [
+            "El Product Owner, cambiando prioridades",
+            "El Scrum Master, removiendo el impedimento",
+            "El analista, reescribiendo la historia",
+            "Nadie: se verá en la Retrospectiva"
+          ],
+          "correctIndex": 1,
+          "explanation": "Quitar impedimentos es tarea del Scrum Master. Esperar a la Retrospectiva deja al dev bloqueado varios días más."
+        },
+        {
+          "question": "¿Cómo participa un analista en el refinamiento del backlog?",
+          "options": [
+            "Asignando tareas a cada desarrollador",
+            "Aprobando el incremento final del sprint",
+            "Aclarando historias y criterios para que el equipo pueda estimarlas",
+            "Decidiendo él solo la prioridad del backlog"
+          ],
+          "correctIndex": 2,
+          "explanation": "En el refinamiento se detallan y dividen historias. Priorizar es del PO, y el equipo se organiza solo para repartir tareas."
+        },
+        {
+          "question": "Historia: 'Como cliente, quiero pagar'. ¿Qué le falta?",
+          "options": [
+            "El beneficio: para qué quiere pagar y qué espera lograr",
+            "Un rol más general, como 'usuario'",
+            "Detalles de la base de datos",
+            "El nombre del desarrollador asignado"
+          ],
+          "correctIndex": 0,
+          "explanation": "Sin el 'para' no se entiende el valor ni se pueden tomar decisiones (¿pago rápido, en cuotas?). Los detalles técnicos no van en la historia."
+        },
+        {
+          "question": "Al cierre del sprint dicen: 'la historia está casi lista, solo falta probarla'. ¿Qué significa?",
+          "options": [
+            "Cuenta como hecha porque el código existe",
+            "Se entrega y QA la prueba el próximo sprint",
+            "No cumple sus criterios de aceptación: no entra en el incremento",
+            "El PO debe aceptarla sin revisar"
+          ],
+          "correctIndex": 2,
+          "explanation": "Sin criterios verificados no está terminada. Contarla como hecha infla la velocidad y esconde trabajo pendiente."
+        },
+        {
+          "question": "¿Qué artefacto muestra lo que el equipo eligió hacer en el sprint actual?",
+          "options": [
+            "Sprint Backlog",
+            "Product Backlog",
+            "Incremento",
+            "Roadmap del producto"
+          ],
+          "correctIndex": 0,
+          "explanation": "El Sprint Backlog son las historias elegidas para este sprint y su plan. El Product Backlog es la lista completa que prioriza el PO."
+        }
+      ]
+    },
+    "mod-as-6": {
+      "emoji": "🏗️",
+      "exam": [
+        {
+          "question": "Una Universidad tiene Facultades que desaparecen si la Universidad cierra; las Facultades tienen Profesores que pueden irse a otra. ¿Qué relaciones son?",
+          "options": [
+            "Universidad-Facultad composición; Facultad-Profesor agregación",
+            "Ambas son composición",
+            "Ambas son agregación",
+            "Universidad-Facultad herencia; Facultad-Profesor asociación"
+          ],
+          "correctIndex": 0,
+          "explanation": "La facultad no existe sin la universidad (composición); el profesor sobrevive al cierre (agregación)."
+        },
+        {
+          "question": "El método calcularTotal() de Pedido recibe un objeto Impuesto solo como parámetro. ¿Qué relación es?",
+          "options": [
+            "Composición, con rombo lleno",
+            "Herencia, con flecha triangular",
+            "Agregación, con rombo vacío",
+            "Dependencia, con flecha punteada"
+          ],
+          "correctIndex": 3,
+          "explanation": "Usar algo de forma temporal en un método es dependencia. No lo guarda como atributo, así que no hay agregación ni composición."
+        },
+        {
+          "question": "¿En qué compartimento de la clase va 'confirmar(): void'?",
+          "options": [
+            "En el segundo, el de atributos",
+            "En el tercero, el de métodos",
+            "En el primero, el del nombre",
+            "Fuera de la clase, como nota"
+          ],
+          "correctIndex": 1,
+          "explanation": "Las operaciones van en el tercer compartimento. El segundo lleva datos, como estado o fecha."
+        },
+        {
+          "question": "PagoTarjeta y PagoEfectivo comparten monto y fecha, pero se procesan distinto. ¿Cómo lo modelas?",
+          "options": [
+            "Pago compuesto dentro de cada tipo",
+            "Una clase Pago con monto y fecha; ambas heredan y definen su propio procesar()",
+            "Una sola clase con un campo tipo y un if",
+            "Una asociación simple entre ambas"
+          ],
+          "correctIndex": 1,
+          "explanation": "Cada una 'es un' Pago con comportamiento propio: herencia. El campo tipo con if crece cada vez que sumas un medio de pago."
+        },
+        {
+          "question": "Un diagrama de clases intenta mostrar cómo avanza un pedido paso a paso. ¿Qué está mal?",
+          "options": [
+            "Faltan métodos en cada clase",
+            "Debería usar composición en vez de herencia",
+            "Nada: las clases también muestran flujos",
+            "Las clases muestran estructura; el paso a paso va en secuencia o actividad"
+          ],
+          "correctIndex": 3,
+          "explanation": "El diagrama de clases es el plano de la casa, no el recorrido. Para el orden de los pasos usa un diagrama de secuencia o de actividad."
+        }
+      ]
+    },
+    "mod-as-7": {
+      "emoji": "🎬",
+      "exam": [
+        {
+          "question": "Quieres mostrar el orden de los mensajes entre App, AuthService y la base durante un login. ¿Qué diagrama usas?",
+          "options": [
+            "Secuencia",
+            "Actividad",
+            "Clases",
+            "Casos de uso"
+          ],
+          "correctIndex": 0,
+          "explanation": "Quién le dice qué a quién y en qué orden es secuencia. Actividad muestra pasos y decisiones de un proceso, no mensajes entre participantes."
+        },
+        {
+          "question": "Debes modelar cómo se aprueban vacaciones entre empleado, jefe y RRHH, con decisiones. ¿Qué diagrama usas?",
+          "options": [
+            "Secuencia con tres líneas de vida",
+            "Clases con tres clases",
+            "Actividad con un carril por rol",
+            "Casos de uso con tres actores"
+          ],
+          "correctIndex": 2,
+          "explanation": "Un flujo de trabajo con decisiones y responsables es actividad con swimlanes. La secuencia sirve para mensajes entre componentes."
+        },
+        {
+          "question": "En el checkout, InventarioService puede responder 'sin stock'. ¿Qué fragmento de secuencia muestra ambos caminos?",
+          "options": [
+            "Un fragmento loop que reintenta",
+            "Una línea de vida nueva para el error",
+            "Un mensaje asíncrono al cliente",
+            "Un fragmento alt con la condición de stock"
+          ],
+          "correctIndex": 3,
+          "explanation": "alt muestra caminos alternativos según una condición. loop repetiría el intento, y eso no resuelve la falta de stock."
+        },
+        {
+          "question": "En un diagrama de actividad, dos ramas paralelas terminan y el proceso sigue sin esperar a ambas. ¿Qué falta?",
+          "options": [
+            "Un nodo de decisión",
+            "Una unión que espere a las dos ramas",
+            "Un nodo final extra",
+            "Un carril nuevo"
+          ],
+          "correctIndex": 1,
+          "explanation": "Sin la unión, el proceso podría avanzar con una rama sin terminar, como dar accesos antes de firmar el contrato."
+        },
+        {
+          "question": "Al pasar el caso de uso 'Registrar préstamo' a un diagrama de secuencia, ¿qué se agrega?",
+          "options": [
+            "Los actores y el límite del sistema",
+            "Las relaciones include y extend",
+            "Los mensajes entre componentes del sistema, en orden",
+            "La cardinalidad entre entidades"
+          ],
+          "correctIndex": 2,
+          "explanation": "La secuencia baja al detalle de qué componente llama a cuál. El límite, include y extend son del diagrama de casos de uso."
+        }
+      ]
+    },
+    "mod-as-8": {
+      "emoji": "🏛️",
+      "exam": [
+        {
+          "question": "Monolito de 8 años, 40 devs, despliegues que tardan un día y conflictos constantes. ¿Qué evalúas?",
+          "options": [
+            "Extraer módulos por dominio a servicios, de uno en uno",
+            "Reescribir todo en microservicios de golpe",
+            "Sumar servidores al monolito y nada más",
+            "Pasarlo a capas y listo"
+          ],
+          "correctIndex": 0,
+          "explanation": "Equipo grande y despliegues trabados apuntan a separar por dominio, pero de forma gradual. Reescribir todo de golpe es el error más caro."
+        },
+        {
+          "question": "Al confirmar un pedido deben reaccionar facturación, inventario y notificaciones, sin que el módulo de pedidos los conozca. ¿Qué estilo?",
+          "options": [
+            "Capas con llamadas directas a los tres",
+            "Un monolito con un método que llama a todo",
+            "Orientado a eventos: pedidos publica y los demás se suscriben",
+            "Cliente-servidor sin intermediario"
+          ],
+          "correctIndex": 2,
+          "explanation": "Publicar un evento desacopla a quien emite de quien reacciona. Con llamadas directas, pedidos debe conocer y esperar a los tres."
+        },
+        {
+          "question": "¿Qué costo nuevo traen los microservicios que un monolito no tiene?",
+          "options": [
+            "Comunicación por red, fallos parciales y monitoreo distribuido",
+            "Prohíben usar bases de datos",
+            "Obligan a usar un solo lenguaje",
+            "Impiden que los equipos trabajen en paralelo"
+          ],
+          "correctIndex": 0,
+          "explanation": "Separar en servicios añade latencia, fallos entre servicios y operación compleja. Justamente permiten equipos y lenguajes independientes."
+        },
+        {
+          "question": "En una arquitectura en capas, ¿dónde va la regla 'un cliente moroso no puede comprar a crédito'?",
+          "options": [
+            "En la capa de presentación",
+            "En la capa de datos",
+            "En el navegador del usuario",
+            "En la capa de negocio"
+          ],
+          "correctIndex": 3,
+          "explanation": "Las reglas del negocio viven en su capa para reutilizarse. Si están en presentación, otra pantalla podría saltárselas."
+        },
+        {
+          "question": "¿Por qué se dice que la arquitectura es 'la decisión más cara'?",
+          "options": [
+            "Requiere licencias costosas",
+            "Afecta a todo el sistema y cambiarla obliga a rehacer gran parte",
+            "Solo la pueden tomar arquitectos senior",
+            "Se decide al final del proyecto"
+          ],
+          "correctIndex": 1,
+          "explanation": "Una mala elección obliga a refactorizar masivamente. Por eso se decide temprano y con contexto, no por moda."
+        }
+      ]
+    },
+    "mod-as-9": {
+      "emoji": "🔺",
+      "exam": [
+        {
+          "question": "Pruebas que, al agregar al carrito, el producto se guarda en la base y el inventario se descuenta. ¿Qué nivel es?",
+          "options": [
+            "Unitaria",
+            "Integración",
+            "Aceptación",
+            "Rendimiento"
+          ],
+          "correctIndex": 1,
+          "explanation": "Verifica que dos componentes funcionen juntos. Una unitaria aislaría una función sin base de datos."
+        },
+        {
+          "question": "Caso de prueba: 'Agregar al carrito un producto sin stock'. ¿Qué resultado esperado está bien escrito?",
+          "options": [
+            "El sistema funciona bien",
+            "Se produce un error",
+            "El producto se agrega igual",
+            "Se muestra 'Sin stock' y el carrito no cambia"
+          ],
+          "correctIndex": 3,
+          "explanation": "Debe ser observable y específico. 'Funciona bien' no se puede comparar con el resultado actual."
+        },
+        {
+          "question": "Un tester no puede ejecutar un caso porque el login del ambiente de pruebas está caído. ¿Qué estado le pone?",
+          "options": [
+            "Blocked",
+            "Fail",
+            "Pass",
+            "Ninguno: no lo registra"
+          ],
+          "correctIndex": 0,
+          "explanation": "Blocked indica que no se pudo ejecutar por algo externo. Fail diría que la función probada no cumple, y eso todavía no se sabe."
+        },
+        {
+          "question": "El pago falla para todos los usuarios en producción. ¿Severidad y prioridad?",
+          "options": [
+            "Severidad menor, prioridad alta",
+            "Severidad crítica, prioridad baja",
+            "Severidad crítica, prioridad alta",
+            "Severidad mayor, prioridad media"
+          ],
+          "correctIndex": 2,
+          "explanation": "Rompe una función central para todos y corta ingresos: lo más grave y lo más urgente."
+        },
+        {
+          "question": "Probar el registro con un email de 255 caracteres. ¿Qué tipo de caso es?",
+          "options": [
+            "Un caso feliz",
+            "Un caso de humo",
+            "Un caso de aceptación del PO",
+            "Un caso límite"
+          ],
+          "correctIndex": 3,
+          "explanation": "Explora el borde de lo permitido, donde suelen esconderse errores. El caso feliz usaría un email normal."
+        }
+      ]
+    },
+    "mod-as-10": {
+      "emoji": "🤖",
+      "exam": [
+        {
+          "question": "Tienes 300 pruebas manuales. ¿Por cuáles empiezas a automatizar?",
+          "options": [
+            "Las más fáciles, aunque se ejecuten una vez",
+            "Las de flujos críticos que se repiten en cada versión",
+            "Las de usabilidad de la pantalla nueva",
+            "Todas a la vez para terminar rápido"
+          ],
+          "correctIndex": 1,
+          "explanation": "El mayor retorno está en lo crítico y repetido. Automatizar lo de una sola vez o todo de golpe gasta tiempo en scripts que no se aprovechan."
+        },
+        {
+          "question": "Quieres comprobar que /pedidos responda 201 con datos válidos y 400 con inválidos. ¿Qué herramienta usas?",
+          "options": [
+            "JMeter",
+            "Selenium",
+            "Postman",
+            "Un checklist manual en Excel"
+          ],
+          "correctIndex": 2,
+          "explanation": "Postman prueba APIs directamente. JMeter mide carga y Selenium maneja navegadores."
+        },
+        {
+          "question": "Antes del Black Friday quieres saber si la tienda aguanta 5.000 usuarios a la vez. ¿Qué herramienta usas?",
+          "options": [
+            "JMeter",
+            "Postman",
+            "Cypress",
+            "Selenium IDE"
+          ],
+          "correctIndex": 0,
+          "explanation": "JMeter simula carga y mide tiempos. Postman y Cypress verifican que algo funcione, no cuánto aguanta."
+        },
+        {
+          "question": "Una prueba automatizada a veces falla y a veces pasa, sin cambios en el código. ¿Qué haces?",
+          "options": [
+            "Reintentarla hasta que pase",
+            "Borrarla de la suite",
+            "Investigar la inestabilidad, como esperas mal puestas o datos compartidos",
+            "Ignorarla porque casi siempre pasa"
+          ],
+          "correctIndex": 2,
+          "explanation": "Una prueba inestable acostumbra al equipo a ignorar fallos reales. Reintentar hasta que pase esconde el problema."
+        },
+        {
+          "question": "Un equipo que trabaja en JS/TS necesita probar en Chrome, Firefox y Safari. ¿Qué herramienta encaja mejor?",
+          "options": [
+            "Playwright",
+            "Cypress",
+            "JMeter",
+            "Postman"
+          ],
+          "correctIndex": 0,
+          "explanation": "Playwright cubre los tres motores, incluido el de Safari. Cypress es JS pero con soporte más limitado para Safari; JMeter y Postman no manejan navegadores."
+        }
+      ]
+    },
+    "mod-as-11": {
+      "emoji": "🔌",
+      "exam": [
+        {
+          "question": "DELETE /pedidos/42 borra el pedido y no devuelve nada. ¿Qué código respondes?",
+          "options": [
+            "201 Created",
+            "404 Not Found",
+            "301 Moved Permanently",
+            "204 No Content"
+          ],
+          "correctIndex": 3,
+          "explanation": "204 confirma éxito sin cuerpo. 404 sería si el pedido no existiera, y 201 es para creaciones."
+        },
+        {
+          "question": "El cliente envía un pedido sin el campo cantidad. ¿Qué responde la API?",
+          "options": [
+            "500 Internal Server Error",
+            "400 Bad Request indicando el campo que falta",
+            "200 OK con un pedido vacío",
+            "404 Not Found"
+          ],
+          "correctIndex": 1,
+          "explanation": "El error es del cliente: 400 con detalle le ayuda a corregir. 500 culpa al servidor y 200 esconde el problema."
+        },
+        {
+          "question": "Un usuario con sesión intenta ver /pedidos/99, que es de otro cliente. ¿Qué responde la API?",
+          "options": [
+            "200 OK con el pedido completo",
+            "403 Forbidden, o 404 para no revelar que existe",
+            "401 Unauthorized",
+            "400 Bad Request"
+          ],
+          "correctIndex": 1,
+          "explanation": "Está identificado pero no autorizado: 403 (o 404 para no filtrar). 401 es para quien no se identificó, y 200 sería una fuga de datos."
+        },
+        {
+          "question": "El servidor guarda en memoria qué página vio cada usuario y todo falla al pasar a 3 servidores. ¿Qué principio rompe?",
+          "options": [
+            "Cacheable: las respuestas se guardan",
+            "Interfaz uniforme: URLs consistentes",
+            "Sistema en capas: hay un proxy",
+            "Sin estado: cada petición debe traer lo necesario"
+          ],
+          "correctIndex": 3,
+          "explanation": "Si un servidor recuerda al cliente, los otros no saben nada de él. Sin estado, cualquier servidor atiende cualquier petición."
+        },
+        {
+          "question": "¿Qué URL sigue mejor las convenciones REST?",
+          "options": [
+            "GET /productos?categoria=cafe",
+            "GET /getProductosCafe",
+            "POST /productos/buscarPorCategoria",
+            "GET /Productos/Categoria/Cafe/Lista"
+          ],
+          "correctIndex": 0,
+          "explanation": "El filtro va como parámetro sobre el recurso en plural. Verbos en la URL y mayúsculas mezcladas rompen la interfaz uniforme."
+        }
+      ]
+    },
+    "mod-as-12": {
+      "emoji": "🌿",
+      "exam": [
+        {
+          "question": "Debes integrar un sistema de facturación antiguo cuyos métodos no encajan con tu código. ¿Qué patrón usas?",
+          "options": [
+            "Observer",
+            "Singleton",
+            "Adapter",
+            "Strategy"
+          ],
+          "correctIndex": 2,
+          "explanation": "Adapter traduce una interfaz incompatible sin tocar ninguno de los dos lados."
+        },
+        {
+          "question": "Reportes llama a 6 servicios distintos y cada pantalla repite esa coordinación. ¿Qué patrón usas?",
+          "options": [
+            "Factory: crear los 6 servicios",
+            "Adapter: traducir cada servicio",
+            "Observer: suscribirse a los 6",
+            "Facade: una interfaz simple que coordina los 6"
+          ],
+          "correctIndex": 3,
+          "explanation": "Facade esconde un subsistema complejo detrás de una sola puerta. Factory resuelve cómo crear objetos, no cómo usarlos juntos."
+        },
+        {
+          "question": "Tu compañera hizo merge en main mientras trabajabas en tu rama. ¿Qué haces antes de abrir tu PR?",
+          "options": [
+            "Hacer push forzado sobre main",
+            "Traer main a tu rama y resolver ahí los conflictos",
+            "Borrar tu rama y empezar de cero",
+            "Abrir el PR y que ella resuelva los conflictos"
+          ],
+          "correctIndex": 1,
+          "explanation": "Integrar main en tu rama deja los conflictos de tu lado. Un push forzado sobre main puede borrar el trabajo de otros."
+        },
+        {
+          "question": "Se usa un Singleton para guardar 'el usuario actual' y se lee desde todas partes. ¿Qué problema trae?",
+          "options": [
+            "Crea demasiadas instancias",
+            "Impide conectarse a la base",
+            "Estado global difícil de probar y de cambiar",
+            "Obliga a usar herencia"
+          ],
+          "correctIndex": 2,
+          "explanation": "Singleton limita a una instancia, pero usado como variable global acopla todo y complica los tests."
+        },
+        {
+          "question": "Un commit dice 'cambios'. ¿Qué mensaje es mejor?",
+          "options": [
+            "Agrega validación de email único en el registro",
+            "fix",
+            "cambios varios del viernes",
+            "update archivos"
+          ],
+          "correctIndex": 0,
+          "explanation": "Un buen mensaje dice qué cambió y dónde. Dentro de seis meses alguien lo entenderá sin abrir el código."
+        }
+      ]
+    },
+    "mod-as-13": {
+      "emoji": "☕",
+      "exam": [
+        {
+          "question": "Requisito: 'el cliente elige en qué sucursal recoge su pedido'. ¿Cómo lo modelas?",
+          "options": [
+            "Sucursal con una columna que lista sus pedidos",
+            "Cliente con FK a Sucursal",
+            "Pedido con FK id_sucursal hacia Sucursal",
+            "Producto con FK a Sucursal"
+          ],
+          "correctIndex": 2,
+          "explanation": "Cada pedido se recoge en una sucursal: 1:N desde Sucursal. Ponerlo en Cliente le impediría elegir otra sucursal en su próximo pedido."
+        },
+        {
+          "question": "El barista marca un pedido como listo. ¿Qué endpoint es más REST?",
+          "options": [
+            "PATCH /pedidos/42 con estado listo",
+            "POST /marcarPedidoListo?id=42",
+            "GET /pedidos/42/listo",
+            "DELETE /pedidos/42"
+          ],
+          "correctIndex": 0,
+          "explanation": "Cambiar un campo es actualización parcial: PATCH. GET no debe modificar nada, y DELETE borraría el pedido."
+        },
+        {
+          "question": "Hay 30 historias para CaféOnline y solo 4 sprints. ¿Qué haces?",
+          "options": [
+            "Meter las 30 en los 4 sprints",
+            "Hacer primero las más fáciles",
+            "Pedir más sprints sin priorizar",
+            "Priorizar con el PO por valor de negocio y dejar fuera lo menos valioso"
+          ],
+          "correctIndex": 3,
+          "explanation": "Priorizar ordena por valor y dependencias. Empezar por lo fácil puede dejar fuera los pedidos online, que son el núcleo del negocio."
+        },
+        {
+          "question": "En el diagrama de clases de CaféOnline, ¿qué herencia tiene sentido?",
+          "options": [
+            "Pedido hereda de Producto",
+            "Cliente, Barista y Gerente heredan de Usuario",
+            "Producto hereda de Categoría",
+            "Sucursal hereda de Pedido"
+          ],
+          "correctIndex": 1,
+          "explanation": "Un Barista 'es un' Usuario. Un Producto no 'es una' Categoría: pertenece a ella, y eso es asociación."
+        },
+        {
+          "question": "Un pedido online debe pagarse antes de avisar al barista. ¿En qué orden van los mensajes de la secuencia?",
+          "options": [
+            "Pedido, aviso al barista y luego pago",
+            "Pedido, pago, confirmación y luego aviso al barista",
+            "Pago, aviso al barista y luego pedido",
+            "Aviso al barista, pedido y luego pago"
+          ],
+          "correctIndex": 1,
+          "explanation": "Avisar antes de cobrar arriesga preparar cafés que no se pagan. La secuencia refleja la regla de negocio en el orden de los mensajes."
+        },
+        {
+          "question": "El requisito 'responder en menos de 2 segundos', ¿en qué fase se comprueba?",
+          "options": [
+            "En la fase 1: solo se escribe",
+            "En la fase 2, dentro del modelo ER",
+            "En la fase 3, al nombrar los endpoints",
+            "En la fase 4, con una prueba de rendimiento en la estrategia de testing"
+          ],
+          "correctIndex": 3,
+          "explanation": "Se escribe en la fase 1, pero se comprueba con una prueba de rendimiento. Si nadie lo mide, el requisito es decorativo."
+        }
+      ]
+    },
+    "mod-as-14": {
+      "emoji": "🎓",
+      "exam": [
+        {
+          "question": "Un profesor quiere corregir una nota de un periodo ya cerrado. ¿Qué requisito agregas?",
+          "options": [
+            "El profesor edita libremente cualquier nota",
+            "Las notas cerradas no se pueden cambiar nunca",
+            "El alumno pide y edita su propia nota",
+            "Corrección con justificación, aprobación del admin y registro de quién y cuándo"
+          ],
+          "correctIndex": 3,
+          "explanation": "Equilibra flexibilidad y control con auditoría. Prohibirlo siempre deja errores sin corregir, y editar libremente abre la puerta a abusos."
+        },
+        {
+          "question": "Asistencia: un alumno, una clase, una fecha y un estado. ¿Cómo la modelas?",
+          "options": [
+            "Asistencia(id_alumno, id_clase, fecha, estado)",
+            "Una columna asistencias en Alumno",
+            "Una columna presentes en Clase con una lista",
+            "Asistencia solo con id_alumno y estado"
+          ],
+          "correctIndex": 0,
+          "explanation": "Necesitas saber qué alumno, qué clase y cuándo. Las listas en columnas rompen la 1FN y sin fecha no hay historial."
+        },
+        {
+          "question": "¿Cuál historia para el rol Padre está mejor escrita?",
+          "options": [
+            "Como usuario, quiero ver cosas del colegio",
+            "El sistema debe enviar avisos de inasistencia",
+            "Como padre, quiero recibir un aviso si mi hijo falta, para enterarme el mismo día",
+            "Como admin, quiero un módulo de padres"
+          ],
+          "correctIndex": 2,
+          "explanation": "Rol concreto, acción y beneficio claros. 'Ver cosas' no se puede verificar y 'el sistema debe' no pone a la persona al centro."
+        },
+        {
+          "question": "Un alumno no puede matricularse en dos cursos que se dictan a la misma hora. ¿Qué es esto?",
+          "options": [
+            "Un requisito no funcional de rendimiento",
+            "Un detalle de diseño visual",
+            "Una relación de herencia",
+            "Una regla de negocio que se valida al matricular"
+          ],
+          "correctIndex": 3,
+          "explanation": "Es lógica del dominio escolar. Debe quedar escrita y tener un caso de prueba que intente el cruce de horario."
+        },
+        {
+          "question": "¿Qué requisito no funcional importa más en EduTrack el día de cierre de notas?",
+          "options": [
+            "La app se ve moderna y atractiva",
+            "Soporta a todos los profesores y alumnos conectados a la vez ese día, con respuesta menor a 3 segundos",
+            "El sistema guarda las notas",
+            "El profesor puede ver su horario"
+          ],
+          "correctIndex": 1,
+          "explanation": "El día de cierre entran todos juntos: capacidad medible. Guardar notas y ver horario son funcionales, y 'moderna' no se puede verificar."
+        }
+      ]
+    },
+    "mod-as-15": {
+      "emoji": "🧹",
+      "exam": [
+        {
+          "question": "Cliente(id, nombre, telefonos = '999-111, 999-222'). ¿Qué haces?",
+          "options": [
+            "Agregar columnas telefono1 y telefono2",
+            "Dejarla así porque se lee bien",
+            "Crear Telefono(id_cliente, numero), una fila por número",
+            "Mover los teléfonos a Pedido"
+          ],
+          "correctIndex": 2,
+          "explanation": "La 1FN pide un valor por celda. telefono1 y telefono2 son un grupo repetitivo disfrazado: ¿qué pasa con el tercer número?"
+        },
+        {
+          "question": "Si cambias el nombre de un producto, debes editar 500 filas de PedidoCliente. ¿Qué anomalía es?",
+          "options": [
+            "Anomalía de actualización por redundancia",
+            "Anomalía de inserción",
+            "Dependencia transitiva resuelta",
+            "Clave foránea rota"
+          ],
+          "correctIndex": 0,
+          "explanation": "El mismo dato repetido obliga a muchos cambios, y si olvidas uno queda inconsistente. Normalizar deja el nombre solo en Producto."
+        },
+        {
+          "question": "No puedes registrar un producto nuevo hasta que alguien lo compre. ¿Qué anomalía es?",
+          "options": [
+            "Anomalía de borrado",
+            "Anomalía de actualización",
+            "Anomalía de inserción",
+            "Violación de la 1FN"
+          ],
+          "correctIndex": 2,
+          "explanation": "El producto solo existe dentro de los pedidos, así que no hay dónde guardarlo solo. Separar Producto lo resuelve."
+        },
+        {
+          "question": "Alumno(id_alumno, nombre, cod_postal, ciudad), donde cod_postal determina ciudad. ¿Qué viola?",
+          "options": [
+            "La 3FN, por la dependencia transitiva a través de cod_postal",
+            "La 2FN, por una dependencia parcial",
+            "La 1FN, por grupos repetitivos",
+            "Ninguna forma normal"
+          ],
+          "correctIndex": 0,
+          "explanation": "La clave es simple, así que no puede haber parcial. ciudad depende de cod_postal, que depende de id_alumno: transitiva."
+        },
+        {
+          "question": "(id_pedido, id_producto) → cantidad. ¿Qué tipo de dependencia es?",
+          "options": [
+            "Parcial: viola la 2FN",
+            "Transitiva: viola la 3FN",
+            "Un grupo repetitivo: viola la 1FN",
+            "Completa: depende de toda la clave y cumple la 2FN"
+          ],
+          "correctIndex": 3,
+          "explanation": "La cantidad cambia con cada combinación de pedido y producto. Es justo lo que debe quedarse en la tabla intermedia."
+        }
+      ]
+    },
+    "mod-as-16": {
+      "emoji": "🗄️",
+      "exam": [
+        {
+          "question": "Transferencia: descontar de la cuenta A y sumar a la B. ¿Qué asegura que no se pierda dinero?",
+          "options": [
+            "Dos procedimientos separados ejecutados en orden",
+            "Una transacción con COMMIT si todo sale bien y ROLLBACK ante cualquier error",
+            "Un trigger AFTER UPDATE en Cuenta",
+            "Un cursor que recorra ambas cuentas"
+          ],
+          "correctIndex": 1,
+          "explanation": "Todo o nada: si falla la suma, se revierte el descuento. Dos procedimientos sueltos pueden dejar la operación a medias."
+        },
+        {
+          "question": "Un trigger recalcula descuentos comerciales en cada pedido y el equipo de la app no sabe que existe. ¿Qué riesgo hay?",
+          "options": [
+            "Ninguno: los triggers son más rápidos",
+            "Lógica escondida: cambios en la app chocan con un comportamiento invisible",
+            "Que el trigger no se ejecute nunca",
+            "Que la tabla deje de aceptar INSERT"
+          ],
+          "correctIndex": 1,
+          "explanation": "La lección lo dice: no uses triggers para lógica de negocio de la aplicación. Para auditoría sí; los descuentos, mejor donde se ven y se prueban."
+        },
+        {
+          "question": "En PL/SQL, ¿qué partes tiene un paquete?",
+          "options": [
+            "DECLARE y EXCEPTION",
+            "Un cursor implícito y uno explícito",
+            "Una tabla y una vista",
+            "Una especificación pública y un cuerpo con la implementación"
+          ],
+          "correctIndex": 3,
+          "explanation": "La especificación dice qué ofrece y el cuerpo cómo lo hace; puedes cambiar el cuerpo sin romper a quien lo usa."
+        },
+        {
+          "question": "SELECT salario INTO v_sal FROM empleados WHERE id = 5. ¿Qué cursor se usa?",
+          "options": [
+            "Uno implícito, que crea Oracle",
+            "Uno explícito, declarado por ti",
+            "Ninguno",
+            "Uno definido en un paquete"
+          ],
+          "correctIndex": 0,
+          "explanation": "SELECT INTO usa un cursor implícito. El explícito lo declaras, lo abres, lo recorres con FETCH y lo cierras."
+        },
+        {
+          "question": "Con sp_RegistrarPedido, dos clientes compran la última unidad al mismo tiempo y ambos pasan la validación. ¿Qué falló?",
+          "options": [
+            "Falta un cursor explícito",
+            "El RAISERROR usa severidad 16",
+            "Leer el stock y descontarlo después, sin bloqueo, deja una carrera entre ambas compras",
+            "Debería ser una función y no un procedimiento"
+          ],
+          "correctIndex": 2,
+          "explanation": "Ambos leen stock = 1 antes del UPDATE. Validar dentro del UPDATE (WHERE stock >= @cantidad) o bloquear la fila evita vender dos veces lo mismo."
+        }
+      ]
+    },
+    "mod-as-17": {
+      "emoji": "🛎️",
+      "exam": [
+        {
+          "question": "Un usuario reporta 'no puedo imprimir'. El service desk reinicia la cola y funciona. ¿Qué se gestionó?",
+          "options": [
+            "Un problema: se eliminó la causa raíz",
+            "Un cambio estándar planificado",
+            "Una actualización de la CMDB",
+            "Un incidente: se restauró el servicio"
+          ],
+          "correctIndex": 3,
+          "explanation": "Restaurar rápido es la meta del incidente. Nadie sabe por qué se trabó la cola, así que la causa raíz sigue ahí."
+        },
+        {
+          "question": "Restablecer la contraseña de un usuario siguiendo un procedimiento ya aprobado. ¿Qué tipo de cambio es?",
+          "options": [
+            "Normal",
+            "Estándar",
+            "De emergencia",
+            "Un problema"
+          ],
+          "correctIndex": 1,
+          "explanation": "Los cambios de bajo riesgo, repetitivos y preaprobados son estándar. Uno normal necesita evaluación y aprobación caso por caso."
+        },
+        {
+          "question": "Antes de un cambio quieres saber qué servicios dependen del servidor X. ¿Dónde miras?",
+          "options": [
+            "En el registro de incidentes",
+            "En el SLA del cliente",
+            "En la CMDB",
+            "En el MTTR del mes"
+          ],
+          "correctIndex": 2,
+          "explanation": "La CMDB guarda los activos y sus relaciones, así que muestra qué se afecta. Los incidentes cuentan qué falló, no qué depende de qué."
+        },
+        {
+          "question": "El MTTR bajó de 4 h a 1 h, pero los incidentes repetidos siguen igual. ¿Qué indica?",
+          "options": [
+            "Restauras más rápido, pero la gestión de problemas no está eliminando causas",
+            "Que todo está resuelto",
+            "Que la CMDB está desactualizada",
+            "Que hay que hacer menos cambios"
+          ],
+          "correctIndex": 0,
+          "explanation": "El MTTR mide incidentes; la baja de recurrentes mide problemas. Mejorar uno no garantiza el otro."
+        },
+        {
+          "question": "¿En qué fase del ciclo de ITIL se lleva un servicio a producción de forma segura?",
+          "options": [
+            "Diseño",
+            "Operación",
+            "Transición",
+            "Estrategia"
+          ],
+          "correctIndex": 2,
+          "explanation": "Transición mueve servicios nuevos o cambiados a producción. Operación los mantiene funcionando después."
+        }
+      ]
+    },
+    "mod-as-18": {
+      "emoji": "📐",
+      "exam": [
+        {
+          "question": "En la WBS del hotel, '3.2 Diseñar pantalla de reservas' es el nivel más bajo. ¿Qué es?",
+          "options": [
+            "Un paquete de trabajo que se puede asignar y estimar",
+            "Un área de conocimiento del PMBOK",
+            "Una fase del proyecto",
+            "Un riesgo identificado"
+          ],
+          "correctIndex": 0,
+          "explanation": "El último nivel de la WBS son paquetes de trabajo manejables. Las fases están en el nivel 2."
+        },
+        {
+          "question": "El analista debe opinar antes de que se apruebe el diseño de la base de datos. ¿Qué letra de la RACI le toca?",
+          "options": [
+            "I (Informed)",
+            "A (Accountable)",
+            "R (Responsible)",
+            "C (Consulted)"
+          ],
+          "correctIndex": 3,
+          "explanation": "Consulted opina antes de la decisión. Informed se entera después, cuando ya se decidió."
+        },
+        {
+          "question": "Contrato con alcance y presupuesto fijos, pero el desarrollo se hace en sprints. ¿Qué enfoque usas?",
+          "options": [
+            "Solo PMBOK: Scrum no sirve con presupuesto fijo",
+            "PMBOK para alcance, costos y riesgos, y Scrum para el desarrollo",
+            "Solo Scrum: el contrato se ignora",
+            "Cascada pura con reuniones diarias"
+          ],
+          "correctIndex": 1,
+          "explanation": "Gestión híbrida: PMBOK controla el marco del contrato y Scrum organiza la entrega iterativa."
+        },
+        {
+          "question": "El proveedor externo de la pasarela de pagos se retrasa. ¿Qué áreas de conocimiento se tocan primero?",
+          "options": [
+            "Calidad y Comunicaciones",
+            "Adquisiciones y Riesgos",
+            "Recursos y Stakeholders",
+            "Solo Integración"
+          ],
+          "correctIndex": 1,
+          "explanation": "El contrato con el proveedor es Adquisiciones y el retraso es un riesgo que se materializó. El cronograma se verá afectado, pero el origen está ahí."
+        },
+        {
+          "question": "Valor ganado = 15.000 y costo real = 12.000. ¿Qué dice del costo?",
+          "options": [
+            "Vas sobre presupuesto",
+            "Vas atrasado en el cronograma",
+            "No se puede concluir nada",
+            "Vas bajo presupuesto: obtuviste más valor del que gastaste"
+          ],
+          "correctIndex": 3,
+          "explanation": "15.000 − 12.000 = +3.000, positivo: bajo costo. Para saber si vas atrasado necesitarías el valor planeado."
+        }
+      ]
+    },
+    "mod-as-19": {
+      "emoji": "🛡️",
+      "exam": [
+        {
+          "question": "Cambiando ?id=41 por ?id=42 en /facturas ves la factura de otro cliente. ¿Qué riesgo es?",
+          "options": [
+            "Broken Access Control",
+            "Injection",
+            "Cryptographic Failures",
+            "SSRF"
+          ],
+          "correctIndex": 0,
+          "explanation": "El servidor no verifica que la factura sea tuya. No hay código inyectado: es control de acceso roto, el número 1 del Top 10 2021."
+        },
+        {
+          "question": "Un email con una imagen oculta dispara una transferencia en tu banco porque tenías la sesión abierta. ¿Qué es y cómo se previene?",
+          "options": [
+            "XSS: escapar el HTML del email",
+            "SQL Injection: parametrizar consultas",
+            "CSRF: tokens anti-CSRF y cookies SameSite",
+            "Auth Failures: claves más largas"
+          ],
+          "correctIndex": 2,
+          "explanation": "Usa tu sesión válida para una acción que no pediste. Escapar HTML previene XSS, no peticiones forzadas desde otro sitio."
+        },
+        {
+          "question": "Las contraseñas se guardan en texto plano en la base. ¿Qué categoría es?",
+          "options": [
+            "Security Misconfiguration",
+            "Logging Failures",
+            "Vulnerable Components",
+            "Cryptographic Failures"
+          ],
+          "correctIndex": 3,
+          "explanation": "Son datos sensibles sin protección criptográfica. Deben guardarse con un hash lento y con sal, como bcrypt o Argon2."
+        },
+        {
+          "question": "Un atacante prueba 10.000 contraseñas y nadie se entera hasta una semana después. ¿Qué falla, además de la autenticación?",
+          "options": [
+            "SSRF",
+            "Logging Failures: no se registran ni alertan los intentos",
+            "Injection",
+            "Software Integrity"
+          ],
+          "correctIndex": 1,
+          "explanation": "Sin registros ni alertas no detectas el ataque. Una autenticación débil permite intentarlo; el logging permite verlo a tiempo."
+        },
+        {
+          "question": "El sistema usa una librería con una vulnerabilidad pública de hace 2 años. ¿Qué categoría es y qué haces?",
+          "options": [
+            "Insecure Design: rediseñar todo",
+            "Injection: parametrizar consultas",
+            "Vulnerable Components: actualizar y revisar dependencias seguido",
+            "Misconfiguration: cambiar los puertos"
+          ],
+          "correctIndex": 2,
+          "explanation": "Son componentes desactualizados con fallas conocidas. Se mitiga actualizando y usando herramientas que avisan de dependencias vulnerables."
+        }
+      ]
+    },
+    "mod-as-20": {
+      "emoji": "🧼",
+      "exam": [
+        {
+          "question": "Para sumar un tipo de descuento debes editar un switch gigante en CalculadoraPrecio. ¿Qué principio se rompe?",
+          "options": [
+            "Open/Closed: extender con clases nuevas sin modificar la existente",
+            "Single Responsibility",
+            "Liskov Substitution",
+            "Interface Segregation"
+          ],
+          "correctIndex": 0,
+          "explanation": "Cada descuento nuevo modifica código ya probado. Con una abstracción Descuento agregas clases sin tocar la calculadora."
+        },
+        {
+          "question": "Pinguino hereda de Ave, pero su volar() lanza un error. ¿Qué principio rompe?",
+          "options": [
+            "Open/Closed",
+            "Dependency Inversion",
+            "Liskov Substitution",
+            "DRY"
+          ],
+          "correctIndex": 2,
+          "explanation": "Un hijo debería reemplazar al padre sin romper nada. Si quien usa Ave llama a volar() y explota, la jerarquía está mal planteada."
+        },
+        {
+          "question": "La interfaz Trabajador tiene programar(), cocinar() y manejar(), y un Chef está obligado a implementar programar(). ¿Qué principio se rompe?",
+          "options": [
+            "Interface Segregation",
+            "Single Responsibility",
+            "Liskov Substitution",
+            "KISS"
+          ],
+          "correctIndex": 0,
+          "explanation": "Interfaces pequeñas y específicas evitan obligar a implementar métodos ajenos. Sepáralas en Programador, Cocinero y Conductor."
+        },
+        {
+          "question": "PedidoService crea por dentro un new MySQLRepositorio(). ¿Qué principio rompe?",
+          "options": [
+            "Open/Closed",
+            "Interface Segregation",
+            "YAGNI",
+            "Dependency Inversion: debería depender de una interfaz Repositorio"
+          ],
+          "correctIndex": 3,
+          "explanation": "Depende de una implementación concreta. Recibir una interfaz permite cambiar de base o usar un repositorio falso en los tests."
+        },
+        {
+          "question": "Un dev arma un sistema de plugins configurable para un formulario de contacto de 3 campos. ¿Qué principio ignora?",
+          "options": [
+            "DRY",
+            "KISS",
+            "Liskov Substitution",
+            "Dependency Inversion"
+          ],
+          "correctIndex": 1,
+          "explanation": "La solución simple bastaba; la sobreingeniería agrega complejidad sin necesidad. También roza YAGNI, pero el foco es la complejidad innecesaria."
+        }
+      ]
+    },
+    "mod-as-21": {
+      "emoji": "🐳",
+      "exam": [
+        {
+          "question": "Tienes una imagen de tu app y levantas 3 copias. ¿Cuántos contenedores hay?",
+          "options": [
+            "3 imágenes y 3 contenedores",
+            "3 contenedores de una sola imagen",
+            "1 contenedor con 3 imágenes",
+            "3 Dockerfiles distintos"
+          ],
+          "correctIndex": 1,
+          "explanation": "La imagen es el molde inmutable; cada instancia en ejecución es un contenedor."
+        },
+        {
+          "question": "¿Por qué un contenedor arranca en segundos y una VM tarda minutos?",
+          "options": [
+            "El contenedor no tiene sistema de archivos",
+            "La VM no usa disco",
+            "El contenedor corre sin ningún kernel",
+            "El contenedor comparte el kernel del host; la VM arranca su propio sistema"
+          ],
+          "correctIndex": 3,
+          "explanation": "Sin kernel propio no hay que arrancar un sistema completo. Por eso pesan MB y no GB."
+        },
+        {
+          "question": "Un dev hace push y el pipeline falla en los tests. ¿Qué debe pasar?",
+          "options": [
+            "Se detiene: no se despliega y se avisa al autor",
+            "Se despliega igual y se arregla luego",
+            "Se reintenta hasta que pase",
+            "Se despliega directo a producción"
+          ],
+          "correctIndex": 0,
+          "explanation": "El valor del CI es frenar cambios rotos. Si se despliega igual, el pipeline es decoración."
+        },
+        {
+          "question": "En Continuous Delivery, ¿qué pasa después de aprobar staging?",
+          "options": [
+            "Se despliega a producción sin intervención humana",
+            "No existe ambiente de staging",
+            "Pasar a producción requiere una aprobación manual",
+            "Los tests se corren a mano"
+          ],
+          "correctIndex": 2,
+          "explanation": "Delivery deja todo listo para producción con un clic humano. Deployment despliega automáticamente si todo pasa."
+        },
+        {
+          "question": "¿Qué archivo describe cómo construir la imagen de tu app?",
+          "options": [
+            "package.json",
+            ".gitignore",
+            "README.md",
+            "Dockerfile"
+          ],
+          "correctIndex": 3,
+          "explanation": "El Dockerfile es la receta: imagen base, dependencias, copia del código y comando de inicio. package.json lista dependencias de Node, no construye la imagen."
+        }
+      ]
+    },
+    "mod-as-22": {
+      "emoji": "⏱️",
+      "exam": [
+        {
+          "question": "Vas a implementar 'deshacer' en un editor. ¿Qué estructura usas?",
+          "options": [
+            "Cola (FIFO)",
+            "Pila (LIFO)",
+            "Hash map",
+            "Grafo"
+          ],
+          "correctIndex": 1,
+          "explanation": "Lo último que hiciste es lo primero que deshaces: LIFO. Una cola desharía la acción más antigua."
+        },
+        {
+          "question": "Debes procesar pedidos en el orden en que llegan. ¿Qué estructura usas?",
+          "options": [
+            "Pila (LIFO)",
+            "Árbol balanceado",
+            "Cola (FIFO)",
+            "Array ordenado por precio"
+          ],
+          "correctIndex": 2,
+          "explanation": "El primero en llegar es el primero en atenderse. Una pila atendería primero al último cliente."
+        },
+        {
+          "question": "Aplicas búsqueda binaria sobre un array desordenado. ¿Qué pasa?",
+          "options": [
+            "Puede dar resultados incorrectos: necesita datos ordenados",
+            "Funciona igual en O(log n)",
+            "Se vuelve O(1)",
+            "Ordena el array por su cuenta"
+          ],
+          "correctIndex": 0,
+          "explanation": "Descartar una mitad solo es válido si está ordenado. Ordenar primero cuesta O(n log n)."
+        },
+        {
+          "question": "Necesitas calcular rutas entre estaciones del metro. ¿Qué estructura usas?",
+          "options": [
+            "Pila",
+            "Hash map simple",
+            "Grafo",
+            "Array"
+          ],
+          "correctIndex": 2,
+          "explanation": "Las estaciones son nodos y los tramos, aristas. Para relaciones y rutas, la lección indica grafos."
+        },
+        {
+          "question": "Debes ordenar 1 millón de registros. ¿Bubble sort o mergesort?",
+          "options": [
+            "Mergesort, O(n log n)",
+            "Bubble sort, O(n²), porque es más simple",
+            "Cualquiera: tardan lo mismo",
+            "Búsqueda binaria, O(log n)"
+          ],
+          "correctIndex": 0,
+          "explanation": "Con un millón, n² es un billón de operaciones frente a unos 20 millones de n log n. La búsqueda binaria busca, no ordena."
+        },
+        {
+          "question": "Fibonacci recursivo sin memoria tarda muchísimo con n = 50. ¿Por qué?",
+          "options": [
+            "Es O(n), pero con números grandes",
+            "Es O(log n), pero la recursión es lenta",
+            "Es O(1), pero se queda sin memoria",
+            "Es O(2^n): recalcula los mismos valores muchas veces"
+          ],
+          "correctIndex": 3,
+          "explanation": "Cada llamada abre dos más y repite trabajo. Guardar los resultados ya calculados lo baja a O(n)."
+        }
+      ]
+    },
+    "mod-as-23": {
+      "emoji": "📚",
+      "exam": [
+        {
+          "question": "Un lector reserva un libro que está prestado. Cuando se devuelve, ¿qué debe pasar?",
+          "options": [
+            "Vuelve al estante para cualquiera",
+            "La reserva se cancela sola",
+            "Se le presta al bibliotecario",
+            "La copia queda apartada para quien reservó y se le avisa"
+          ],
+          "correctIndex": 3,
+          "explanation": "Esa regla le da sentido a la reserva. Debe estar en los requisitos, en el diagrama de actividad y en un caso de prueba."
+        },
+        {
+          "question": "¿Qué riesgo OWASP vigilas primero en la búsqueda del catálogo online?",
+          "options": [
+            "SSRF, porque busca libros",
+            "Injection: la búsqueda recibe texto libre del usuario",
+            "Cryptographic Failures, por los títulos",
+            "Vulnerable Components, por los ebooks"
+          ],
+          "correctIndex": 1,
+          "explanation": "Todo campo de texto libre es candidato a inyección. Pruébalo con entradas maliciosas y exige consultas parametrizadas."
+        },
+        {
+          "question": "¿Qué endpoint usas para que un lector renueve su préstamo 15?",
+          "options": [
+            "GET /prestamos/15/renovar",
+            "POST /prestamos/15/renovaciones",
+            "DELETE /prestamos/15",
+            "PUT /renovarPrestamo?id=15"
+          ],
+          "correctIndex": 1,
+          "explanation": "Una renovación crea un registro nuevo asociado al préstamo. GET no debe cambiar datos, y DELETE eliminaría el préstamo."
+        },
+        {
+          "question": "La multa es días de atraso × tarifa. ¿Qué prueba unitaria escribes?",
+          "options": [
+            "Abrir la app y ver si aparece la multa",
+            "Comprobar que la base guarda las multas",
+            "Medir cuánto tarda la página de multas",
+            "calcularMulta con 3 días devuelve 3 × tarifa, y con 0 días devuelve 0"
+          ],
+          "correctIndex": 3,
+          "explanation": "La unitaria aísla la regla de cálculo, incluido el borde de cero días. Las otras son pruebas de sistema, integración y rendimiento."
+        },
+        {
+          "question": "¿En qué orden va el pipeline de despliegue de BiblioTech?",
+          "options": [
+            "Push, build de la imagen, tests, staging y producción",
+            "Push, producción y luego tests",
+            "Build, producción, staging y tests",
+            "Tests manuales, push y producción"
+          ],
+          "correctIndex": 0,
+          "explanation": "Los tests van antes de cualquier ambiente y staging antes de producción. Al revés, los usuarios encuentran los bugs."
+        },
+        {
+          "question": "En una entrevista te preguntan qué fue lo más difícil de BiblioTech. ¿Qué respuesta muestra más criterio?",
+          "options": [
+            "Todo fue fácil porque seguí la plantilla",
+            "Elegir los colores de los diagramas",
+            "Separar Libro de Ejemplar: cambió préstamos, reservas y pruebas, y lo justifiqué con los requisitos",
+            "Usar la herramienta de diagramas más nueva"
+          ],
+          "correctIndex": 2,
+          "explanation": "Mostrar una decisión con impacto y cómo la justificaste demuestra análisis. Decir que todo fue fácil o hablar de herramientas no muestra criterio."
+        }
+      ]
+    }
+  }
+}

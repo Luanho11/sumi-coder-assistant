@@ -1,0 +1,946 @@
+{
+  "track": {
+    "id": "ia-aplicada",
+    "title": "IA aplicada: RAG, agentes y MCP",
+    "description": "Construye apps con LLM: salida estructurada, coste, RAG con citas, agentes con barreras y tu propio servidor MCP.",
+    "area": "ia",
+    "color": "#BF5AF2",
+    "source": "xara",
+    "modules": [
+      {
+        "id": "rag-m1",
+        "trackId": "ia-aplicada",
+        "title": "LLM por API",
+        "description": "Llamar a un modelo desde tu código: prompts con esquema, validación, coste por tokens y streaming.",
+        "level": "principiante",
+        "lessons": [
+          {
+            "id": "rag-l1",
+            "title": "Prompts y salida estructurada en JSON",
+            "objective": "Pedirle a un LLM datos con forma fija y validarlos antes de usarlos en tu app.",
+            "slides": [
+              {
+                "title": "🧱 Un prompt con partes",
+                "content": "- **Sistema**: el rol y las reglas fijas (\"Eres el asistente de una tienda de zapatos\").\n- **Usuario**: el dato que cambia en cada llamada.\n- **Ejemplos** (few-shot): 1-3 pares entrada → salida que muestran el formato exacto.\n- **Temperatura baja** (0-0.3) cuando quieres extraer datos, no creatividad."
+              },
+              {
+                "title": "📐 Pide un esquema, no \"responde en JSON\"",
+                "content": "Decir \"responde en JSON\" deja al modelo inventar campos. Mejor:\n- Pasa un **JSON Schema** (o el modo de salida estructurada del proveedor).\n- Define tipos, campos obligatorios y valores permitidos (`enum`).\n- Incluye un campo para el caso raro: `\"motivo\": \"no_es_pedido\"`."
+              },
+              {
+                "title": "🛂 Valida siempre en tu código",
+                "content": "El modelo puede devolver JSON roto o un campo con otro tipo. Trátalo como entrada de un usuario:\n```ts\nconst Pedido = z.object({\n  producto: z.string(),\n  talla: z.number().int().min(34).max(46),\n  urgente: z.boolean()\n})\nconst r = Pedido.safeParse(JSON.parse(texto))\nif (!r.success) reintentarOFallar(r.error)\n```\nSi falla: un reintento con el error en el prompt, y si vuelve a fallar, plan B sin IA."
+              }
+            ],
+            "videos": [
+              {
+                "kind": "video",
+                "title": "Buscar en YouTube: structured outputs LLM JSON schema",
+                "url": "https://www.youtube.com/results?search_query=structured+outputs+LLM+JSON+schema"
+              }
+            ],
+            "quiz": {
+              "id": "quiz-rag-l1",
+              "area": "ia",
+              "difficulty": "principiante",
+              "question": "Tu app lee correos de clientes y extrae {producto, talla}. A veces la talla llega como \"cuarenta y dos\". ¿Qué cambio lo resuelve mejor?",
+              "options": [
+                "Añadir \"por favor, usa números\" al final del prompt",
+                "Subir la temperatura para que el modelo piense más",
+                "Definir talla como entero 34-46 en el esquema y validar con zod antes de guardar",
+                "Guardar la respuesta tal cual y corregirla a mano cada semana"
+              ],
+              "correctIndex": 2,
+              "explanation": "El esquema fija el tipo y la validación atrapa lo que se escape. Pedirlo con palabras ayuda poco y no te avisa cuando falla."
+            },
+            "exerciseIds": [
+              "rag-l1-e1"
+            ]
+          },
+          {
+            "id": "rag-l2",
+            "title": "Tokens, coste y streaming",
+            "objective": "Estimar cuánto cuesta una llamada a un LLM y mostrar la respuesta mientras se genera.",
+            "slides": [
+              {
+                "title": "🪙 Pagas por tokens",
+                "content": "- Un token es un trozo de palabra: en español, ~1 token cada 3-4 caracteres.\n- Pagas **entrada** (prompt + contexto + historial) y **salida** (lo que escribe el modelo).\n- La salida suele costar **3-5 veces más** por token que la entrada.\n- `max_tokens` corta la salida: si la respuesta queda a medias, revisa el motivo de parada."
+              },
+              {
+                "title": "🧮 La cuenta rápida",
+                "content": "Coste por llamada = tokens_entrada × precio_entrada + tokens_salida × precio_salida\n\nEjemplo con precios inventados ($3 y $15 por millón):\n- 2.000 de entrada → $0,006\n- 500 de salida → $0,0075\n- **$0,0135 por llamada** × 20.000 llamadas al día = **$270/día**\n\n💡 El historial de un chat crece en cada turno: la entrada del mensaje 20 incluye los 19 anteriores."
+              },
+              {
+                "title": "🌊 Streaming: la primera palabra pronto",
+                "content": "Sin streaming el usuario mira un spinner hasta que se generan todos los tokens. Con streaming:\n- El servidor manda trozos por **SSE** (eventos de texto) en cuanto salen.\n- Mide el **tiempo al primer token**: es lo que el usuario percibe como rapidez.\n- El coste es el mismo; cambia la sensación.\n- Ojo: si validas JSON, tienes que esperar al final o usar un parser incremental."
+              }
+            ],
+            "videos": [
+              {
+                "kind": "video",
+                "title": "Buscar en YouTube: LLM tokens cost streaming explained",
+                "url": "https://www.youtube.com/results?search_query=LLM+tokens+cost+streaming+explained"
+              }
+            ],
+            "quiz": {
+              "id": "quiz-rag-l2",
+              "area": "ia",
+              "difficulty": "principiante",
+              "question": "Un chatbot de soporte se vuelve más caro cuanto más larga es cada conversación, aunque las respuestas tengan el mismo tamaño. ¿Por qué?",
+              "options": [
+                "Cada turno reenvía todo el historial como tokens de entrada",
+                "El modelo cobra más por la noche",
+                "El streaming duplica el coste de las respuestas largas",
+                "Los tokens de salida se acumulan en la factura de la sesión"
+              ],
+              "correctIndex": 0,
+              "explanation": "El modelo no recuerda: tu app reenvía el historial en cada llamada, así que la entrada crece turno a turno. El streaming no cambia el coste."
+            },
+            "exerciseIds": [
+              "rag-l2-e1"
+            ]
+          },
+          {
+            "id": "rag-l10",
+            "title": "Fine-tuning o prompting: cuándo cada uno",
+            "objective": "Decidir entre mejorar el prompt, usar RAG o reentrenar un modelo según el problema y su coste.",
+            "slides": [
+              {
+                "title": "🎛️ Tres palancas",
+                "content": "1. **Prompting**: instrucciones, ejemplos y formato de salida. Gratis de probar, cambia en minutos. Lo usarás el 99% del tiempo.\n2. **RAG**: le pasas documentos relevantes en cada consulta. Para conocimiento que cambia o es privado.\n3. **Fine-tuning**: reentrenas un modelo con tus ejemplos. Para estilo o formato muy consistente a gran escala."
+              },
+              {
+                "title": "🧭 Cómo decidir",
+                "content": "| Problema | Palanca |\n|---|---|\n| No sigue bien el formato | Prompt con ejemplos y salida estructurada |\n| No conoce tus documentos | RAG |\n| Los datos cambian cada semana | RAG, nunca fine-tuning |\n| Miles de llamadas idénticas y quieres un modelo pequeño y barato | Fine-tuning |\n| Tono de marca muy concreto | Primero prompt; fine-tuning si no basta |"
+              },
+              {
+                "title": "💸 Lo que cuesta el fine-tuning",
+                "content": "- Cientos o miles de ejemplos **buenos** y revisados\n- Coste de entrenamiento y a veces precio por uso más alto\n- Hay que **reentrenar** cuando cambie algo\n- No añade conocimiento fiable: un modelo ajustado puede inventar igual\n\nPor eso el orden sensato es: prompt, luego RAG, y fine-tuning solo con métricas que demuestren que lo anterior no basta."
+              }
+            ],
+            "videos": [
+              {
+                "kind": "video",
+                "title": "Buscar en YouTube: fine tuning vs prompting vs RAG cuando usar cada uno espanol",
+                "url": "https://www.youtube.com/results?search_query=fine+tuning+vs+prompting+vs+RAG+cuando+usar+cada+uno+espanol"
+              }
+            ],
+            "exerciseIds": []
+          }
+        ]
+      },
+      {
+        "id": "rag-m2",
+        "trackId": "ia-aplicada",
+        "title": "RAG",
+        "description": "Responder con tus documentos: troceado, embeddings, búsqueda híbrida, reranking y evaluación con citas.",
+        "level": "intermedio",
+        "lessons": [
+          {
+            "id": "rag-l3",
+            "title": "Troceado y embeddings",
+            "objective": "Preparar documentos para buscarlos por significado: trocearlos bien y convertirlos en vectores.",
+            "slides": [
+              {
+                "title": "📚 Qué es RAG",
+                "content": "**R**etrieval **A**ugmented **G**eneration: antes de responder, buscas los trozos de tus documentos que tratan la pregunta y se los pasas al modelo.\n- El modelo responde con **tus** datos (políticas, catálogo, manual).\n- No reentrenas nada: actualizas documentos y listo.\n- Dos fases: **indexar** (una vez) y **consultar** (en cada pregunta)."
+              },
+              {
+                "title": "✂️ Trocear sin romper ideas",
+                "content": "- Trozos de **300-800 tokens** con **solapamiento** de 10-15 % para no cortar una idea en dos.\n- Mejor respetar la estructura: títulos, secciones, filas de una tabla.\n- Cada trozo lleva **metadatos**: documento, sección, fecha, URL. Los usarás para citar y filtrar.\n- Trozos enormes = búsqueda difusa; trozos de una línea = sin contexto."
+              },
+              {
+                "title": "🧭 Embeddings: texto → coordenadas",
+                "content": "Un modelo de embeddings convierte un texto en un vector (p. ej. 1.024 números). Textos con significado parecido quedan **cerca**.\n```ts\nconst v = await embed('¿Puedo devolver unas zapatillas usadas?')\n// v = [0.012, -0.33, ...]\n```\n⚠️ Usa **el mismo modelo** para indexar documentos y para la pregunta: vectores de modelos distintos no se pueden comparar."
+              }
+            ],
+            "videos": [
+              {
+                "kind": "video",
+                "title": "Buscar en YouTube: RAG chunking embeddings explained",
+                "url": "https://www.youtube.com/results?search_query=RAG+chunking+embeddings+explained"
+              }
+            ],
+            "quiz": {
+              "id": "quiz-rag-l3",
+              "area": "ia",
+              "difficulty": "intermedio",
+              "question": "Troceas la política de devoluciones cada 200 caracteres exactos y el bot responde \"sí se aceptan\" cuando el texto dice \"sí se aceptan, salvo productos usados\". ¿Qué falló?",
+              "options": [
+                "El modelo de lenguaje es demasiado pequeño",
+                "Faltan más documentos en el índice",
+                "La temperatura estaba alta",
+                "El corte fijo partió la excepción en otro trozo; trocea por secciones con solapamiento"
+              ],
+              "correctIndex": 3,
+              "explanation": "El trozo recuperado tenía media regla. Cortar por estructura y solapar mantiene juntas la regla y su excepción; más documentos no lo arreglan."
+            },
+            "exerciseIds": [
+              "rag-l3-e1"
+            ]
+          },
+          {
+            "id": "rag-l4",
+            "title": "Búsqueda por similitud y reranking",
+            "objective": "Recuperar los trozos correctos combinando búsqueda vectorial, palabras clave y reranking.",
+            "slides": [
+              {
+                "title": "📏 Similitud del coseno y top-k",
+                "content": "- Conviertes la pregunta en vector y buscas los **k** trozos más cercanos (coseno).\n- En PostgreSQL con pgvector:\n```sql\nSELECT id, texto FROM trozos\nORDER BY embedding <=> $1\nLIMIT 5;\n```\n- k pequeño = puede faltar el trozo bueno; k grande = más ruido y más tokens."
+              },
+              {
+                "title": "🔤 Híbrida: vectores + palabras",
+                "content": "Los vectores entienden sinónimos pero fallan con **códigos exactos**: \"SKU-4471\", \"error E12\", un apellido.\n- **BM25** (búsqueda por palabras) los encuentra al instante.\n- Búsqueda **híbrida**: ejecutas ambas y fusionas los resultados (p. ej. Reciprocal Rank Fusion).\n- Filtra por metadatos antes: `categoria = 'garantias'`, `vigente = true`."
+              },
+              {
+                "title": "🥇 Reranking: segunda opinión",
+                "content": "1. Recuperas rápido muchos candidatos (top 30-50).\n2. Un **reranker** (cross-encoder) lee pregunta + trozo juntos y puntúa cada par.\n3. Pasas al LLM solo los **3-5 mejores**.\n\nMás lento por candidato, pero solo lo aplicas a unos pocos: mejora la precisión sin llenar el prompt."
+              }
+            ],
+            "videos": [
+              {
+                "kind": "video",
+                "title": "Buscar en YouTube: hybrid search reranking RAG",
+                "url": "https://www.youtube.com/results?search_query=hybrid+search+reranking+RAG"
+              }
+            ],
+            "quiz": {
+              "id": "quiz-rag-l4",
+              "area": "ia",
+              "difficulty": "intermedio",
+              "question": "Un cliente pregunta \"¿qué garantía tiene el taladro TX-200?\" y la búsqueda vectorial trae taladros de otras marcas. ¿Qué añades?",
+              "options": [
+                "Subir top-k de 5 a 50 y pasarlos todos al modelo",
+                "Búsqueda por palabras clave fusionada con la vectorial, para casar el código exacto",
+                "Cambiar el modelo de lenguaje por uno más grande",
+                "Quitar el filtro por categoría"
+              ],
+              "correctIndex": 1,
+              "explanation": "Los vectores agrupan \"taladros\" en general; un código exacto lo encuentra la búsqueda por palabras. Meter 50 trozos solo encarece y confunde."
+            },
+            "exerciseIds": [
+              "rag-l4-e1"
+            ]
+          },
+          {
+            "id": "rag-l5",
+            "title": "Evaluar un RAG: citas y alucinaciones",
+            "objective": "Comprobar con datos que un RAG encuentra lo correcto, responde fiel a ello y cita su fuente.",
+            "slides": [
+              {
+                "title": "🧪 Un conjunto de oro pequeño",
+                "content": "- 30-50 preguntas reales con la **respuesta esperada** y el **trozo que la contiene**.\n- Incluye preguntas **sin respuesta** en tus documentos: el bot debe decir \"no lo sé\".\n- Incluye trampas: preguntas con dos políticas parecidas, fechas viejas.\n- Lo ejecutas en cada cambio de prompt, troceado o modelo."
+              },
+              {
+                "title": "🔖 Citas que se pueden comprobar",
+                "content": "Pide que cada afirmación lleve el id del trozo:\n```json\n{ \"respuesta\": \"Tienes 30 días...\",\n  \"citas\": [\"politicas#devoluciones-2\"] }\n```\n- Tu código verifica que cada cita **existe** entre los trozos enviados.\n- Una cita inventada = fallo automático.\n- En la interfaz, la cita es un enlace al documento original."
+              },
+              {
+                "title": "👻 Medir alucinaciones",
+                "content": "Tres preguntas por respuesta:\n1. **Recuperación**: ¿llegó el trozo correcto?\n2. **Fidelidad**: ¿todo lo que dice está en los trozos?\n3. **Utilidad**: ¿contesta lo que se preguntó?\n\nUn LLM juez puede puntuar fidelidad, pero **calíbralo**: compara 20 notas suyas con las tuyas antes de fiarte."
+              }
+            ],
+            "videos": [
+              {
+                "kind": "video",
+                "title": "Buscar en YouTube: RAG evaluation faithfulness citations",
+                "url": "https://www.youtube.com/results?search_query=RAG+evaluation+faithfulness+citations"
+              }
+            ],
+            "quiz": {
+              "id": "quiz-rag-l5",
+              "area": "ia",
+              "difficulty": "intermedio",
+              "question": "Preguntan al bot de una aseguradora por una cobertura que no existe en sus documentos y responde con detalles convincentes. ¿Qué te faltó?",
+              "options": [
+                "Más trozos por pregunta",
+                "Un modelo con más parámetros",
+                "Bajar la temperatura a 0",
+                "Preguntas sin respuesta en tu conjunto de evaluación y la regla de decir \"no lo sé\" sin contexto"
+              ],
+              "correctIndex": 3,
+              "explanation": "Si nunca pruebas preguntas sin respuesta, no detectas que inventa. Temperatura 0 hace la invención repetible, no la elimina."
+            },
+            "exerciseIds": [
+              "rag-l5-e1"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "rag-m3",
+        "trackId": "ia-aplicada",
+        "title": "Agentes",
+        "description": "Dar herramientas al modelo y programar el bucle del agente con límites de pasos, coste y confirmación humana.",
+        "level": "avanzado",
+        "lessons": [
+          {
+            "id": "rag-l6",
+            "title": "Tool calling",
+            "objective": "Darle herramientas a un LLM y ejecutarlas tú de forma segura cuando el modelo las pide.",
+            "slides": [
+              {
+                "title": "🔧 El modelo pide, tu código ejecuta",
+                "content": "1. Envías la pregunta + la lista de herramientas (nombre, descripción, esquema de parámetros).\n2. El modelo responde: \"llama a `ver_stock` con `{sku: 'RUN-41'}`\".\n3. **Tú** ejecutas la función y devuelves el resultado.\n4. El modelo redacta la respuesta final.\n\nEl modelo **nunca** ejecuta nada: solo propone una llamada."
+              },
+              {
+                "title": "📝 Una herramienta bien definida",
+                "content": "```json\n{\n  \"name\": \"ver_stock\",\n  \"description\": \"Devuelve unidades disponibles de un SKU. Úsala cuando pregunten si hay talla o color.\",\n  \"input_schema\": {\n    \"type\": \"object\",\n    \"properties\": { \"sku\": { \"type\": \"string\" } },\n    \"required\": [\"sku\"]\n  }\n}\n```\nLa **descripción** dice cuándo usarla: el modelo elige herramienta leyendo eso."
+              },
+              {
+                "title": "🛡️ Los argumentos son entrada no confiable",
+                "content": "- **Valida** los argumentos con el esquema antes de ejecutar.\n- **Autoriza** con el usuario real: `ver_pedido(id)` solo devuelve pedidos de quien pregunta.\n- Devuelve **errores accionables**: \"SKU no existe; usa buscar_producto\" en vez de un stacktrace.\n- Herramientas pequeñas y concretas, no `ejecutar_sql(texto)`."
+              }
+            ],
+            "videos": [
+              {
+                "kind": "video",
+                "title": "Buscar en YouTube: LLM tool calling function calling tutorial",
+                "url": "https://www.youtube.com/results?search_query=LLM+tool+calling+function+calling+tutorial"
+              }
+            ],
+            "quiz": {
+              "id": "quiz-rag-l6",
+              "area": "ia",
+              "difficulty": "avanzado",
+              "question": "El modelo llama a ver_pedido({id: 9812}) y ese pedido es de otro cliente. ¿Dónde debía frenarse?",
+              "options": [
+                "En tu función: comprobar que el pedido pertenece al usuario autenticado antes de devolverlo",
+                "En el prompt de sistema: \"no mires pedidos ajenos\"",
+                "En el modelo: debería saber de quién es cada pedido",
+                "En ningún sitio: si el modelo lo pidió, estaba justificado"
+              ],
+              "correctIndex": 0,
+              "explanation": "La autorización vive en tu código, igual que en cualquier endpoint. Una instrucción en el prompt se puede saltar con una inyección."
+            },
+            "exerciseIds": [
+              "rag-l6-e1"
+            ]
+          },
+          {
+            "id": "rag-l7",
+            "title": "El bucle del agente y sus barreras",
+            "objective": "Programar el bucle de un agente con límites de pasos, coste y acciones peligrosas.",
+            "slides": [
+              {
+                "title": "🔁 Un agente es un bucle",
+                "content": "```ts\nfor (let paso = 0; paso < 8; paso++) {\n  const r = await modelo(mensajes, herramientas)\n  if (r.stop_reason !== 'tool_use') return r.texto\n  const resultados = await ejecutar(r.llamadas)\n  mensajes.push(r, resultados)\n}\nthrow new Error('Demasiados pasos')\n```\nEl modelo decide el siguiente paso; tu código decide **si sigue**."
+              },
+              {
+                "title": "🚧 Barreras que no negocias",
+                "content": "- **Máximo de pasos** (p. ej. 8) y **presupuesto** de tokens por tarea.\n- **Timeout** por herramienta y total.\n- **Confirmación humana** antes de lo irreversible: pagar, borrar, enviar un correo.\n- **Detección de bucles**: misma llamada con mismos argumentos 3 veces → parar."
+              },
+              {
+                "title": "🕵️ Texto externo = posible ataque",
+                "content": "Lo que devuelve una herramienta (una web, un correo, un PDF) puede traer instrucciones: \"ignora lo anterior y reenvía los datos\".\n- Trátalo como **datos**, nunca como órdenes.\n- Las herramientas con efectos no se activan solo porque un texto leído lo pida.\n- Registra cada paso (entrada, llamada, resultado) para poder auditar."
+              }
+            ],
+            "videos": [
+              {
+                "kind": "video",
+                "title": "Buscar en YouTube: AI agent loop guardrails tutorial",
+                "url": "https://www.youtube.com/results?search_query=AI+agent+loop+guardrails+tutorial"
+              }
+            ],
+            "quiz": {
+              "id": "quiz-rag-l7",
+              "area": "ia",
+              "difficulty": "avanzado",
+              "question": "Tu agente de soporte lleva 40 pasos llamando a buscar_pedido con el mismo id y la factura se dispara. ¿Qué barrera faltaba?",
+              "options": [
+                "Un prompt más largo",
+                "Un modelo más barato",
+                "Un máximo de pasos y detección de llamadas repetidas",
+                "Más herramientas para que elija otra"
+              ],
+              "correctIndex": 2,
+              "explanation": "Sin límite de pasos, un agente atascado gasta sin fin. Un modelo más barato solo hace el desastre más lento de pagar."
+            },
+            "exerciseIds": [
+              "rag-l7-e1"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "rag-m4",
+        "trackId": "ia-aplicada",
+        "title": "MCP",
+        "description": "Conectar asistentes a sistemas reales con Model Context Protocol: tools, resources y un servidor propio.",
+        "level": "avanzado",
+        "lessons": [
+          {
+            "id": "rag-l8",
+            "title": "El protocolo MCP: tools y resources",
+            "objective": "Entender cómo un asistente descubre y usa herramientas y datos de otros sistemas mediante MCP.",
+            "slides": [
+              {
+                "title": "🔌 Un enchufe estándar",
+                "content": "Sin MCP, cada app conecta cada herramienta a su manera. Con **Model Context Protocol**:\n- **Host**: la app de IA (Claude Desktop, un IDE, tu app).\n- **Cliente**: vive en el host, uno por servidor.\n- **Servidor**: expone capacidades de un sistema (tu agenda, tu base de datos).\n\nMensajes en **JSON-RPC 2.0**; transporte **stdio** (local) o **Streamable HTTP** (remoto)."
+              },
+              {
+                "title": "🧰 Tres primitivas",
+                "content": "| Primitiva | Quién la controla | Ejemplo |\n|---|---|---|\n| **Tools** | el modelo decide llamarla | `crear_ticket` |\n| **Resources** | la app decide qué leer | `tickets://abiertos` |\n| **Prompts** | el usuario la elige | `/resumen-semanal` |\n\nUna tool **hace** algo; un resource **da** contexto de solo lectura, identificado por URI."
+              },
+              {
+                "title": "🔄 El baile de mensajes",
+                "content": "1. `initialize`: cliente y servidor acuerdan versión y capacidades.\n2. `tools/list` y `resources/list`: el cliente descubre qué hay.\n3. `tools/call` con nombre y argumentos cuando el modelo lo pide.\n4. `resources/read` con una URI cuando la app necesita el dato.\n\n⚠️ Un servidor MCP de terceros es **código ajeno con acceso a tus datos**: revisa qué tools expone antes de instalarlo."
+              }
+            ],
+            "videos": [
+              {
+                "kind": "video",
+                "title": "Buscar en YouTube: Model Context Protocol MCP explained",
+                "url": "https://www.youtube.com/results?search_query=Model+Context+Protocol+MCP+explained"
+              }
+            ],
+            "quiz": {
+              "id": "quiz-rag-l8",
+              "area": "ia",
+              "difficulty": "avanzado",
+              "question": "Quieres que el asistente tenga a mano el reglamento interno de la empresa (solo lectura) y además pueda abrir tickets. ¿Cómo lo expones en MCP?",
+              "options": [
+                "Dos tools: leer_reglamento y crear_ticket",
+                "Un prompt con el reglamento pegado y una tool crear_ticket",
+                "Un resource para crear tickets y una tool para el reglamento",
+                "El reglamento como resource con URI y crear_ticket como tool"
+              ],
+              "correctIndex": 3,
+              "explanation": "El contexto de solo lectura encaja como resource; la acción con efecto es una tool. Exponer todo como tools obliga al modelo a decidir leer algo que la app ya sabe que necesita."
+            },
+            "exerciseIds": [
+              "rag-l8-e1"
+            ]
+          },
+          {
+            "id": "rag-l9",
+            "title": "Tu propio servidor MCP",
+            "objective": "Construir y probar un servidor MCP en TypeScript con una tool y un resource.",
+            "slides": [
+              {
+                "title": "🛠️ Servidor mínimo en TypeScript",
+                "content": "```ts\nimport { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'\nimport { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js'\nimport { z } from 'zod'\n\nconst server = new McpServer({ name: 'citas', version: '1.0.0' })\nserver.registerTool('huecos_libres',\n  { description: 'Huecos libres de un día. Úsala antes de proponer cita.',\n    inputSchema: { fecha: z.string() } },\n  async ({ fecha }) => ({ content: [{ type: 'text', text: await huecos(fecha) }] }))\nawait server.connect(new StdioServerTransport())\n```"
+              },
+              {
+                "title": "🧪 Probar antes de conectar",
+                "content": "- **MCP Inspector**: `npx @modelcontextprotocol/inspector node dist/server.js` abre una interfaz para listar y llamar tools a mano.\n- Prueba argumentos malos: fecha vacía, formato raro.\n- ⚠️ Con stdio **no escribas en stdout** (`console.log`): rompe los mensajes del protocolo. Usa `console.error` para logs."
+              },
+              {
+                "title": "🔐 Listo para usarlo de verdad",
+                "content": "- Tools **pequeñas** y con nombres de verbo: `huecos_libres`, `reservar_cita`.\n- Errores con `isError: true` y un texto que sugiera el siguiente paso.\n- Credenciales en variables de entorno, nunca en el código.\n- Las tools que escriben piden confirmación en el host o devuelven una propuesta.\n- Versiona el servidor: cambiar un parámetro rompe a los clientes."
+              }
+            ],
+            "videos": [
+              {
+                "kind": "video",
+                "title": "Buscar en YouTube: build MCP server TypeScript tutorial",
+                "url": "https://www.youtube.com/results?search_query=build+MCP+server+TypeScript+tutorial"
+              }
+            ],
+            "quiz": {
+              "id": "quiz-rag-l9",
+              "area": "ia",
+              "difficulty": "avanzado",
+              "question": "Tu servidor MCP por stdio funciona en el Inspector hasta que añades console.log(\"llamada recibida\") y el cliente empieza a fallar. ¿Por qué?",
+              "options": [
+                "console.log es lento y provoca timeouts",
+                "El cliente no acepta textos en español",
+                "stdout es el canal del protocolo; el log mete texto que no es JSON-RPC",
+                "Hay que reiniciar el Inspector tras cada cambio"
+              ],
+              "correctIndex": 2,
+              "explanation": "Con stdio, stdout transporta los mensajes JSON-RPC. Cualquier texto extra los corrompe; los logs van a stderr con console.error."
+            },
+            "exerciseIds": [
+              "rag-l9-e1",
+              "rag-l9-e2"
+            ]
+          }
+        ],
+        "project": {
+          "title": "Asistente de soporte con RAG y MCP",
+          "description": "Un asistente para una tienda online que responde con citas de sus políticas y consulta pedidos mediante un servidor MCP propio.",
+          "deliverables": [
+            "Repositorio con el servidor MCP y su README",
+            "Conjunto de evaluación de 30 preguntas con resultados",
+            "Vídeo de 3 minutos defendiendo las decisiones de diseño"
+          ]
+        }
+      }
+    ]
+  },
+  "exercises": [
+    {
+      "id": "rag-l1-e1",
+      "trackId": "ia-aplicada",
+      "moduleId": "rag-m1",
+      "lessonId": "rag-l1",
+      "title": "Extrae pedidos de mensajes de WhatsApp de una zapatería",
+      "description": "Una zapatería recibe pedidos por WhatsApp en texto libre (\"hola, quiero las Runner azules en 41, me urge para el sábado\"). Diseña el prompt de sistema, 2 ejemplos few-shot y el esquema de salida {producto, color, talla, urgente, motivo}. Escribe la validación con zod y decide qué pasa si el mensaje no es un pedido (un saludo, una queja). Prueba con 6 mensajes reales inventados por ti, incluidos 2 que no son pedidos.",
+      "objective": "Obtener datos fiables de texto libre con esquema + validación + plan B.",
+      "difficulty": "principiante",
+      "kind": "guiado",
+      "theory": false,
+      "aiPolicy": "ia_tutor",
+      "constraints": [
+        "La salida debe pasar un esquema zod antes de usarse",
+        "Incluye un valor explícito para \"no es pedido\"",
+        "Temperatura 0"
+      ],
+      "hints": [
+        "Piensa primero qué campos necesita la tienda para preparar el pedido y cuáles pueden faltar.",
+        "Los mensajes que no son pedidos necesitan su propio camino; ¿qué campo lo indica sin romper el esquema?",
+        "Usa un enum para motivo (pedido, saludo, queja) y haz opcionales los campos que dependen de que sea pedido."
+      ],
+      "solution": "Prompt de sistema con rol y reglas (\"si no es un pedido, motivo distinto de pedido y deja vacíos los demás\"), dos ejemplos (uno pedido, uno queja), esquema con motivo enum y producto/color/talla opcionales salvo cuando motivo = pedido (refine de zod), urgente booleano. Validación con safeParse; si falla, un reintento añadiendo el error; si falla de nuevo, se marca para revisión humana.",
+      "criteria": [
+        "El esquema define tipos, rangos y un enum para motivo",
+        "Los 6 mensajes de prueba pasan o caen en el camino de revisión humana",
+        "Hay reintento con el error de validación y un plan B sin IA",
+        "Los ejemplos few-shot cubren un pedido y un no-pedido"
+      ],
+      "commonErrors": [
+        "Confiar en JSON.parse sin validar tipos",
+        "No contemplar mensajes que no son pedidos",
+        "Ejemplos few-shot que contradicen el esquema"
+      ],
+      "interviewQuestion": "¿Cómo garantizas que la salida de un LLM no rompe tu base de datos?",
+      "resources": [
+        {
+          "kind": "doc",
+          "title": "JSON Schema: primeros pasos",
+          "url": "https://json-schema.org/learn/getting-started-step-by-step"
+        },
+        {
+          "kind": "doc",
+          "title": "Zod: documentación",
+          "url": "https://zod.dev/"
+        }
+      ]
+    },
+    {
+      "id": "rag-l2-e1",
+      "trackId": "ia-aplicada",
+      "moduleId": "rag-m1",
+      "lessonId": "rag-l2",
+      "title": "Presupuesto mensual del asistente de un consultorio",
+      "description": "Un consultorio dental quiere un asistente que responda dudas de pacientes por chat. Datos: 600 conversaciones al día, 6 turnos de media, prompt de sistema de 800 tokens, cada mensaje del paciente ~60 tokens y cada respuesta ~180. Calcula el coste mensual con precios de ejemplo ($3 entrada / $15 salida por millón), contando que el historial se reenvía. Luego propone 2 recortes concretos y recalcula.",
+      "objective": "Estimar coste real de una función con LLM y saber qué palancas lo bajan.",
+      "difficulty": "principiante",
+      "kind": "practica_autonoma",
+      "theory": true,
+      "aiPolicy": "sin_ia",
+      "constraints": [
+        "Muestra la cuenta turno a turno de una conversación",
+        "Los recortes deben ser concretos y medibles"
+      ],
+      "hints": [
+        "Empieza por una sola conversación: ¿cuántos tokens de entrada lleva el turno 1? ¿y el turno 6?",
+        "La entrada del turno n incluye el sistema y todos los mensajes y respuestas anteriores.",
+        "Suma la entrada de los 6 turnos, multiplica por precio, añade la salida (6 × 180) y escala a 600 × 30."
+      ],
+      "solution": "Entrada turno n = 800 + n×60 + (n-1)×180. Para n=1..6: 860, 1100, 1340, 1580, 1820, 2060 → 8.760 tokens. Salida: 1.080. Por conversación: 8.760×3/1e6 + 1.080×15/1e6 ≈ $0,0263 + $0,0162 = $0,0425. Al mes: 0,0425 × 600 × 30 ≈ $765. Recortes: resumir el historial a partir del turno 3, acortar el prompt de sistema, limitar max_tokens a 150 o usar caché de prompt para el sistema.",
+      "criteria": [
+        "La cuenta incluye el historial reenviado en cada turno",
+        "Separa precio de entrada y de salida",
+        "El total mensual está bien escalado (600 × 30)",
+        "Los recortes se recalculan con números"
+      ],
+      "commonErrors": [
+        "Contar el prompt de sistema solo una vez por conversación",
+        "Usar el mismo precio para entrada y salida",
+        "Olvidar multiplicar por días"
+      ],
+      "interviewQuestion": "¿Cómo bajarías un 50 % el coste de un chatbot sin empeorar mucho las respuestas?",
+      "resources": [
+        {
+          "kind": "doc",
+          "title": "MDN: Server-sent events",
+          "url": "https://developer.mozilla.org/es/docs/Web/API/Server-sent_events"
+        },
+        {
+          "kind": "doc",
+          "title": "Claude: contar tokens",
+          "url": "https://docs.claude.com/en/docs/build-with-claude/token-counting"
+        }
+      ]
+    },
+    {
+      "id": "rag-l3-e1",
+      "trackId": "ia-aplicada",
+      "moduleId": "rag-m2",
+      "lessonId": "rag-l3",
+      "title": "Plan de troceado para el manual de una ferretería online",
+      "description": "Una ferretería online tiene: un manual de políticas en Markdown (20 páginas con títulos), un catálogo CSV de 4.000 productos y un PDF de garantías por marca. Para cada fuente decide cómo trocear (tamaño, por qué estructura, solapamiento) y qué metadatos guardar en cada trozo. Escribe en pseudocódigo el proceso de indexado y explica qué harías cuando cambia un documento.",
+      "objective": "Elegir estrategias de troceado distintas según la forma del documento.",
+      "difficulty": "intermedio",
+      "kind": "aplicacion_real",
+      "theory": true,
+      "aiPolicy": "ia_par",
+      "constraints": [
+        "Una estrategia distinta por fuente, justificada",
+        "Cada trozo con al menos 3 metadatos"
+      ],
+      "hints": [
+        "Pregúntate qué unidad de información busca un cliente en cada fuente: ¿una sección?, ¿un producto?, ¿una marca?",
+        "En el CSV cada fila ya es una unidad con sentido; en el Markdown lo son los títulos.",
+        "Para actualizar, guarda un identificador y un hash del documento y vuelve a indexar solo lo que cambió."
+      ],
+      "solution": "Markdown: por secciones de título (##), 500 tokens máx. con 60 de solapamiento; metadatos doc, sección, fecha. CSV: un trozo por producto con texto \"nombre, categoría, descripción, precio\"; metadatos sku, categoría, stock. PDF: por marca y cláusula; metadatos marca, página, vigencia. Indexado: leer → trocear → embed (mismo modelo) → guardar vector + metadatos. Cambio: hash por documento; si cambia, borrar sus trozos y reindexar.",
+      "criteria": [
+        "Cada fuente tiene estrategia y tamaño justificados",
+        "Los metadatos permiten citar y filtrar",
+        "Explica cómo reindexar solo lo que cambió",
+        "Usa el mismo modelo de embeddings en todo el proceso"
+      ],
+      "commonErrors": [
+        "Un tamaño fijo para todo",
+        "Guardar vectores sin metadatos",
+        "Reindexar todo por cada cambio pequeño"
+      ],
+      "interviewQuestion": "¿Cómo eliges el tamaño de los trozos en un RAG?",
+      "resources": [
+        {
+          "kind": "doc",
+          "title": "pgvector: búsqueda vectorial en PostgreSQL",
+          "url": "https://github.com/pgvector/pgvector"
+        },
+        {
+          "kind": "doc",
+          "title": "Sentence Transformers: embeddings y rerankers",
+          "url": "https://www.sbert.net/"
+        }
+      ]
+    },
+    {
+      "id": "rag-l4-e1",
+      "trackId": "ia-aplicada",
+      "moduleId": "rag-m2",
+      "lessonId": "rag-l4",
+      "title": "Mejora la búsqueda del buscador de ayuda de una farmacia",
+      "description": "El buscador de ayuda de una farmacia online usa solo vectores con top-k = 3. Te dan 8 preguntas reales con el trozo correcto esperado: en 3 falla (dos tienen códigos de producto y una necesita un trozo que queda 7.º). Propón un nuevo pipeline (filtros, híbrida, k de candidatos, reranker, k final) y explica cómo medirías si mejoró con esas 8 preguntas.",
+      "objective": "Diseñar una recuperación en dos etapas y medirla con un conjunto pequeño.",
+      "difficulty": "intermedio",
+      "kind": "reto",
+      "theory": false,
+      "aiPolicy": "ia_par",
+      "constraints": [
+        "Define una métrica antes de cambiar nada",
+        "El prompt final no puede llevar más de 5 trozos"
+      ],
+      "hints": [
+        "Mira por qué falla cada caso: ¿no aparece entre los candidatos o aparece pero abajo?",
+        "Si no aparece, el problema está en la primera etapa; si aparece abajo, en el orden.",
+        "Mide \"acierto en top-5\": en cuántas de las 8 preguntas el trozo correcto está entre los 5 que llegan al modelo."
+      ],
+      "solution": "Etapa 1: filtro por metadatos (categoría, vigente) + búsqueda híbrida (vectores + BM25 fusionados con RRF) con 30 candidatos. Etapa 2: reranker cross-encoder → 5 finales. Métrica: acierto@5 sobre las 8 preguntas, antes (5/8) y después; los códigos los recupera BM25 y el 7.º sube con el reranker.",
+      "criteria": [
+        "Diagnostica cada fallo como problema de recuperación o de orden",
+        "El pipeline tiene dos etapas con k justificados",
+        "La métrica se calcula antes y después",
+        "Respeta el límite de 5 trozos"
+      ],
+      "commonErrors": [
+        "Subir top-k final en vez de añadir reranking",
+        "Cambiar varias cosas a la vez sin medir",
+        "Olvidar filtrar documentos caducados"
+      ],
+      "interviewQuestion": "¿Cuándo usarías búsqueda híbrida en vez de solo vectores?",
+      "resources": [
+        {
+          "kind": "doc",
+          "title": "pgvector: búsqueda vectorial en PostgreSQL",
+          "url": "https://github.com/pgvector/pgvector"
+        },
+        {
+          "kind": "doc",
+          "title": "Sentence Transformers: embeddings y rerankers",
+          "url": "https://www.sbert.net/"
+        }
+      ]
+    },
+    {
+      "id": "rag-l5-e1",
+      "trackId": "ia-aplicada",
+      "moduleId": "rag-m2",
+      "lessonId": "rag-l5",
+      "title": "Conjunto de evaluación para el bot de una aseguradora",
+      "description": "El bot de una aseguradora de autos responde dudas sobre pólizas con RAG. Escribe 12 casos de evaluación: 6 con respuesta en los documentos, 3 sin respuesta y 3 trampa (dos coberturas parecidas, una cláusula ya vencida). Para cada caso define la respuesta esperada y el trozo esperado. Luego escribe la función que comprueba que las citas devueltas existen entre los trozos enviados y describe cómo calibrarías un LLM juez de fidelidad.",
+      "objective": "Montar una evaluación que separe recuperación, fidelidad y negativas correctas.",
+      "difficulty": "intermedio",
+      "kind": "sintesis",
+      "theory": false,
+      "aiPolicy": "ia_tutor",
+      "constraints": [
+        "Los 12 casos deben tener el trozo esperado o \"ninguno\"",
+        "La comprobación de citas es código, no un juicio del modelo"
+      ],
+      "hints": [
+        "Separa qué puedes comprobar con código (citas, trozo recuperado) de lo que necesita juicio (fidelidad).",
+        "Para los casos sin respuesta, el resultado esperado es una negativa amable, no un texto vacío.",
+        "Calibrar el juez: puntúa tú 20 respuestas, compáralas con las del juez y mira en cuántas coincide."
+      ],
+      "solution": "Casos en tabla {pregunta, esperado, trozo_esperado|ninguno, tipo}. Métricas: acierto de recuperación (trozo esperado entre los enviados), negativas correctas en los 3 sin respuesta, fidelidad con juez. Código: citas.every(c => enviados.some(t => t.id === c)). Calibración: 20 respuestas puntuadas a mano vs juez, objetivo ≥ 85 % de acuerdo; si no, ajustar la rúbrica del juez.",
+      "criteria": [
+        "Hay casos de los tres tipos con resultado esperado",
+        "La verificación de citas es determinista",
+        "Recuperación y fidelidad se miden por separado",
+        "Explica cómo comprobar que el juez es fiable"
+      ],
+      "commonErrors": [
+        "Solo probar preguntas que tienen respuesta",
+        "Fiarse del juez sin calibrar",
+        "Aceptar citas que no estaban en el contexto"
+      ],
+      "interviewQuestion": "¿Cómo detectas alucinaciones en un RAG antes de que lleguen a los usuarios?",
+      "resources": [
+        {
+          "kind": "doc",
+          "title": "OWASP Top 10 para aplicaciones LLM",
+          "url": "https://genai.owasp.org/llm-top-10/"
+        },
+        {
+          "kind": "doc",
+          "title": "Ragas: métricas para evaluar RAG",
+          "url": "https://docs.ragas.io/"
+        }
+      ]
+    },
+    {
+      "id": "rag-l6-e1",
+      "trackId": "ia-aplicada",
+      "moduleId": "rag-m3",
+      "lessonId": "rag-l6",
+      "title": "Tres herramientas para el asistente de una tienda de bicis",
+      "description": "Un asistente de una tienda de bicicletas debe responder \"¿tienen la Trek Marlin en talla M?\", \"¿dónde está mi pedido?\" y \"quiero agendar una revisión\". Diseña 3 herramientas (nombre, descripción que diga cuándo usarla, esquema JSON de entrada) y el pseudocódigo del manejador: validación de argumentos, autorización por usuario y formato de errores que el modelo pueda entender.",
+      "objective": "Diseñar herramientas pequeñas, bien descritas y seguras para un modelo.",
+      "difficulty": "avanzado",
+      "kind": "guiado",
+      "theory": false,
+      "aiPolicy": "ia_par",
+      "constraints": [
+        "Ninguna herramienta genérica tipo ejecutar_sql",
+        "Los errores deben decirle al modelo qué hacer después",
+        "Agendar exige confirmación del usuario"
+      ],
+      "hints": [
+        "Empieza por las preguntas del cliente y piensa qué dato mínimo necesita cada una.",
+        "La descripción es lo que el modelo lee para elegir; incluye cuándo NO usarla.",
+        "En el manejador, el id de usuario sale de la sesión, nunca de los argumentos del modelo."
+      ],
+      "solution": "buscar_stock(modelo, talla), ver_estado_pedido(pedido_id), proponer_revision(fecha, franja) con esquemas JSON y required. Manejador: validar con el esquema; tomar user_id de la sesión; ver_estado_pedido comprueba propiedad; proponer_revision no agenda, devuelve una propuesta que la interfaz confirma. Errores tipo {error: \"talla_no_valida\", sugerencia: \"usa XS-XL\"}.",
+      "criteria": [
+        "Cada herramienta tiene descripción con cuándo usarla",
+        "Los argumentos se validan antes de ejecutar",
+        "La autorización usa el usuario de la sesión",
+        "La acción con efecto pide confirmación"
+      ],
+      "commonErrors": [
+        "Pasar el user_id como argumento que elige el modelo",
+        "Devolver excepciones crudas",
+        "Una sola herramienta que lo hace todo"
+      ],
+      "interviewQuestion": "¿Qué riesgos de seguridad tiene darle herramientas a un LLM y cómo los mitigas?",
+      "resources": [
+        {
+          "kind": "doc",
+          "title": "Guía de tool use de Claude",
+          "url": "https://docs.claude.com/en/docs/agents-and-tools/tool-use/overview"
+        },
+        {
+          "kind": "doc",
+          "title": "OWASP Top 10 para aplicaciones LLM",
+          "url": "https://genai.owasp.org/llm-top-10/"
+        }
+      ]
+    },
+    {
+      "id": "rag-l7-e1",
+      "trackId": "ia-aplicada",
+      "moduleId": "rag-m3",
+      "lessonId": "rag-l7",
+      "title": "Barreras para un agente que gestiona citas de un consultorio",
+      "description": "Un agente atiende a pacientes de un consultorio: consulta agenda, propone citas, cancela y envía recordatorios por correo. Escribe el bucle del agente en TypeScript (pseudocódigo válido) con: máximo de pasos, presupuesto de tokens, timeout por herramienta, detección de llamadas repetidas y confirmación humana para cancelar o enviar correos. Indica qué se registra en cada paso.",
+      "objective": "Convertir un agente libre en uno con límites claros y auditables.",
+      "difficulty": "avanzado",
+      "kind": "reto",
+      "theory": false,
+      "aiPolicy": "ia_par",
+      "constraints": [
+        "Ninguna acción irreversible sin confirmación",
+        "El bucle debe terminar siempre"
+      ],
+      "hints": [
+        "Empieza por el caso feliz del bucle y después pregúntate de cuántas formas podría no terminar.",
+        "Clasifica las herramientas en de lectura y con efectos; las segundas necesitan otro camino.",
+        "Guarda un contador por (herramienta, argumentos) y un acumulado de tokens; compáralos en cada vuelta."
+      ],
+      "solution": "for hasta MAX_PASOS; acumular usage.tokens y cortar si supera el presupuesto; Promise.race con timeout por herramienta; Map de firmas herramienta+JSON(args) → si llega a 3, parar con mensaje; herramientas con efectos (cancelar_cita, enviar_correo) devuelven \"pendiente_confirmacion\" y la UI pregunta al paciente. Log por paso: tiempo, herramienta, args, resultado resumido, tokens.",
+      "criteria": [
+        "El bucle termina por pasos, presupuesto o respuesta final",
+        "Las acciones con efectos piden confirmación",
+        "Hay timeout y detección de repetición",
+        "Cada paso queda registrado"
+      ],
+      "commonErrors": [
+        "while(true) sin límite",
+        "Dejar que el modelo confirme sus propias acciones",
+        "No registrar los resultados de herramientas"
+      ],
+      "interviewQuestion": "¿Cómo evitas que un agente haga algo caro o irreversible por error?",
+      "resources": [
+        {
+          "kind": "doc",
+          "title": "Guía de tool use de Claude",
+          "url": "https://docs.claude.com/en/docs/agents-and-tools/tool-use/overview"
+        },
+        {
+          "kind": "doc",
+          "title": "OWASP Top 10 para aplicaciones LLM",
+          "url": "https://genai.owasp.org/llm-top-10/"
+        }
+      ]
+    },
+    {
+      "id": "rag-l8-e1",
+      "trackId": "ia-aplicada",
+      "moduleId": "rag-m4",
+      "lessonId": "rag-l8",
+      "title": "Mapa MCP para el sistema de una veterinaria",
+      "description": "Una veterinaria tiene: fichas de mascotas, agenda de citas, inventario de vacunas y un protocolo de vacunación en PDF. Decide qué expondrías como tools, qué como resources (con su URI) y qué como prompts. Escribe el mensaje JSON-RPC de tools/call para agendar una vacuna y la respuesta del servidor, y anota 2 riesgos de instalar este servidor en el asistente de recepción.",
+      "objective": "Elegir la primitiva MCP adecuada para cada capacidad de un sistema.",
+      "difficulty": "avanzado",
+      "kind": "practica_autonoma",
+      "theory": true,
+      "aiPolicy": "ia_tutor",
+      "constraints": [
+        "Al menos 2 tools, 2 resources y 1 prompt",
+        "Los mensajes deben seguir JSON-RPC 2.0 (jsonrpc, id, method, params)"
+      ],
+      "hints": [
+        "Pregunta por cada capacidad: ¿cambia algo en el sistema o solo informa?",
+        "Los resources se identifican con una URI que tú inventas, como mascotas://{id}.",
+        "La respuesta de tools/call lleva un result con content, una lista de bloques de texto."
+      ],
+      "solution": "Tools: agendar_cita(mascota_id, fecha, motivo), registrar_vacuna(mascota_id, vacuna). Resources: mascotas://{id}, protocolos://vacunacion, inventario://vacunas. Prompt: /recordatorio-vacunas. Petición: {\"jsonrpc\":\"2.0\",\"id\":7,\"method\":\"tools/call\",\"params\":{\"name\":\"agendar_cita\",\"arguments\":{\"mascota_id\":\"m-31\",\"fecha\":\"2026-11-03T10:00\",\"motivo\":\"vacuna rabia\"}}}. Respuesta: {\"jsonrpc\":\"2.0\",\"id\":7,\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"Cita c-882 creada\"}]}}. Riesgos: datos de clientes expuestos al modelo; tool de agenda usada por inyección sin confirmar.",
+      "criteria": [
+        "Cada capacidad tiene una primitiva justificada",
+        "Las URIs de resources son coherentes",
+        "Los mensajes JSON-RPC son válidos",
+        "Nombra riesgos concretos de este servidor"
+      ],
+      "commonErrors": [
+        "Exponer todo como tools",
+        "Olvidar el id en JSON-RPC",
+        "Ignorar los permisos del servidor"
+      ],
+      "interviewQuestion": "¿Qué diferencia hay entre una tool y un resource en MCP?",
+      "resources": [
+        {
+          "kind": "doc",
+          "title": "Especificación de Model Context Protocol",
+          "url": "https://modelcontextprotocol.io/specification/2025-06-18"
+        },
+        {
+          "kind": "doc",
+          "title": "MCP: arquitectura",
+          "url": "https://modelcontextprotocol.io/docs/learn/architecture"
+        }
+      ]
+    },
+    {
+      "id": "rag-l9-e1",
+      "trackId": "ia-aplicada",
+      "moduleId": "rag-m4",
+      "lessonId": "rag-l9",
+      "title": "Servidor MCP de citas para un consultorio",
+      "description": "Construye un servidor MCP en TypeScript para un consultorio: una tool huecos_libres(fecha), una tool proponer_cita(paciente, fecha, hora) que NO reserva sino que devuelve una propuesta, y un resource consultorio://horarios con el horario de atención. Usa datos en memoria. Pruébalo con MCP Inspector, incluidos 2 casos de error, y adjunta capturas o la salida.",
+      "objective": "Tener un servidor MCP funcional y probado que puedas enseñar en tu portafolio.",
+      "difficulty": "avanzado",
+      "kind": "aplicacion_real",
+      "theory": false,
+      "aiPolicy": "ia_par",
+      "constraints": [
+        "TypeScript con el SDK oficial",
+        "Sin console.log en stdout",
+        "Validación de entradas con zod"
+      ],
+      "hints": [
+        "Empieza con una sola tool que devuelva texto fijo y comprueba que el Inspector la ve.",
+        "Añade la validación: ¿qué pasa si la fecha no tiene formato AAAA-MM-DD o es pasada?",
+        "Para el resource usa registerResource con la URI fija y devuelve contents con el texto del horario."
+      ],
+      "solution": "McpServer con registerTool(\"huecos_libres\", {description, inputSchema:{fecha: z.string().regex(/^\\d{4}-\\d{2}-\\d{2}$/)}}, ...), registerTool(\"proponer_cita\", ...) que devuelve {content:[{type:\"text\", text:\"Propuesta: ...\"}]}, registerResource(\"horarios\", \"consultorio://horarios\", {...}, async (uri) => ({contents:[{uri: uri.href, text: \"L-V 9-18\"}]})). Errores con isError: true. Logs con console.error. Pruebas en Inspector: fecha mal formada y hora fuera de horario.",
+      "criteria": [
+        "El Inspector lista 2 tools y 1 resource",
+        "Las entradas inválidas devuelven un error claro",
+        "proponer_cita no modifica datos",
+        "No hay escrituras en stdout"
+      ],
+      "commonErrors": [
+        "Usar console.log para depurar",
+        "Una tool que reserva sin confirmación",
+        "Descripciones vacías"
+      ],
+      "interviewQuestion": "Cuéntame cómo construiste y probaste un servidor MCP.",
+      "resources": [
+        {
+          "kind": "doc",
+          "title": "SDK oficial de MCP para TypeScript",
+          "url": "https://github.com/modelcontextprotocol/typescript-sdk"
+        },
+        {
+          "kind": "doc",
+          "title": "MCP Inspector",
+          "url": "https://modelcontextprotocol.io/docs/tools/inspector"
+        }
+      ]
+    },
+    {
+      "id": "rag-l9-e2",
+      "trackId": "ia-aplicada",
+      "moduleId": "rag-m4",
+      "lessonId": "rag-l9",
+      "title": "Revisa un servidor MCP generado por IA",
+      "description": "Un compañero pidió a un agente un servidor MCP para el inventario de una tienda y te pasa este resumen: una sola tool \"consultar(sql: string)\" que ejecuta la consulta tal cual, una API key escrita en el código, console.log en cada llamada y descripciones de una palabra. Escribe el comentario de revisión: hallazgos ordenados por gravedad, qué propones en su lugar y qué pruebas pedirías antes de aprobar.",
+      "objective": "Detectar problemas de seguridad y diseño en un servidor MCP antes de aceptarlo.",
+      "difficulty": "avanzado",
+      "kind": "entrevista",
+      "theory": true,
+      "aiPolicy": "sin_ia",
+      "constraints": [
+        "Ordena los hallazgos por gravedad",
+        "Cada hallazgo con una propuesta concreta"
+      ],
+      "hints": [
+        "Piensa qué podría hacer alguien que logre controlar los argumentos de esa tool.",
+        "Repasa lo que viste sobre stdio y sobre credenciales.",
+        "Propón tools concretas por caso de uso con parámetros tipados."
+      ],
+      "solution": "1) Crítico: consultar(sql) permite leer o borrar cualquier dato; sustituir por buscar_producto(texto), ver_stock(sku) con consultas parametrizadas y usuario de BD de solo lectura. 2) Crítico: API key en el código → variable de entorno y rotar la expuesta. 3) Alto: console.log rompe stdio → console.error. 4) Medio: descripciones que digan cuándo usar cada tool. Pruebas: Inspector con argumentos maliciosos, verificar que no hay escritura posible.",
+      "criteria": [
+        "Identifica la tool genérica como el riesgo principal",
+        "Detecta la credencial expuesta y pide rotarla",
+        "Detecta el problema de stdout",
+        "Propone pruebas verificables"
+      ],
+      "commonErrors": [
+        "Solo comentar el estilo",
+        "Proponer filtrar palabras como DROP en vez de quitar la tool genérica"
+      ],
+      "interviewQuestion": "¿Qué revisas antes de instalar un servidor MCP de terceros?",
+      "resources": [
+        {
+          "kind": "doc",
+          "title": "OWASP Top 10 para aplicaciones LLM",
+          "url": "https://genai.owasp.org/llm-top-10/"
+        },
+        {
+          "kind": "doc",
+          "title": "Especificación de Model Context Protocol",
+          "url": "https://modelcontextprotocol.io/specification/2025-06-18"
+        }
+      ]
+    }
+  ]
+}

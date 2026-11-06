@@ -1,0 +1,961 @@
+{
+  "track": {
+    "id": "entrevistas",
+    "title": "Entrevistas, inglés técnico y Scrum",
+    "description": "Explica tu código en inglés, responde entrevistas con STAR y live coding, negocia con datos y trabaja en equipos Scrum.",
+    "area": "analisis",
+    "color": "#FF9F0A",
+    "source": "xara",
+    "modules": [
+      {
+        "id": "car-m1",
+        "trackId": "entrevistas",
+        "title": "Inglés técnico",
+        "description": "Vocabulario para explicar código y un pitch de 2 minutos de tu proyecto, en inglés y sin falsos amigos.",
+        "level": "principiante",
+        "lessons": [
+          {
+            "id": "car-l1",
+            "title": "Vocabulario para explicar tu código",
+            "objective": "Usar en inglés los verbos y frases con los que se explica código, evitando falsos amigos y errores de pronunciación típicos.",
+            "slides": [
+              {
+                "title": "🛠️ Verbos que dirás cada día",
+                "content": "| Inglés | Qué significa |\n|---|---|\n| **fetch** | traer datos de otro sitio |\n| **render** | pintar en pantalla |\n| **handle** | encargarse de (un error, un clic) |\n| **validate** | comprobar que algo es correcto |\n| **refactor** | reordenar sin cambiar lo que hace |\n| **ship** | publicar para los usuarios |\n\n> *This component **fetches** the orders and **renders** a table.*\n> (Este componente trae los pedidos y pinta una tabla.)"
+              },
+              {
+                "title": "🧩 Plantillas para explicar una función",
+                "content": "- *It **takes** a cart **and returns** the total.* → Recibe un carrito y devuelve el total.\n- *It's **responsible for** sending the email.* → Se encarga de enviar el correo.\n- ***Under the hood**, it uses a Map.* → Por dentro usa un Map.\n- *The **trade-off** is memory vs speed.* → El precio a pagar es memoria contra velocidad.\n- *It **breaks** when the list is empty.* → Falla con la lista vacía.\n\n🎯 Primero la **intención**, luego el detalle. Nadie quiere oír el código leído línea por línea."
+              },
+              {
+                "title": "🪤 Falsos amigos que delatan",
+                "content": "- **actually** = en realidad (no \"actualmente\" → *currently*)\n- **eventually** = al final (no \"eventualmente\" → *occasionally*)\n- **sensible** = sensato (\"sensible\" → *sensitive*: *sensitive data*)\n- **assist** = ayudar (\"asistir a una reunión\" → *attend*)\n- **realize** = darse cuenta (\"realizar\" → *carry out / do*)\n\n> ❌ *Actually I work with React.*\n> ✅ ***Currently** I work with React.* (Actualmente trabajo con React.)"
+              },
+              {
+                "title": "🔊 Palabras que se pronuncian distinto",
+                "content": "- **cache** → como *cash* (no \"cachei\")\n- **queue** → *kiu* (como la letra Q)\n- **height / width** → *jait* / *uidz*\n- **SQL** → *ese-kiu-el* o *síquel*, las dos valen\n- **null** → *nal*, con la *u* corta\n- **GUI** → *gúi*\n\n🎧 Truco: busca la palabra en el Cambridge Dictionary y repite el audio 3 veces antes de tu próxima entrevista."
+              }
+            ],
+            "videos": [
+              {
+                "kind": "video",
+                "title": "Buscar en YouTube: technical english for developers vocabulary",
+                "url": "https://www.youtube.com/results?search_query=technical+english+for+developers+vocabulary"
+              }
+            ],
+            "quiz": {
+              "id": "quiz-car-l1",
+              "area": "analisis",
+              "difficulty": "principiante",
+              "question": "En una entrevista quieres decir \"Actualmente mantengo la app de reservas de un consultorio\". ¿Qué frase es correcta?",
+              "options": [
+                "Actually, I maintain a booking app for a clinic.",
+                "Currently, I maintain a booking app for a clinic.",
+                "Eventually, I maintain a booking app for a clinic.",
+                "Actually, I am maintaining since a booking app for a clinic."
+              ],
+              "correctIndex": 1,
+              "explanation": "Currently = actualmente. Actually significa 'en realidad' y suena a que corriges algo; eventually significa 'al final'."
+            },
+            "exerciseIds": [
+              "car-l1-e1"
+            ]
+          },
+          {
+            "id": "car-l2",
+            "title": "Cuenta tu proyecto en 2 minutos (pitch)",
+            "objective": "Presentar un proyecto propio en inglés en 2 minutos: problema, solución, decisión técnica, resultado y aprendizaje.",
+            "slides": [
+              {
+                "title": "🎬 Los 5 bloques de un buen pitch",
+                "content": "1. **Problem** – qué dolía y a quién\n2. **What I built** – en una frase\n3. **How** – tecnologías + **una decisión** y su porqué\n4. **Result** – un número o un cambio visible\n5. **What I learned** – una lección honesta\n\n⏱️ 2 minutos ≈ **250 palabras** hablando tranquilo."
+              },
+              {
+                "title": "🦷 Ejemplo: app de reservas de un consultorio",
+                "content": "> *The clinic took every booking by phone.* (El consultorio tomaba las citas por teléfono.)\n> *I built a web app where patients choose a free slot.* (Hice una web donde el paciente elige un hueco libre.)\n> *I locked each slot in the database to avoid double bookings.* (Bloqueé cada hueco para evitar citas dobles.)\n> *Now 60% of bookings come through the app.* (Ahora el 60% de las citas llegan por la app.)\n\nCada frase hace **un solo** trabajo."
+              },
+              {
+                "title": "🚫 Lo que hace que el reclutador desconecte",
+                "content": "- Empezar con *\"So, basically, I used React, Node, Mongo, Docker…\"*\n- Decir **we** todo el rato → di **I** cuando fue tuyo\n- Ningún resultado: *\"and… that's it\"*\n- Pasar de 3 minutos\n\n✅ Cierra con algo que invite a preguntar: *\"Happy to go deeper into the booking logic.\"*"
+              },
+              {
+                "title": "🎙️ Cómo ensayarlo sin aburrirte",
+                "content": "- Escribe las 5 frases clave, **no** un guion entero\n- Grábate con el móvil y mide el tiempo\n- Escucha una vez y corrige **solo 2 cosas**\n- Repite al día siguiente: la segunda toma siempre suena más natural\n\n🧠 La meta no es memorizar, es poder contarlo aunque te interrumpan."
+              }
+            ],
+            "videos": [
+              {
+                "kind": "video",
+                "title": "Buscar en YouTube: how to present your project in a tech interview",
+                "url": "https://www.youtube.com/results?search_query=how+to+present+your+project+in+a+tech+interview"
+              }
+            ],
+            "quiz": {
+              "id": "quiz-car-l2",
+              "area": "analisis",
+              "difficulty": "principiante",
+              "question": "Tu pitch dura 3:30 y el reclutador se distrae a la mitad. Al revisarlo ves que 1:30 es la lista de tecnologías. ¿Qué cambias primero?",
+              "options": [
+                "Hablo más rápido para que quepa en 2 minutos",
+                "Quito el resultado final para ganar tiempo",
+                "Dejo solo las tecnologías clave y explico una decisión y su porqué",
+                "Añado más tecnologías para impresionar"
+              ],
+              "correctIndex": 2,
+              "explanation": "La lista de herramientas no cuenta la historia; una decisión con su razón demuestra criterio. Hablar más rápido solo lo hace más difícil de seguir."
+            },
+            "exerciseIds": [
+              "car-l2-e1",
+              "car-l2-e2"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "car-m2",
+        "trackId": "entrevistas",
+        "title": "La entrevista",
+        "description": "Preguntas conductuales con STAR, live coding narrado en voz alta y una negociación salarial basada en datos.",
+        "level": "intermedio",
+        "lessons": [
+          {
+            "id": "car-l3",
+            "title": "Preguntas conductuales con el método STAR",
+            "objective": "Responder preguntas del tipo 'cuéntame una vez que…' con historias reales, ordenadas con STAR y centradas en lo que hiciste tú.",
+            "slides": [
+              {
+                "title": "🎭 Qué buscan con 'Tell me about a time…'",
+                "content": "Quieren saber **cómo actuaste**, no cómo actuarías.\n\n- *Tell me about a time you made a mistake.* (Cuéntame un error que cometiste.)\n- *…you had a tight deadline.* (…una entrega muy justa.)\n- *…you disagreed with someone.* (…un desacuerdo.)\n- *…you learned something quickly.* (…algo que aprendiste rápido.)\n\n🎯 Detrás de cada una hay una pregunta real: ¿asumes responsabilidad? ¿sabes trabajar con otros?"
+              },
+              {
+                "title": "⭐ STAR y cuánto tiempo darle a cada parte",
+                "content": "| Parte | Qué cuentas | Peso |\n|---|---|---|\n| **S**ituation | contexto en 1-2 frases | 10% |\n| **T**ask | tu responsabilidad | 10% |\n| **A**ction | qué hiciste **tú**, paso a paso | 60% |\n| **R**esult | qué cambió, mejor con número | 20% |\n\n⚠️ El error más común: 1 minuto de contexto y 10 segundos de acción."
+              },
+              {
+                "title": "🗣️ Una respuesta completa en 30 segundos",
+                "content": "> **S:** *Our client's shop applied a discount twice after a release.* (La tienda aplicaba un descuento dos veces.)\n> **T:** *I owned that release.* (Esa publicación era mía.)\n> **A:** *I rolled it back in ten minutes, told the client, and added a test for that case.* (Lo revertí, avisé y añadí un test.)\n> **R:** *Only three orders were affected, and it never happened again.* (Solo 3 pedidos afectados y no se repitió.)\n\nFíjate: **I**, no *we*."
+              },
+              {
+                "title": "🗂️ Tu banco de historias",
+                "content": "Con **5-6 historias** cubres casi cualquier pregunta:\n\n- 🔥 conflicto\n- 💥 error propio\n- ⏰ presión de tiempo\n- 📚 aprender rápido\n- 🧭 tomar la iniciativa\n\nCada historia sirve para 2-3 preguntas. Ensáyalas en viñetas, no de memoria palabra por palabra."
+              }
+            ],
+            "videos": [
+              {
+                "kind": "video",
+                "title": "Buscar en YouTube: STAR method behavioral interview software engineer",
+                "url": "https://www.youtube.com/results?search_query=STAR+method+behavioral+interview+software+engineer"
+              }
+            ],
+            "quiz": {
+              "id": "quiz-car-l3",
+              "area": "analisis",
+              "difficulty": "intermedio",
+              "question": "Te preguntan *Tell me about a time you missed a deadline*. ¿Qué respuesta muestra mejor el método STAR?",
+              "options": [
+                "We were a great team and we always tried our best to deliver on time.",
+                "I usually plan very well, so I rarely miss deadlines.",
+                "Our sprint was late; the manager decided to move the date and it was fine.",
+                "I underestimated a payment screen; I told my lead two days early, cut a filter, and we shipped the core on time."
+              ],
+              "correctIndex": 3,
+              "explanation": "La última dice qué hizo la persona (avisar pronto, recortar alcance) y el resultado. Las otras evitan la pregunta o hablan del equipo sin acción propia."
+            },
+            "exerciseIds": [
+              "car-l3-e1",
+              "car-l3-e2"
+            ]
+          },
+          {
+            "id": "car-l4",
+            "title": "Live coding pensando en voz alta",
+            "objective": "Seguir un proceso de 7 pasos en un live coding y narrarlo en inglés para que el entrevistador vea cómo razonas.",
+            "slides": [
+              {
+                "title": "🧭 El proceso que evalúan",
+                "content": "1. **Clarify** – preguntar dudas\n2. **Example** – un caso concreto\n3. **Brute force** – la idea simple y su coste\n4. **Optimize** – mejorarla\n5. **Code** – escribir\n6. **Test** – recorrer un ejemplo a mano\n7. **Complexity** – tiempo y memoria\n\n🎯 Un silencio largo puntúa peor que una idea imperfecta dicha en voz alta."
+              },
+              {
+                "title": "💬 Frases para cada paso",
+                "content": "- *Let me make sure I understand…* → Déjame ver si entendí…\n- *Can I assume the input is never empty?* → ¿Puedo suponer que nunca viene vacío?\n- *My first idea is two loops, that's O(n²).* → Mi primera idea…\n- *I think I can do better with a Set.* → Creo que puedo mejorarlo…\n- *Let me trace through this example.* → Voy a recorrer este ejemplo.\n- *This runs in O(n) time and O(n) space.*"
+              },
+              {
+                "title": "🧱 Cuando te atascas",
+                "content": "- **Dilo**: *I'm stuck on how to avoid duplicates.*\n- Vuelve al **ejemplo pequeño** y hazlo a mano\n- Pide pista con elegancia: *Could I get a small hint?*\n- Si ves un bug, **anúncialo**: *Wait, this fails for an empty array, let me fix it.*\n\n✅ Detectar tu propio error suma puntos; esconderlo los resta."
+              },
+              {
+                "title": "🤖 Entrevistas con IA permitida",
+                "content": "Algunas empresas en 2026 dejan usar un asistente en la prueba. Lo que miran cambia:\n\n- ¿Qué le **pediste** y por qué?\n- ¿**Leíste** lo que generó o lo pegaste a ciegas?\n- ¿Lo **probaste** con casos borde?\n\n> *The assistant suggested this loop; I checked it against the empty case and it failed, so I added a guard.*"
+              }
+            ],
+            "videos": [
+              {
+                "kind": "video",
+                "title": "Buscar en YouTube: think out loud coding interview tips",
+                "url": "https://www.youtube.com/results?search_query=think+out+loud+coding+interview+tips"
+              }
+            ],
+            "quiz": {
+              "id": "quiz-car-l4",
+              "area": "analisis",
+              "difficulty": "intermedio",
+              "question": "Llevas 4 minutos en silencio en un live coding porque no ves la solución óptima. ¿Qué es lo mejor que puedes hacer?",
+              "options": [
+                "Seguir en silencio hasta tener la solución perfecta",
+                "Explicar la solución simple con su complejidad y decir que buscarás mejorarla",
+                "Pedir directamente la respuesta al entrevistador",
+                "Escribir código rápido aunque no sepas si funciona"
+              ],
+              "correctIndex": 1,
+              "explanation": "Decir la idea simple y su coste muestra razonamiento y da al entrevistador algo que evaluar. El silencio o escribir a ciegas no le enseñan cómo piensas."
+            },
+            "exerciseIds": [
+              "car-l4-e1",
+              "car-l4-e2"
+            ]
+          },
+          {
+            "id": "car-l5",
+            "title": "Negociar la oferta sin miedo",
+            "objective": "Investigar el mercado con fuentes públicas, razonar un rango propio y negociar en inglés con frases preparadas.",
+            "slides": [
+              {
+                "title": "🔎 Dónde buscar las cifras",
+                "content": "| Fuente | Qué te da | Cuidado con |\n|---|---|---|\n| **Levels.fyi** | sueldo por empresa y nivel | casi todo empresas grandes |\n| **Encuesta de Stack Overflow** | por país, rol y experiencia | es anual, mira el año |\n| **Glassdoor** | sueldos reportados por empresa | pocas respuestas = poco fiable |\n\n📌 Anota siempre **año, país, nivel** y si es **base** o **total** (base + bonus + acciones)."
+              },
+              {
+                "title": "🧮 De datos a tu rango",
+                "content": "- Quédate solo con filas **parecidas a ti** (rol, años, remoto)\n- **Contractor** remoto: tú pagas seguro, vacaciones e impuestos → súmalo\n- Define 3 números:\n  - 🧱 **Piso**: por debajo, no\n  - 🎯 **Objetivo**: lo razonable según los datos\n  - ⚓ **Ancla**: lo que dices primero, algo por encima del objetivo\n\nNo inventes: si no tienes datos, sigue buscando antes de dar un número."
+              },
+              {
+                "title": "🗣️ Frases listas en inglés",
+                "content": "- *Could you share the budgeted range for this role?* → ¿Me compartes el rango previsto?\n- *Based on my research for this role and level, I'm targeting X to Y.* → Según mi investigación…\n- *I'm excited about the offer. Is there flexibility on the base?* → ¿Hay margen en el salario base?\n- *Could I have until Friday to review it?* → ¿Puedo tener hasta el viernes?\n\n🙂 Primero gracias, luego el número."
+              },
+              {
+                "title": "🎁 Más allá del sueldo",
+                "content": "Si el sueldo no se mueve, negocia otra cosa:\n\n- 💻 equipo o ayuda para internet\n- 📚 presupuesto de cursos\n- 🌴 días libres\n- 💵 bono de firma\n- 🗓️ revisión salarial a los 6 meses, **por escrito**\n\n🚫 Nunca inventes otra oferta: si te piden pruebas, pierdes la confianza."
+              }
+            ],
+            "videos": [
+              {
+                "kind": "video",
+                "title": "Buscar en YouTube: how to negotiate software engineer salary offer",
+                "url": "https://www.youtube.com/results?search_query=how+to+negotiate+software+engineer+salary+offer"
+              }
+            ],
+            "quiz": {
+              "id": "quiz-car-l5",
+              "area": "analisis",
+              "difficulty": "intermedio",
+              "question": "Encuentras en Levels.fyi una cifra altísima para tu rol en una gran tecnológica de EE. UU. Tú vas a ser contractor junior en una startup. ¿Cómo la usas?",
+              "options": [
+                "La pido tal cual: es el precio de mercado",
+                "La uso como techo y busco datos de empresas y niveles parecidos al mío",
+                "La ignoro porque Levels.fyi no sirve",
+                "Le resto la mitad y la uso como ancla"
+              ],
+              "correctIndex": 1,
+              "explanation": "Esa cifra es de otro tipo de empresa y nivel: marca un techo. El rango se razona con filas parecidas a tu caso; restar la mitad es adivinar."
+            },
+            "exerciseIds": [
+              "car-l5-e1",
+              "car-l5-e2"
+            ]
+          }
+        ],
+        "project": {
+          "title": "Simulacro completo de entrevista remota",
+          "description": "Una entrevista de 45 minutos con la IA como entrevistadora en inglés: presentación, 2 preguntas conductuales, un live coding y la pregunta de salario.",
+          "deliverables": [
+            "Grabación o transcripción de la entrevista",
+            "Tu banco de historias STAR",
+            "Tu tabla de rango salarial con fuentes",
+            "3 cosas a mejorar para la siguiente"
+          ]
+        }
+      },
+      {
+        "id": "car-m3",
+        "trackId": "entrevistas",
+        "title": "Agile y Scrum",
+        "description": "Roles, eventos y artefactos de Scrum, y cómo escribir y estimar historias de usuario como en un equipo real.",
+        "level": "principiante",
+        "lessons": [
+          {
+            "id": "car-l6",
+            "title": "Scrum: roles y ceremonias",
+            "objective": "Saber quién hace qué en Scrum y para qué sirve cada evento, y detectar cuando un equipo lo aplica mal.",
+            "slides": [
+              {
+                "title": "👥 Tres responsabilidades",
+                "content": "- 🧭 **Product Owner**: decide **qué** aporta más valor; ordena el Product Backlog\n- 🛠️ **Developers**: deciden **cómo** construirlo; se autoorganizan\n- 🧹 **Scrum Master**: quita obstáculos y ayuda a que Scrum funcione; **no es el jefe**\n\nEquipo pequeño: normalmente **10 personas o menos**."
+              },
+              {
+                "title": "🔁 Los eventos del sprint",
+                "content": "| Evento | Para qué | Duración máx. (sprint de 1 mes) |\n|---|---|---|\n| **Sprint Planning** | qué y cómo en este sprint | 8 h |\n| **Daily Scrum** | ajustar el plan de 24 h | 15 min |\n| **Sprint Review** | mostrar el incremento y recoger feedback | 4 h |\n| **Retrospective** | mejorar cómo trabajamos | 3 h |\n\nSprints más cortos → eventos más cortos. El sprint dura **1 mes o menos**."
+              },
+              {
+                "title": "📦 Los tres artefactos",
+                "content": "- **Product Backlog** → todo lo que podría hacerse; apunta al *Product Goal*\n- **Sprint Backlog** → lo elegido para este sprint + el plan; apunta al *Sprint Goal*\n- **Increment** → software que funciona y cumple la **Definition of Done**\n\n🎯 Si no cumple la Definition of Done, no se muestra en la Review como terminado."
+              },
+              {
+                "title": "🚩 Señales de un Scrum mal aplicado",
+                "content": "- Daily de 40 min donde cada uno **informa al jefe**\n- El PO mete tareas a mitad de sprint sin hablar con el equipo\n- Review con **diapositivas** en vez de software\n- Retro cancelada \"porque hay mucho trabajo\"\n- El Scrum Master **asigna** tareas\n\nEn una entrevista, saber detectar esto vale más que recitar definiciones."
+              }
+            ],
+            "videos": [
+              {
+                "kind": "video",
+                "title": "Buscar en YouTube: scrum explicado roles eventos artefactos",
+                "url": "https://www.youtube.com/results?search_query=scrum+explicado+roles+eventos+artefactos"
+              }
+            ],
+            "quiz": {
+              "id": "quiz-car-l6",
+              "area": "analisis",
+              "difficulty": "principiante",
+              "question": "En la Daily de tu equipo, cada persona le cuenta al Scrum Master lo que hizo ayer y la reunión dura 30 minutos. ¿Qué está fallando?",
+              "options": [
+                "Nada: la Daily sirve para informar al Scrum Master",
+                "Debería hacerla el Product Owner",
+                "Es una reunión de los Developers para ajustar el plan hacia el Sprint Goal, en 15 minutos",
+                "Debería hacerse una vez por semana"
+              ],
+              "correctIndex": 2,
+              "explanation": "La Daily es de los Developers, dura 15 minutos y sirve para replanificar hacia el Sprint Goal. Convertirla en reporte al Scrum Master es el antipatrón más común."
+            },
+            "exerciseIds": [
+              "car-l6-e1",
+              "car-l6-e2"
+            ]
+          },
+          {
+            "id": "car-l7",
+            "title": "Historias de usuario y estimación",
+            "objective": "Escribir historias de usuario con criterios de aceptación comprobables y estimarlas en puntos relativos.",
+            "slides": [
+              {
+                "title": "🧾 La plantilla y su parte olvidada",
+                "content": "> **Como** paciente **quiero** ver los huecos libres **para** reservar sin llamar.\n\n- **Como** → quién lo necesita (una persona real, no \"el sistema\")\n- **Quiero** → qué quiere lograr\n- **Para** → por qué, el beneficio\n\n⚠️ Sin el *para*, el equipo no puede proponer una solución mejor."
+              },
+              {
+                "title": "✅ Criterios de aceptación: Dado / Cuando / Entonces",
+                "content": "- **Dado** que el martes a las 10:00 está libre\n- **Cuando** el paciente lo elige y confirma\n- **Entonces** el hueco desaparece para los demás y recibe un correo\n\nUn criterio sirve si se responde con **sí o no**.\n❌ \"Que sea fácil de usar\" ✅ \"Se reserva en 3 clics o menos\""
+              },
+              {
+                "title": "🧩 INVEST: ¿está lista la historia?",
+                "content": "- **I**ndependiente – no espera a otra\n- **N**egociable – el detalle se conversa\n- **V**aliosa – alguien gana algo\n- **E**stimable – el equipo entiende el tamaño\n- **S**mall – cabe en un sprint\n- **T**esteable – tiene criterios claros\n\n✂️ ¿Es enorme? Divide por **pasos del flujo**, no por capas técnicas."
+              },
+              {
+                "title": "🃏 Puntos y Planning Poker",
+                "content": "- Los puntos miden **tamaño relativo** (esfuerzo + complejidad + incertidumbre), no horas\n- Escala típica: **1, 2, 3, 5, 8, 13**\n- Planning Poker: todos muestran su carta a la vez → si hay un 2 y un 8, **hablan** los extremos\n- La **velocidad** sirve para planear el próximo sprint, **no** para comparar equipos\n\n🎯 Lo valioso no es el número, es la conversación que destapa lo que nadie había visto."
+              }
+            ],
+            "videos": [
+              {
+                "kind": "video",
+                "title": "Buscar en YouTube: historias de usuario criterios de aceptacion ejemplos",
+                "url": "https://www.youtube.com/results?search_query=historias+de+usuario+criterios+de+aceptacion+ejemplos"
+              }
+            ],
+            "quiz": {
+              "id": "quiz-car-l7",
+              "area": "analisis",
+              "difficulty": "principiante",
+              "question": "En el Planning Poker de la app de reservas, tres personas votan 3 y una vota 13 en la historia 'reservar cita'. ¿Qué hace el equipo?",
+              "options": [
+                "Se queda con 3 porque es la mayoría",
+                "Calcula la media y pone 5",
+                "La persona del 13 explica qué ve; tras hablar, se vuelve a votar",
+                "El Product Owner decide el número final"
+              ],
+              "correctIndex": 2,
+              "explanation": "Un voto muy distinto suele esconder un riesgo (citas dobles, correos). Se habla y se revota. Promediar o votar por mayoría tapa justo esa información."
+            },
+            "exerciseIds": [
+              "car-l7-e1",
+              "car-l7-e2"
+            ]
+          },
+          {
+            "id": "car-l8",
+            "title": "Kanban y flujo continuo",
+            "objective": "Trabajar con un tablero Kanban, límites de trabajo en curso y métricas de flujo.",
+            "slides": [
+              {
+                "title": "📋 El tablero",
+                "content": "Kanban organiza el trabajo en columnas: **Por hacer → En curso → En revisión → Hecho**.\n\nA diferencia de Scrum, no hay sprints fijos: las tareas **fluyen** de una en una. Es habitual en equipos de soporte, mantenimiento y operaciones, donde el trabajo llega sin avisar."
+              },
+              {
+                "title": "🚧 Límites de trabajo en curso (WIP)",
+                "content": "La regla que lo cambia todo: cada columna tiene un **máximo**. Por ejemplo, \"En revisión: 3\".\n\nSi está llena, no empiezas nada nuevo: ayudas a revisar lo que hay. Así se ven los **cuellos de botella** y se termina más, aunque se empiece menos.\n\nFrase de equipo: \"deja de empezar, empieza a terminar\"."
+              },
+              {
+                "title": "⏱️ Métricas de flujo",
+                "content": "- **Lead time**: desde que se pide hasta que está hecho (lo que nota el cliente)\n- **Cycle time**: desde que alguien empieza hasta que termina\n- **Throughput**: tareas terminadas por semana\n\nEn una entrevista: \"en Scrum planificamos por sprints; en Kanban limitamos el trabajo en curso y medimos el cycle time\" demuestra que conoces ambos."
+              }
+            ],
+            "videos": [
+              {
+                "kind": "video",
+                "title": "Buscar en YouTube: kanban limites wip explicado espanol",
+                "url": "https://www.youtube.com/results?search_query=kanban+limites+wip+explicado+espanol"
+              }
+            ],
+            "exerciseIds": []
+          }
+        ]
+      }
+    ]
+  },
+  "exercises": [
+    {
+      "id": "car-l1-e1",
+      "trackId": "entrevistas",
+      "moduleId": "car-m1",
+      "lessonId": "car-l1",
+      "title": "Explica en inglés la función que calcula el envío de una tienda",
+      "description": "Tienes esta función de una tienda online:\n\n```js\nfunction shippingCost(cart) {\n  const subtotal = cart.reduce((s, i) => s + i.price * i.qty, 0)\n  if (subtotal >= 50) return 0\n  return 4.99\n}\n```\n\n1. Escribe en inglés 4-5 frases que expliquen qué hace, como si se lo contaras a un compañero en una code review.\n2. Usa al menos 4 verbos de la clase (takes, returns, calculates, checks, handles…).\n3. Menciona un caso borde que no maneja (carrito vacío, precio negativo…).\n4. Grábate leyéndolo y escucha si pronuncias bien *cart*, *subtotal* y *returns*.",
+      "objective": "Describir código propio en inglés con verbos precisos y sin traducir palabra por palabra.",
+      "difficulty": "principiante",
+      "kind": "guiado",
+      "theory": false,
+      "aiPolicy": "ia_tutor",
+      "constraints": [
+        "Frases de máximo 20 palabras",
+        "Nada de traductor automático para el primer borrador"
+      ],
+      "hints": [
+        "Empieza por la idea general: qué entra y qué sale.",
+        "La estructura 'It takes ___ and returns ___' resuelve la primera frase.",
+        "Para el caso borde piensa qué pasa si un artículo trae qty negativa o el precio viene como texto."
+      ],
+      "solution": "Ejemplo:\n- *This function takes the cart and returns the shipping cost.* (Recibe el carrito y devuelve el costo de envío.)\n- *First, it calculates the subtotal by adding price times quantity for each item.*\n- *Then it checks if the subtotal is 50 or more; in that case shipping is free.*\n- *Otherwise, it returns a flat fee of 4.99.*\n- *It doesn't handle negative quantities, so a bad item could lower the subtotal.*",
+      "criteria": [
+        "Explica entrada y salida en la primera frase",
+        "Usa al menos 4 verbos técnicos correctos",
+        "Menciona un caso borde real",
+        "No hay falsos amigos (actually, eventually) mal usados"
+      ],
+      "commonErrors": [
+        "Traducir 'devuelve' como 'gives back'",
+        "Leer el código línea por línea en vez de explicar la intención",
+        "Decir 'actually' para decir 'actualmente'"
+      ],
+      "resources": [
+        {
+          "kind": "doc",
+          "title": "Cambridge Dictionary (pronunciación con audio)",
+          "url": "https://dictionary.cambridge.org/"
+        }
+      ]
+    },
+    {
+      "id": "car-l2-e1",
+      "trackId": "entrevistas",
+      "moduleId": "car-m1",
+      "lessonId": "car-l2",
+      "title": "Escribe y graba el pitch de tu app de reservas",
+      "description": "Elige un proyecto tuyo (o usa este: una app de reservas para un consultorio dental hecha con React y Node).\n\n1. Escribe un pitch en inglés de unas **250 palabras** (≈ 2 minutos) con los 5 bloques de la clase.\n2. Incluye **una decisión técnica** que tomaste y por qué.\n3. Incluye **un resultado medible** (tiempo ahorrado, usuarios, errores menos). Si no lo tienes, di cómo lo medirías.\n4. Grábate en audio o video, mide el tiempo y escúchate una vez. Anota 2 cosas que mejorarías.",
+      "objective": "Contar un proyecto en inglés en 2 minutos con estructura clara y un resultado concreto.",
+      "difficulty": "principiante",
+      "kind": "aplicacion_real",
+      "theory": false,
+      "aiPolicy": "ia_tutor",
+      "constraints": [
+        "Máximo 2:15 de grabación",
+        "La IA solo corrige gramática; la historia y las decisiones son tuyas"
+      ],
+      "hints": [
+        "Si empiezas por la lista de tecnologías, vuelve a empezar por el problema.",
+        "Una frase por bloque ya te da el esqueleto; luego amplía la del 'cómo'.",
+        "Para el resultado sirve 'Patients can now book in under a minute instead of calling'."
+      ],
+      "solution": "Esqueleto de referencia:\n- **Problem:** *The clinic took bookings by phone, and the receptionist lost about an hour a day.*\n- **What I built:** *I built a web app where patients pick a free slot and get a confirmation email.*\n- **How:** *React on the front, Node and PostgreSQL behind. I chose to lock the slot in the database to avoid double bookings.*\n- **Result:** *In the first month, 60% of bookings came through the app.*\n- **Learned:** *I learned to test concurrency cases before release.*",
+      "criteria": [
+        "Sigue los 5 bloques en orden",
+        "Dura entre 1:45 y 2:15",
+        "Explica una decisión técnica con su razón",
+        "Incluye un resultado medible o cómo se mediría"
+      ],
+      "commonErrors": [
+        "Empezar con 'So, basically…' y la lista de tecnologías",
+        "Decir 'we' todo el tiempo sin aclarar qué hiciste tú",
+        "Leer el texto sin mirar a cámara"
+      ],
+      "resources": [
+        {
+          "kind": "doc",
+          "title": "Cambridge Dictionary (pronunciación con audio)",
+          "url": "https://dictionary.cambridge.org/"
+        }
+      ]
+    },
+    {
+      "id": "car-l2-e2",
+      "trackId": "entrevistas",
+      "moduleId": "car-m1",
+      "lessonId": "car-l2",
+      "title": "Responde 'Walk me through your resume' en inglés",
+      "description": "Es la primera pregunta de casi todas las entrevistas remotas. Prepara una respuesta de **60-90 segundos** en inglés que vaya del pasado al presente y termine en por qué quieres ESTE puesto.\n\nEscenario: postulas a *Frontend Developer* en una startup de EE. UU. que hace un panel de facturación para pymes.\n\nEscríbela, practícala con la IA haciendo de reclutador y pídele que te haga una pregunta de seguimiento.",
+      "objective": "Presentar tu trayectoria como una historia corta que conecta con el puesto.",
+      "difficulty": "principiante",
+      "kind": "entrevista",
+      "theory": false,
+      "aiPolicy": "ia_par",
+      "hints": [
+        "Piensa en tres paradas: dónde empezaste, qué haces ahora, hacia dónde vas.",
+        "Cada parada lleva un logro, no una lista de tareas.",
+        "Cierra con una frase que nombre algo concreto de la empresa: el panel de facturación."
+      ],
+      "solution": "*I started in web development building small sites for local shops. For the last year I've been building React apps, the latest one a booking system for a clinic where I owned the front end and the email flow. I'm now looking for a team where I can work on a product used every day by small businesses, which is why your billing dashboard caught my attention.*",
+      "criteria": [
+        "Dura 60-90 segundos",
+        "Tiene pasado, presente y futuro",
+        "Cada etapa lleva un logro concreto",
+        "Termina conectando con la empresa"
+      ],
+      "commonErrors": [
+        "Recitar el CV completo en orden cronológico",
+        "No mencionar la empresa al final",
+        "Hablar de la vida personal en vez de la profesional"
+      ],
+      "interviewQuestion": "Walk me through your resume.",
+      "resources": [
+        {
+          "kind": "doc",
+          "title": "Tech Interview Handbook: entrevistas conductuales",
+          "url": "https://www.techinterviewhandbook.org/behavioral-interview/"
+        }
+      ],
+      "constraints": []
+    },
+    {
+      "id": "car-l3-e1",
+      "trackId": "entrevistas",
+      "moduleId": "car-m2",
+      "lessonId": "car-l3",
+      "title": "Arma tu banco de 4 historias STAR",
+      "description": "Las preguntas conductuales cambian, pero tus historias se repiten. Prepara **4 historias** reales (de trabajo, estudios, freelance o un proyecto personal) que cubran:\n\n- 🔥 un conflicto o desacuerdo\n- 💥 un error que cometiste\n- ⏰ una entrega con poco tiempo\n- 📚 algo que tuviste que aprender rápido\n\nPara cada una escribe S, T, A y R en viñetas (no en párrafo), en español o inglés. Después indica a qué 2 preguntas distintas podría responder cada historia.",
+      "objective": "Tener historias listas y reutilizables para cualquier pregunta conductual.",
+      "difficulty": "intermedio",
+      "kind": "practica_autonoma",
+      "theory": false,
+      "aiPolicy": "sin_ia",
+      "constraints": [
+        "Historias reales: el entrevistador repregunta y lo inventado se nota"
+      ],
+      "hints": [
+        "Revisa tus últimos proyectos y busca momentos en que algo salió mal o cambió el plan.",
+        "La Action debe ocupar la mayor parte: qué hiciste TÚ, paso a paso.",
+        "Si el Result no tiene número, sirve un cambio observable: 'el cliente renovó', 'no volvió a pasar'."
+      ],
+      "solution": "Ejemplo (error):\n- **S:** En la tienda online de un cliente, publiqué un cambio de precios un viernes.\n- **T:** Yo era responsable de esa actualización.\n- **A:** Vi que el descuento se aplicaba dos veces; revertí en 10 min, avisé al cliente, escribí un test para ese caso y propuse no publicar los viernes.\n- **R:** Solo 3 pedidos afectados, devueltos ese día; el test sigue en el proyecto.\n\nResponde a: *Tell me about a mistake* y *Tell me about a time you worked under pressure*.",
+      "criteria": [
+        "Hay 4 historias que cubren los 4 temas",
+        "Cada historia tiene S, T, A y R separados",
+        "La Action dice qué hizo la persona, no el equipo",
+        "Cada historia se asocia a 2 preguntas distintas"
+      ],
+      "commonErrors": [
+        "Contar la situación durante medio minuto",
+        "Usar 'nosotros' y no aclarar el papel propio",
+        "Elegir un 'error' que en realidad es una virtud ('trabajo demasiado')"
+      ],
+      "resources": [
+        {
+          "kind": "doc",
+          "title": "Tech Interview Handbook: entrevistas conductuales",
+          "url": "https://www.techinterviewhandbook.org/behavioral-interview/"
+        }
+      ]
+    },
+    {
+      "id": "car-l3-e2",
+      "trackId": "entrevistas",
+      "moduleId": "car-m2",
+      "lessonId": "car-l3",
+      "title": "Simulacro: 'Tell me about a time you disagreed with a teammate'",
+      "description": "Pídele a la IA que haga de entrevistadora de una empresa remota de EE. UU. y te pregunte en inglés: *Tell me about a time you disagreed with a teammate.*\n\n1. Responde en voz alta (o escribiendo) con STAR, en menos de 2 minutos.\n2. Pide a la IA 2 repreguntas (*What would you do differently?*, *How did your teammate react?*) y respóndelas.\n3. Pide feedback solo sobre: estructura STAR, uso de **I**, y si el resultado es concreto.",
+      "objective": "Responder una pregunta conductual difícil sin culpar a nadie y con un resultado claro.",
+      "difficulty": "intermedio",
+      "kind": "entrevista",
+      "theory": false,
+      "aiPolicy": "ia_par",
+      "hints": [
+        "Elige un desacuerdo técnico, no personal: una librería, un plazo, una forma de probar.",
+        "Muestra cómo escuchaste el argumento del otro antes de proponer.",
+        "El mejor resultado no es 'gané yo', es 'llegamos a una decisión y el proyecto salió'."
+      ],
+      "solution": "*In a dashboard project, a teammate wanted to skip tests to meet a Friday deadline (S). I was responsible for the payments screen (T). I asked what worried him most, proposed testing only the payment flow, and offered to write those tests myself that afternoon (A). We shipped on time and the tests caught a rounding bug before release (R).*",
+      "criteria": [
+        "Respeta la estructura STAR",
+        "No culpa ni ridiculiza al compañero",
+        "La Action describe pasos propios concretos",
+        "Responde las repreguntas sin contradecirse"
+      ],
+      "commonErrors": [
+        "Contar un conflicto donde el otro queda como el malo",
+        "No tener resultado",
+        "Decir 'I never disagree with people'"
+      ],
+      "interviewQuestion": "Tell me about a time you disagreed with a teammate.",
+      "resources": [
+        {
+          "kind": "doc",
+          "title": "Tech Interview Handbook: entrevistas conductuales",
+          "url": "https://www.techinterviewhandbook.org/behavioral-interview/"
+        }
+      ],
+      "constraints": []
+    },
+    {
+      "id": "car-l4-e1",
+      "trackId": "entrevistas",
+      "moduleId": "car-m2",
+      "lessonId": "car-l4",
+      "title": "Narra en voz alta: pedidos duplicados en una tienda",
+      "description": "Problema de entrevista: recibes un array de IDs de pedidos de una tienda online, por ejemplo `[101, 205, 101, 330, 205]`. Escribe `findDuplicates(ids)` que devuelva los IDs repetidos, sin repetirlos en la salida: `[101, 205]`.\n\nLo importante no es solo el código: **grábate** resolviéndolo en 20 minutos y narrando en inglés cada paso del proceso de la clase (aclarar, ejemplo, idea simple, mejorar, codificar, probar, complejidad).",
+      "objective": "Resolver un problema sencillo comunicando el razonamiento en voz alta y en inglés.",
+      "difficulty": "intermedio",
+      "kind": "entrevista",
+      "theory": false,
+      "aiPolicy": "sin_ia",
+      "constraints": [
+        "20 minutos como máximo",
+        "Sin buscar la solución antes de grabar"
+      ],
+      "hints": [
+        "Antes de escribir, pregunta en voz alta: ¿importa el orden de salida? ¿puede venir vacío?",
+        "La idea simple compara cada par: di su complejidad y luego busca algo mejor.",
+        "Una estructura que recuerda lo que ya viste en tiempo constante te lleva a O(n)."
+      ],
+      "solution": "```js\nfunction findDuplicates(ids) {\n  const seen = new Set()\n  const dupes = new Set()\n  for (const id of ids) {\n    if (seen.has(id)) dupes.add(id)\n    else seen.add(id)\n  }\n  return [...dupes]\n}\n// findDuplicates([101, 205, 101, 330, 205]) -> [101, 205]\n// findDuplicates([]) -> []\n```\nTiempo O(n), memoria O(n). Narración clave: *My first idea is two nested loops, O(n²). I can do better by remembering what I've seen in a Set.*",
+      "criteria": [
+        "Hace al menos una pregunta de aclaración antes de codificar",
+        "Menciona la idea simple y su complejidad antes de optimizar",
+        "El código funciona con el ejemplo y con un array vacío",
+        "Prueba el código recorriendo un ejemplo en voz alta",
+        "Dice la complejidad final"
+      ],
+      "commonErrors": [
+        "Quedarse en silencio mientras escribe",
+        "Devolver duplicados repetidos ([101, 101])",
+        "No probar el caso vacío"
+      ],
+      "interviewQuestion": "Can you walk me through your solution and its time complexity?",
+      "resources": [
+        {
+          "kind": "doc",
+          "title": "Tech Interview Handbook: técnicas para live coding",
+          "url": "https://www.techinterviewhandbook.org/coding-interview-techniques/"
+        },
+        {
+          "kind": "doc",
+          "title": "MDN: Set",
+          "url": "https://developer.mozilla.org/es/docs/Web/JavaScript/Reference/Global_Objects/Set"
+        }
+      ]
+    },
+    {
+      "id": "car-l4-e2",
+      "trackId": "entrevistas",
+      "moduleId": "car-m2",
+      "lessonId": "car-l4",
+      "title": "Reto: dos productos que suman el presupuesto",
+      "description": "Un cliente tiene una tarjeta regalo de `budget` dólares y quiere gastar **exactamente** ese monto en dos productos distintos. Dado `prices` (array de números) y `budget`, devuelve los índices de los dos productos o `null` si no existe.\n\n`pairForBudget([12, 30, 7, 25], 37)` → `[1, 2]`\n\nResuélvelo con la IA haciendo de entrevistadora: ella solo puede responder tus preguntas de aclaración y darte una pista si la pides con la frase *Could I get a small hint?*. Al final, pídele que puntúe tu comunicación del 1 al 5.",
+      "objective": "Practicar pedir aclaraciones y pistas de forma profesional mientras resuelves un problema clásico.",
+      "difficulty": "intermedio",
+      "kind": "reto",
+      "theory": false,
+      "aiPolicy": "ia_tutor",
+      "constraints": [
+        "La IA no puede escribir código"
+      ],
+      "hints": [
+        "Pregunta si puede haber precios repetidos y si sirve cualquier par o el primero.",
+        "Para cada precio, el que necesitas es budget - precio.",
+        "Guarda en un Map el precio visto y su índice; antes de guardarlo, busca su complemento."
+      ],
+      "solution": "```js\nfunction pairForBudget(prices, budget) {\n  const seen = new Map() // precio -> índice\n  for (let i = 0; i < prices.length; i++) {\n    const need = budget - prices[i]\n    if (seen.has(need)) return [seen.get(need), i]\n    seen.set(prices[i], i)\n  }\n  return null\n}\n```\nO(n) tiempo y memoria. Buscar antes de guardar evita usar el mismo producto dos veces.",
+      "criteria": [
+        "Aclara al menos dos supuestos antes de codificar",
+        "Devuelve índices correctos o null",
+        "No usa el mismo producto dos veces",
+        "Explica la complejidad"
+      ],
+      "commonErrors": [
+        "Guardar en el Map antes de buscar y emparejar un producto consigo mismo",
+        "Devolver los precios en lugar de los índices",
+        "Pedir la pista con 'just tell me the answer'"
+      ],
+      "interviewQuestion": "What would change if the prices array were already sorted?",
+      "resources": [
+        {
+          "kind": "doc",
+          "title": "Tech Interview Handbook: técnicas para live coding",
+          "url": "https://www.techinterviewhandbook.org/coding-interview-techniques/"
+        },
+        {
+          "kind": "doc",
+          "title": "MDN: Map",
+          "url": "https://developer.mozilla.org/es/docs/Web/JavaScript/Reference/Global_Objects/Map"
+        }
+      ]
+    },
+    {
+      "id": "car-l5-e1",
+      "trackId": "entrevistas",
+      "moduleId": "car-m2",
+      "lessonId": "car-l5",
+      "title": "Construye tu rango salarial con 3 fuentes",
+      "description": "Puesto objetivo: *React Developer, ~2 años de experiencia, remoto para una empresa de EE. UU., pago en USD como contractor.*\n\n1. Busca datos en **Levels.fyi**, la **encuesta de Stack Overflow** y **Glassdoor**. Anota de cada uno: cifra, año, país, nivel y si es salario base o compensación total.\n2. Descarta lo que no se parezca a tu caso (otro país, senior, otro rol).\n3. Ajusta por ser contractor (sin seguro médico ni vacaciones pagadas, impuestos a tu cargo).\n4. Define tres números: **piso** (por debajo dices no), **objetivo** y **ancla** (lo que dirás primero).\n5. Escribe en 3 líneas por qué tu rango es razonable.",
+      "objective": "Calcular un rango salarial defendible a partir de datos públicos, sin adivinar.",
+      "difficulty": "intermedio",
+      "kind": "aplicacion_real",
+      "theory": false,
+      "aiPolicy": "ia_tutor",
+      "constraints": [
+        "Cada cifra lleva su fuente y fecha",
+        "La IA no te da números: solo te ayuda a ordenar los que encuentres"
+      ],
+      "hints": [
+        "Empieza por la encuesta de Stack Overflow: filtra por rol y años de experiencia.",
+        "Levels.fyi y Glassdoor suelen mostrar empresas grandes de EE. UU.: úsalos como techo, no como piso.",
+        "Como contractor, súmale a tu objetivo lo que pagarías tú por seguro, vacaciones e impuestos."
+      ],
+      "solution": "No hay una cifra correcta: depende de lo que encuentres. Una tabla válida tiene columnas *Fuente · Año · País · Rol/nivel · Base o total · Cifra*, descarta las filas que no encajan y llega a algo como: *Piso = lo que cubre mis gastos + colchón de contractor; Objetivo = mediana de las filas parecidas; Ancla = algo por encima del objetivo, sin salirse de los datos.* La justificación cita al menos dos fuentes.",
+      "criteria": [
+        "Usa las 3 fuentes y anota año y país",
+        "Distingue salario base de compensación total",
+        "Ajusta por ser contractor",
+        "Define piso, objetivo y ancla con una razón cada uno"
+      ],
+      "commonErrors": [
+        "Copiar la cifra de una empresa enorme como si fuera la media",
+        "Mezclar salarios mensuales y anuales",
+        "Usar datos de hace varios años sin decirlo"
+      ],
+      "resources": [
+        {
+          "kind": "doc",
+          "title": "Levels.fyi: salarios por empresa y nivel",
+          "url": "https://www.levels.fyi/"
+        },
+        {
+          "kind": "doc",
+          "title": "Stack Overflow Developer Survey",
+          "url": "https://survey.stackoverflow.co/"
+        },
+        {
+          "kind": "doc",
+          "title": "Glassdoor: salarios reportados por empresa",
+          "url": "https://www.glassdoor.com/Salaries/index.htm"
+        }
+      ]
+    },
+    {
+      "id": "car-l5-e2",
+      "trackId": "entrevistas",
+      "moduleId": "car-m2",
+      "lessonId": "car-l5",
+      "title": "Simulacro: el reclutador pregunta tu expectativa salarial",
+      "description": "Pídele a la IA que haga de reclutadora en inglés de una startup de EE. UU. y siga este guion:\n\n1. Te pregunta *What are your salary expectations?* en la primera llamada.\n2. Más tarde te hace una oferta por debajo de tu objetivo.\n3. Te presiona para responder hoy.\n\nUsa el rango que calculaste en el ejercicio anterior. Responde en inglés a las tres situaciones y al final pide feedback sobre tono y claridad.",
+      "objective": "Responder con calma y argumentos a las tres presiones típicas de una negociación.",
+      "difficulty": "intermedio",
+      "kind": "entrevista",
+      "theory": false,
+      "aiPolicy": "ia_par",
+      "hints": [
+        "En la primera llamada puedes devolver la pregunta preguntando por el rango presupuestado.",
+        "Ante la oferta baja: agradece, muestra interés y da tu número con su porqué.",
+        "Pedir 2-3 días para decidir es normal; no necesitas excusas."
+      ],
+      "solution": "1. *I'd like to learn more about the role first. Could you share the budgeted range?* Si insiste: *Based on my research for this role and level, I'm targeting X to Y.*\n2. *Thank you, I'm excited about this role. Based on market data and the scope we discussed, I was hoping for closer to Y. Is there flexibility on the base?*\n3. *I appreciate it. I'd like until Friday to review everything carefully.*",
+      "criteria": [
+        "No da un número sin respaldo en la primera llamada",
+        "Agradece antes de contraofertar",
+        "Justifica el número con datos, no con necesidades personales",
+        "Pide tiempo sin disculparse en exceso"
+      ],
+      "commonErrors": [
+        "Aceptar en el momento por miedo a perder la oferta",
+        "Inventar otra oferta que no existe",
+        "Justificar con 'necesito pagar mi alquiler'"
+      ],
+      "interviewQuestion": "What are your salary expectations?",
+      "resources": [
+        {
+          "kind": "doc",
+          "title": "Tech Interview Handbook: negociación",
+          "url": "https://www.techinterviewhandbook.org/negotiation/"
+        }
+      ],
+      "constraints": []
+    },
+    {
+      "id": "car-l6-e1",
+      "trackId": "entrevistas",
+      "moduleId": "car-m3",
+      "lessonId": "car-l6",
+      "title": "Detecta los antipatrones en el equipo de un panel para pymes",
+      "description": "Lee lo que pasa en un equipo que construye un panel de ventas para pymes:\n\n1. La Daily dura 40 minutos y cada persona le reporta al jefe lo que hizo.\n2. El Product Owner cambia las tareas del sprint a mitad de semana sin hablar con nadie.\n3. En la Review solo se muestran diapositivas, no software que funcione.\n4. La Retro se canceló tres sprints seguidos \"porque hay mucho trabajo\".\n5. El Scrum Master reparte las tareas a cada desarrollador.\n\nPara cada punto: di qué regla de Scrum se rompe y propón un cambio concreto.",
+      "objective": "Reconocer cómo debería funcionar cada rol y evento de Scrum a partir de situaciones reales.",
+      "difficulty": "principiante",
+      "kind": "guiado",
+      "theory": true,
+      "aiPolicy": "ia_tutor",
+      "hints": [
+        "Relee para qué sirve cada evento: ¿a quién le habla la Daily?",
+        "Piensa quién decide CÓMO se hace el trabajo del sprint.",
+        "La Review y la Retro inspeccionan cosas distintas: el producto y el equipo."
+      ],
+      "solution": "1. Daily: máx. 15 min, la hacen los Developers para planear las próximas 24 h hacia el Sprint Goal, no es un reporte. → Temporizador y foco en el objetivo.\n2. El Sprint Backlog es de los Developers; el PO negocia, no impone. → Cambios grandes se hablan; si el objetivo deja de tener sentido, se replanifica.\n3. La Review inspecciona el **Incremento** real. → Demo del panel funcionando.\n4. La Retro es donde el equipo mejora; saltarla deja los problemas fijos. → Retro corta, una mejora por sprint.\n5. Los Developers se autoorganizan. → El SM facilita, no asigna.",
+      "criteria": [
+        "Identifica la regla rota en los 5 casos",
+        "Cada propuesta es concreta y aplicable",
+        "Usa bien los nombres de roles y eventos",
+        "Distingue Review de Retro"
+      ],
+      "commonErrors": [
+        "Decir que el Scrum Master es el jefe del equipo",
+        "Confundir Review con Retro",
+        "Pensar que la Daily es para informar al jefe"
+      ],
+      "resources": [
+        {
+          "kind": "doc",
+          "title": "La Guía de Scrum (oficial)",
+          "url": "https://scrumguides.org/scrum-guide.html"
+        },
+        {
+          "kind": "doc",
+          "title": "Atlassian: ceremonias de Scrum",
+          "url": "https://www.atlassian.com/agile/scrum/ceremonies"
+        }
+      ],
+      "constraints": []
+    },
+    {
+      "id": "car-l6-e2",
+      "trackId": "entrevistas",
+      "moduleId": "car-m3",
+      "lessonId": "car-l6",
+      "title": "Pregunta de entrevista: tu papel en un equipo Scrum",
+      "description": "En entrevistas para equipos ágiles es habitual: *How does your team work in Scrum, and what do you do in each ceremony?*\n\nPrepara una respuesta de 1 minuto (en español o inglés) contando cómo participarías tú como desarrollador en Planning, Daily, Review y Retro, con un ejemplo concreto de cada una sacado de un proyecto real o del panel de ventas para pymes.",
+      "objective": "Explicar Scrum desde la práctica de un desarrollador, no recitando la teoría.",
+      "difficulty": "principiante",
+      "kind": "entrevista",
+      "theory": false,
+      "aiPolicy": "ia_par",
+      "hints": [
+        "Para cada evento piensa en una acción tuya, no en su definición.",
+        "En la Planning tu aporte es estimar y decir si cabe; en la Daily, coordinar bloqueos.",
+        "En la Retro, un ejemplo de mejora que propusiste suma mucho."
+      ],
+      "solution": "*In Planning I help estimate stories and say what fits in the sprint. In the Daily I share what blocks me, like waiting for the sales data format. In the Review I demo the feature working, for example the new revenue chart. In the Retro I once proposed reviewing pull requests within a day, and it cut our waiting time.*",
+      "criteria": [
+        "Cubre los 4 eventos",
+        "Cada uno con una acción propia concreta",
+        "No confunde roles",
+        "Dura alrededor de 1 minuto"
+      ],
+      "commonErrors": [
+        "Recitar la Guía de Scrum",
+        "Decir que en la Daily 'reporto al Scrum Master'"
+      ],
+      "interviewQuestion": "How does your team work in Scrum, and what do you do in each ceremony?",
+      "resources": [
+        {
+          "kind": "doc",
+          "title": "La Guía de Scrum (oficial)",
+          "url": "https://scrumguides.org/scrum-guide.html"
+        }
+      ],
+      "constraints": []
+    },
+    {
+      "id": "car-l7-e1",
+      "trackId": "entrevistas",
+      "moduleId": "car-m3",
+      "lessonId": "car-l7",
+      "title": "Escribe y estima historias para la app de reservas",
+      "description": "Un consultorio dental quiere que sus pacientes reserven cita online. Escribe **3 historias de usuario** (paciente, recepcionista y dentista) con:\n\n- formato *Como… quiero… para…*\n- 2-3 **criterios de aceptación** en Dado / Cuando / Entonces\n- una estimación en **puntos** (1, 2, 3, 5, 8) comparando las tres entre sí\n\nTermina explicando en 2 líneas por qué la historia más grande vale más puntos que la más pequeña.",
+      "objective": "Convertir necesidades de un cliente en historias pequeñas, comprobables y estimadas de forma relativa.",
+      "difficulty": "principiante",
+      "kind": "practica_autonoma",
+      "theory": false,
+      "aiPolicy": "ia_tutor",
+      "constraints": [
+        "Cada historia debe poder terminarse en un sprint"
+      ],
+      "hints": [
+        "Empieza por lo que cada persona necesita lograr, no por pantallas.",
+        "Un buen criterio se puede comprobar con sí o no.",
+        "Para estimar, elige la historia más sencilla como 'referencia' y compara las demás con ella."
+      ],
+      "solution": "1. *Como paciente quiero ver los huecos libres de la semana para elegir uno sin llamar.* · Dado que hay huecos libres, cuando abro el calendario, entonces veo solo los disponibles. · Dado que elijo un hueco, cuando confirmo, entonces recibo un correo. → **3 puntos**\n2. *Como recepcionista quiero cancelar una cita para liberar el hueco.* → **2 puntos**\n3. *Como dentista quiero ver mis citas del día para prepararme.* → **1 punto** (solo lectura, es la referencia)\nLa 1 vale más: tiene más casos (huecos ocupados, correo, choques).",
+      "criteria": [
+        "Las 3 historias siguen el formato y nombran el beneficio",
+        "Cada criterio se puede comprobar con sí o no",
+        "Las estimaciones son relativas y están justificadas",
+        "Ninguna historia es una tarea técnica disfrazada"
+      ],
+      "commonErrors": [
+        "Escribir 'Como desarrollador quiero crear la tabla citas'",
+        "Estimar en horas en vez de puntos relativos",
+        "Criterios vagos como 'que sea rápido'"
+      ],
+      "resources": [
+        {
+          "kind": "doc",
+          "title": "Atlassian: historias de usuario",
+          "url": "https://www.atlassian.com/agile/project-management/user-stories"
+        },
+        {
+          "kind": "doc",
+          "title": "Mountain Goat Software: Planning Poker",
+          "url": "https://www.mountaingoatsoftware.com/agile/planning-poker"
+        }
+      ]
+    },
+    {
+      "id": "car-l7-e2",
+      "trackId": "entrevistas",
+      "moduleId": "car-m3",
+      "lessonId": "car-l7",
+      "title": "Reto: parte una épica gigante en historias pequeñas",
+      "description": "El dueño de una tienda online pide: *\"Quiero un sistema de devoluciones completo\"*. El equipo la estimó en **40 puntos**, imposible para un sprint.\n\nDivide esa épica en **al menos 5 historias** que cumplan INVEST. Ordénalas para que la primera ya entregue valor sola. Indica cuál dejarías fuera de la primera versión y por qué.",
+      "objective": "Dividir trabajo grande en piezas que entregan valor por separado.",
+      "difficulty": "intermedio",
+      "kind": "reto",
+      "theory": false,
+      "aiPolicy": "sin_ia",
+      "hints": [
+        "Pregunta qué es lo mínimo para que un cliente pueda devolver algo hoy.",
+        "Divide por pasos del flujo (pedir, aprobar, reembolsar) o por variantes (tarjeta, tienda física).",
+        "Evita dividir por capas técnicas (base de datos, pantalla): ninguna entrega valor sola."
+      ],
+      "solution": "1. Como cliente quiero pedir una devolución desde mi pedido para no tener que escribir un correo. (valor solo)\n2. Como encargado quiero aprobar o rechazar devoluciones para controlar fraudes.\n3. Como cliente quiero recibir un correo con el estado de mi devolución.\n4. Como encargado quiero reembolsar a la tarjeta original.\n5. Como cliente quiero imprimir una etiqueta de envío.\n6. Como dueño quiero un informe mensual de devoluciones. → fuera de la v1: no bloquea a nadie hoy.",
+      "criteria": [
+        "Hay al menos 5 historias",
+        "Cada una entrega valor visible a alguien",
+        "La primera funciona sin las demás",
+        "Justifica qué queda fuera de la primera versión"
+      ],
+      "commonErrors": [
+        "Dividir por capas: 'hacer la base de datos', 'hacer la pantalla'",
+        "Historias que dependen todas unas de otras",
+        "Mantener una de 20 puntos"
+      ],
+      "resources": [
+        {
+          "kind": "doc",
+          "title": "Atlassian: historias de usuario",
+          "url": "https://www.atlassian.com/agile/project-management/user-stories"
+        }
+      ],
+      "constraints": []
+    }
+  ]
+}

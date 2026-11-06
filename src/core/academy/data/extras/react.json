@@ -1,0 +1,734 @@
+{
+  "trackId": "react",
+  "lessons": {
+    "ses-react-1-1": {
+      "emoji": "🧩",
+      "summary": "Partes una interfaz en piezas reutilizables y les pasas datos de padre a hijo.",
+      "analogy": "Un componente es un molde de galletas y las props son el relleno: el mismo molde da galletas de chocolate o de fresa según lo que le pongas.",
+      "learned": [
+        "🧩 Puedes dividir una pantalla en piezas pequeñas que se repiten",
+        "📨 Pasas información de una pieza grande a otra más chica",
+        "🔁 Reutilizas un mismo diseño con datos distintos sin copiar y pegar",
+        "👀 Lees una pieza de interfaz y entiendes qué mostrará"
+      ],
+      "check": [
+        {
+          "question": "Escribes `<div class=\"card\">` en JSX y la consola avisa. ¿Qué corriges?",
+          "options": [
+            "Usar class={\"card\"}",
+            "Usar style=\"card\"",
+            "Usar className=\"card\"",
+            "Quitar la clase y usar id"
+          ],
+          "correctIndex": 2,
+          "explanation": "class es palabra reservada en JavaScript, así que JSX usa className. Ponerla entre llaves no cambia el nombre del atributo."
+        },
+        {
+          "question": "Dentro de Tarjeta haces `titulo = titulo.toUpperCase()` sobre la prop recibida. ¿Qué dice tu revisión?",
+          "options": [
+            "Está bien si el componente es pequeño",
+            "Las props no se modifican en el hijo; calcula una variable nueva o pide al padre el dato",
+            "Solo falla con TypeScript",
+            "Hay que usar useRef para cambiarla"
+          ],
+          "correctIndex": 1,
+          "explanation": "Las props son de solo lectura: el padre es dueño del dato. Derivar `const t = titulo.toUpperCase()` es lo correcto; useRef no arregla la propiedad."
+        }
+      ],
+      "diagram": "flowchart TD\n  A[App padre]:::azul -->|titulo nivel| T1[Tarjeta React]:::verde\n  A -->|titulo nivel| T2[Tarjeta Node]:::verde\n  T1 -.->|no modifica| X[props]:::rosa\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n  classDef rosa fill:#FF375F,stroke:#FF375F,color:#fff"
+    },
+    "ses-react-1-2": {
+      "emoji": "🎛️",
+      "summary": "Haces que la pantalla reaccione a clics y teclas guardando datos que cambian con useState.",
+      "analogy": "El estado es el marcador de un partido: solo el árbitro lo cambia (el setter) y cada vez que lo hace, el tablero se vuelve a pintar.",
+      "learned": [
+        "🖲️ Puedes hacer que un botón cambie lo que se ve en pantalla",
+        "📝 Guardas lo que alguien escribe mientras lo escribe",
+        "⬆️ Sabes dónde poner un dato que dos piezas hermanas necesitan",
+        "🧮 Actualizas un contador sin perder clics rápidos"
+      ],
+      "check": [
+        {
+          "question": "Un botón hace `setContador(contador + 1)` tres veces seguidas en el mismo clic y solo suma 1. ¿Cómo lo arreglas?",
+          "options": [
+            "setContador(prev => prev + 1) tres veces",
+            "Hacer contador++ directamente",
+            "Usar setContador(contador + 3) dentro de un setTimeout",
+            "Llamar a forceUpdate()"
+          ],
+          "correctIndex": 0,
+          "explanation": "Las tres llamadas leen el mismo contador viejo. La forma con función recibe el valor más reciente. Mutar contador no dispara re-render."
+        },
+        {
+          "question": "Dos hermanos, Filtro y Lista, necesitan el mismo texto de búsqueda. ¿Dónde vive el estado?",
+          "options": [
+            "Un useState en cada hermano",
+            "En Lista, y Filtro lo lee del DOM",
+            "En una variable global fuera de los componentes",
+            "En el padre común, que lo pasa a ambos y da el setter a Filtro"
+          ],
+          "correctIndex": 3,
+          "explanation": "Es lifting state up: un solo dueño evita que se desincronicen. Dos useState separados serían dos copias que no se enteran entre sí."
+        }
+      ],
+      "diagram": "flowchart LR\n  E[Clic o tecla]:::naranja --> S[setter]:::azul\n  S --> ST[Nuevo estado]:::morado\n  ST --> R[Re-render]:::verde\n  R --> UI[Pantalla]:::cian\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n  classDef naranja fill:#FF9F0A,stroke:#FF9F0A,color:#fff\n  classDef morado fill:#BF5AF2,stroke:#BF5AF2,color:#fff\n  classDef cian fill:#64D2FF,stroke:#64D2FF,color:#1d1d1f"
+    },
+    "ses-react-2-1": {
+      "emoji": "⏱️",
+      "summary": "Ejecutas código después de pintar, limpias lo que dejas abierto y guardas valores sin repintar.",
+      "analogy": "useEffect es la lista de cierre de una tienda: tras atender (render) apagas luces; el cleanup es cerrar con llave antes de irte para no dejar nada encendido.",
+      "learned": [
+        "🧹 Puedes dejar todo limpio cuando una pantalla se cierra",
+        "⏲️ Haces un cronómetro que se pausa y se reinicia sin fallar",
+        "🎯 Pones el cursor en un campo apenas se abre la pantalla",
+        "🔄 Detectas un ciclo que se repite sin fin y lo cortas"
+      ],
+      "check": [
+        {
+          "question": "Un useEffect hace `setData(nuevo)` y no tiene array de dependencias. La pestaña se congela. ¿Por qué?",
+          "options": [
+            "Porque setData debe ir en las dependencias",
+            "Corre tras cada render, setData provoca otro render y se repite sin fin",
+            "Porque useEffect no acepta setters",
+            "Porque falta el cleanup"
+          ],
+          "correctIndex": 1,
+          "explanation": "Sin array el efecto corre en cada render y el setState genera otro. La solución es un array con lo que realmente cambia; el setter es estable y no causa el ciclo."
+        },
+        {
+          "question": "Quieres contar cuántas veces se renderiza un componente sin provocar más renders. ¿Qué usas?",
+          "options": [
+            "useState y sumar en cada render",
+            "useEffect sin dependencias que llama a setCount",
+            "useRef y sumar en ref.current",
+            "Una variable let dentro del componente"
+          ],
+          "correctIndex": 2,
+          "explanation": "Cambiar ref.current no repinta. useState causaría un ciclo infinito; un let interno se reinicia en cada render."
+        }
+      ],
+      "diagram": "flowchart LR\n  R[Render]:::azul --> P[Pinta pantalla]:::verde\n  P --> E[useEffect corre]:::naranja\n  E --> C{Cambió dep?}:::amarillo\n  C -->|sí| CL[Cleanup previo]:::morado --> E\n  C -->|al salir| CL2[Cleanup final]:::rosa\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n  classDef naranja fill:#FF9F0A,stroke:#FF9F0A,color:#fff\n  classDef rosa fill:#FF375F,stroke:#FF375F,color:#fff\n  classDef morado fill:#BF5AF2,stroke:#BF5AF2,color:#fff\n  classDef amarillo fill:#FFD60A,stroke:#FFD60A,color:#1d1d1f"
+    },
+    "ses-react-2-2": {
+      "emoji": "📡",
+      "summary": "Compartes datos como tema o usuario en toda la app sin pasarlos de mano en mano.",
+      "analogy": "Context es la radio del edificio: en lugar de pasar el mensaje piso por piso, el Provider lo transmite y cada departamento que sintoniza lo escucha.",
+      "learned": [
+        "📻 Puedes compartir un dato con toda la app sin pasarlo pieza por pieza",
+        "🌙 Haces un interruptor de tema claro y oscuro para toda la pantalla",
+        "🚧 Detectas cuándo compartir algo global vuelve lenta la app",
+        "🧯 Das un aviso claro si alguien usa algo fuera de su lugar"
+      ],
+      "check": [
+        {
+          "question": "El hook useAuth lanza \"Falta AuthProvider\". El componente Perfil está en el árbol. ¿Causa más probable?",
+          "options": [
+            "Perfil se renderiza fuera del <AuthProvider>, por ejemplo por encima de él",
+            "useContext no funciona con objetos",
+            "Falta poner el contexto en las dependencias",
+            "AuthProvider debe estar dentro de Perfil"
+          ],
+          "correctIndex": 0,
+          "explanation": "useContext devuelve el valor por defecto (null) si no hay Provider arriba. Hay que envolver la app o la rama con el Provider, no al revés."
+        },
+        {
+          "question": "Un formulario guarda cada tecla en un Context y toda la app se repinta al escribir. ¿Qué recomiendas?",
+          "options": [
+            "Mover el Provider más arriba",
+            "Agregar más consumidores",
+            "Usar dos useContext en cada componente",
+            "Guardar ese estado local o en una librería con selectores como Zustand"
+          ],
+          "correctIndex": 3,
+          "explanation": "Cada cambio del Context repinta a todos sus consumidores. Datos que cambian rápido van locales o en una librería con selectores; subir el Provider empeora."
+        }
+      ]
+    },
+    "ses-react-3-1": {
+      "emoji": "🗄️",
+      "summary": "Organizas una app completa por carpetas y separas las llamadas al servidor de la interfaz.",
+      "analogy": "La capa de servicios es el mesero: el componente pide \"tareas\" y no entra a la cocina a ver cómo se preparan ni con qué olla.",
+      "learned": [
+        "🗃️ Puedes ordenar un proyecto para que otra persona encuentre todo rápido",
+        "🧑‍🍳 Separas quién pide los datos de quién los muestra",
+        "⏳ Muestras al usuario que algo está cargando o que falló",
+        "📋 Revisas tu app con una lista antes de publicarla"
+      ],
+      "check": [
+        {
+          "question": "Tres componentes repiten `fetch(\"/api/tareas\")` con los mismos headers. ¿Qué refactor propones?",
+          "options": [
+            "Mover la llamada a services/api.ts (tareaService.getAll) y usarla desde los tres",
+            "Copiar el fetch en un archivo utils por cada componente",
+            "Hacer el fetch en index.html",
+            "Guardar la respuesta en localStorage"
+          ],
+          "correctIndex": 0,
+          "explanation": "Un service layer centraliza URL, headers y errores: un cambio, un lugar. Copiar a utils sigue duplicando; localStorage no reemplaza la llamada."
+        },
+        {
+          "question": "fetchAPI hace `if (!res.ok) throw`. ¿Qué pasaría sin esa línea con un 404?",
+          "options": [
+            "fetch lanzaría un error automáticamente",
+            "El navegador reintentaría solo",
+            "res.json() intentaría leer la respuesta de error como si fuera éxito",
+            "React mostraría una pantalla de error"
+          ],
+          "correctIndex": 2,
+          "explanation": "fetch solo rechaza por fallos de red, no por 404 o 500. Sin el chequeo, el código sigue como si todo fuera bien con datos de error."
+        }
+      ],
+      "diagram": "flowchart LR\n  P[pages]:::azul --> H[hooks]:::morado\n  H --> SV[services api.ts]:::naranja\n  SV --> AP[Servidor]:::cian\n  P --> C[components ui]:::verde\n  P --> CX[context]:::morado\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n  classDef naranja fill:#FF9F0A,stroke:#FF9F0A,color:#fff\n  classDef morado fill:#BF5AF2,stroke:#BF5AF2,color:#fff\n  classDef cian fill:#64D2FF,stroke:#64D2FF,color:#1d1d1f"
+    },
+    "ses-react-4-1": {
+      "emoji": "🧭",
+      "summary": "Navegas entre pantallas sin recargar, lees datos de la URL y proteges páginas privadas.",
+      "analogy": "React Router es el recepcionista de un hotel: miras el número de habitación (la URL) y te lleva a la puerta correcta sin salir del edificio.",
+      "learned": [
+        "🚪 Puedes cambiar de pantalla sin que la página parpadee",
+        "🔢 Lees un número de la dirección web para mostrar el producto correcto",
+        "🔒 Mandas al inicio de sesión a quien intenta entrar sin permiso",
+        "🐇 Haces que la primera carga sea más ligera trayendo pantallas al usarlas"
+      ],
+      "check": [
+        {
+          "question": "Usas `<a href=\"/perfil\">` en la app y cada clic recarga todo y se pierde el estado. ¿Qué cambias?",
+          "options": [
+            "<a href=\"#/perfil\">",
+            "window.location = \"/perfil\"",
+            "<Route path=\"/perfil\">",
+            "<Link to=\"/perfil\">"
+          ],
+          "correctIndex": 3,
+          "explanation": "Link cambia la URL sin recargar y conserva el estado. window.location y <a> recargan; Route define rutas, no enlaces."
+        },
+        {
+          "question": "En /productos/42, ¿cómo obtienes el 42 dentro de ProductoDetalle?",
+          "options": [
+            "useNavigate()",
+            "const { id } = useParams() con la ruta \"/productos/:id\"",
+            "props.match.id siempre",
+            "document.URL.split(\"/\")"
+          ],
+          "correctIndex": 1,
+          "explanation": "useParams lee los segmentos dinámicos definidos con :id. useNavigate sirve para ir a otra ruta; partir la URL a mano es frágil."
+        }
+      ],
+      "diagram": "flowchart LR\n  U[URL dashboard]:::azul --> PR{ProtectedRoute}:::amarillo\n  PR -->|logueado| D[Dashboard lazy]:::verde\n  PR -->|no| L[Redirige a login]:::rosa\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n  classDef rosa fill:#FF375F,stroke:#FF375F,color:#fff\n  classDef amarillo fill:#FFD60A,stroke:#FFD60A,color:#1d1d1f"
+    },
+    "ses-react-5-1": {
+      "emoji": "🎚️",
+      "summary": "Centralizas la lógica de estado con useReducer y la compartes con Context.",
+      "analogy": "Un reducer es la caja registradora: no tocas el dinero a mano, pulsas una tecla (acción) y la caja calcula el nuevo total siempre igual.",
+      "learned": [
+        "🧾 Puedes describir cada cambio posible de tu app como una acción con nombre",
+        "🛒 Manejas un carrito que agrega, quita y vacía sin enredarse",
+        "🧪 Pruebas la lógica de cambios sin abrir la pantalla",
+        "🎯 Sabes cuándo un dato compartido conviene y cuándo no"
+      ],
+      "check": [
+        {
+          "question": "Tu reducer de carrito hace `state.items.push(item); return state` y la pantalla no se actualiza. ¿Por qué?",
+          "options": [
+            "Falta llamar a dispatch dos veces",
+            "Devuelve el mismo objeto mutado; React compara referencia y no ve cambio",
+            "useReducer no acepta arrays",
+            "push es asíncrono"
+          ],
+          "correctIndex": 1,
+          "explanation": "React detecta cambios por referencia. Hay que devolver un objeto nuevo: { ...state, items: [...state.items, item] }."
+        },
+        {
+          "question": "El carrito guarda items, total y cantidad en el estado. Al quitar un item, el total queda desfasado. ¿Mejor diseño?",
+          "options": [
+            "Guardar solo items y calcular total y cantidad como valores derivados",
+            "Agregar una acción ACTUALIZAR_TOTAL",
+            "Guardar el total en otro Context",
+            "Recalcular el total con un useEffect que hace dispatch"
+          ],
+          "correctIndex": 0,
+          "explanation": "Lo que se puede calcular no se guarda: así nunca se desincroniza. Acciones o efectos extra solo añaden pasos que pueden fallar."
+        }
+      ],
+      "diagram": "flowchart LR\n  UI[Componente]:::azul -->|dispatch acción| R[reducer]:::morado\n  ST[Estado actual]:::cian --> R\n  R --> N[Estado nuevo]:::verde\n  N --> UI\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n  classDef morado fill:#BF5AF2,stroke:#BF5AF2,color:#fff\n  classDef cian fill:#64D2FF,stroke:#64D2FF,color:#1d1d1f"
+    },
+    "ses-react-6-1": {
+      "emoji": "📊",
+      "summary": "Diseñas un dashboard por piezas: layout, gráficos, tablas y lógica reutilizable antes de programar.",
+      "analogy": "El compound component es una hamburguesa armable: Chart es el pan y tú eliges qué capas poner dentro (título, cuerpo, leyenda) y en qué orden.",
+      "learned": [
+        "🗂️ Puedes planear las piezas de un tablero antes de escribir código",
+        "📈 Defines qué datos necesita cada tarjeta y cada gráfico",
+        "🍔 Armas un componente que se compone de partes opcionales",
+        "♻️ Evitas repetir la misma lógica de carga en varias pantallas"
+      ],
+      "check": [
+        {
+          "question": "StatsCard recibe `trend: \"up\" | \"down\"`. Un compañero pasa trend=\"subiendo\". ¿Qué lo detecta antes de ejecutar?",
+          "options": [
+            "React en tiempo de ejecución",
+            "ESLint siempre",
+            "TypeScript, porque la interfaz StatsCardProps solo permite \"up\" o \"down\"",
+            "Nada, se verá en producción"
+          ],
+          "correctIndex": 2,
+          "explanation": "El tipo unión limita los valores válidos y el compilador marca el error. React no valida tipos en tiempo de ejecución."
+        },
+        {
+          "question": "Users, Orders y Products repiten loading, error y fetch. ¿Qué extraes?",
+          "options": [
+            "Un Context por cada página",
+            "Un componente <Loader> con el fetch dentro",
+            "Copiar la lógica a utils/helpers.ts sin estado",
+            "Un custom hook useFetch que devuelva { data, loading, error }"
+          ],
+          "correctIndex": 3,
+          "explanation": "La lógica con estado reutilizable va en un custom hook. utils no puede tener estado de React y un Context por página no evita duplicar."
+        }
+      ],
+      "diagram": "flowchart TD\n  DL[DashboardLayout]:::azul --> SB[Sidebar]:::cian\n  DL --> HD[Header]:::cian\n  DL --> MN[main]:::azul\n  MN --> SC[StatsCards]:::verde\n  MN --> RC[RevenueChart]:::naranja\n  MN --> OT[OrdersTable]:::morado\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n  classDef naranja fill:#FF9F0A,stroke:#FF9F0A,color:#fff\n  classDef morado fill:#BF5AF2,stroke:#BF5AF2,color:#fff\n  classDef cian fill:#64D2FF,stroke:#64D2FF,color:#1d1d1f"
+    },
+    "ses-react-6-2": {
+      "emoji": "🚀",
+      "summary": "Optimizas solo lo que mides, pruebas lo que el usuario ve y empaquetas la app para publicarla.",
+      "analogy": "Optimizar sin medir es como cambiar llantas por un ruido sin abrir el capó: el Profiler es el mecánico que te dice qué pieza realmente falla.",
+      "learned": [
+        "🩺 Puedes encontrar qué parte de una pantalla la hace lenta antes de tocarla",
+        "🧪 Escribes pruebas que revisan lo que la persona ve, no las tripas",
+        "📦 Empaquetas tu app para que corra igual en cualquier servidor",
+        "🛑 Sabes cuándo no vale la pena optimizar"
+      ],
+      "check": [
+        {
+          "question": "Envuelves StatsCard en React.memo pero sigue re-renderizando: el padre le pasa `onClick={() => abrir(id)}`. ¿Qué falta?",
+          "options": [
+            "Memorizar el handler con useCallback para que la prop no cambie en cada render",
+            "Usar useMemo en el return del hijo",
+            "Quitar React.memo",
+            "Pasar id en un useRef"
+          ],
+          "correctIndex": 0,
+          "explanation": "memo compara props por referencia y una función inline es nueva en cada render. useCallback mantiene la misma referencia mientras no cambien sus deps."
+        },
+        {
+          "question": "Recargas /dashboard/users en producción con Nginx y sale 404. ¿Qué línea del config lo arregla?",
+          "options": [
+            "proxy_pass http://api:3000;",
+            "EXPOSE 80",
+            "try_files $uri /index.html;",
+            "RUN npm ci"
+          ],
+          "correctIndex": 2,
+          "explanation": "En una SPA el servidor no tiene un archivo /dashboard/users; try_files devuelve index.html y React Router decide. proxy_pass es para /api."
+        }
+      ],
+      "diagram": "flowchart LR\n  M[Medir Profiler]:::azul --> D{Hay problema?}:::amarillo\n  D -->|no| N[No optimizar]:::verde\n  D -->|sí| O[memo useMemo useCallback]:::naranja\n  O --> M\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n  classDef naranja fill:#FF9F0A,stroke:#FF9F0A,color:#fff\n  classDef amarillo fill:#FFD60A,stroke:#FFD60A,color:#1d1d1f"
+    }
+  },
+  "modules": {
+    "mod-react-1": {
+      "emoji": "⚛️",
+      "exam": [
+        {
+          "question": "Un componente retorna `<h1>Hola</h1><p>Texto</p>` y da error. ¿Arreglo mínimo?",
+          "options": [
+            "Separarlos con una coma",
+            "Envolver ambos en un fragmento <>...</>",
+            "Poner return dos veces",
+            "Cambiar h1 por div"
+          ],
+          "correctIndex": 1,
+          "explanation": "JSX exige un único elemento raíz; el fragmento lo da sin agregar un div extra al DOM. Dos return no funcionan: el primero corta."
+        },
+        {
+          "question": "Un input con `value={email}` no deja escribir nada. ¿Qué falta?",
+          "options": [
+            "defaultValue en lugar de nada",
+            "onSubmit en el input",
+            "Un useEffect que lea el input",
+            "onChange={(e) => setEmail(e.target.value)}"
+          ],
+          "correctIndex": 3,
+          "explanation": "Un input controlado sin onChange nunca actualiza el estado, así que React lo regresa al valor viejo. onSubmit va en el form."
+        },
+        {
+          "question": "Al enviar el formulario la página se recarga y pierdes el estado. ¿Qué agregas a handleSubmit?",
+          "options": [
+            "e.preventDefault()",
+            "e.stopPropagation()",
+            "return false",
+            "setEmail(\"\")"
+          ],
+          "correctIndex": 0,
+          "explanation": "preventDefault cancela el envío nativo que recarga la página. stopPropagation solo evita que el evento suba a los padres."
+        },
+        {
+          "question": "Renderizas 3 <Contador /> y haces clic en el primero. ¿Qué pasa con los otros dos?",
+          "options": [
+            "Suben también porque comparten useState",
+            "Se reinician a 0",
+            "Siguen igual: cada instancia tiene su propio estado",
+            "Dan error de estado duplicado"
+          ],
+          "correctIndex": 2,
+          "explanation": "El estado es independiente por instancia. Para compartirlo habría que subirlo al padre."
+        },
+        {
+          "question": "¿Qué muestra `<Saludo nombre=\"Ana\" />` si Saludo es `({ nombre }) => <h1>Hola, nombre</h1>`?",
+          "options": [
+            "Hola, Ana",
+            "Hola, nombre — faltan las llaves {nombre}",
+            "Un error de compilación",
+            "Hola, undefined"
+          ],
+          "correctIndex": 1,
+          "explanation": "Sin llaves, JSX trata \"nombre\" como texto literal. Las expresiones JavaScript van entre { }."
+        },
+        {
+          "question": "Un estilo inline en JSX: ¿cuál es correcto?",
+          "options": [
+            "style=\"color: red\"",
+            "style={color: \"red\"}",
+            "style={{ \"font-size\": \"16px\" color: red }}",
+            "style={{ color: \"red\", fontSize: 16 }}"
+          ],
+          "correctIndex": 3,
+          "explanation": "style recibe un objeto (llaves externas de expresión + internas de objeto) con claves en camelCase. Un string CSS no se acepta."
+        }
+      ]
+    },
+    "mod-react-2": {
+      "emoji": "🪝",
+      "exam": [
+        {
+          "question": "Un efecto con `setInterval` sin cleanup: navegas fuera y vuelves 3 veces. ¿Qué observas?",
+          "options": [
+            "Cuatro intervalos corriendo a la vez y el contador acelera",
+            "Un solo intervalo, React lo reemplaza",
+            "Error al desmontar",
+            "El intervalo se pausa solo"
+          ],
+          "correctIndex": 0,
+          "explanation": "Sin return () => clearInterval, cada montaje deja un intervalo vivo. React no limpia por ti lo que creaste."
+        },
+        {
+          "question": "Un fetch en useEffect con [userId]. El usuario cambia rápido de 1 a 2 y llega primero la respuesta de 2, luego la de 1. ¿Qué evita mostrar datos viejos?",
+          "options": [
+            "Quitar userId de las dependencias",
+            "Usar useRef en vez de useState",
+            "Una bandera cancelled en el cleanup que ignore la respuesta tardía",
+            "Poner un setTimeout"
+          ],
+          "correctIndex": 2,
+          "explanation": "El cleanup del efecto de userId 1 marca cancelled = true, así su respuesta se descarta. Quitar la dependencia dejaría de recargar al cambiar usuario."
+        },
+        {
+          "question": "Necesitas guardar el ID de un setInterval para pausarlo después. ¿Dónde lo guardas?",
+          "options": [
+            "En useState",
+            "En un useRef",
+            "En una variable let del componente",
+            "En un Context"
+          ],
+          "correctIndex": 1,
+          "explanation": "El ID no se muestra, así que no debe causar render: useRef persiste entre renders sin repintar. Un let se pierde en cada render."
+        },
+        {
+          "question": "¿Qué valor recibe useContext si no hay ningún Provider arriba?",
+          "options": [
+            "undefined siempre",
+            "Lanza error automáticamente",
+            "El último valor usado en la app",
+            "El valor por defecto pasado a createContext"
+          ],
+          "correctIndex": 3,
+          "explanation": "Sin Provider se usa el default. Por eso el patrón crea el contexto con null y el hook propio lanza error si recibe null."
+        },
+        {
+          "question": "Tema e idioma están en un solo Context. Cambiar idioma repinta botones que solo usan el tema. ¿Solución sencilla?",
+          "options": [
+            "Separar en TemaContext e IdiomaContext",
+            "Usar useRef para el tema",
+            "Poner todo en useState de App",
+            "Agregar React.memo al Provider"
+          ],
+          "correctIndex": 0,
+          "explanation": "Cada consumidor se repinta cuando cambia el valor de su Context. Separar contextos aísla los cambios."
+        },
+        {
+          "question": "ESLint avisa \"falta someValue en las dependencias\" de un useEffect. ¿Qué haces?",
+          "options": [
+            "Desactivar la regla en esa línea",
+            "Quitar el array de dependencias",
+            "Agregarlo, salvo que sea un setter de useState que es estable",
+            "Mover someValue a una variable global"
+          ],
+          "correctIndex": 2,
+          "explanation": "Omitir dependencias deja el efecto leyendo valores viejos. Los setters son estables y no necesitan ir. Quitar el array lo ejecutaría en cada render."
+        }
+      ]
+    },
+    "mod-react-3": {
+      "emoji": "🏗️",
+      "exam": [
+        {
+          "question": "¿En qué carpeta va useAuth según la arquitectura propuesta?",
+          "options": [
+            "hooks/",
+            "context/",
+            "services/",
+            "utils/"
+          ],
+          "correctIndex": 0,
+          "explanation": "Los custom hooks van en hooks/. El Provider vive en context/ y el hook lo consume; services/ es para llamadas al servidor."
+        },
+        {
+          "question": "La URL del servidor está escrita en api.ts como \"http://localhost:3000\". ¿Qué falla al publicar?",
+          "options": [
+            "Nada, Vite la reemplaza sola",
+            "El build no compila",
+            "Solo falla en Safari",
+            "En producción apuntaría a localhost; debe venir de una variable de entorno"
+          ],
+          "correctIndex": 3,
+          "explanation": "El checklist pide variables de entorno para la URL. localhost en producción apunta a la máquina del visitante."
+        },
+        {
+          "question": "Una lista renderiza tareas con `key={index}` y al borrar una, el checkbox marcado salta a otra fila. ¿Arreglo?",
+          "options": [
+            "Quitar la key",
+            "Usar key={tarea.id} único y estable",
+            "Usar key={Math.random()}",
+            "Envolver la lista en un fragmento"
+          ],
+          "correctIndex": 1,
+          "explanation": "Con el índice, al borrar React reutiliza nodos y el estado se corre. Math.random cambia en cada render y destruye todo."
+        },
+        {
+          "question": "Un componente TareaPage tiene 400 líneas con fetch, filtros y UI. ¿Qué dice el checklist?",
+          "options": [
+            "Está bien si funciona",
+            "Pasarlo a clase",
+            "Partirlo: lógica en custom hooks y UI en componentes de menos de 100 líneas",
+            "Moverlo a utils"
+          ],
+          "correctIndex": 2,
+          "explanation": "Componentes pequeños y hooks para lógica son más fáciles de leer y probar. utils no maneja estado de React."
+        },
+        {
+          "question": "Durante la carga de tareas la pantalla queda en blanco. ¿Qué agregas?",
+          "options": [
+            "Un estado loading que muestre un skeleton o spinner",
+            "Un alert(\"cargando\")",
+            "Un setTimeout de 2 segundos",
+            "Nada, es normal"
+          ],
+          "correctIndex": 0,
+          "explanation": "El checklist UX pide estados de carga visibles. Un alert bloquea y un timeout fijo no refleja la carga real."
+        }
+      ]
+    },
+    "mod-react-4": {
+      "emoji": "🧭",
+      "exam": [
+        {
+          "question": "Tras un login exitoso quieres llevar al usuario a /dashboard desde el handler. ¿Qué usas?",
+          "options": [
+            "<Link to=\"/dashboard\"> dentro del handler",
+            "useParams(\"/dashboard\")",
+            "const navigate = useNavigate(); navigate(\"/dashboard\")",
+            "window.history.back()"
+          ],
+          "correctIndex": 2,
+          "explanation": "useNavigate es para navegación desde código. Link es un elemento que se pinta, no algo que se llama en un handler."
+        },
+        {
+          "question": "Usas `lazy(() => import(\"./Dashboard\"))` y la app explota al entrar a la ruta. ¿Qué falta?",
+          "options": [
+            "Envolver la ruta en <Suspense fallback={...}>",
+            "Un useEffect que importe el módulo",
+            "Exportar Dashboard sin default",
+            "Agregar key a la ruta"
+          ],
+          "correctIndex": 0,
+          "explanation": "Mientras se descarga el código, React necesita un Suspense que muestre algo. lazy además requiere export default."
+        },
+        {
+          "question": "ProtectedRoute revisa auth, pero un usuario sin sesión ve el dashboard un instante antes de salir. ¿Mejor práctica?",
+          "options": [
+            "Ocultar el dashboard con CSS",
+            "Redirigir siempre a /login",
+            "Verificar la sesión en el footer",
+            "Mientras se verifica la sesión, mostrar un loader en vez del contenido"
+          ],
+          "correctIndex": 3,
+          "explanation": "Si se pinta el contenido antes de saber si hay sesión, se filtra. Un estado \"verificando\" evita el destello; ocultar con CSS lo deja en el DOM."
+        },
+        {
+          "question": "¿Qué ventaja tiene lazy loading de rutas?",
+          "options": [
+            "Las rutas cargan más rápido cada vez",
+            "La primera carga descarga menos código",
+            "Elimina la necesidad de Suspense",
+            "Hace innecesario el build"
+          ],
+          "correctIndex": 1,
+          "explanation": "Cada página va en su propio archivo y se descarga al visitarla. La primera vez que entras a esa ruta hay una pequeña espera, no menos."
+        },
+        {
+          "question": "Tienes /productos/:id y el usuario va de /productos/1 a /productos/2. El detalle sigue mostrando el 1. ¿Causa probable?",
+          "options": [
+            "useParams no se actualiza",
+            "Falta un Link",
+            "El efecto que carga el producto no tiene id en sus dependencias",
+            "React Router no soporta parámetros"
+          ],
+          "correctIndex": 2,
+          "explanation": "El componente se reutiliza y useParams sí cambia; si el efecto tiene [] no vuelve a pedir datos. Hay que poner [id]."
+        }
+      ]
+    },
+    "mod-react-5": {
+      "emoji": "🎚️",
+      "exam": [
+        {
+          "question": "¿Cuándo eliges useReducer sobre useState?",
+          "options": [
+            "Siempre, es más moderno",
+            "Cuando varias piezas de estado cambian juntas con reglas, como un carrito",
+            "Para un solo booleano",
+            "Para evitar re-renders"
+          ],
+          "correctIndex": 1,
+          "explanation": "useReducer centraliza transiciones complejas y las hace predecibles. Para un booleano es ceremonia; no evita re-renders por sí mismo."
+        },
+        {
+          "question": "Tu reducer recibe { type: \"VACIAR\" } y no tiene ese caso. ¿Qué buena práctica aplicas?",
+          "options": [
+            "Un default que devuelva el estado o lance error para acciones desconocidas",
+            "Ignorar, nunca pasará",
+            "Hacer dispatch dos veces",
+            "Mutar state a []"
+          ],
+          "correctIndex": 0,
+          "explanation": "Un default evita que el reducer devuelva undefined y rompa la app; lanzar error ayuda a detectar typos. Mutar el estado nunca es válido."
+        },
+        {
+          "question": "Un compañero mete en Context la posición del mouse (cambia 60 veces por segundo). ¿Qué le dices?",
+          "options": [
+            "Está bien, Context es para eso",
+            "Que use dos Providers anidados",
+            "Que use useReducer y listo",
+            "Datos de alta frecuencia en Context repintan a todos los consumidores; mejor estado local o Zustand"
+          ],
+          "correctIndex": 3,
+          "explanation": "Context sirve para datos que cambian poco (tema, auth, idioma). useReducer dentro del Context no evita repintar a todos los consumidores."
+        },
+        {
+          "question": "¿Qué expone normalmente el value de un AppProvider con useReducer?",
+          "options": [
+            "Solo el reducer",
+            "El createContext",
+            "{ state, dispatch }",
+            "Una copia del estado inicial"
+          ],
+          "correctIndex": 2,
+          "explanation": "Los consumidores leen state y envían acciones con dispatch. Exponer el reducer o el estado inicial no permite cambiar nada."
+        },
+        {
+          "question": "¿Por qué un reducer es fácil de testear?",
+          "options": [
+            "Es una función pura: mismo estado y acción dan siempre el mismo resultado",
+            "Porque React lo ejecuta en tests",
+            "Porque no tiene lógica",
+            "Porque usa TypeScript"
+          ],
+          "correctIndex": 0,
+          "explanation": "Pruebas reducer(estado, acción) y comparas el resultado sin montar componentes. No depende de React ni del tipado."
+        }
+      ]
+    },
+    "mod-react-6": {
+      "emoji": "📊",
+      "exam": [
+        {
+          "question": "Un test busca `screen.getByText(/cargando/i)` con loading={true} y falla. ¿Qué revisas primero?",
+          "options": [
+            "Que Vitest esté instalado globalmente",
+            "Que el componente realmente pinte un texto \"Cargando\" cuando loading es true",
+            "Que el componente use React.memo",
+            "Que el test tenga un setTimeout"
+          ],
+          "correctIndex": 1,
+          "explanation": "getByText busca texto visible; si el componente muestra solo un spinner sin texto, el test falla con razón. memo no afecta lo que se pinta."
+        },
+        {
+          "question": "Una tabla con 10.000 filas va lenta al hacer scroll. ¿Qué técnica aplica?",
+          "options": [
+            "useMemo en cada celda",
+            "Más React.memo en el header",
+            "Virtualización con react-window para pintar solo las filas visibles",
+            "Lazy loading de la ruta"
+          ],
+          "correctIndex": 2,
+          "explanation": "La virtualización mantiene en el DOM solo lo que se ve. memo reduce renders, pero no evita tener 10.000 nodos."
+        },
+        {
+          "question": "El Dockerfile copia package*.json y hace npm ci antes de COPY . . ¿Por qué ese orden?",
+          "options": [
+            "Para reutilizar la capa de dependencias si solo cambió el código",
+            "Porque npm ci necesita el código fuente",
+            "Para que el build sea más pequeño",
+            "Por estética"
+          ],
+          "correctIndex": 0,
+          "explanation": "Docker cachea capas: si package.json no cambió, no reinstala. El tamaño final lo reduce el multi-stage con Nginx, no este orden."
+        },
+        {
+          "question": "Aplicas useMemo a `const total = a + b`. ¿Qué dice tu revisión?",
+          "options": [
+            "Perfecto, siempre hay que memorizar",
+            "Debe ser useCallback",
+            "Debe ir en useEffect",
+            "Sobra: el cálculo es trivial y memorizar cuesta más que sumar"
+          ],
+          "correctIndex": 3,
+          "explanation": "useMemo es para cálculos costosos medidos. Optimizar sin medir agrega complejidad; useCallback es para funciones."
+        },
+        {
+          "question": "<Chart><Chart.Title /><Chart.Body data={d} /></Chart>. ¿Qué ventaja da este patrón?",
+          "options": [
+            "Hace el gráfico más rápido",
+            "El usuario del componente elige qué partes mostrar y en qué orden",
+            "Evita pasar data",
+            "Reemplaza a Recharts"
+          ],
+          "correctIndex": 1,
+          "explanation": "Compound components dan flexibilidad de composición. No cambian el rendimiento ni la librería de gráficos."
+        },
+        {
+          "question": "En docker-compose, el dashboard llama a /api. ¿Quién redirige al contenedor api:3000?",
+          "options": [
+            "Nginx con location /api { proxy_pass http://api:3000; }",
+            "React Router",
+            "Vite en producción",
+            "El navegador directamente"
+          ],
+          "correctIndex": 0,
+          "explanation": "En producción no corre el servidor de Vite; Nginx sirve los archivos y hace de proxy hacia la API por el nombre del servicio."
+        },
+        {
+          "question": "¿Qué prueba tiene más valor para el Login?",
+          "options": [
+            "Verificar que useState se llamó",
+            "Contar cuántos divs tiene",
+            "Escribir un email inválido, enviar y verificar que aparezca el mensaje de error",
+            "Comprobar el nombre de las clases CSS"
+          ],
+          "correctIndex": 2,
+          "explanation": "Testing Library prueba comportamiento visible para el usuario. Revisar internals o clases rompe con cualquier refactor."
+        }
+      ]
+    }
+  }
+}

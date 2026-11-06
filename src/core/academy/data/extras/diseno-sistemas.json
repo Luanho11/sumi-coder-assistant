@@ -1,0 +1,450 @@
+{
+  "trackId": "diseno-sistemas",
+  "lessons": {
+    "sd-l1": {
+      "emoji": "⏱️",
+      "summary": "Hablas de rapidez con números y repartes el trabajo entre varias máquinas sin perder datos del usuario.",
+      "analogy": "Un banco con varias cajas y un turnero: da igual a qué caja te mande, porque tu expediente está en el archivo central, no en el cajón del cajero.",
+      "learned": [
+        "⏱️ Puedes explicar por qué una página tarda con números y no con sensaciones",
+        "📊 Te fijas en los usuarios que peor lo pasan, no solo en el promedio",
+        "↔️ Sabes repartir visitas entre varias máquinas para aguantar un día de ofertas",
+        "🧰 Sacas del reparto a una máquina caída sin que nadie lo note"
+      ],
+      "check": [
+        {
+          "question": "Tu API tiene promedio de 90 ms y p99 de 4 s. ¿Qué concluyes?",
+          "options": [
+            "Todo va bien: el promedio es bajo",
+            "El p99 es un error de medición",
+            "Un 1 % de usuarios espera muchísimo; hay que buscar qué peticiones son lentas",
+            "Hay que escalar en vertical ya"
+          ],
+          "correctIndex": 2,
+          "explanation": "El promedio esconde la cola lenta. El p99 señala peticiones concretas que investigar antes de comprar máquinas."
+        },
+        {
+          "question": "Un servidor detrás del balanceador se cuelga pero sigue recibiendo tráfico. ¿Qué falta?",
+          "options": [
+            "Health checks que lo saquen del reparto",
+            "Más memoria RAM",
+            "Un algoritmo round robin",
+            "Una CDN"
+          ],
+          "correctIndex": 0,
+          "explanation": "Sin health check el balanceador no sabe que falla. Round robin seguiría mandándole su turno."
+        }
+      ],
+      "diagram": "flowchart LR\n  U[Usuarios]:::azul --> B[Balanceador]:::morado\n  B --> S1[Servidor 1]:::verde\n  B --> S2[Servidor 2]:::verde\n  B -.->|health check falla| S3[Servidor 3]:::rosa\n  S1 --> R[Sesiones Redis]:::naranja\n  S2 --> R\n  S1 --> D[Base de datos]:::cian\n  S2 --> D\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef morado fill:#BF5AF2,stroke:#BF5AF2,color:#fff\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n  classDef rosa fill:#FF375F,stroke:#FF375F,color:#fff\n  classDef naranja fill:#FF9F0A,stroke:#FF9F0A,color:#fff\n  classDef cian fill:#64D2FF,stroke:#64D2FF,color:#1d1d1f"
+    },
+    "sd-l2": {
+      "emoji": "🗄️",
+      "summary": "Guardas a mano lo que más se pide para responder rápido, y sabes cuándo tirarlo para no mentir.",
+      "analogy": "La nevera de la oficina: el agua y los refrescos que todos piden están ahí; la leche lleva fecha de caducidad y si alguien trae nueva, se tira la vieja.",
+      "learned": [
+        "🗄️ Puedes hacer que las páginas más visitadas carguen al instante",
+        "♻️ Decides cuándo tirar un dato guardado para no mostrar precios viejos",
+        "🌎 Haces que las fotos lleguen rápido a usuarios de otros países",
+        "⚖️ Distingues qué información puede llegar con retraso y cuál no"
+      ],
+      "check": [
+        {
+          "question": "A las 00:00 expira la clave del \"producto del día\" y la base de datos se cae. ¿Qué fue?",
+          "options": [
+            "Una estampida: miles de misses simultáneos; usa bloqueo o TTL con variación",
+            "La CDN dejó de funcionar",
+            "Redis se quedó sin memoria",
+            "Un ataque de inyección SQL"
+          ],
+          "correctIndex": 0,
+          "explanation": "Todas las peticiones encontraron la caché vacía a la vez y fueron a la base. Un candado para regenerar o TTL con azar lo evita."
+        },
+        {
+          "question": "¿Qué archivo pones en la CDN con max-age de un año?",
+          "options": [
+            "El HTML del perfil del usuario",
+            "La respuesta del saldo de la cuenta",
+            "app.3f9a1c.js, que cambia de nombre en cada versión",
+            "El carrito de compras"
+          ],
+          "correctIndex": 2,
+          "explanation": "El hash en el nombre hace que cada versión sea un archivo nuevo, así que cachearlo para siempre es seguro. Lo personal no va a la CDN."
+        }
+      ],
+      "diagram": "flowchart LR\n  P[Petición]:::azul --> C{En caché}:::amarillo\n  C -->|hit| R[Respuesta rápida]:::verde\n  C -->|miss| D[Base de datos]:::naranja\n  D --> G[Guardar con TTL]:::morado\n  G --> R\n  W[Cambio de precio]:::rosa -.->|borra clave| C\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef amarillo fill:#FFD60A,stroke:#FFD60A,color:#1d1d1f\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n  classDef naranja fill:#FF9F0A,stroke:#FF9F0A,color:#fff\n  classDef morado fill:#BF5AF2,stroke:#BF5AF2,color:#fff\n  classDef rosa fill:#FF375F,stroke:#FF375F,color:#fff"
+    },
+    "sd-l3": {
+      "emoji": "📇",
+      "summary": "Eliges dónde guardar cada dato según cómo se consulta y haces que las búsquedas lentas vuelen.",
+      "analogy": "Una biblioteca: el índice de autores te lleva directo al estante, y las fotocopias en otras salas reparten lectores, aunque tardan un rato en recibir las páginas nuevas.",
+      "learned": [
+        "🧭 Puedes defender dónde guardar cada tipo de dato de un negocio",
+        "📇 Haces que una búsqueda de 2 segundos tarde milisegundos",
+        "🪞 Repartes la lectura entre copias sin que alguien vea su cambio desaparecer",
+        "⚖️ Sabes que acelerar la lectura puede frenar la escritura"
+      ],
+      "check": [
+        {
+          "question": "Tienes índice en (cliente_id, creado_en). ¿Qué consulta NO lo aprovecha bien?",
+          "options": [
+            "WHERE cliente_id = 7",
+            "WHERE creado_en > ayer, sin filtrar por cliente",
+            "WHERE cliente_id = 7 ORDER BY creado_en DESC",
+            "WHERE cliente_id = 7 AND creado_en > ayer"
+          ],
+          "correctIndex": 1,
+          "explanation": "Un índice compuesto se usa de izquierda a derecha. Sin cliente_id la base no puede saltar a las filas por fecha."
+        },
+        {
+          "question": "El primario aguanta las lecturas con réplicas, pero ya no da abasto con las escrituras. ¿Qué toca?",
+          "options": [
+            "Más réplicas de lectura",
+            "Más índices",
+            "Una CDN delante",
+            "Particionar datos entre varias bases (sharding)"
+          ],
+          "correctIndex": 3,
+          "explanation": "Las réplicas solo reparten lecturas; todas las escrituras siguen yendo al primario. Más índices empeoran las escrituras."
+        }
+      ],
+      "diagram": "flowchart LR\n  A[App]:::azul -->|escrituras| P[Primario]:::naranja\n  P -->|replica con retraso| R1[Réplica 1]:::verde\n  P -->|replica con retraso| R2[Réplica 2]:::verde\n  A -->|lecturas| R1\n  A -->|lecturas| R2\n  A -.->|leer tras escribir| P\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef naranja fill:#FF9F0A,stroke:#FF9F0A,color:#fff\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff"
+    },
+    "sd-l4": {
+      "emoji": "📬",
+      "summary": "Respondes al usuario al instante y dejas que el trabajo lento se haga detrás, sin duplicar ni perder nada.",
+      "analogy": "Una tintorería: te dan un ticket en un minuto y tu ropa se lava después. Si pierdes el ticket y vuelves, el número evita que te laven el saco dos veces.",
+      "learned": [
+        "📬 Puedes hacer que pagar tarde un instante aunque detrás pasen muchas cosas",
+        "🔁 Evitas que un cliente reciba el mismo correo dos veces",
+        "☠️ Apartas las tareas que fallan siempre para revisarlas con calma",
+        "📈 Sabes qué mirar para notar que el trabajo pendiente se está acumulando"
+      ],
+      "check": [
+        {
+          "question": "La cola de \"enviar factura\" pasó de 50 a 80.000 mensajes en una hora. ¿Qué miras primero?",
+          "options": [
+            "El tamaño de los PDF",
+            "Si los workers fallan en cada mensaje o si faltan workers para el ritmo de entrada",
+            "La CDN",
+            "El índice de la tabla de usuarios"
+          ],
+          "correctIndex": 1,
+          "explanation": "Una cola que crece indica que se consume más lento de lo que entra: workers caídos, un error repetido o falta de capacidad."
+        },
+        {
+          "question": "El servicio de correo está caído 10 minutos. ¿Qué política de reintentos usas?",
+          "options": [
+            "Reintentar cada 10 ms sin límite",
+            "Descartar el mensaje al primer fallo",
+            "Backoff exponencial con jitter y límite de intentos, luego DLQ",
+            "Reintentar dentro de la petición del usuario"
+          ],
+          "correctIndex": 2,
+          "explanation": "El backoff no satura al servicio caído y el jitter evita que todos reintenten a la vez. Reintentar cada 10 ms lo empeora."
+        }
+      ],
+      "diagram": "flowchart LR\n  U[Pagar]:::azul --> A[App: cobro y stock]:::verde\n  A --> Q[Cola de eventos]:::morado\n  Q --> W1[Worker factura]:::cian\n  Q --> W2[Worker correo]:::cian\n  W2 -->|falla 5 veces| D[Mensajes muertos]:::rosa\n  W1 --> OK[Hecho]:::verde\n  W2 -.->|reintento backoff| Q\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n  classDef morado fill:#BF5AF2,stroke:#BF5AF2,color:#fff\n  classDef cian fill:#64D2FF,stroke:#64D2FF,color:#1d1d1f\n  classDef rosa fill:#FF375F,stroke:#FF375F,color:#fff"
+    },
+    "sd-l5": {
+      "emoji": "🔗",
+      "summary": "Resuelves de punta a punta el problema de entrevista más clásico, con cuentas y decisiones defendidas.",
+      "analogy": "El guardarropa de un teatro: das el abrigo, te dan una ficha con un número corto, y con ella lo recuperas al instante sin describir el abrigo.",
+      "learned": [
+        "🔗 Puedes diseñar en pizarra un servicio de enlaces cortos de principio a fin",
+        "🧮 Haces cuentas rápidas para saber cuánta carga y espacio necesita un sistema",
+        "🔑 Explicas por qué siete caracteres alcanzan para miles de millones de enlaces",
+        "🗣️ Defiendes una decisión diciendo qué ganas y qué pierdes"
+      ],
+      "check": [
+        {
+          "question": "Usas un hash MD5 de la URL y tomas 7 caracteres. ¿Qué problema debes resolver?",
+          "options": [
+            "Las claves serían muy largas",
+            "Colisiones: dos URLs distintas pueden dar la misma clave; comprobar y reintentar",
+            "MD5 no funciona con URLs con tildes",
+            "Las claves serían consecutivas y adivinables"
+          ],
+          "correctIndex": 1,
+          "explanation": "Al truncar el hash aparecen colisiones. Las claves consecutivas son el problema del contador, no del hash."
+        },
+        {
+          "question": "Lecturas 100 veces más que escrituras. ¿Qué pieza aporta más?",
+          "options": [
+            "Sharding desde el día 1",
+            "Una cola para las redirecciones",
+            "Una caché de claves calientes delante de la base",
+            "Réplicas de escritura"
+          ],
+          "correctIndex": 2,
+          "explanation": "Con tanta lectura y pocos enlaces muy populares, la caché absorbe la mayoría. Encolar la redirección la haría lenta."
+        }
+      ],
+      "diagram": "flowchart LR\n  U[Usuario]:::azul --> LB[Balanceador]:::morado\n  LB --> S[Servicio enlaces]:::verde\n  S --> C{Caché Redis}:::amarillo\n  C -->|miss| DB[Base enlaces]:::naranja\n  S -->|302 + evento| Q[Cola de clics]:::cian\n  Q --> W[Worker estadísticas]:::cian\n  K[Contador por rangos]:::morado --> S\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef morado fill:#BF5AF2,stroke:#BF5AF2,color:#fff\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n  classDef amarillo fill:#FFD60A,stroke:#FFD60A,color:#1d1d1f\n  classDef naranja fill:#FF9F0A,stroke:#FF9F0A,color:#fff\n  classDef cian fill:#64D2FF,stroke:#64D2FF,color:#1d1d1f"
+    },
+    "sd-l6": {
+      "emoji": "💬",
+      "summary": "Diseñas un chat donde los mensajes llegan al instante, en orden y aunque el otro esté desconectado.",
+      "analogy": "Una central de radiotaxis: cada chofer tiene su canal abierto, la central reparte el aviso al que toque y anota todo en la bitácora por si alguien estaba sin señal.",
+      "learned": [
+        "💬 Puedes explicar cómo un mensaje viaja de un celular a otro en segundos",
+        "📴 Te aseguras de que nadie pierda mensajes por quedarse sin señal",
+        "🔢 Haces que todos vean la conversación en el mismo orden",
+        "🟢 Sabes cómo una app decide si alguien está en línea"
+      ],
+      "check": [
+        {
+          "question": "Beto estaba sin señal 20 minutos. Al volver, ¿cómo recupera lo que se perdió?",
+          "options": [
+            "Pide al servidor los mensajes desde el último número de secuencia que vio",
+            "Espera a que alguien reenvíe",
+            "El servidor reenvía todo el historial completo",
+            "No se puede: los WebSockets no guardan nada"
+          ],
+          "correctIndex": 0,
+          "explanation": "Guardar antes de enviar y sincronizar desde el último seq recupera solo lo que falta. Reenviar todo el historial desperdicia datos."
+        },
+        {
+          "question": "¿Por qué el servidor 1 publica el mensaje en un canal en vez de mandarlo directo al socket de Beto?",
+          "options": [
+            "Porque los WebSockets solo admiten un mensaje por vez",
+            "Para cifrarlo",
+            "Porque el socket de Beto puede estar en otro servidor; el canal llega a todos los suscritos",
+            "Para que tarde más y no sature"
+          ],
+          "correctIndex": 2,
+          "explanation": "Cada servidor solo tiene sus propios sockets. Pub/sub lleva el mensaje al servidor que tiene la conexión de Beto."
+        }
+      ],
+      "diagram": "flowchart LR\n  A[App de Ana]:::azul -->|socket| S1[Servidor 1]:::verde\n  S1 --> DB[Mensajes con seq]:::naranja\n  S1 --> PS[Pub/sub]:::morado\n  PS --> S3[Servidor 3]:::verde\n  S3 -->|socket| B[App de Beto]:::azul\n  PS -.->|Beto offline| N[Notificación push]:::amarillo\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n  classDef naranja fill:#FF9F0A,stroke:#FF9F0A,color:#fff\n  classDef morado fill:#BF5AF2,stroke:#BF5AF2,color:#fff\n  classDef amarillo fill:#FFD60A,stroke:#FFD60A,color:#1d1d1f"
+    },
+    "sd-l7": {
+      "emoji": "🚦",
+      "summary": "Diseñas un servicio con IA para miles de clientes que no se cae en el pico ni rompe el presupuesto.",
+      "analogy": "Una panadería con un solo horno: los pedidos grandes se hornean de madrugada, los del día hacen fila con turno, y a nadie le das más de tres bandejas en hora punta.",
+      "learned": [
+        "🚦 Puedes ordenar la demanda para no pasarte de lo que el proveedor permite",
+        "💸 Bajas la factura de la IA preparando trabajo por adelantado",
+        "🧯 Haces que la app siga útil aunque el servicio de IA falle",
+        "👥 Evitas que un solo cliente acapare lo que es de todos"
+      ],
+      "check": [
+        {
+          "question": "El 40 % de las preguntas a tu asistente son idénticas (\"¿horario de atención?\"). ¿Qué palanca usas?",
+          "options": [
+            "Un modelo más grande",
+            "Subir la temperatura",
+            "Caché de respuestas por hash de la pregunta normalizada",
+            "Más workers"
+          ],
+          "correctIndex": 2,
+          "explanation": "Una respuesta guardada cuesta casi cero y responde al instante. Más workers o un modelo grande solo aumentan el gasto."
+        },
+        {
+          "question": "El proveedor del LLM está caído 15 minutos. ¿Qué debe pasar en tu app?",
+          "options": [
+            "Toda la app muestra error 500",
+            "Reintenta cada segundo sin parar",
+            "Se borra la cola de pendientes",
+            "Modo degradado: lo demás sigue funcionando y la función de IA avisa o usa un respaldo"
+          ],
+          "correctIndex": 3,
+          "explanation": "La IA es una parte, no toda la app. Un respaldo o un aviso claro mantiene el servicio; reintentar sin parar no ayuda."
+        }
+      ],
+      "diagram": "flowchart LR\n  U[Usuarios]:::azul --> L{Límite por cliente}:::amarillo\n  L --> C{Caché}:::amarillo\n  C -->|hit| R[Respuesta]:::verde\n  C -->|miss| Q[Cola]:::morado\n  Q --> W[Workers al ritmo de cuota]:::cian\n  W --> M[LLM principal]:::naranja\n  W -.->|429 o caída| F[Respaldo o degradado]:::rosa\n  M --> R\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef amarillo fill:#FFD60A,stroke:#FFD60A,color:#1d1d1f\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n  classDef morado fill:#BF5AF2,stroke:#BF5AF2,color:#fff\n  classDef cian fill:#64D2FF,stroke:#64D2FF,color:#1d1d1f\n  classDef naranja fill:#FF9F0A,stroke:#FF9F0A,color:#fff\n  classDef rosa fill:#FF375F,stroke:#FF375F,color:#fff"
+    }
+  },
+  "modules": {
+    "sd-m1": {
+      "emoji": "🏗️",
+      "exam": [
+        {
+          "question": "Tu página de producto tarda 800 ms: 20 ms de código y 780 ms en 6 consultas a la base en serie. ¿Qué atacas primero?",
+          "options": [
+            "Reescribir el código en otro lenguaje",
+            "Una CDN para el HTML personalizado",
+            "Más CPU en el servidor de la app",
+            "Las consultas: cachear las repetidas o hacerlas en paralelo"
+          ],
+          "correctIndex": 3,
+          "explanation": "El tiempo está en la base, no en el código. Más CPU en la app no cambia 780 ms de espera de consultas."
+        },
+        {
+          "question": "Quieres escalar en horizontal y la app guarda archivos subidos en el disco local de cada servidor. ¿Qué pasa?",
+          "options": [
+            "Nada, el balanceador lo resuelve",
+            "Un archivo subido a un servidor no existe en los otros; muévelos a almacenamiento compartido",
+            "Los archivos se copian solos",
+            "Solo afecta a archivos grandes"
+          ],
+          "correctIndex": 1,
+          "explanation": "El disco local es estado del servidor. Un almacenamiento de objetos compartido lo deja sin estado."
+        },
+        {
+          "question": "Cacheas el stock de productos 10 minutos. ¿Dónde puede salir caro?",
+          "options": [
+            "En el último paso del pago, si vendes algo agotado",
+            "En la portada",
+            "En la página de categorías",
+            "En el buscador"
+          ],
+          "correctIndex": 0,
+          "explanation": "Mostrar stock aproximado en listados es aceptable; confirmar la compra con dato viejo causa ventas sin stock."
+        },
+        {
+          "question": "Tu p50 es 80 ms y el p99 1,8 s solo en la búsqueda. ¿Qué haces?",
+          "options": [
+            "Comprar servidores más grandes",
+            "Ignorarlo: el p50 es bueno",
+            "Investigar qué búsquedas caen en el 1 % lento, por ejemplo sin índice o con muchos resultados",
+            "Subir el TTL de todas las cachés"
+          ],
+          "correctIndex": 2,
+          "explanation": "Un p99 alto localizado apunta a casos concretos. Servidores más grandes rara vez arreglan una consulta mal indexada."
+        },
+        {
+          "question": "Un usuario en Buenos Aires tarda 2 s en cargar imágenes servidas desde EE. UU. ¿Qué pieza ayuda?",
+          "options": [
+            "Una réplica de lectura",
+            "Una cola",
+            "Un índice",
+            "Una CDN con nodos cercanos al usuario"
+          ],
+          "correctIndex": 3,
+          "explanation": "La CDN acerca los archivos estáticos al usuario. Réplicas e índices aceleran la base, no la descarga de imágenes."
+        }
+      ]
+    },
+    "sd-m2": {
+      "emoji": "🗃️",
+      "exam": [
+        {
+          "question": "Una tabla de pedidos tiene 12 índices y las inserciones se volvieron lentas. ¿Qué haces?",
+          "options": [
+            "Añadir otro índice",
+            "Revisar qué índices no se usan y eliminarlos",
+            "Pasar a una cola de lecturas",
+            "Más réplicas"
+          ],
+          "correctIndex": 1,
+          "explanation": "Cada índice se actualiza en cada inserción. Quitar los que no usa ninguna consulta acelera la escritura."
+        },
+        {
+          "question": "Un worker cobra la suscripción mensual y la cola entrega el mensaje dos veces. ¿Cuál es la defensa principal?",
+          "options": [
+            "Que la cola nunca reintente",
+            "Procesar los mensajes muy rápido",
+            "Idempotencia: clave única por cobro (cliente + mes) que impide repetirlo",
+            "Un timeout más largo"
+          ],
+          "correctIndex": 2,
+          "explanation": "Una clave única hace que el segundo intento no cobre de nuevo. Quitar reintentos hace que algunos cobros nunca se intenten."
+        },
+        {
+          "question": "Guardas el carrito de compras, que se lee y escribe completo por id de sesión y caduca en 7 días. ¿Qué almacén encaja mejor?",
+          "options": [
+            "Clave-valor con caducidad, como Redis",
+            "Una tabla con joins entre 5 tablas",
+            "Un CSV en el servidor",
+            "La CDN"
+          ],
+          "correctIndex": 0,
+          "explanation": "Acceso por clave, lectura completa y caducidad son el caso típico de clave-valor. Los joins añaden trabajo sin aportar nada aquí."
+        },
+        {
+          "question": "Después de publicar un comentario el usuario no lo ve en la página, y a los 3 segundos sí. ¿Causa probable?",
+          "options": [
+            "Falta un índice",
+            "La cola está llena",
+            "La CDN tiene la página",
+            "Lee de una réplica con retraso respecto al primario"
+          ],
+          "correctIndex": 3,
+          "explanation": "Es el retraso de réplica típico. Leer del primario tras escribir lo corrige."
+        },
+        {
+          "question": "Un mensaje falla siempre porque su pedido no existe. ¿Qué evita que bloquee o gaste recursos para siempre?",
+          "options": [
+            "Reintentos infinitos",
+            "Un límite de intentos y moverlo a la cola de mensajes muertos",
+            "Borrar la cola completa",
+            "Más workers"
+          ],
+          "correctIndex": 1,
+          "explanation": "Tras N intentos, la DLQ lo aparta para revisión. Más workers solo reintentan el mismo error más rápido."
+        }
+      ]
+    },
+    "sd-m3": {
+      "emoji": "🎤",
+      "exam": [
+        {
+          "question": "En una entrevista de diseño te piden \"un sistema de reservas para clínicas\". ¿Qué haces en los primeros 5 minutos?",
+          "options": [
+            "Dibujar microservicios",
+            "Elegir base de datos",
+            "Preguntar requisitos y escala: usuarios, reservas por día, qué pasa con dobles reservas",
+            "Escribir código"
+          ],
+          "correctIndex": 2,
+          "explanation": "Sin requisitos ni números no puedes justificar nada. Elegir tecnología antes es el error más visto por los entrevistadores."
+        },
+        {
+          "question": "En el acortador, ¿por qué los clics se registran en una cola y no directamente en la base durante la redirección?",
+          "options": [
+            "Para que la redirección no espere a la escritura y aguante los picos",
+            "Porque las colas son más baratas que las bases",
+            "Para poder borrar clics",
+            "Porque la base no admite escrituras"
+          ],
+          "correctIndex": 0,
+          "explanation": "La redirección debe ser rápida; la escritura del clic puede esperar. Así el pico de clics no frena a los usuarios."
+        },
+        {
+          "question": "En el chat, un servidor de conexiones se reinicia. ¿Qué evita que se pierdan mensajes?",
+          "options": [
+            "Guardar mensajes solo en memoria",
+            "Pedir a los usuarios que no envíen nada",
+            "Usar 301",
+            "Guardar antes de enviar y que el cliente sincronice desde su último seq al reconectar"
+          ],
+          "correctIndex": 3,
+          "explanation": "La base es la fuente de verdad y el seq dice qué falta. Lo que solo vive en memoria se pierde con el reinicio."
+        },
+        {
+          "question": "Tu sistema con LLM recibe 429 y además gasta el doble de lo previsto. ¿Qué medida ataca ambos a la vez?",
+          "options": [
+            "Reintentar más rápido",
+            "Caché de respuestas repetidas y enrutar tareas simples a un modelo pequeño",
+            "Subir max_tokens",
+            "Quitar el límite por usuario"
+          ],
+          "correctIndex": 1,
+          "explanation": "Menos llamadas al modelo grande reduce gasto y uso de cuota. Reintentar rápido aumenta ambos."
+        },
+        {
+          "question": "Te preguntan \"¿y si el tráfico se multiplica por 10?\" en el acortador. ¿Qué respuesta muestra más criterio?",
+          "options": [
+            "Pasar todo a microservicios",
+            "Cambiar a NoSQL",
+            "Rehacerlo en Go",
+            "Identificar el primer cuello de botella con números y escalar esa pieza: más caché, réplicas, servidores"
+          ],
+          "correctIndex": 3,
+          "explanation": "Escalar la pieza que se satura, con cuentas, es lo que se evalúa. Cambiar tecnología sin diagnóstico no responde la pregunta."
+        },
+        {
+          "question": "Para el chat de 50.000 conectados, ¿por qué el servicio de conexiones se escala distinto que el de guardar mensajes?",
+          "options": [
+            "Porque usa otro lenguaje",
+            "Porque los sockets son estado: cada servidor tiene sus conexiones, el de guardar es sin estado",
+            "Porque es más barato",
+            "No hay diferencia"
+          ],
+          "correctIndex": 1,
+          "explanation": "Los sockets atan a cada usuario a un servidor. Guardar y leer mensajes es sin estado y escala detrás de un balanceador normal."
+        }
+      ]
+    }
+  }
+}

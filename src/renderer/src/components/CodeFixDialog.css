@@ -1,0 +1,54 @@
+.modal.wide {
+  width: min(860px, 100%);
+}
+.warning {
+  font-size: 13px;
+  padding: 12px 14px;
+  border-radius: var(--radius);
+  background: color-mix(in srgb, var(--warn) 12%, var(--panel));
+}
+.warning ul {
+  margin: 6px 0 0;
+  padding-left: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.file-name {
+  font-size: 13px;
+  margin: 0 0 10px;
+  overflow-wrap: anywhere;
+}
+.modal-actions.start {
+  justify-content: flex-start;
+}
+.modal-actions .spacer {
+  flex: 1;
+}
+.danger-link {
+  background: none;
+  color: var(--error);
+  padding: 5px 0;
+}
+.diff {
+  max-height: 360px;
+  overflow: auto;
+  background: var(--code-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 10px 0;
+  font: 12px/1.55 var(--mono);
+  margin: 0;
+}
+.diff > div {
+  padding: 0 12px;
+  white-space: pre;
+}
+.diff-add {
+  background: color-mix(in srgb, var(--ok) 16%, transparent);
+}
+.diff-del {
+  background: color-mix(in srgb, var(--error) 14%, transparent);
+  text-decoration: line-through;
+  text-decoration-color: color-mix(in srgb, var(--error) 50%, transparent);
+}

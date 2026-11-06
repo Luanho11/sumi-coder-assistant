@@ -1,0 +1,22 @@
+.diagram {
+  margin: 10px 0;
+  padding: 16px;
+  border-radius: var(--radius-lg);
+  background: var(--panel-2);
+  overflow-x: auto;
+  text-align: center;
+  animation: fade-up 0.35s var(--ease);
+}
+.diagram svg {
+  max-width: 100%;
+  height: auto;
+}
+.diagram-pending pre {
+  background: var(--code-bg);
+  border: 1px dashed var(--border);
+  border-radius: var(--radius);
+  padding: 12px 14px;
+  margin: 8px 0 4px;
+  font: 12.5px/1.6 var(--mono);
+  overflow-x: auto;
+}

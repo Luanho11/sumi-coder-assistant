@@ -1,0 +1,849 @@
+{
+  "trackId": "qa-testing",
+  "lessons": {
+    "mod-5-s1": {
+      "emoji": "🛡️",
+      "summary": "Distingues prevenir de detectar defectos y aplicas los 7 principios ISTQB a casos reales.",
+      "analogy": "QA es el chef que revisa la receta y la frescura de los ingredientes; QC es quien prueba el plato antes de que salga a la mesa.",
+      "learned": [
+        "🍲 Puedes explicar la diferencia entre evitar un problema y encontrarlo a tiempo",
+        "🐛 Sabes reconocer cuándo unas pruebas viejas ya no encuentran nada nuevo",
+        "🗣️ Puedes responder con argumentos a quien diga \"si pasó las pruebas, no tiene fallas\""
+      ],
+      "check": [
+        {
+          "question": "Antes de programar, revisas la historia de usuario y señalas que \"rápido\" no tiene un número. ¿Qué actividad es?",
+          "options": [
+            "QA: prevención sobre el proceso",
+            "QC: detección en el producto",
+            "Testing: ejecución de casos",
+            "No es calidad, es análisis de negocio"
+          ],
+          "correctIndex": 0,
+          "explanation": "Revisar requisitos evita que el defecto exista: eso es QA. QC y testing trabajan sobre algo ya construido, y aquí aún no hay código."
+        },
+        {
+          "question": "Tu suite de 200 pruebas pasa siempre desde hace un año sin cambios, pero en producción aparecen bugs nuevos. ¿Qué principio explica esto?",
+          "options": [
+            "El testing exhaustivo es imposible",
+            "Agrupamiento de defectos",
+            "Paradoja del pesticida: las pruebas dejaron de encontrar defectos nuevos",
+            "Testing temprano ahorra dinero"
+          ],
+          "correctIndex": 2,
+          "explanation": "Repetir las mismas pruebas sin actualizarlas las vuelve inútiles contra fallas nuevas. El agrupamiento hablaría de bugs concentrados en un módulo."
+        }
+      ],
+      "diagram": "flowchart TD\n  QA[QA: cuida el proceso]:::morado --> QC[QC: revisa el producto]:::azul\n  QC --> T[Testing: ejecuta casos]:::verde\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n  classDef morado fill:#BF5AF2,stroke:#BF5AF2,color:#fff"
+    },
+    "mod-5-s2": {
+      "emoji": "🔄",
+      "summary": "Recorres las 6 fases del ciclo de testing y ubicas a cada rol de QA dentro de un sprint ágil.",
+      "analogy": "El ciclo de testing es preparar un viaje: decides destino, planeas ruta, haces maleta, viajas, anotas problemas y al volver cuentas qué aprendiste.",
+      "learned": [
+        "🧳 Puedes ordenar el trabajo de pruebas en pasos claros de inicio a fin",
+        "👥 Sabes qué hace cada persona en un equipo de calidad y a quién acudir",
+        "🤝 Puedes defender que la calidad es tarea de todo el equipo, no de una sola persona"
+      ],
+      "check": [
+        {
+          "question": "Antes de diseñar casos, el QA lee la historia y pregunta \"¿qué pasa si el cupón está vencido?\". ¿En qué fase está?",
+          "options": [
+            "Análisis de requisitos",
+            "Planificación",
+            "Diseño de pruebas",
+            "Cierre"
+          ],
+          "correctIndex": 0,
+          "explanation": "Identificar qué hay que probar es la primera fase. El diseño viene después, cuando esa pregunta se convierte en un caso con pasos y datos."
+        },
+        {
+          "question": "Un dev dice \"la calidad es trabajo del QA\". Según el enfoque de equipo completo, ¿qué respondes?",
+          "options": [
+            "Tiene razón: QA prueba y dev programa",
+            "La calidad es de todos: los criterios van en la Definition of Done y todos los cumplen",
+            "QA solo participa en la Sprint Review",
+            "La calidad la define el QA Manager por su cuenta"
+          ],
+          "correctIndex": 1,
+          "explanation": "En Scrum el QA es parte del equipo y la Definition of Done incluye criterios de calidad verificables por todos. Separar roles así lleva a probar todo al final."
+        }
+      ],
+      "diagram": "flowchart LR\n  A[Requisitos]:::azul --> P[Planificación]:::cian\n  P --> D[Diseño]:::cian\n  D --> E[Ejecución]:::naranja\n  E --> R[Reporte de defectos]:::rosa\n  R --> C[Cierre]:::verde\n  C -.->|siguiente sprint| A\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n  classDef naranja fill:#FF9F0A,stroke:#FF9F0A,color:#fff\n  classDef rosa fill:#FF375F,stroke:#FF375F,color:#fff\n  classDef cian fill:#64D2FF,stroke:#64D2FF,color:#1d1d1f"
+    },
+    "mod-6-s1": {
+      "emoji": "⚖️",
+      "summary": "Clasificas pruebas en funcionales y no funcionales y armas la pirámide: muchas unitarias, pocas de punta a punta.",
+      "analogy": "Lo funcional es que el ascensor llegue al piso que marcaste; lo no funcional es que tarde poco y no se caiga con diez personas.",
+      "learned": [
+        "🛗 Puedes separar \"hace lo que debe\" de \"lo hace bien, rápido y seguro\"",
+        "🔺 Sabes repartir tus pruebas entre muchas baratas y pocas costosas",
+        "♿ Puedes notar cuando algo funciona pero alguien con discapacidad no lo puede usar"
+      ],
+      "check": [
+        {
+          "question": "Requisito: \"el login responde en menos de 2 s con 500 usuarios a la vez\". ¿Qué tipo de prueba es?",
+          "options": [
+            "Funcional de sistema",
+            "No funcional: prueba de estrés",
+            "Unitaria",
+            "No funcional: prueba de carga"
+          ],
+          "correctIndex": 3,
+          "explanation": "Mide cómo responde bajo la carga esperada: carga. Estrés sería subir usuarios hasta encontrar el punto en que el sistema cae."
+        },
+        {
+          "question": "Pruebas un formulario solo con entradas y salidas, sin ver el código. ¿Qué enfoque usas?",
+          "options": [
+            "Caja blanca",
+            "Caja negra",
+            "Caja gris",
+            "Prueba unitaria"
+          ],
+          "correctIndex": 1,
+          "explanation": "Caja negra ignora la estructura interna. Caja blanca exige conocer el código, como revisar que cada rama del if se ejecute."
+        }
+      ],
+      "diagram": "flowchart TD\n  E2E[E2E: pocos, lentos]:::rosa --> I[Integración: algunos]:::naranja\n  I --> U[Unitarios: muchos, rápidos]:::verde\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n  classDef naranja fill:#FF9F0A,stroke:#FF9F0A,color:#fff\n  classDef rosa fill:#FF375F,stroke:#FF375F,color:#fff"
+    },
+    "mod-6-s2": {
+      "emoji": "💨",
+      "summary": "Eliges entre smoke, sanity y regresión según el momento, y seleccionas qué regresión correr por riesgo.",
+      "analogy": "Smoke es girar la llave y ver que el auto encienda; sanity es probar los frenos que te arreglaron; regresión es revisar que lo demás siga bien.",
+      "learned": [
+        "🔑 Puedes decidir en minutos si vale la pena seguir probando una versión nueva",
+        "🔧 Sabes comprobar a fondo solo lo que se arregló sin perder el día",
+        "🎯 Puedes elegir qué revisar primero cuando no hay tiempo para todo"
+      ],
+      "check": [
+        {
+          "question": "Llega un build nuevo a QA a las 9 am. ¿Qué corres primero?",
+          "options": [
+            "Regresión completa",
+            "Sanity del último bug",
+            "Smoke: las funciones críticas, en 15 a 30 minutos",
+            "Prueba de estrés"
+          ],
+          "correctIndex": 2,
+          "explanation": "Si el build no pasa lo básico, no tiene sentido invertir horas en regresión. La sanity aplica a una corrección puntual, no a un build entero."
+        },
+        {
+          "question": "El dev corrigió el bug del cupón DESCUENTO20. Pruebas a fondo solo cupones. ¿Qué tipo de prueba es?",
+          "options": [
+            "Sanity",
+            "Smoke",
+            "Regresión completa",
+            "Exploratoria de usabilidad"
+          ],
+          "correctIndex": 0,
+          "explanation": "Sanity: alcance estrecho y profundo sobre el cambio. Si además revisas que carrito y pago sigan bien, ya estás haciendo regresión."
+        }
+      ],
+      "diagram": "flowchart LR\n  B[Build nuevo]:::azul --> S{Smoke}:::amarillo\n  S -->|Falla| X[Rechazar build]:::rosa\n  S -->|Pasa| R[Regresión]:::verde\n  F[Bug corregido]:::azul --> SA[Sanity]:::cian\n  SA --> R\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n  classDef rosa fill:#FF375F,stroke:#FF375F,color:#fff\n  classDef cian fill:#64D2FF,stroke:#64D2FF,color:#1d1d1f\n  classDef amarillo fill:#FFD60A,stroke:#FFD60A,color:#1d1d1f"
+    },
+    "mod-9-s1": {
+      "emoji": "✏️",
+      "summary": "Escribes casos de prueba que cualquiera repite y reduces cientos de valores a unos pocos con técnicas formales.",
+      "analogy": "La partición de equivalencia es probar una cucharada de cada olla: si una cucharada de sopa sabe bien, no pruebas toda la olla.",
+      "learned": [
+        "🥄 Puedes probar pocos valores bien elegidos en vez de todos los posibles",
+        "📏 Sabes dónde se esconden los errores: justo en los bordes de lo permitido",
+        "📋 Puedes escribir instrucciones de prueba que otra persona sigue sin preguntarte"
+      ],
+      "check": [
+        {
+          "question": "Un campo cantidad acepta de 1 a 10. ¿Qué valores pruebas con análisis de valor límite?",
+          "options": [
+            "1 y 10",
+            "0, 5 y 11",
+            "Todos del 1 al 10",
+            "0, 1, 2, 9, 10, 11"
+          ],
+          "correctIndex": 3,
+          "explanation": "Se prueba cada límite y sus vecinos de ambos lados. 0, 5 y 11 es partición de equivalencia; probar todos es justo lo que evitan estas técnicas."
+        },
+        {
+          "question": "Edad válida de 18 a 65. Con partición de equivalencia, ¿cuántos casos mínimos necesitas?",
+          "options": [
+            "1: un valor válido",
+            "2: uno válido y uno inválido",
+            "3: uno válido y uno por cada clase inválida",
+            "48: uno por cada edad válida"
+          ],
+          "correctIndex": 2,
+          "explanation": "Hay tres clases: menor de 18, de 18 a 65 y mayor de 65. Con dos casos dejas una clase inválida sin probar."
+        }
+      ],
+      "diagram": "flowchart LR\n  A[\"Menor de 18: inválida\"]:::rosa --> L1[Límite 17-18-19]:::naranja\n  L1 --> V[\"18 a 65: válida\"]:::verde\n  V --> L2[Límite 64-65-66]:::naranja\n  L2 --> B[\"Mayor de 65: inválida\"]:::rosa\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n  classDef naranja fill:#FF9F0A,stroke:#FF9F0A,color:#fff\n  classDef rosa fill:#FF375F,stroke:#FF375F,color:#fff"
+    },
+    "mod-9-s2": {
+      "emoji": "📋",
+      "summary": "Armas un plan de testing (IEEE 829 o ágil) y usas métricas para decidir, no para decorar reportes.",
+      "analogy": "Un plan de testing es el itinerario de una mudanza: qué se lleva, qué se queda, quién carga qué, en qué fecha y qué hacer si llueve.",
+      "learned": [
+        "🧭 Puedes dejar por escrito qué se va a revisar y qué no, con sus razones",
+        "📉 Sabes calcular cuántos errores se escaparon a los clientes",
+        "🚦 Puedes responder con datos si un producto está listo para salir"
+      ],
+      "check": [
+        {
+          "question": "En un release se encontraron 300 bugs; 30 llegaron a producción. ¿Cuál es el defect leakage?",
+          "options": [
+            "10 %",
+            "30 %",
+            "90 %",
+            "3 %"
+          ],
+          "correctIndex": 0,
+          "explanation": "Bugs en producción / total = 30 / 300 = 10 %. 90 % sería lo que sí se atrapó antes; 30 % confunde el número de bugs con un porcentaje."
+        },
+        {
+          "question": "En el plan de una app de salud deciden no probar los reportes PDF en este release. ¿Dónde se registra?",
+          "options": [
+            "En ningún lado, para no alarmar",
+            "En \"características a no probar\", con el motivo",
+            "En el reporte de defectos",
+            "En los criterios de aceptación"
+          ],
+          "correctIndex": 1,
+          "explanation": "IEEE 829 pide alcance explícito: qué se prueba y qué no. Dejarlo fuera del papel hace que alguien asuma que sí se probó."
+        }
+      ]
+    },
+    "mod-10-s1": {
+      "emoji": "🐞",
+      "summary": "Reportas defectos que un dev reproduce a la primera y organizas tus casos en Jira y su ecosistema.",
+      "analogy": "Un buen reporte de bug es una receta para quemar el pan: ingredientes, pasos, horno y foto del pan quemado, para que otro lo repita igual.",
+      "learned": [
+        "📸 Puedes contar un error con pasos tan claros que otro lo repite sin llamarte",
+        "⚖️ Sabes separar qué tan grave es un fallo de qué tan urgente es arreglarlo",
+        "🗃️ Puedes organizar cientos de pruebas para saber cuáles se hicieron y cuáles faltan"
+      ],
+      "check": [
+        {
+          "question": "Hay un error de ortografía en el logo de la portada y mañana es el lanzamiento con prensa. ¿Cómo lo clasificas?",
+          "options": [
+            "Severidad baja, prioridad alta",
+            "Severidad alta, prioridad alta",
+            "Severidad baja, prioridad baja",
+            "Severidad alta, prioridad baja"
+          ],
+          "correctIndex": 0,
+          "explanation": "No rompe nada (severidad baja), pero hay que corregirlo ya por el impacto público (prioridad alta). Severidad mide daño; prioridad, urgencia."
+        },
+        {
+          "question": "¿Cuál título de bug ayuda más al desarrollador?",
+          "options": [
+            "No funciona el pago",
+            "BUG URGENTE!!!",
+            "Error en la página",
+            "[Checkout] Cupón DESCUENTO20 devuelve error 500 al pagar"
+          ],
+          "correctIndex": 3,
+          "explanation": "Sigue la plantilla [Módulo] + qué pasa + cuándo. Los otros obligan a abrir el ticket y preguntar antes de empezar a investigar."
+        }
+      ]
+    },
+    "mod-10-s2": {
+      "emoji": "🤖",
+      "summary": "Escoges entre Selenium, Cypress y Postman según el proyecto y escribes tus primeras pruebas automáticas.",
+      "analogy": "Selenium es un control remoto universal; Cypress es el control original de tu tele: hace menos cosas, pero responde más rápido.",
+      "learned": [
+        "🎮 Puedes elegir la herramienta que encaja con el equipo y no solo la de moda",
+        "🖱️ Sabes hacer que la compu llene un formulario y verifique el resultado por ti",
+        "📬 Puedes revisar las respuestas de un servicio sin abrir el navegador"
+      ],
+      "check": [
+        {
+          "question": "Tu equipo programa en C# y necesita probar la web en Safari. ¿Qué herramienta de la lección encaja?",
+          "options": [
+            "Cypress",
+            "Selenium WebDriver",
+            "Postman",
+            "Newman"
+          ],
+          "correctIndex": 1,
+          "explanation": "Selenium admite C# y Safari. Cypress solo usa JavaScript o TypeScript; Postman y Newman prueban servicios, no navegadores."
+        },
+        {
+          "question": "Quieres correr tu colección de Postman en cada push del pipeline. ¿Qué usas?",
+          "options": [
+            "El Runner de la app de escritorio",
+            "Un mock server de Postman",
+            "Newman, la línea de comandos de Postman",
+            "Cypress"
+          ],
+          "correctIndex": 2,
+          "explanation": "Newman ejecuta colecciones sin interfaz gráfica, ideal para CI/CD. El Runner necesita que alguien abra la app; el mock simula, no prueba."
+        }
+      ]
+    },
+    "mod-15-s1": {
+      "emoji": "🌐",
+      "summary": "Lees y pruebas un servicio REST: verbos, códigos de estado, cabeceras, autenticación y versiones.",
+      "analogy": "HTTP es pedir en una ventanilla: el verbo es el trámite, la URL es la ventanilla y el código de estado es el sello que te ponen.",
+      "learned": [
+        "📨 Puedes predecir qué responde un servicio a cada tipo de pedido",
+        "🔢 Sabes leer un código de respuesta y saber si el fallo fue tuyo o del servidor",
+        "🪪 Puedes distinguir \"no sé quién eres\" de \"sé quién eres pero no puedes pasar\""
+      ],
+      "check": [
+        {
+          "question": "Un usuario con sesión válida pide /users/45, que pertenece a otra persona, y no tiene permiso. ¿Qué código esperas?",
+          "options": [
+            "403 Forbidden",
+            "401 Unauthorized",
+            "400 Bad Request",
+            "500 Internal Server Error"
+          ],
+          "correctIndex": 0,
+          "explanation": "401 es \"no sé quién eres\" (sin token o token vencido); 403 es \"sé quién eres, pero no puedes\". Algunas APIs responden 404 para no revelar que existe."
+        },
+        {
+          "question": "Quieres cambiar solo el email de un usuario sin mandar los demás campos. ¿Qué verbo usas?",
+          "options": [
+            "PUT",
+            "POST",
+            "GET",
+            "PATCH"
+          ],
+          "correctIndex": 3,
+          "explanation": "PATCH actualiza parcialmente. PUT reemplaza el recurso completo, así que los campos que no mandes podrían quedar vacíos."
+        }
+      ],
+      "diagram": "flowchart LR\n  C[Cliente]:::azul --> R[Verbo + URL + cabeceras]:::cian\n  R --> S[Servidor]:::morado\n  S --> OK[2xx éxito]:::verde\n  S --> E4[4xx error del cliente]:::naranja\n  S --> E5[5xx error del servidor]:::rosa\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n  classDef naranja fill:#FF9F0A,stroke:#FF9F0A,color:#fff\n  classDef rosa fill:#FF375F,stroke:#FF375F,color:#fff\n  classDef morado fill:#BF5AF2,stroke:#BF5AF2,color:#fff\n  classDef cian fill:#64D2FF,stroke:#64D2FF,color:#1d1d1f"
+    },
+    "mod-15-s2": {
+      "emoji": "🧩",
+      "summary": "Pruebas contratos entre servicios, buscas fallas del OWASP API Top 10 y diseñas pruebas para microservicios.",
+      "analogy": "Un contrato de API es el enchufe entre dos países: si uno cambia la forma de la clavija sin avisar, el otro se queda sin luz.",
+      "learned": [
+        "🔌 Puedes detectar a tiempo cuando un equipo cambia algo que rompe a otro",
+        "🕵️ Sabes buscar si alguien puede ver datos ajenos cambiando un número en la dirección",
+        "💥 Puedes provocar fallas a propósito para ver si el sistema aguanta"
+      ],
+      "check": [
+        {
+          "question": "Cambias GET /orders/7 por /orders/8 con tu propio token y ves el pedido de otro cliente. ¿Qué vulnerabilidad es?",
+          "options": [
+            "Broken Authentication",
+            "Broken Object Level Authorization (BOLA)",
+            "SSRF",
+            "Unrestricted Resource Consumption"
+          ],
+          "correctIndex": 1,
+          "explanation": "Tu identidad es válida (la autenticación funciona), pero el servidor no revisa si ese objeto es tuyo. Es la número 1 del OWASP API Top 10."
+        },
+        {
+          "question": "El equipo de pagos renombra el campo amount a total y rompe al equipo de carrito. ¿Qué prueba lo habría detectado antes de publicar?",
+          "options": [
+            "Chaos testing",
+            "Prueba de carga",
+            "Contract testing con Pact",
+            "Smoke en producción"
+          ],
+          "correctIndex": 2,
+          "explanation": "Pact verifica que el proveedor sigue cumpliendo lo que el consumidor espera. Chaos simula caídas y carga mide rendimiento; ninguno revisa nombres de campos."
+        }
+      ]
+    },
+    "mod-16-s1": {
+      "emoji": "🗂️",
+      "summary": "Eliges un framework de automatización con criterio y organizas los tests con Page Object Model.",
+      "analogy": "Page Object Model es la agenda del celular: si tu amigo cambia de número, lo actualizas una vez y no en cada chat donde lo mencionaste.",
+      "learned": [
+        "📇 Puedes cambiar un detalle de la pantalla en un solo lugar y no en cuarenta",
+        "🧰 Sabes comparar herramientas según el equipo y el proyecto, no según la moda",
+        "🏷️ Puedes etiquetar pruebas para correr solo las rápidas cuando hay prisa"
+      ],
+      "check": [
+        {
+          "question": "El id del botón de login cambia y fallan 40 tests. Con POM, ¿cuántos lugares editas?",
+          "options": [
+            "Uno: el locator en LoginPage",
+            "Los 40 tests",
+            "Ninguno: POM detecta el cambio solo",
+            "Cada archivo de fixtures"
+          ],
+          "correctIndex": 0,
+          "explanation": "POM concentra los selectores en la clase de la página; los tests llaman a loginPage.login(). Sin POM, cada test repite el selector."
+        },
+        {
+          "question": "Equipo de React con TypeScript que necesita probar en Chrome, Firefox y WebKit. ¿Qué framework de la tabla encaja mejor?",
+          "options": [
+            "Puppeteer",
+            "Rest Assured",
+            "Jest + RTL",
+            "Playwright"
+          ],
+          "correctIndex": 3,
+          "explanation": "Playwright es multinavegador y admite TypeScript. Puppeteer se centra en Chrome; Rest Assured prueba servicios en Java; Jest + RTL prueba componentes, no navegadores reales."
+        }
+      ],
+      "diagram": "flowchart LR\n  T[Tests]:::azul --> P[LoginPage]:::morado\n  P --> L[Locators]:::cian\n  P --> A[Acciones]:::cian\n  L --> U[Interfaz]:::verde\n  A --> U\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n  classDef morado fill:#BF5AF2,stroke:#BF5AF2,color:#fff\n  classDef cian fill:#64D2FF,stroke:#64D2FF,color:#1d1d1f"
+    },
+    "mod-16-s2": {
+      "emoji": "🔁",
+      "summary": "Conectas tus pruebas al pipeline de CI/CD, las aceleras en paralelo y domas los tests inestables.",
+      "analogy": "Un flaky test es una alarma de humo que suena sin humo: a la tercera vez la desconectas y el día del incendio nadie le cree.",
+      "learned": [
+        "🚨 Puedes reconocer una prueba poco confiable y decidir qué hacer con ella",
+        "⚡ Sabes acortar la espera de las pruebas repartiéndolas entre varias máquinas",
+        "🪜 Puedes decidir qué pruebas correr en cada paso para no frenar al equipo"
+      ],
+      "check": [
+        {
+          "question": "Un test falla 1 de cada 5 veces sin cambios en el código y usa cy.wait(3000). ¿Qué haces?",
+          "options": [
+            "Esperar una condición, como que el elemento sea visible, en vez de tiempo fijo",
+            "Subirlo a cy.wait(10000)",
+            "Borrar el test",
+            "Poner retries: 10 y olvidarlo"
+          ],
+          "correctIndex": 0,
+          "explanation": "Un tiempo fijo falla cuando el sistema va más lento y desperdicia tiempo cuando va rápido. Los reintentos esconden el síntoma sin quitar la causa."
+        },
+        {
+          "question": "La suite E2E tarda 40 minutos y frena cada PR. ¿Qué estrategia propone la lección?",
+          "options": [
+            "Correr todo en cada PR igual",
+            "Smoke en cada PR, regresión al unir a main y suite completa antes del release",
+            "Quitar los E2E del pipeline",
+            "Correr E2E solo de forma manual"
+          ],
+          "correctIndex": 1,
+          "explanation": "Cada paso corre lo que justifica su riesgo: el PR necesita feedback rápido y el release, cobertura total. Quitar los E2E deja flujos críticos sin red."
+        }
+      ],
+      "diagram": "flowchart LR\n  C[Commit]:::azul --> B[Build]:::cian\n  B --> U[Unitarias]:::verde\n  U --> I[Integración]:::verde\n  I --> E[E2E]:::verde\n  E --> D[Despliegue]:::morado\n  U -.->|falla| X[Pipeline se detiene]:::rosa\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n  classDef rosa fill:#FF375F,stroke:#FF375F,color:#fff\n  classDef morado fill:#BF5AF2,stroke:#BF5AF2,color:#fff\n  classDef cian fill:#64D2FF,stroke:#64D2FF,color:#1d1d1f"
+    }
+  },
+  "modules": {
+    "mod-5": {
+      "emoji": "🔬",
+      "exam": [
+        {
+          "question": "Un gerente dice \"probamos todo y no hay bugs\". ¿Qué principio lo desmiente directamente?",
+          "options": [
+            "El testing muestra la presencia de defectos, no su ausencia",
+            "La paradoja del pesticida",
+            "El testing depende del contexto",
+            "El agrupamiento de defectos"
+          ],
+          "correctIndex": 0,
+          "explanation": "Pasar las pruebas solo dice que esas pruebas no encontraron fallas. Además, el testing exhaustivo es imposible: \"probamos todo\" no ocurre."
+        },
+        {
+          "question": "El 80 % de los bugs del último release salió del módulo de pagos. ¿Qué haces en el próximo?",
+          "options": [
+            "Repartir las pruebas por igual en todos los módulos",
+            "Dejar de probar pagos porque ya se corrigió",
+            "Concentrar más pruebas en pagos",
+            "Repetir exactamente las mismas pruebas de pagos"
+          ],
+          "correctIndex": 2,
+          "explanation": "Agrupamiento de defectos (Pareto): los bugs se concentran. Repetir las mismas pruebas choca con la paradoja del pesticida."
+        },
+        {
+          "question": "Una app no tiene bugs conocidos, pero nadie la usa porque no resuelve el problema del cliente. ¿Qué principio es?",
+          "options": [
+            "El testing temprano ahorra dinero",
+            "El testing exhaustivo es imposible",
+            "La paradoja del pesticida",
+            "La ilusión de ausencia de errores"
+          ],
+          "correctIndex": 3,
+          "explanation": "Sin errores no significa útil: si no cumple lo que el usuario necesita, falla igual. Por eso QA revisa también los requisitos."
+        },
+        {
+          "question": "Inspeccionas el build final contra una lista de verificación antes de liberarlo. ¿Qué es?",
+          "options": [
+            "QC: detección orientada al producto",
+            "QA: prevención orientada al proceso",
+            "Planificación de pruebas",
+            "Retrospectiva"
+          ],
+          "correctIndex": 0,
+          "explanation": "Revisar el producto ya hecho para encontrar defectos es QC. QA sería mejorar cómo se construye para que el defecto no llegue."
+        },
+        {
+          "question": "En Scrum, ¿en qué momento propones criterios de aceptación verificables para una historia?",
+          "options": [
+            "En la retrospectiva",
+            "En Sprint Planning o refinamiento, antes de empezar a programar",
+            "En la daily",
+            "Después de la Sprint Review"
+          ],
+          "correctIndex": 1,
+          "explanation": "Shift-left: los criterios se acuerdan antes de construir. En la retro se mejora el proceso, no se definen historias."
+        },
+        {
+          "question": "Tu equipo necesita construir desde cero un framework de automatización. ¿Qué rol encaja?",
+          "options": [
+            "QA Analyst",
+            "QA Manager",
+            "SDET",
+            "Product Owner"
+          ],
+          "correctIndex": 2,
+          "explanation": "El SDET es un desarrollador especializado en pruebas que construye frameworks. El QA Analyst diseña casos y el Manager gestiona procesos y presupuesto."
+        }
+      ]
+    },
+    "mod-6": {
+      "emoji": "🧪",
+      "exam": [
+        {
+          "question": "Antes del Black Friday subes el tráfico a 10 veces lo normal hasta que el sistema cae. ¿Qué prueba es?",
+          "options": [
+            "Estrés",
+            "Carga",
+            "Estabilidad",
+            "Smoke"
+          ],
+          "correctIndex": 0,
+          "explanation": "Estrés busca el límite y el punto de falla. Carga verifica la carga esperada; estabilidad, un uso sostenido en el tiempo."
+        },
+        {
+          "question": "Release que solo modifica transferencias en una app bancaria, con 2 días de margen. ¿Qué regresión corres?",
+          "options": [
+            "Completa, aunque no termine a tiempo",
+            "Solo smoke",
+            "Ninguna: solo se probó el cambio nuevo",
+            "Parcial: transferencias y lo que se integra con ellas, priorizado por riesgo"
+          ],
+          "correctIndex": 3,
+          "explanation": "El análisis de impacto marca qué se afecta y el riesgo da el orden. La completa se reserva para releases mayores o cambios de arquitectura."
+        },
+        {
+          "question": "El smoke del build nuevo falla en el login. ¿Qué haces?",
+          "options": [
+            "Seguir con la regresión completa",
+            "Rechazar el build y devolverlo, sin seguir con pruebas profundas",
+            "Probar todo menos el login",
+            "Abrir un bug menor y continuar"
+          ],
+          "correctIndex": 1,
+          "explanation": "Si lo crítico falla, cualquier prueba posterior es tiempo perdido o datos poco confiables. Para eso existe el smoke."
+        },
+        {
+          "question": "Dejas la app funcionando 8 horas seguidas para ver si la memoria crece sin parar. ¿Qué prueba es?",
+          "options": [
+            "Estrés",
+            "Usabilidad",
+            "Estabilidad: comportamiento sostenido en el tiempo",
+            "Regresión"
+          ],
+          "correctIndex": 2,
+          "explanation": "No subes la carga: mides el comportamiento a lo largo del tiempo. Las fugas de memoria solo aparecen así."
+        },
+        {
+          "question": "Revisas que cada rama de un if del cálculo de envío se ejecute al menos una vez. ¿Qué enfoque es?",
+          "options": [
+            "Caja blanca",
+            "Caja negra",
+            "Prueba de aceptación",
+            "Smoke"
+          ],
+          "correctIndex": 0,
+          "explanation": "Necesitas ver el código para saber qué ramas existen. La caja negra solo mira entradas y salidas."
+        },
+        {
+          "question": "Una persona con lector de pantalla no puede usar un botón que no tiene etiqueta. ¿Qué tipo de defecto es?",
+          "options": [
+            "Funcional de integración",
+            "De rendimiento",
+            "De compatibilidad de navegador",
+            "No funcional: accesibilidad (WCAG)"
+          ],
+          "correctIndex": 3,
+          "explanation": "El botón funciona para quien ve la pantalla, así que falla una característica de calidad. WCAG es el estándar que la lección menciona."
+        }
+      ]
+    },
+    "mod-9": {
+      "emoji": "📐",
+      "exam": [
+        {
+          "question": "El descuento depende de dos condiciones: ser socio y comprar más de $100. ¿Cuántas reglas tiene la tabla de decisión completa?",
+          "options": [
+            "2",
+            "4",
+            "3",
+            "8"
+          ],
+          "correctIndex": 1,
+          "explanation": "Dos condiciones verdadero/falso dan 2 × 2 = 4 combinaciones. 8 serían tres condiciones; con 2 o 3 dejas combinaciones sin probar."
+        },
+        {
+          "question": "Un caso dice \"ingresar un correo válido\" sin dar el valor. ¿Qué problema tiene?",
+          "options": [
+            "Cada persona usa datos distintos y puede obtener otro resultado",
+            "Ninguno: es más flexible",
+            "Le falta la prioridad",
+            "Debería tener más pasos"
+          ],
+          "correctIndex": 0,
+          "explanation": "Un buen caso da el mismo resultado lo ejecute quien lo ejecute; para eso existe el campo datos de entrada con valores exactos."
+        },
+        {
+          "question": "La contraseña debe tener entre 8 y 20 caracteres. ¿Qué longitudes cubren los límites?",
+          "options": [
+            "8 y 20",
+            "1, 10 y 30",
+            "7, 8, 9, 19, 20, 21",
+            "0, 8, 20 y 100"
+          ],
+          "correctIndex": 2,
+          "explanation": "Cada borde con sus vecinos: justo fuera, en el borde y justo dentro. 1, 10 y 30 sirven para partición, no para límites."
+        },
+        {
+          "question": "Un pedido pasa por creado → pagado → enviado → entregado y no puede saltarse pasos. ¿Qué técnica usas?",
+          "options": [
+            "Partición de equivalencia",
+            "Valor límite",
+            "Tabla de decisión",
+            "Transición de estados"
+          ],
+          "correctIndex": 3,
+          "explanation": "Pruebas transiciones válidas e inválidas, como de creado a entregado directo. Las otras técnicas trabajan con valores de entrada, no con secuencias."
+        },
+        {
+          "question": "El PO pregunta si se puede lanzar el viernes. ¿Qué reporte le muestras?",
+          "options": [
+            "Release readiness: casos ejecutados, bugs abiertos por severidad y riesgos",
+            "El daily status de hoy",
+            "Solo el número total de casos",
+            "La lista de todos los bugs cerrados"
+          ],
+          "correctIndex": 0,
+          "explanation": "Release readiness responde justo esa pregunta. Un número total de casos no dice si quedan bloqueantes abiertos."
+        },
+        {
+          "question": "El 40 % de los bugs que reporta el equipo se rechazan. ¿Qué indica?",
+          "options": [
+            "Que el equipo encuentra muchos bugs: bien",
+            "Reportes poco claros o malentendidos de requisitos: hay que revisarlos",
+            "Que los devs no quieren trabajar",
+            "Nada, es una métrica sin uso"
+          ],
+          "correctIndex": 1,
+          "explanation": "La tasa de rechazo alta suele venir de pasos no reproducibles o de requisitos ambiguos. La lección dice que una métrica sin acción es solo un número."
+        }
+      ]
+    },
+    "mod-10": {
+      "emoji": "🛠️",
+      "exam": [
+        {
+          "question": "Un reporte dice solo \"El pago falla\". ¿Qué falta primero?",
+          "options": [
+            "La prioridad en mayúsculas",
+            "El nombre del dev responsable",
+            "Pasos para reproducir, resultado esperado vs actual y ambiente",
+            "Una propuesta de solución"
+          ],
+          "correctIndex": 2,
+          "explanation": "Sin pasos ni ambiente el dev no puede reproducirlo y vuelve con preguntas. La solución no es tarea del reporte."
+        },
+        {
+          "question": "El equipo vive en Jira y quiere gestionar los casos de prueba ahí mismo. ¿Qué le recomiendas?",
+          "options": [
+            "Zephyr Scale o Xray, que se integran en Jira",
+            "TestRail como herramienta aparte",
+            "Newman",
+            "Selenium"
+          ],
+          "correctIndex": 0,
+          "explanation": "Ambos son plugins de Jira y enlazan casos con historias y bugs. TestRail funciona por separado; Newman y Selenium ejecutan, no gestionan."
+        },
+        {
+          "question": "En Cypress no escribes una espera para que aparezca un botón y el test igual funciona. ¿Por qué?",
+          "options": [
+            "Cypress ignora los elementos faltantes",
+            "El navegador carga todo antes",
+            "Suerte: falla en otras máquinas",
+            "Auto-wait: Cypress reintenta hasta que el elemento existe"
+          ],
+          "correctIndex": 3,
+          "explanation": "Cypress reintenta comandos y aserciones hasta un tiempo límite. Por eso cy.wait con tiempo fijo casi nunca hace falta."
+        },
+        {
+          "question": "Debes probar el frontend, pero la API de pagos aún no existe. ¿Qué usas de Postman?",
+          "options": [
+            "Newman",
+            "Un mock server que simula sus respuestas",
+            "Variables de entorno",
+            "El Runner"
+          ],
+          "correctIndex": 1,
+          "explanation": "El mock devuelve respuestas acordadas para avanzar sin el servicio real. Newman y Runner ejecutan pruebas contra algo que ya existe."
+        },
+        {
+          "question": "pm.expect(json.users).to.be.an('array') pasa aunque la lista venga vacía. ¿Qué agregas?",
+          "options": [
+            "pm.response.to.have.status(200)",
+            "pm.expect(json).to.be.an('object')",
+            "pm.expect(json.users.length).to.be.above(0)",
+            "Nada, una lista vacía es válida siempre"
+          ],
+          "correctIndex": 2,
+          "explanation": "Comprobar el tipo no garantiza contenido. El ejemplo de la lección añade la longitud mayor que 0 para atrapar una respuesta vacía."
+        },
+        {
+          "question": "¿Por qué el ejemplo de Selenium termina con driver.quit()?",
+          "options": [
+            "Cierra el navegador y la sesión; sin él quedan procesos colgados",
+            "Para guardar los resultados",
+            "Selenium lo exige para compilar",
+            "Para limpiar las cookies del sitio"
+          ],
+          "correctIndex": 0,
+          "explanation": "Cada test sin quit deja un navegador abierto que consume memoria, sobre todo en CI. Suele ir en un teardown para correr aunque el test falle."
+        }
+      ]
+    },
+    "mod-15": {
+      "emoji": "🛰️",
+      "exam": [
+        {
+          "question": "POST /users crea el usuario y responde 200 con el cuerpo. ¿Qué esperarías por convención REST?",
+          "options": [
+            "201 Created",
+            "204 No Content",
+            "200 está perfecto",
+            "302 Found"
+          ],
+          "correctIndex": 0,
+          "explanation": "201 indica que se creó un recurso. Reportarlo como hallazgo menor ayuda a que los clientes distingan crear de consultar."
+        },
+        {
+          "question": "Mandas una petición con un token vencido. ¿Qué código esperas?",
+          "options": [
+            "403 Forbidden",
+            "401 Unauthorized",
+            "400 Bad Request",
+            "419 Expired"
+          ],
+          "correctIndex": 1,
+          "explanation": "Token vencido = el servidor no puede confirmar quién eres: 401. 403 es para identidad válida sin permiso."
+        },
+        {
+          "question": "Envías 1000 peticiones por segundo y la API responde todas sin límite. ¿Qué falla del OWASP API Top 10 encontraste?",
+          "options": [
+            "Broken Authentication",
+            "Security Misconfiguration",
+            "Improper Inventory Management",
+            "Unrestricted Resource Consumption: falta límite de peticiones"
+          ],
+          "correctIndex": 3,
+          "explanation": "Sin rate limiting cualquiera puede agotar recursos o forzar contraseñas. La prueba esperada es recibir 429 a partir de cierto umbral."
+        },
+        {
+          "question": "Quieres saber qué pasa si el servicio de inventario se cae en medio de una compra. ¿Qué estrategia usas?",
+          "options": [
+            "Contract testing",
+            "Prueba unitaria con mocks",
+            "Chaos testing: provocar la falla a propósito",
+            "Smoke"
+          ],
+          "correctIndex": 2,
+          "explanation": "Chaos testing apaga o degrada servicios para ver si el resto aguanta. El contrato revisa formatos, no caídas."
+        },
+        {
+          "question": "Tus pruebas de integración necesitan un PostgreSQL limpio en cada corrida. ¿Qué herramienta de la lección encaja?",
+          "options": [
+            "Testcontainers",
+            "WireMock",
+            "Pact",
+            "Postman"
+          ],
+          "correctIndex": 0,
+          "explanation": "Testcontainers levanta contenedores efímeros desde el test y los borra al terminar. WireMock simula servicios HTTP, no bases."
+        },
+        {
+          "question": "Lanzas /api/v2/users con cambios y hay apps viejas que usan /api/v1/users. ¿Qué haces?",
+          "options": [
+            "Apagar v1 el mismo día",
+            "Mantener v1 funcionando hasta que los clientes migren",
+            "Redirigir v1 a v2 sin avisar",
+            "Cambiar v1 para que sea igual a v2"
+          ],
+          "correctIndex": 1,
+          "explanation": "Versionar en la URL existe justo para no romper a quien no ha migrado. Redirigir sin avisar rompe a los clientes que esperan el formato viejo."
+        }
+      ]
+    },
+    "mod-16": {
+      "emoji": "⚙️",
+      "exam": [
+        {
+          "question": "Los datos del usuario de prueba están escritos a mano en 30 tests. ¿Qué haces?",
+          "options": [
+            "Moverlos a fixtures/users.json y cargarlos desde ahí",
+            "Copiarlos a un comentario",
+            "Dejarlos: así se leen mejor",
+            "Crear un test que los revise"
+          ],
+          "correctIndex": 0,
+          "explanation": "La lección pide datos en fixtures, no hardcoded: cambias un archivo y no 30 tests."
+        },
+        {
+          "question": "Un test crea el pedido 123 y otro lo borra; corriendo en paralelo fallan al azar. ¿Cuál es la causa?",
+          "options": [
+            "Faltan waits más largos",
+            "El navegador es lento",
+            "Hay que correrlos en orden alfabético",
+            "Estado compartido: cada test debería crear sus propios datos"
+          ],
+          "correctIndex": 3,
+          "explanation": "Dos tests que tocan el mismo dato dependen del orden. El aislamiento elimina la causa; las esperas solo la tapan."
+        },
+        {
+          "question": "Quieres verificar que el carrito calcula bien el total con 50 combinaciones. ¿Por dónde lo pruebas?",
+          "options": [
+            "Las 50 por la interfaz",
+            "Solo a mano",
+            "Por la API, con datos variados, y la UI solo para el flujo crítico",
+            "Con una prueba de carga"
+          ],
+          "correctIndex": 2,
+          "explanation": "API-first: es más rápido y estable que la UI. Combinarlo con data-driven testing da un test y muchos conjuntos de datos."
+        },
+        {
+          "question": "La suite tarda 2 horas en una máquina. ¿Qué técnica de la lección la acorta sin quitar tests?",
+          "options": [
+            "Sharding: dividirla para correr en paralelo en varias máquinas",
+            "Borrar los tests más lentos",
+            "Ejecutarla de noche",
+            "Subir los timeouts"
+          ],
+          "correctIndex": 0,
+          "explanation": "Repartir la suite reduce el tiempo total sin perder cobertura. Retirar tests es válido solo si son obsoletos o redundantes."
+        },
+        {
+          "question": "Mandas un flaky test a cuarentena. ¿Qué significa hacerlo bien?",
+          "options": [
+            "Borrarlo para siempre",
+            "Sacarlo del pipeline bloqueante y abrir una tarea para corregirlo",
+            "Dejarlo bloqueando hasta que pase solo",
+            "Ponerle 10 reintentos"
+          ],
+          "correctIndex": 1,
+          "explanation": "La cuarentena protege la confianza en la suite sin perder la prueba. Si nadie lo corrige, la cuarentena se vuelve olvido."
+        },
+        {
+          "question": "Etiquetas algunos tests con @smoke. ¿Para qué te sirve en CI?",
+          "options": [
+            "Que se ejecuten más lento",
+            "Que nunca fallen",
+            "Excluirlos del release",
+            "Correr solo ese grupo rápido en cada PR"
+          ],
+          "correctIndex": 3,
+          "explanation": "Las etiquetas permiten elegir subconjuntos: smoke en cada PR y regresión al unir a main, como en la estrategia de la lección."
+        }
+      ]
+    }
+  }
+}

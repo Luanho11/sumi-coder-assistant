@@ -1,0 +1,568 @@
+{
+  "trackId": "soporte-ti",
+  "lessons": {
+    "mod-sti-1-s1": {
+      "emoji": "🎧",
+      "summary": "Sabes qué resuelve cada nivel de soporte, cuándo escalar y qué números miden un buen help desk.",
+      "analogy": "Los niveles de soporte son como un hospital: triaje (L1) atiende lo común, el especialista (L2) lo que pide estudio y el cirujano (L3) lo que exige abrir el sistema.",
+      "learned": [
+        "🎧 Puedes decidir si un problema lo resuelves tú o lo pasas a alguien más experto",
+        "📊 Sabes qué números dicen si un equipo de ayuda está atendiendo bien a la gente",
+        "🧭 Puedes explicar qué hace cada puesto de un equipo de soporte y cómo se crece en él"
+      ],
+      "check": [
+        {
+          "question": "Un usuario olvidó su contraseña y su cuenta quedó bloqueada. ¿Qué nivel lo resuelve?",
+          "options": [
+            "L3, porque toca cuentas del dominio",
+            "L1 Service Desk, en el primer contacto",
+            "L2, porque requiere permisos",
+            "El IT Support Manager"
+          ],
+          "correctIndex": 1,
+          "explanation": "El reset de contraseña es el ejemplo típico de L1. Escalarlo a L2 o L3 alarga la espera y baja el FCR sin aportar nada."
+        },
+        {
+          "question": "El FCR del equipo bajó del 75 % al 50 % en un mes. ¿Qué te dice?",
+          "options": [
+            "Que entran menos tickets que antes",
+            "Que los usuarios están más satisfechos",
+            "Que se cumplen más SLA",
+            "Que más incidentes necesitan otro contacto o escalado"
+          ],
+          "correctIndex": 3,
+          "explanation": "FCR es el % resuelto en el primer contacto. Si baja, más casos rebotan o se escalan. No mide volumen ni satisfacción directamente."
+        }
+      ],
+      "diagram": "flowchart LR\n  U[Usuario]:::azul --> L1[L1 Help Desk]:::verde\n  L1 -->|no puede| L2[L2 Especialista]:::amarillo\n  L2 -->|cambio mayor| L3[L3 Ingeniería]:::naranja\n  L3 --> KB[Base de conocimiento]:::cian\n  KB -->|próxima vez| L1\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n  classDef naranja fill:#FF9F0A,stroke:#FF9F0A,color:#fff\n  classDef cian fill:#64D2FF,stroke:#64D2FF,color:#1d1d1f\n  classDef amarillo fill:#FFD60A,stroke:#FFD60A,color:#1d1d1f"
+    },
+    "mod-sti-1-s2": {
+      "emoji": "🎫",
+      "summary": "Llevas un ticket de principio a fin: lo priorizas bien, hablas claro con el usuario y lo documentas.",
+      "analogy": "Un ticket es como la historia clínica de un paciente: si el médico anterior solo escribió \"se curó\", el siguiente tiene que empezar de cero.",
+      "learned": [
+        "🎫 Puedes ordenar una fila de pedidos de ayuda según a cuántos afecta y cuánto urge",
+        "🗣️ Sabes explicar un problema técnico a alguien sin jerga y sin hacerlo sentir mal",
+        "📝 Dejas notas tan claras que otra persona puede retomar tu trabajo sin llamarte"
+      ],
+      "check": [
+        {
+          "question": "La impresora de un piso falla (impacto medio) y hay que imprimir contratos para firmar en 1 hora (urgencia alta). ¿Prioridad?",
+          "options": [
+            "P1 Crítico",
+            "P2 Alto",
+            "P3 Medio",
+            "P4 Bajo"
+          ],
+          "correctIndex": 1,
+          "explanation": "Impacto medio × urgencia alta = P2 en la matriz. P1 exige impacto alto y urgencia alta a la vez."
+        },
+        {
+          "question": "Aplicaste una solución y esperas que el usuario confirme que funciona. ¿En qué estado dejas el ticket?",
+          "options": [
+            "Cerrado",
+            "Pendiente",
+            "Resuelto",
+            "En progreso"
+          ],
+          "correctIndex": 2,
+          "explanation": "Resuelto = solución aplicada, falta confirmar. Cerrado llega tras la confirmación; Pendiente es cuando esperas información para seguir."
+        }
+      ],
+      "diagram": "flowchart LR\n  N[Nuevo]:::azul --> A[Asignado]:::azul\n  A --> P[En progreso]:::amarillo\n  P --> E[Pendiente]:::naranja\n  E --> P\n  P --> R[Resuelto]:::verde\n  R --> C[Cerrado]:::verde\n  R -->|persiste| X[Reabierto]:::rosa\n  X --> A\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n  classDef naranja fill:#FF9F0A,stroke:#FF9F0A,color:#fff\n  classDef rosa fill:#FF375F,stroke:#FF375F,color:#fff\n  classDef amarillo fill:#FFD60A,stroke:#FFD60A,color:#1d1d1f"
+    },
+    "mod-sti-2-s1": {
+      "emoji": "🔧",
+      "summary": "Aplicas 6 pasos para diagnosticar cualquier falla y recorres las capas de red en orden, sin adivinar.",
+      "analogy": "Diagnosticar es como buscar el foquito fundido en una serie navideña: pruebas por mitades hasta dar con él, no cambias todos a la vez.",
+      "learned": [
+        "🔧 Puedes seguir un método paso a paso en lugar de probar cosas al azar",
+        "❓ Sabes qué preguntarle a alguien para entender qué le pasó de verdad",
+        "🪜 Puedes revisar una conexión desde el cable hasta el programa, en orden"
+      ],
+      "check": [
+        {
+          "question": "\"No tengo internet\": ipconfig muestra IP válida y el ping al gateway responde, pero nslookup google.com falla. ¿Dónde está el fallo?",
+          "options": [
+            "En la resolución de nombres (DNS)",
+            "En el cable de red",
+            "En la tarjeta de red",
+            "En el navegador del usuario"
+          ],
+          "correctIndex": 0,
+          "explanation": "Hay IP y se llega al gateway, así que cable y tarjeta funcionan. Falla traducir nombres: DNS. Ir de abajo arriba evita culpar al navegador."
+        },
+        {
+          "question": "Tu primera teoría (driver de la impresora) resulta falsa al probarla. ¿Qué dice la metodología?",
+          "options": [
+            "Cerrar el ticket como no reproducible",
+            "Volver al paso 2 con una nueva teoría",
+            "Reinstalar Windows por si acaso",
+            "Documentar y dar por terminado"
+          ],
+          "correctIndex": 1,
+          "explanation": "Teoría descartada → nueva teoría (paso 2); si no puedes probar ninguna, escalas. Reinstalar sin causa borra pistas y no explica nada."
+        }
+      ],
+      "diagram": "flowchart LR\n  I[1 Identificar]:::azul --> T[2 Teoría]:::morado\n  T --> P{3 ¿Se confirma?}:::amarillo\n  P -->|no| T\n  P -->|no se puede probar| E[Escalar]:::rosa\n  P -->|sí| A[4 Plan y acción]:::azul\n  A --> V[5 Verificar]:::verde\n  V --> D[6 Documentar]:::cian\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n  classDef rosa fill:#FF375F,stroke:#FF375F,color:#fff\n  classDef morado fill:#BF5AF2,stroke:#BF5AF2,color:#fff\n  classDef cian fill:#64D2FF,stroke:#64D2FF,color:#1d1d1f\n  classDef amarillo fill:#FFD60A,stroke:#FFD60A,color:#1d1d1f"
+    },
+    "mod-sti-2-s2": {
+      "emoji": "🖥️",
+      "summary": "Atacas las fallas más comunes de Windows, Linux y hardware con la herramienta justa para cada síntoma.",
+      "analogy": "Probar con una pieza que sabes buena es como cambiar las pilas del control antes de culpar a la tele: descartas primero lo barato.",
+      "learned": [
+        "🖥️ Puedes averiguar por qué una computadora va lenta antes de pensar en formatear",
+        "📜 Sabes buscar en los registros del sistema la pista de qué falló y cuándo",
+        "🔌 Puedes descartar piezas una por una cambiándolas por otras que sabes que funcionan"
+      ],
+      "check": [
+        {
+          "question": "Un servidor Linux deja de guardar archivos y Apache se cae. ¿Qué comando revisas primero?",
+          "options": [
+            "uname -a, para ver el kernel",
+            "nmcli, para ver la red",
+            "df -h, para ver el espacio en disco",
+            "cat /etc/os-release"
+          ],
+          "correctIndex": 2,
+          "explanation": "\"No guarda archivos\" apunta a disco lleno, y df -h lo muestra en segundos. La versión del kernel o de la distribución no explica el síntoma."
+        },
+        {
+          "question": "Un PC tiene pantallazos azules aleatorios y archivos que se corrompen, sin cambios de software recientes. ¿Qué pruebas primero?",
+          "options": [
+            "Reinstalar el navegador",
+            "La RAM con Windows Memory Diagnostic",
+            "Cambiar el teclado",
+            "Liberar espacio con msconfig"
+          ],
+          "correctIndex": 1,
+          "explanation": "BSOD al azar más corrupción de archivos son síntomas clásicos de RAM. Sin cambios de software, un driver nuevo es menos probable."
+        }
+      ]
+    },
+    "mod-sti-3-s1": {
+      "emoji": "🌐",
+      "summary": "Entiendes cómo se conectan los equipos, qué puerto usa cada servicio y cómo obtienen dirección y nombres.",
+      "analogy": "La IP es la dirección del edificio, el puerto es el número de departamento y el DNS es el portero que traduce \"casa de Ana\" a la dirección exacta.",
+      "learned": [
+        "🌐 Puedes explicar cómo un equipo encuentra a otro en la oficina y en internet",
+        "🚪 Sabes qué puerta usa cada servicio, como el correo o el escritorio remoto",
+        "🏷️ Puedes notar cuándo una red traduce mal los nombres de las páginas"
+      ],
+      "check": [
+        {
+          "question": "Un usuario hace ping a 142.250.80.46 sin problema, pero no abre google.com. ¿Qué revisas?",
+          "options": [
+            "El cable de red",
+            "El puerto 3389 en el firewall",
+            "La máscara de subred /16",
+            "El DNS configurado y luego ipconfig /flushdns"
+          ],
+          "correctIndex": 3,
+          "explanation": "Si llega por IP pero no por nombre, la red funciona y falla la resolución: DNS. El cable o la máscara impedirían también el ping."
+        },
+        {
+          "question": "Una oficina necesita unas 300 direcciones para sus equipos. ¿Qué red eliges?",
+          "options": [
+            "/24, que da 254 hosts",
+            "/23, que da 510 hosts",
+            "/16, que da 65 534 hosts",
+            "/24 y repetir IP cuando se acaben"
+          ],
+          "correctIndex": 1,
+          "explanation": "/24 se queda corta con 300. /23 da 510 y deja margen; /16 desperdicia miles de direcciones. Repetir IP provoca conflictos."
+        }
+      ],
+      "diagram": "flowchart LR\n  D[Discover]:::azul --> O[Offer]:::verde\n  O --> R[Request]:::azul\n  R --> A[Ack]:::verde\n  A --> L[IP, gateway y DNS]:::cian\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n  classDef cian fill:#64D2FF,stroke:#64D2FF,color:#1d1d1f"
+    },
+    "mod-sti-3-s2": {
+      "emoji": "🧱",
+      "summary": "Diagnosticas la VPN, entiendes reglas de firewall y aplicas la higiene digital de quien tiene acceso privilegiado.",
+      "analogy": "Un firewall con \"implicit deny\" es como un portero con lista de invitados: si tu nombre no está escrito, no entras, aunque nadie te lo haya prohibido.",
+      "learned": [
+        "🧱 Puedes explicar por qué un servicio no responde aunque el equipo tenga conexión",
+        "🔑 Sabes proteger tus accesos con claves únicas y un segundo paso de verificación",
+        "🎣 Puedes reconocer un correo trampa y saber a quién avisar"
+      ],
+      "check": [
+        {
+          "question": "La VPN conecta, pero el usuario no abre la carpeta compartida de la oficina. ¿Qué revisas primero?",
+          "options": [
+            "DNS y rutas del túnel (split tunneling)",
+            "Reinstalar el cliente VPN",
+            "Cambiarle la contraseña",
+            "Desactivar el antivirus"
+          ],
+          "correctIndex": 0,
+          "explanation": "Si conecta, la autenticación y el túnel funcionan. VPN conectada sin acceso a recursos casi siempre es DNS o ruteo."
+        },
+        {
+          "question": "Un usuario necesita escritorio remoto (RDP) a su PC de la oficina desde casa. ¿Qué es lo correcto?",
+          "options": [
+            "Abrir el puerto 3389 a internet",
+            "Desactivar el firewall de su PC",
+            "Permitir RDP solo a través de la VPN",
+            "Prestarle tu cuenta de administrador"
+          ],
+          "correctIndex": 2,
+          "explanation": "RDP expuesto a internet es blanco de ataques constantes; va solo por VPN. Desactivar el firewall o compartir credenciales rompe lo básico."
+        }
+      ]
+    },
+    "mod-sti-4-s1": {
+      "emoji": "📋",
+      "summary": "Organizas un lunes con 15 tickets: agrupas, priorizas, resuelves, escalas y lo cuentas en un informe.",
+      "analogy": "Abrir la bandeja del lunes es como llegar a urgencias tras un puente: primero quien no respira, luego el brazo roto, y el resfriado espera.",
+      "learned": [
+        "📋 Puedes armar un plan para un día lleno de pedidos sin ahogarte",
+        "🧲 Sabes ver cuándo varios avisos son en realidad el mismo problema",
+        "📣 Puedes contar al final del día qué hiciste, qué quedó y qué mejorarías"
+      ],
+      "check": [
+        {
+          "question": "T03 (email lento de la directora) y T11 (escalado del servidor de email) llegaron por separado. ¿Qué haces?",
+          "options": [
+            "Atender T03 primero porque es la directora",
+            "Vincularlos: son el mismo incidente P1 del servidor de email",
+            "Cerrar T03 como duplicado sin avisarle",
+            "Esperar a que L3 abra un ticket nuevo"
+          ],
+          "correctIndex": 1,
+          "explanation": "Ambos describen el P1 activo del email. Agruparlos evita trabajo doble; cerrar T03 sin avisar deja a la directora sin respuesta."
+        },
+        {
+          "question": "T13 es una alerta de malware en PC-042 y T02 una impresora atascada. ¿Qué atiendes antes?",
+          "options": [
+            "T02, porque entró antes",
+            "T02, porque se resuelve rápido",
+            "Los dos al final del día",
+            "T13: el malware puede propagarse y afectar a muchos"
+          ],
+          "correctIndex": 3,
+          "explanation": "La prioridad sale de impacto y urgencia, no del orden de llegada. Un malware puede extenderse por la red; el atasco afecta a un piso."
+        }
+      ]
+    },
+    "mod-sti-4-s2": {
+      "emoji": "🚨",
+      "summary": "Llevas un apagón general: diagnosticas de la luz al proveedor, comunicas cada 30 minutos y escribes el post-mortem.",
+      "analogy": "Un incidente mayor es como un apagón en un edificio: alguien revisa el tablero de luz, pero otro tiene que avisar por megáfono qué pasa y cuándo vuelve.",
+      "learned": [
+        "🚨 Puedes mantener la calma y ordenar los pasos cuando se cae todo a la vez",
+        "⏱️ Sabes avisar a la gente con regularidad aunque aún no tengas la solución",
+        "🧾 Puedes escribir qué pasó, por qué y qué cambiará, sin buscar culpables"
+      ],
+      "check": [
+        {
+          "question": "Central sin internet ni ERP; la sucursal tiene internet pero no llega a central; los teléfonos IP de central también cayeron. ¿Qué sugiere?",
+          "options": [
+            "Que el ERP se colgó",
+            "Una contraseña caducada en el dominio",
+            "Un fallo en la red de central: switch core, router o enlace",
+            "Un virus en un PC de recepción"
+          ],
+          "correctIndex": 2,
+          "explanation": "Caen a la vez servicios distintos (web, ERP, telefonía) solo en central: el punto común es su red. Un ERP colgado no tumba los teléfonos."
+        },
+        {
+          "question": "Llevas 40 minutos diagnosticando solo y no has mandado ninguna actualización. ¿Qué pide el protocolo?",
+          "options": [
+            "Enviar ya una actualización y repetir cada 30 minutos",
+            "Seguir hasta resolver y avisar al final",
+            "Esperar a que los usuarios pregunten",
+            "Enviar el post-mortem preliminar"
+          ],
+          "correctIndex": 0,
+          "explanation": "En un incidente mayor comunicar es tan importante como reparar. Si estás solo, alternas. El post-mortem va después de resolver."
+        }
+      ],
+      "diagram": "flowchart TD\n  A{¿Hay luz y LEDs?}:::amarillo -->|no| E[Eléctrico o UPS]:::rosa\n  A -->|sí| B{¿Switch core OK?}:::amarillo\n  B -->|no| S[Revisar switch]:::rosa\n  B -->|sí| C{¿Responde el gateway?}:::amarillo\n  C -->|no| R[Router o firewall]:::rosa\n  C -->|sí| I[Llamar al ISP]:::morado\n  classDef rosa fill:#FF375F,stroke:#FF375F,color:#fff\n  classDef morado fill:#BF5AF2,stroke:#BF5AF2,color:#fff\n  classDef amarillo fill:#FFD60A,stroke:#FFD60A,color:#1d1d1f"
+    }
+  },
+  "modules": {
+    "mod-sti-1": {
+      "emoji": "🛎️",
+      "exam": [
+        {
+          "question": "Hay que cambiar la arquitectura de red de una sede. ¿Quién implementa el cambio?",
+          "options": [
+            "L1 Service Desk",
+            "L2 Soporte especializado",
+            "L3 Ingeniería / Administradores",
+            "El propio usuario con una guía"
+          ],
+          "correctIndex": 2,
+          "explanation": "Cambios en infraestructura y arquitectura son de L3, que además documenta para que L1 y L2 puedan resolver casos parecidos después."
+        },
+        {
+          "question": "El backlog pasó de 20 a 90 tickets sin asignar en una semana. Como manager, ¿qué haces primero?",
+          "options": [
+            "Cerrar automáticamente los tickets viejos",
+            "Ver qué categorías crecen y reasignar o reforzar el equipo",
+            "Alargar los SLA para cumplirlos",
+            "Ignorarlo mientras el FCR esté bien"
+          ],
+          "correctIndex": 1,
+          "explanation": "Los datos de tendencia dicen dónde está el atasco. Cerrar tickets o mover los SLA maquilla el número sin atender a nadie."
+        },
+        {
+          "question": "Un usuario dice: \"Esto es un desastre, llevo una hora sin poder trabajar\". ¿Mejor respuesta?",
+          "options": [
+            "\"Entiendo que es frustrante. Lo reviso ahora y te actualizo en 30 minutos.\"",
+            "\"Es un problema simple, enseguida está.\"",
+            "\"El DHCP no te asignó IP.\"",
+            "\"Abre un ticket por el portal y espera.\""
+          ],
+          "correctIndex": 0,
+          "explanation": "Combina empatía y expectativa concreta. Llamarlo \"simple\" minimiza al usuario y la jerga técnica no le dice nada."
+        },
+        {
+          "question": "Cerraste un ticket con la nota \"Se resolvió\". ¿Qué falta?",
+          "options": [
+            "Nada, es suficiente",
+            "El nombre de tu jefe",
+            "Una captura del escritorio",
+            "Pasos realizados, causa raíz, solución y confirmación del usuario"
+          ],
+          "correctIndex": 3,
+          "explanation": "\"Se resolvió\" sin el cómo es el error de documentación más común: el próximo técnico empieza de cero y no se alimenta la base de conocimiento."
+        },
+        {
+          "question": "Un gerente pide subir su ticket de P3 a P1 \"porque es gerente\". ¿Qué haces?",
+          "options": [
+            "Subirlo: es gerente",
+            "Evaluar impacto y urgencia y cambiarlo solo con justificación documentada",
+            "Rechazarlo y cerrar el ticket",
+            "Pasarlo a L3 para quitártelo"
+          ],
+          "correctIndex": 1,
+          "explanation": "La prioridad sale de la matriz impacto × urgencia, no del cargo. Si cambia, queda escrito el porqué."
+        },
+        {
+          "question": "Un usuario no encuentra un menú de configuración y se pierde con tus indicaciones. ¿Qué canal usas?",
+          "options": [
+            "Un email con instrucciones largas",
+            "Una visita presencial a otra sede",
+            "Una sesión remota compartiendo pantalla",
+            "Un chat sin capturas"
+          ],
+          "correctIndex": 2,
+          "explanation": "Pantalla compartida es visual e interactiva, justo lo que falta aquí. El email es lento y sin contexto; ir en persona no escala."
+        }
+      ]
+    },
+    "mod-sti-2": {
+      "emoji": "🩻",
+      "exam": [
+        {
+          "question": "Antes de cambiar la configuración de un servidor en producción, ¿qué pide el paso 4?",
+          "options": [
+            "Hacerlo ya y ver qué pasa",
+            "Considerar el impacto y obtener aprobación",
+            "Pedir permiso al usuario que reportó",
+            "Documentarlo solo si sale mal"
+          ],
+          "correctIndex": 1,
+          "explanation": "El plan de acción incluye impacto y aprobación en producción. Probar \"a ver qué pasa\" puede tumbar a muchos usuarios más."
+        },
+        {
+          "question": "Un usuario no entra a una app web interna, pero sí a internet y al correo. ¿Qué enfoque eliges?",
+          "options": [
+            "Top-down: empezar por la aplicación y su puerto",
+            "Bottom-up desde el cable",
+            "Cambiar la tarjeta de red",
+            "Reemplazar la fuente de poder"
+          ],
+          "correctIndex": 0,
+          "explanation": "Internet y correo funcionan, así que las capas bajas están bien. Con un fallo de una sola app, ir de arriba abajo es más rápido."
+        },
+        {
+          "question": "PC \"muy lento\": el Administrador de tareas muestra disco al 100 % y solo 5 % de espacio libre. ¿Acción?",
+          "options": [
+            "Comprar otra CPU",
+            "Liberar espacio (más del 15 %) y revisar programas de inicio",
+            "Reinstalar el navegador",
+            "Cambiar el monitor"
+          ],
+          "correctIndex": 1,
+          "explanation": "Con menos del 15 % libre Windows sufre. Liberar espacio y quitar programas de inicio ataca la causa medida, no una supuesta."
+        },
+        {
+          "question": "Un PC se reinicia al azar y huele a quemado. ¿Qué pruebas?",
+          "options": [
+            "La RAM con memtest86+",
+            "Reinstalar Windows",
+            "SFC /scannow",
+            "Cambiar la fuente por una que sabes que funciona"
+          ],
+          "correctIndex": 3,
+          "explanation": "Olor a quemado y reinicios aleatorios señalan la fuente. Probar con una pieza buena conocida confirma el diagnóstico sin adivinar."
+        },
+        {
+          "question": "Windows Update falla una y otra vez. ¿Qué comandos de reparación aplicas?",
+          "options": [
+            "ping 8.8.8.8",
+            "df -h",
+            "SFC /scannow y DISM /RestoreHealth",
+            "ss -tulpn"
+          ],
+          "correctIndex": 2,
+          "explanation": "SFC y DISM reparan archivos del sistema que bloquean las actualizaciones. Los otros comandos miden red o disco en Linux."
+        },
+        {
+          "question": "Un mouse USB no funciona; en otro puerto sí. ¿Qué concluyes?",
+          "options": [
+            "Que el mouse está roto",
+            "Que falla el puerto original",
+            "Que es el driver de video",
+            "Que hay que reinstalar el sistema"
+          ],
+          "correctIndex": 1,
+          "explanation": "Mismo dispositivo, distinto puerto, funciona: el problema está en el puerto. Es la técnica de sustitución aplicada a periféricos."
+        }
+      ]
+    },
+    "mod-sti-3": {
+      "emoji": "🔐",
+      "exam": [
+        {
+          "question": "¿Qué puerto debe estar abierto para que los usuarios naveguen por sitios cifrados?",
+          "options": [
+            "80",
+            "443",
+            "3389",
+            "25"
+          ],
+          "correctIndex": 1,
+          "explanation": "HTTPS usa el 443. El 80 es web sin cifrar, el 3389 es RDP y el 25 es envío de correo."
+        },
+        {
+          "question": "La VPN de un usuario se desconecta cada pocos minutos desde su casa. ¿Qué revisas?",
+          "options": [
+            "La estabilidad de su internet, el MTU y el timeout",
+            "Su contraseña de correo",
+            "El driver de la impresora",
+            "El nivel de acceso a la carpeta Finanzas"
+          ],
+          "correctIndex": 0,
+          "explanation": "Las desconexiones frecuentes suelen venir de internet inestable, MTU o timeout. Un problema de credenciales impediría conectar desde el inicio."
+        },
+        {
+          "question": "Un técnico desactivó el firewall de un servidor \"para que funcione\" y lo dejó así. ¿Qué debió hacer?",
+          "options": [
+            "Nada, ahora funciona",
+            "Desactivar también el antivirus",
+            "Crear una regla para el puerto y la dirección que se necesitan",
+            "Reiniciar el servidor"
+          ],
+          "correctIndex": 2,
+          "explanation": "Deshabilitarlo sirve, como mucho, para una prueba breve. La solución es una regla específica de entrada o salida para ese servicio."
+        },
+        {
+          "question": "Te llega un correo de \"TI\" pidiendo tu contraseña para \"migrar el buzón\". ¿Qué haces?",
+          "options": [
+            "Responder con la contraseña",
+            "Reenviarlo a toda la empresa para alertar",
+            "Borrarlo sin decir nada",
+            "No responder y reportarlo como phishing al equipo de seguridad"
+          ],
+          "correctIndex": 3,
+          "explanation": "TI nunca pide contraseñas por correo. Reportarlo permite bloquear la campaña; reenviarlo a todos esparce el enlace trampa."
+        },
+        {
+          "question": "¿Por qué DNS suele usar UDP en lugar de TCP?",
+          "options": [
+            "Porque cifra el tráfico",
+            "Porque son consultas cortas que no necesitan establecer conexión",
+            "Porque es más seguro",
+            "Porque usa el puerto 443"
+          ],
+          "correctIndex": 1,
+          "explanation": "UDP no hace el saludo de tres pasos de TCP, así que una consulta corta responde antes. No cifra ni es más seguro."
+        },
+        {
+          "question": "Un servidor de archivos de la LAN usa SMB (445). ¿Cómo debe quedar en el firewall perimetral?",
+          "options": [
+            "Solo interno, bloqueado desde internet",
+            "Abierto a internet",
+            "Redirigido al puerto 80",
+            "Abierto solo de noche"
+          ],
+          "correctIndex": 0,
+          "explanation": "SMB expuesto a internet ha sido puerta de entrada de ransomware. Va solo dentro de la red o por VPN."
+        }
+      ]
+    },
+    "mod-sti-4": {
+      "emoji": "🏁",
+      "exam": [
+        {
+          "question": "15 usuarios no pueden imprimir en central (T09) y la impresora del 3.er piso está atascada (T02). ¿Cómo los tratas?",
+          "options": [
+            "Por separado, en orden de llegada",
+            "Revisas si están relacionados; T09 tiene más impacto y va primero",
+            "Cierras T02 sin revisar",
+            "Escalas ambos a L3"
+          ],
+          "correctIndex": 1,
+          "explanation": "Puede ser el mismo problema, y T09 afecta a 15 personas. Agrupar y priorizar por impacto es lo que evalúa el proyecto."
+        },
+        {
+          "question": "Sergio, gerente, pide acceso urgente a la carpeta Finanzas (T10). ¿Qué haces?",
+          "options": [
+            "Dárselo ya porque es gerente",
+            "Prestarle tu usuario un rato",
+            "Ignorarlo hasta el viernes",
+            "Confirmar la aprobación del responsable de la carpeta (mínimo privilegio)"
+          ],
+          "correctIndex": 3,
+          "explanation": "El acceso a datos sensibles requiere aprobación del dueño, sea quien sea el que lo pide. Prestar tu usuario rompe la trazabilidad."
+        },
+        {
+          "question": "Post-mortem: ¿qué sección convierte lo aprendido en cambios reales?",
+          "options": [
+            "El timeline",
+            "El impacto",
+            "Acciones correctivas con responsable y fecha",
+            "Qué funcionó bien"
+          ],
+          "correctIndex": 2,
+          "explanation": "Sin responsable y fecha, las mejoras se quedan en buenas intenciones. El timeline y el impacto explican, pero no cambian nada."
+        },
+        {
+          "question": "Durante el outage eres el único analista en la oficina. ¿Cómo repartes tu tiempo?",
+          "options": [
+            "Alternas diagnóstico y comunicación, con actualizaciones cada 30 minutos",
+            "Solo diagnosticas hasta resolver",
+            "Solo comunicas y no diagnosticas",
+            "Sales a buscar ayuda sin avisar a nadie"
+          ],
+          "correctIndex": 0,
+          "explanation": "El protocolo pide que alguien comunique mientras se diagnostica. Si estás solo, alternas con la plantilla de actualización."
+        },
+        {
+          "question": "El router no recibe IP del proveedor y la interfaz WAN no tiene link; el switch y la LAN funcionan. ¿Siguiente paso?",
+          "options": [
+            "Reiniciar todos los PC",
+            "Llamar al ISP para verificar si hay un corte reportado",
+            "Cambiar el switch core",
+            "Reinstalar el ERP"
+          ],
+          "correctIndex": 1,
+          "explanation": "La LAN está bien y la WAN no tiene enlace: el problema está del lado del proveedor. Tocar el switch o los PC no ayuda."
+        },
+        {
+          "question": "Sandra recibe \"Error 403\" en el ERP (T14). ¿Qué indica y dónde miras?",
+          "options": [
+            "Que el servidor está caído: lo reinicias",
+            "Acceso denegado: revisas sus permisos o grupo en el ERP o Active Directory",
+            "Que no tiene red: revisas el cable",
+            "Que el DNS cayó: haces flushdns"
+          ],
+          "correctIndex": 1,
+          "explanation": "403 significa que el servidor responde pero le niega el acceso. Si fuera red o DNS, ni siquiera llegaría a esa respuesta."
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,79 @@
+{
+  "name": "xara-coder-assistant",
+  "version": "1.2.3",
+  "description": "XARA: tutora y asistente de programación con IA para Windows: academia con ejercicios guiados, examen de nivel, evaluación por rúbrica, observador de pantalla y corrección de código con permiso.",
+  "main": "out/main/index.js",
+  "scripts": {
+    "dev": "electron-vite dev",
+    "build": "electron-vite build",
+    "start": "electron-vite preview",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "dist:win": "electron-vite build && electron-builder --win",
+    "validate:v2": "node scripts/validate-content-v2.mjs",
+    "test:validator-v2": "node scripts/test-validator-v2.mjs",
+    "alineacion": "node scripts/gen-alineacion-v2.mjs"
+  },
+  "author": "LM",
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "@fontsource-variable/inter": "^5.3.0",
+    "@types/node": "^26.6.5",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@types/sql.js": "^1.4.11",
+    "@vitejs/plugin-react": "^6.1.2",
+    "electron": "^45.0.0",
+    "electron-builder": "^26.15.3",
+    "electron-vite": "^6.0.0",
+    "mermaid": "^11.17.2",
+    "playwright": "^1.56.1",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "react-markdown": "^10.1.0",
+    "remark-gfm": "^4.0.1",
+    "simple-icons": "^16.35.0",
+    "sql.js": "^1.15.1",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.5",
+    "vitest": "^5.0.5"
+  },
+  "productName": "XARA Coder Assistant",
+  "private": true,
+  "build": {
+    "appId": "dev.lm.xara",
+    "productName": "XARA Coder Assistant",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "out/**",
+      "package.json"
+    ],
+    "win": {
+      "icon": "build/icon.png",
+      "target": [
+        "nsis",
+        "zip"
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true
+    },
+    "executableName": "XaraCoderAssistant",
+    "electronFuses": {
+      "runAsNode": false,
+      "enableNodeOptionsEnvironmentVariable": false,
+      "enableNodeCliInspectArguments": false,
+      "enableCookieEncryption": true,
+      "enableEmbeddedAsarIntegrityValidation": true,
+      "onlyLoadAppFromAsar": true
+    }
+  },
+  "dependencies": {
+    "@fontsource-variable/atkinson-hyperlegible-next": "^5.3.0",
+    "@fontsource-variable/bricolage-grotesque": "^5.3.0"
+  }
+}

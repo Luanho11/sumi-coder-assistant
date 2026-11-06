@@ -1,0 +1,912 @@
+#!/usr/bin/env python3
+# Clase sec-l15 «Cómo funciona una web por dentro» (Seguridad web, módulo M1, clase 2) escrita al estándar v2.
+import json, sys
+
+L = 'sec-l15'
+O1, O2, O3, O4 = f'{L}-o1', f'{L}-o2', f'{L}-o3', f'{L}-o4'
+P1, P2, P3, P4, P5, P6 = (f'{L}-p{i}' for i in range(1, 7))
+
+
+def S(kind, title, content, narration, refs=None, artifact=None):
+    s = {'kind': kind, 'title': title, 'content': content.strip(), 'narration': narration.strip()}
+    if refs: s['glossaryRefs'] = refs
+    if artifact: s['artifact'] = artifact
+    return s
+
+
+def mcq(id, obj, bloom, prompt, opts, correct, expl):
+    return {'id': id, 'type': 'mcq', 'objective': obj, 'bloom': bloom, 'prompt': prompt,
+            'options': [{'text': t, **({'whyNot': w} if i != correct else {})} for i, (t, w) in enumerate(opts)],
+            'correctIndex': correct, 'explanation': expl}
+
+
+def multi(id, obj, bloom, prompt, opts, correct, expl):
+    return {'id': id, 'type': 'multi', 'objective': obj, 'bloom': bloom, 'prompt': prompt,
+            'options': [{'text': t, **({'whyNot': w} if i not in correct else {})} for i, (t, w) in enumerate(opts)],
+            'correctIndexes': correct, 'explanation': expl}
+
+
+def order(id, obj, bloom, prompt, steps, expl):
+    return {'id': id, 'type': 'order', 'objective': obj, 'bloom': bloom, 'prompt': prompt, 'steps': steps, 'explanation': expl}
+
+
+def classify(id, obj, bloom, prompt, buckets, cases, expl):
+    return {'id': id, 'type': 'classify', 'objective': obj, 'bloom': bloom, 'prompt': prompt, 'buckets': buckets,
+            'cases': [{'text': t, 'bucket': b} for t, b in cases], 'explanation': expl}
+
+
+def fill(id, obj, bloom, prompt, template, blanks, expl):
+    return {'id': id, 'type': 'fill', 'objective': obj, 'bloom': bloom, 'prompt': prompt, 'template': template,
+            'blanks': [{'accept': a} for a in blanks], 'explanation': expl}
+
+
+def spot(id, obj, bloom, prompt, artifact, lines, expl):
+    return {'id': id, 'type': 'spot', 'objective': obj, 'bloom': bloom, 'prompt': prompt, 'artifact': artifact, 'correctLines': lines, 'explanation': expl}
+
+
+def G(id, term, plain, example, aliases=None):
+    g = {'id': id, 'term': term, 'plain': plain, 'example': example, 'firstTaughtIn': L}
+    if aliases: g['aliases'] = aliases
+    return g
+
+
+# ───────────────────────── Glosario ─────────────────────────
+glossary = [
+    G('navegador', 'navegador', 'Programa de tu computadora que pide páginas por ti y las muestra en pantalla.', 'Chrome, Firefox o Edge.', ['navegadores']),
+    G('http', 'HTTP', 'El idioma común en que el navegador y el servidor se escriben mensajes. HTTPS es lo mismo, pero con el viaje cifrado.', 'Una dirección que empieza por https:// usa HTTP cifrado.', ['HTTPS']),
+    G('url', 'URL', 'La dirección completa de lo que pides: protocolo, dominio, ruta y parámetros.', 'https://tienda.example.com/productos/7?talla=M', ['URLs']),
+    G('ruta', 'ruta de la dirección', 'La parte de la dirección que va después del dominio y dice qué recurso pides.', '/productos/7 pide el producto número 7.'),
+    G('parametro', 'parámetro', 'Dato extra que va al final de la dirección, después del signo ?, con la forma nombre=valor.', '?talla=M&color=rojo envía dos parámetros: talla y color.', ['parámetros', 'parametros', 'parametro']),
+    G('peticion', 'petición HTTP', 'Mensaje que el navegador envía al servidor para pedir algo o para entregarle datos.', 'Abrir la página de un producto envía una petición GET.'),
+    G('respuesta', 'respuesta HTTP', 'Mensaje con el que el servidor contesta a una petición: un código de estado, cabeceras y un cuerpo.', 'El servidor responde con el código 200 y la página del producto.'),
+    G('metodo-http', 'método HTTP', 'La acción que pide una petición. GET sirve para leer algo y POST para enviar datos.', 'GET /productos/7 lee el producto; POST /pedidos envía un pedido.'),
+    G('cabecera', 'cabecera', 'Línea con un dato sobre el mensaje, no sobre su contenido: la cookie, el idioma, el tipo de archivo.', 'Cookie: sesion=ab12 es una cabecera de la petición.', ['cabeceras']),
+    G('cuerpo', 'cuerpo', 'El contenido que viaja dentro de un mensaje, como los datos que escribiste en un formulario.', 'En un inicio de sesión, el cuerpo lleva el usuario y la clave.', ['cuerpo de la petición']),
+    G('codigo-estado', 'código de estado', 'Número de tres cifras con el que el servidor resume el resultado: 2 y 3 salió bien, 4 falló quien pidió, 5 falló el servidor.', '200 todo bien, 404 no existe, 500 falló el servidor.', ['códigos de estado', 'código de respuesta']),
+    G('cookie', 'cookie', 'Dato pequeño que el servidor entrega y que tu navegador devuelve en cada petición siguiente, por ejemplo para recordar que ya iniciaste sesión.', 'sesion=ab12cd viaja en la cabecera Cookie de cada petición.', ['cookies']),
+    G('herramientas-desarrollo', 'herramientas de desarrollo', 'Panel del navegador, que se abre con F12, donde ves las peticiones y respuestas que envía y recibe tu navegador.', 'La pestaña Red del panel lista cada petición con su método y su código.', ['herramientas del navegador', 'DevTools', 'pestaña Red']),
+    G('entrada-usuario', 'entrada del usuario', 'Cualquier dato que llega desde el navegador, se vea o no en pantalla: lo escrito, los parámetros, las cookies, las cabeceras.', 'Un campo oculto del formulario también es entrada del usuario.', ['entradas del usuario', 'datos controlados por el usuario']),
+    G('campo-oculto', 'campo oculto', 'Dato que un formulario envía sin mostrarlo en pantalla, pero que las herramientas de desarrollo muestran y permiten cambiar.', 'Un campo oculto precio=120 viaja con el botón Comprar.', ['campos ocultos']),
+]
+
+
+def ST(kind, title, content, narration, stamp, dateline, source=None, imagined=False, refs=None):
+    s = S(kind, title, content, narration, refs)
+    s['stamp'] = stamp
+    s['dateline'] = dateline
+    if imagined: s['imagined'] = True
+    else: s['source'] = source
+    return s
+
+
+# ───────────────────────── El caso real que recorre la clase ─────────────────────────
+realCase = {
+ 'title': 'Del «vago pero emocionante» de 1989 a 114.000 correos en 2010',
+ 'summary': 'En 1989 Tim Berners-Lee propone en el CERN una red para compartir información y su jefe anota «Vague, but exciting». En 1994 nacen las cookies para un carrito de compras. En 2010, dos personas cambian cifras de una dirección web de AT&T y obtienen unos 114.000 correos de usuarios de iPad. En 2021, un periodista de Misuri ve datos de maestros en el código de una página oficial.',
+ 'sources': [
+  {'title': 'CERN Bulletin: «Vague but exciting…» CERN celebrates 20 years of the Web', 'url': 'https://cds.cern.ch/journal/CERNBulletin/2009/11/News%20Articles/1165312', 'claim': 'En marzo de 1989 Berners-Lee presentó su propuesta a Mike Sendall, quien escribió «Vague, but exciting»; usó una computadora NeXT para el primer servidor web.'},
+  {'title': 'Science Museum Group: Happy 25th birthday, World Wide Web', 'url': 'https://blog.sciencemuseum.org.uk/happy-25th-birthday-world-wide-web', 'claim': 'La NeXT conserva una etiqueta que dice «This machine is a server. DO NOT POWER IT DOWN!!».'},
+  {'title': 'CNBC: el comentario de su jefe a Berners-Lee (2019)', 'url': 'https://www.cnbc.com/2019/03/12/feedback-world-wide-web-inventor-berners-lee-got-from-boss-on-the-idea.html', 'claim': 'Un año después de la propuesta, Sendall le permitió comprar la NeXT que sería el primer servidor web.'},
+  {'title': 'Google Privacy Sandbox: What are cookies', 'url': 'https://developers.google.cn/privacy-sandbox/cookies/basics/what-are-cookies', 'claim': 'En 1994 MCI buscaba un carrito de compras y Lou Montulli, de Netscape, añadió a HTTP la posibilidad de guardar texto en el navegador y la llamó «cookie».'},
+  {'title': 'Threatpost: condenado por acceder a servidores de AT&T (2013)', 'url': 'https://threatpost.com/man-convicted-illegally-accessing-att-servers-impersonating-ipad-112012/77236', 'claim': 'El número ICC-ID del iPad aparecía en la dirección de la web de AT&T; al cambiarlo se obtenían otros correos; un programa recogió 114.000 direcciones.'},
+  {'title': 'Engadget: AT&T iPad hacker appeals conviction (2013)', 'url': 'https://www.engadget.com/2013-07-02-atandt-ipad-hacker-appeals-conviction.html', 'claim': 'Cambiar una sola cifra del ICC-ID devolvía el correo de otro usuario.'},
+  {'title': 'Giga Law: Court Reverses Conviction of AT&T-iPad Hacker (2014)', 'url': 'https://giga.law/daily-news/2014/04/13/court-reverses-conviction-of-att-ipad-hacker', 'claim': 'Una corte federal de apelaciones revocó la condena de Auernheimer.'},
+  {'title': 'Missouri Independent: informe de 158 páginas sobre el caso del periodista (2022)', 'url': 'https://missouriindependent.com/2022/03/03/parson-digs-in-against-evidence-absolving-reporter-he-accused-of-being-a-hacker/', 'claim': 'El reportero solo miró el código fuente de un sitio público del estado, donde estaban los números de seguro social de maestros.'},
+  {'title': '3 News Now: el fiscal no presentará cargos contra el periodista', 'url': 'https://www.3newsnow.com/news/prosecutor-isnt-pressing-charges-against-st-louis-reporter-who-found-flaw-in-state-website', 'claim': 'El periodista avisó al estado y prometió no publicar hasta que se corrigiera; el fiscal del condado decidió no presentar cargos.'},
+  {'title': 'Malwarebytes: Journalist won’t be indicted for viewing a state website’s HTML (2022)', 'url': 'https://www.malwarebytes.com/ja/blog/news/2022/02/journalist-wont-be-indicted-for-hacking-for-viewing-a-state-websites-html', 'claim': 'El fiscal escribió que había un argumento para sostener que se violó la ley, pero que el asunto se había resuelto por vías no legales.'}],
+}
+
+# ───────────────────────── Gancho: el caso AT&T ─────────────────────────
+hook = ST('hook', 'Un número en la dirección',
+ """Dos personas cambiaron una cifra en una dirección web. Apareció el correo de **otro usuario**.
+
+¿Qué creyó el servidor?
+
+1. Que el número era de quien lo envió
+2. Que el número era secreto
+3. Nada: no comprobó""",
+ """Junio de 2010. Hace pocos meses que salió el iPad con conexión celular, y su dueño entra a la web de AT&T desde la tableta. La dirección lleva un número largo: el de serie de la tarjeta SIM del aparato. Y la página, para ahorrarle tiempo, ya muestra su correo. Daniel Spitler descubrió algo: si cambiaba una sola cifra de ese número, la página mostraba el correo de otra persona. Entonces escribió un programa que probaba números uno tras otro, y juntó unos ciento catorce mil correos. Aquí no hay magia. Hay un número en una dirección y un servidor que lo creyó. Quédate con esa idea: al terminar la clase sabrás explicar qué falló y qué habría que comprobar.""",
+ '114.000', 'Estados Unidos · junio de 2010', 'Threatpost y Engadget')
+
+# ───────────────────────── Parte 1 ─────────────────────────
+p1_scenes = [
+ ST('story', 'Una propuesta «vaga, pero emocionante»',
+ """Tim Berners-Lee entrega a su jefe una propuesta para compartir información entre computadoras.
+
+Su jefe anota al margen: **«Vague, but exciting»**.""",
+ """Para entender cómo funciona una web, volvamos a su origen. Marzo de 1989. En el CERN, un laboratorio de física en Suiza, un ingeniero llamado Tim Berners-Lee entrega a su jefe un documento con una idea: unir computadoras para que los físicos compartan información. El jefe, Mike Sendall, lo lee y escribe en el margen una frase: vaga, pero emocionante. Con esa nota, que significa algo así como imprecisa pero con potencial, lo dejó seguir adelante. Esa propuesta es el punto de partida de la web que usas hoy.""",
+ '1989', 'CERN, Ginebra · marzo de 1989', 'CERN Bulletin'),
+ ST('story', 'La computadora con una nota pegada',
+ """Un año después compra una computadora NeXT. Ahí corre el **primer servidor web**.
+
+Pegada, una nota: «Esta máquina es un servidor. NO LA APAGUES».""",
+ """Un año más tarde, su jefe le permite comprar una computadora NeXT, una máquina potente para su época. Esa computadora fue el primer servidor web del mundo. Y tenía pegada una nota que lo dice todo: esta máquina es un servidor, no la apagues. Porque un servidor solo sirve si está siempre encendido y conectado: si se apaga, la página desaparece para todos. Fíjate en la idea que nos llevamos: un servidor es, literalmente, una computadora que espera a que alguien le pida algo.""",
+ '1990', 'CERN, Ginebra · 1990', 'Science Museum y CNBC'),
+ S('concept', 'Dos computadoras que conversan',
+ """Cada visita a una web son **dos mensajes**: el navegador pide, el servidor responde.
+
+```mermaid
+sequenceDiagram
+  participant N as Navegador (tu computadora)
+  participant S as Servidor (la tienda)
+  N->>S: 1. Pide la página
+  S-->>N: 2. Responde con la página
+```""",
+ """Pongamos esa conversación en un diagrama. Tu computadora tiene un programa que se llama navegador: Chrome, Firefox o Edge. La computadora del otro lado, la que espera pedidos, es el servidor. Cuando escribes una dirección ocurren solo dos mensajes. Primero, tu navegador pide la página. Después, el servidor responde con ella. Siempre en ese orden, y siempre empieza el navegador: el servidor nunca te escribe primero. Los libros técnicos llaman cliente a quien pide, y servidor a quien responde. Casi toda la seguridad web se apoya en esta conversación."""),
+ S('analogy', 'El restaurante',
+ """- **Tú** quieres comer.
+- El **mesero** (navegador) lleva tu pedido.
+- La **cocina** (servidor) decide qué prepara.
+
+La cocina nunca te ve: solo lee la comanda.""",
+ """Una forma de recordarlo es un restaurante. Tú eres quien quiere comer. El mesero es el navegador: anota lo que pides y lo lleva a la cocina. La cocina es el servidor: recibe la comanda, decide qué puede preparar y devuelve el plato. Fíjate en un detalle que vamos a necesitar más adelante. La cocina nunca te ve, solo ve el papel. Y ese papel lo escribió alguien que no trabaja en la cocina. Si dice plato de lujo, precio cero, la cocina puede creerlo o comprobarlo en su carta de precios. Guarda esta idea: la cocina decide, el papel solo sugiere.""",
+ ['navegador']),
+ S('definition', 'Navegador y HTTP',
+ """- **Navegador**: programa que pide páginas por ti y las muestra.
+- **HTTP**: el idioma común de navegador y servidor. **HTTPS** es el mismo, con el viaje cifrado.""",
+ """Pongamos nombre a lo que acabamos de ver. El navegador es el programa que pide páginas por ti y las muestra. Y HTTP es el idioma en que el navegador y el servidor se escriben: reglas comunes sobre cómo se pide algo y cómo se responde, para que cualquier navegador hable con cualquier servidor. Cuando la dirección empieza por https, con la ese, es el mismo idioma pero el mensaje viaja cifrado: nadie que escuche en el camino, por ejemplo en una red de cafetería, puede leerlo.""",
+ ['navegador', 'http']),
+ S('concept', 'Qué vive en cada lado',
+ """| En el navegador | En el servidor |
+|---|---|
+| Lo que ves: textos, botones, colores | Las reglas: quién puede ver qué |
+| El código que corre en tu pantalla | La base de datos |
+| Lo que escribes en los formularios | Las contraseñas guardadas |""",
+ """Ahora separemos qué vive en cada lado, porque de esta separación sale todo lo demás. En el navegador vive lo que ves: los textos, los botones, los colores, el código de la página que se ejecuta en tu pantalla y lo que tú escribes en los formularios. Todo eso está en tu computadora y lo controlas tú. En el servidor viven las reglas, como quién puede ver cuál agenda, la base de datos con toda la información y las contraseñas guardadas. Eso lo controla el dueño de la aplicación.""",
+ ['navegador']),
+ S('concept', 'El servidor no te ve',
+ """El servidor **no ve tu pantalla** ni tu teclado.
+
+Solo recibe el mensaje que tu navegador decide enviarle.""",
+ """Esta es la frase que sostiene toda la clase, así que léela despacio. El servidor no ve tu pantalla, no ve tu teclado, no sabe quién eres ni qué estabas mirando. Lo único que recibe es el mensaje que tu navegador decide enviarle."""),
+]
+p1_micro = {
+ 'Dos computadoras que conversan': mcq(f'{L}-u0', O1, 'comprender', '¿Quién empieza siempre la conversación entre el navegador y el servidor?',
+   [('El servidor, cuando tiene algo nuevo que mostrarte', 'El servidor solo contesta: nunca escribe primero.'), ('El navegador, que pide; el servidor solo responde', None), ('Los dos al mismo tiempo, para ahorrar tiempo', 'La conversación tiene orden: primero se pide y luego se responde.'), ('Depende de la página, a veces uno y a veces otro', 'En la web siempre empieza el navegador.')], 1,
+   'Siempre pide el navegador y responde el servidor, en ese orden.'),
+ 'Navegador y HTTP': fill(f'{L}-u1', O1, 'recordar', 'Completa: Chrome, Firefox y Edge son ejemplos de un ___.', 'Chrome, Firefox y Edge son ejemplos de un ___.',
+   [['navegador', 'navegadores']], 'Un navegador es el programa que pide páginas por ti y las muestra.'),
+ 'Qué vive en cada lado': classify(f'{L}-u2', O1, 'comprender', '¿Dónde vive cada cosa: en el navegador o en el servidor?', ['En el navegador', 'En el servidor'],
+   [('El color de un botón', 'En el navegador'), ('Lo que escribes en la caja de búsqueda', 'En el navegador'), ('El texto que aparece en pantalla', 'En el navegador'),
+    ('La base de datos con todos los clientes', 'En el servidor'), ('Las contraseñas guardadas', 'En el servidor'), ('La regla «solo el médico ve su agenda»', 'En el servidor')],
+   'Lo que se ve y se escribe vive en el navegador; las reglas y los datos guardados viven en el servidor.'),
+}
+part1 = {
+ 'id': P1, 'objectives': [O1], 'title': 'El navegador y el servidor: quién hace qué', 'scenes': p1_scenes,
+ 'checkpoint': [
+  order(f'{L}-cp1a', O1, 'comprender', 'Ordena lo que ocurre cuando abres una página web.',
+        ['Escribes la dirección en el navegador', 'El navegador envía un mensaje pidiendo la página', 'El servidor prepara su respuesta', 'El navegador muestra la página'],
+        'Primero escribes, luego el navegador pide, después el servidor responde y al final se muestra la página.'),
+  mcq(f'{L}-cp1b', O1, 'comprender', 'En la analogía del restaurante, ¿qué papel cumple el navegador?',
+      [('La cocina, que decide qué se prepara', 'La cocina es el servidor: decide y prepara.'), ('El mesero, que anota el pedido y lo lleva', None), ('El plato, que es lo que recibes', 'El plato sería la respuesta, no quien la pide.'), ('La carta de precios, que guarda las reglas', 'Las reglas y los precios viven en la cocina, es decir, en el servidor.')], 1,
+      'El navegador hace de mesero: lleva lo que tú pides y trae lo que el servidor responde.'),
+ ],
+ 'reteach': S('analogy', 'Otra analogía: la biblioteca',
+ """- Tú llenas una **ficha** con el libro que quieres.
+- La **bibliotecaria** (servidor) la lee y busca.
+- Te trae el libro, o te dice que no existe.
+
+Ella solo ve la ficha, no te ve a ti.""",
+ """Prueba con una biblioteca. Para pedir un libro llenas una ficha con el título que quieres y se la entregas a la bibliotecaria. Ella no te conoce ni te ve pensar: solo lee la ficha. Va al estante, busca, y te devuelve una de dos cosas: el libro, o una nota que dice que ese libro no existe. Ahora cambia las palabras: la ficha es el mensaje que envía tu navegador, la bibliotecaria es el servidor, y el libro es la página que recibes. Tú escribiste la ficha, así que pudiste escribir cualquier cosa en ella. La bibliotecaria decide qué hacer con lo que lee, pero no controla lo que tú escribiste.""")}
+
+# ───────────────────────── Parte 2 ─────────────────────────
+p2_scenes = [
+ ST('story', 'El número que viajaba en la dirección',
+ """La web de AT&T reconocía el iPad por el número de serie de su tarjeta SIM (**ICC-ID**).
+
+Ese número aparecía **en la dirección**.""",
+ """Volvamos a AT&T, porque su caso encaja justo con lo que vamos a aprender ahora. Cada iPad con conexión celular tiene una tarjeta SIM, y cada tarjeta tiene un número de serie largo, el ICC-ID. Cuando el dueño entraba a la web de AT&T desde su iPad, ese número iba escrito en la dirección, a la vista en la barra del navegador. La página lo usaba para mostrar el correo del usuario sin que lo escribiera. Era cómodo, pero había un problema escondido: ese número estaba en un lugar que cualquiera puede editar.""",
+ 'ICC-ID', 'Estados Unidos · 2010', 'Threatpost'),
+ S('concept', 'Una URL, cuatro partes',
+ """`https://citas.consultorioruiz.com/medicos/3?dia=lunes&hora=9`
+
+| Parte | En el ejemplo | Qué dice |
+|---|---|---|
+| Protocolo | `https://` | Cómo hablar |
+| Dominio | `citas.consultorioruiz.com` | A qué servidor ir |
+| Ruta | `/medicos/3` | Qué recurso |
+| Parámetros | `?dia=lunes&hora=9` | Detalles |""",
+ """Veamos qué hay dentro de una dirección. Léela de izquierda a derecha, en cuatro trozos. Primero, el protocolo: https con dos puntos y dos barras, que dice cómo se va a hablar con el servidor. Segundo, el dominio, el nombre del servidor al que hay que ir; aquí, citas punto consultorio Ruiz punto com. Tercero, la ruta, que empieza con una barra y dice qué recurso quieres de ese servidor: el médico número tres. Y cuarto, los parámetros, que empiezan con un signo de interrogación y son detalles de lo que pides: el día lunes y la hora nueve."""),
+ S('definition', 'URL, ruta y parámetro',
+ """- **URL**: la dirección completa de lo que pides.
+- **Ruta**: lo que va tras el dominio; dice qué recurso quieres.
+- **Parámetro**: dato extra tras el `?`, con la forma `nombre=valor`. Varios se separan con `&`.""",
+ """Pongamos nombre a las piezas. La URL es la dirección completa, de principio a fin. La ruta es lo que va después del dominio y dice qué recurso quieres: barra médicos barra tres. Y un parámetro es un dato extra al final, después del signo de interrogación, con la forma nombre igual valor. En día igual lunes, el nombre es día y el valor es lunes. Si hay varios, se separan con el signo y comercial.""",
+ ['url', 'ruta', 'parametro']),
+ S('worked-example', 'Ejemplo resuelto: leer una dirección',
+ """`https://tienda.example.com/productos/7?talla=M&color=rojo`
+
+| Paso | Qué leo | Qué significa |
+|---|---|---|
+| 1 | `https://` | Conversación cifrada |
+| 2 | `tienda.example.com` | Ese servidor |
+| 3 | `/productos/7` | El producto 7 |
+| 4 | `talla=M`, `color=rojo` | Dos detalles |
+| 5 | `7`, `M`, `rojo` | Lo que quien navega puede cambiar |""",
+ """Resolvamos un caso paso a paso. Tienda punto example punto com, barra productos barra siete, y dos parámetros. Paso uno: el protocolo es https, así que la conversación va cifrada. Paso dos: el dominio me dice a qué servidor voy. Paso tres: la ruta dice que pido el producto número siete. Paso cuatro: los parámetros son talla eme y color rojo, dos detalles de lo que pido. Y el paso cinco es el que casi nadie hace al principio: preguntarme qué puede cambiar quien tiene el navegador. Todo. El siete, la eme y el rojo son texto en la barra de direcciones.""",
+ ['url', 'ruta', 'parametro'], 'lectura-direccion'),
+ S('concept', 'La dirección se puede editar',
+ """```text
+/facturas/88   →   /facturas/89
+```
+
+Quien usa el navegador escribe lo que quiera en la barra. El navegador **lo envía tal cual**.""",
+ """Esto no es un truco de expertos. Si en tu aplicación de práctica la dirección dice barra facturas barra ochenta y ocho, tú puedes borrar el ocho final, escribir un nueve y pulsar entrar. Tu navegador no se pregunta si debería. Envía exactamente lo que escribiste, y el servidor recibe una petición para la factura ochenta y nueve. Puedes hacerlo con cualquier parte de la dirección: la ruta, los parámetros, todo. Lo que ocurre después ya no depende del navegador, depende de qué hace el servidor con ese número."""),
+ S('concept', 'El número del final: un identificador',
+ """`/citas/1043`
+
+El `1043` señala **una cita** en la base de datos.
+
+Cambiar a `1044` pide **otra**. Si puedes verla, lo decide el servidor.""",
+ """Mira esta dirección: barra citas barra mil cuarenta y tres. Ese número casi siempre es un identificador: señala un registro concreto dentro de la base de datos. Recuerdas a Marta, de la primera clase, que cambió un mil cuarenta y tres por un mil cuarenta y cuatro? Hizo exactamente eso: editó un número de la barra de direcciones. La pregunta importante no es si pudo cambiarlo, porque siempre se puede. La pregunta es qué hizo el servidor al recibirlo: si respondió con la cita de otra paciente sin comprobar si Marta tenía derecho a verla, ahí está el fallo."""),
+ S('misconception', '«Es tan largo que nadie lo adivinará»',
+ """| Creencia | Realidad |
+|---|---|
+| «El número es larguísimo» | Un programa prueba miles por minuto |
+| «Solo lo conoce su dueño» | Va en la dirección, a la vista |
+| «Nadie lo va a cambiar» | Cambiar una cifra toma un segundo |""",
+ """Esto mismo pensó quien programó la página de AT&T: el número era largo, así que nadie lo adivinaría. Mira la tabla. Que un número sea largo no lo vuelve secreto: Spitler no adivinó nada, escribió un programa que probaba números a toda velocidad, y una computadora hace en un minuto lo que a una persona le tomaría semanas. Que solo lo conozca su dueño tampoco es cierto, porque iba escrito en la dirección. Y que nadie lo cambie es una esperanza, no una defensa. Una defensa es que el servidor compruebe quién pide cada dato, sin importar cómo sea el número."""),
+]
+p2_micro = {
+ 'Una URL, cuatro partes': classify(f'{L}-u3', O2, 'aplicar', '¿A qué parte de la dirección pertenece cada fragmento?', ['Protocolo', 'Dominio', 'Ruta', 'Parámetros'],
+   [('https://', 'Protocolo'), ('http://', 'Protocolo'), ('tienda.example.com', 'Dominio'), ('citas.consultorioruiz.com', 'Dominio'),
+    ('/productos/7', 'Ruta'), ('/medicos/3', 'Ruta'), ('?talla=M&color=rojo', 'Parámetros'), ('?dia=lunes', 'Parámetros')],
+   'El protocolo abre la dirección, el dominio nombra el servidor, la ruta señala el recurso y los parámetros van tras el signo ?.'),
+ 'URL, ruta y parámetro': fill(f'{L}-u4', O2, 'recordar', 'Completa: en `?dia=lunes`, `dia` es el nombre y `lunes` es el ___.', 'En ?dia=lunes, dia es el nombre y lunes es el ___.',
+   [['valor']], 'Un parámetro tiene la forma nombre=valor: aquí el valor es lunes.'),
+ 'El número del final: un identificador': mcq(f'{L}-u5', O2, 'aplicar', 'En tu propia app de práctica cambias `/facturas/88` por `/facturas/89` en la barra del navegador. ¿Qué haces realmente?',
+   [('Modificas el servidor para que cree una factura nueva', 'Cambiar la dirección no modifica nada en el servidor.'), ('Pides al servidor otra factura distinta, con un número editado', None), ('Nada: el navegador ignora los números de la dirección', 'El navegador envía la dirección tal como está escrita.'), ('Cambias el color de la factura que ya tenías abierta', 'Es una petición nueva, no un cambio en la página abierta.')], 1,
+   'Editar la dirección envía otra petición; el servidor decide si responde con esa factura.'),
+}
+part2 = {
+ 'id': P2, 'objectives': [O2], 'title': 'La dirección por dentro', 'scenes': p2_scenes,
+ 'checkpoint': [
+  fill(f'{L}-cp2a', O2, 'comprender', 'Completa con el término correcto.', 'En `/productos/7?talla=M`, la parte `?talla=M` es un ___.', [['parámetro', 'parametro']],
+       'Todo lo que va después del signo ? son parámetros, con la forma nombre=valor.'),
+  mcq(f'{L}-cp2b', O2, 'aplicar', 'En `https://citas.ejemplo.com/medicos/3`, ¿qué parte es la ruta?',
+      [('`https://`', 'Eso es el protocolo, la forma de hablar con el servidor.'), ('`citas.ejemplo.com`', 'Eso es el dominio: el nombre del servidor.'), ('`/medicos/3`', None), ('`3` solamente', 'El 3 es solo el final de la ruta; la ruta completa es /medicos/3.')], 2,
+      'La ruta es lo que va después del dominio y señala el recurso: /medicos/3.'),
+ ],
+ 'reteach': S('analogy', 'Otra analogía: la dirección de una casa',
+ """| Dirección postal | URL |
+|---|---|
+| Ciudad | Dominio |
+| Calle y número | Ruta |
+| «Piso 3, timbre B» | Parámetros |""",
+ """Compara una URL con la dirección de una casa. La ciudad te dice a qué lugar ir: eso es el dominio. La calle y el número te dicen qué edificio buscas dentro de esa ciudad: eso es la ruta. Y detalles como piso tres, timbre be, que añaden precisión sobre a quién buscas, son los parámetros. Cuando escribes una dirección en el navegador, nadie comprueba que sea la tuya: puedes escribir cualquier ruta y cualquier parámetro. Quien decide si te abre la puerta es el servidor, que es el dueño del edificio.""")}
+
+# ───────────────────────── Parte 3 ─────────────────────────
+p3_scenes = [
+ ST('story', 'La web que no recordaba a nadie',
+ """Cada visita era nueva: la web **no tenía memoria**.
+
+MCI quería un carrito de compras. Lou Montulli, de Netscape, inventó la **cookie**.""",
+ """Salto a 1994. La web de esos años tenía un problema curioso: no recordaba nada. Cada vez que pedías una página, el servidor te trataba como si nunca te hubiera visto. Una empresa de telecomunicaciones, MCI, quería construir una de las primeras tiendas en línea y necesitaba un carrito de compras, es decir, que la tienda recordara qué habías elegido entre una página y otra. Lou Montulli, programador de Netscape, añadió algo a HTTP: que el servidor pudiera guardar un dato pequeño en el navegador y que este lo devolviera cada vez. Lo llamó cookie, por el nombre que los programadores daban entonces a ciertos datos con un valor escondido.""",
+ '1994', 'Netscape y MCI · junio de 1994', 'Google Privacy Sandbox'),
+ S('concept', 'Una petición por dentro',
+ """Esto es lo que **de verdad** envía el navegador: texto, una línea por dato.
+
+```text
+GET /medicos/3?dia=lunes HTTP/1.1
+Host: citas.consultorioruiz.com
+Cookie: sesion=ab12cd
+Accept-Language: es-PE
+```""",
+ """Hasta ahora hablamos de la dirección. Veamos el mensaje completo, tal como sale del navegador: es solo texto, línea por línea. La primera línea tiene tres piezas: GET, la acción que pides, en este caso leer algo; la ruta con sus parámetros; y la palabra HTTP con su versión. Las líneas siguientes se llaman cabeceras y cada una es un dato sobre el mensaje. Host dice a qué dominio va dirigido. Cookie lleva el dato que el servidor te entregó antes. Y Accept-Language dice en qué idioma prefieres la respuesta, aquí español de Perú.""",
+ ['peticion', 'cabecera']),
+ S('definition', 'Método, cabecera y cuerpo',
+ """- **Método**: la acción. `GET` = leer. `POST` = enviar datos.
+- **Cabecera**: línea con un dato sobre el mensaje.
+- **Cuerpo**: lo que viaja dentro, como lo que escribiste en un formulario.""",
+ """Pongamos nombre a las tres piezas. El método es la acción que pides. Los dos que más vas a ver son GET, que significa leer algo, por ejemplo abrir una página, y POST, que significa enviar datos para que el servidor los procese, por ejemplo mandar un formulario. La cabecera es una línea con un dato sobre el propio mensaje: la cookie, el idioma, el tipo de archivo. Y el cuerpo es el contenido que viaja dentro: en un inicio de sesión, el cuerpo lleva el usuario y la clave que escribiste.""",
+ ['metodo-http', 'cabecera', 'cuerpo']),
+ S('compare', 'GET frente a POST',
+ """| | GET | POST |
+|---|---|---|
+| Sirve para | Leer | Enviar datos |
+| Los datos van | En la dirección | En el cuerpo |
+| Ejemplo | Ver un producto | Pagar un pedido |""",
+ """Comparemos los dos métodos. Con GET pides algo que ya existe, y si necesitas enviar un detalle, como la talla, va escrito en la dirección. Con POST entregas datos nuevos para que el servidor los procese, y esos datos viajan dentro del cuerpo, no en la dirección. Por eso ver un producto es un GET y pagar un pedido es un POST. Esta diferencia es práctica: una dirección se puede copiar, guardar y compartir con todos sus parámetros, mientras que el cuerpo de un POST no queda escrito en la barra.""",
+ ['metodo-http', 'cuerpo']),
+ S('misconception', '«POST oculta los datos, así que es seguro»',
+ """| Creencia | Realidad |
+|---|---|
+| «En POST no se ven» | Se ven en las herramientas del navegador |
+| «Si no van en la dirección, nadie los cambia» | Se editan antes de enviar |
+| «HTTPS lo arregla todo» | Cifra el viaje, no lo que el usuario decide enviar |""",
+ """Mucha gente piensa que, como en POST los datos no aparecen en la dirección, están ocultos y por lo tanto seguros. Mira la tabla. Los datos de un POST no están en la barra, pero sí en el cuerpo del mensaje, y las herramientas del navegador los muestran completos y permiten reenviarlos con cambios. Ocultar no es proteger. La segunda creencia es parecida: si un dato no va en la dirección, nadie lo cambia. Falso: quien usa el navegador puede editar el formulario antes de enviarlo. Y la tercera: https lo arregla todo. Cifra el camino para que nadie lo lea en medio, pero no impide que quien está frente al navegador envíe lo que quiera.""",
+ ['metodo-http', 'cuerpo', 'http']),
+ S('concept', 'La respuesta y su código de estado',
+ """| Código | Significa |
+|---|---|
+| `200` | Todo bien |
+| `302` | Ve a otra dirección |
+| `403` | No tienes permiso |
+| `404` | No existe |
+| `500` | Falló el servidor |""",
+ """Veamos la otra mitad de la conversación: la respuesta. Lo primero que trae es un número de tres cifras que resume qué pasó, el código de estado. Hay una regla fácil: mira la primera cifra. Si empieza con dos o con tres, salió bien o te mandan a otro sitio. Si empieza con cuatro, el error es de quien pidió: la dirección no existe, o no tienes permiso. Si empieza con cinco, el error es del servidor, que falló al intentar responder. Doscientos es todo bien; trescientos dos manda a otra dirección, algo que verás justo después de iniciar sesión; cuatrocientos tres es sin permiso; cuatrocientos cuatro es que no existe; y quinientos es que el programa falló.""",
+ ['respuesta', 'codigo-estado']),
+ S('definition', 'Respuesta, código de estado y cookie',
+ """- **Respuesta**: lo que contesta el servidor: código, cabeceras y cuerpo.
+- **Código de estado**: número de 3 cifras con el resultado.
+- **Cookie**: dato pequeño que el servidor te da y tu navegador devuelve en **cada** petición.""",
+ """Terminemos de nombrar piezas. La respuesta es el mensaje con el que contesta el servidor: un código de estado, unas cabeceras y un cuerpo, que suele ser la página en sí. Y la cookie, la invención de Montulli, funciona así. El servidor, en su respuesta, añade una cabecera llamada Set-Cookie, que significa guarda este dato. Tu navegador lo guarda y, desde ese momento, lo devuelve en cada petición a ese servidor, en la cabecera Cookie. Así el servidor, que no recuerda nada entre una petición y otra, puede reconocerte.""",
+ ['respuesta', 'codigo-estado', 'cookie']),
+ S('analogy', 'La pulsera del parque',
+ """- Pagas **una vez** y te ponen una pulsera.
+- En cada juego miran la pulsera, no te piden el boleto.
+- Para el operador, quien lleva la pulsera es quien pagó.""",
+ """La cookie se entiende mejor con una pulsera de parque de diversiones. Pagas una sola vez en la entrada y te ponen una pulsera. Después, en cada juego, el operador no te pregunta quién eres: mira la pulsera y te deja pasar. Para él, quien la lleve puesta es quien pagó. En la web, la cookie es la pulsera, el servidor es el operador y cada petición muestra la pulsera.""",
+ ['cookie']),
+ S('non-example', 'Una cookie no es un programa',
+ """Una cookie **no es un programa**, ni un virus.
+
+Es un **dato**: un nombre y un valor, como `sesion=ab12cd`.""",
+ """Hay una confusión frecuente que conviene aclarar. Mucha gente cree que una cookie es un programa que se instala en la computadora y que puede hacer cosas. No lo es. Una cookie es solo un dato: un nombre y un valor, como sesión igual a, y unas letras y números. No se ejecuta, no abre nada y no puede dañar tu equipo por sí sola. Lo que sí importa es qué dato guarda y para qué lo usa el servidor, porque ese dato es lo que le dice al servidor quién eres. Esa es la razón por la que más adelante aprenderás a protegerlas."""),
+ S('concept', 'Ida y vuelta de un inicio de sesión',
+ """```mermaid
+sequenceDiagram
+  participant N as Navegador
+  participant S as Servidor
+  N->>S: POST /login (usuario y clave en el cuerpo)
+  S-->>N: 302 hacia /panel + cookie nueva
+  N->>S: GET /panel (cabecera Cookie)
+  S-->>N: 200 con la página del panel
+```""",
+ """Juntemos todo en un recorrido completo: iniciar sesión. Mira el diagrama de arriba abajo. Uno: escribes usuario y clave y pulsas entrar; el navegador envía un POST a barra login, con el usuario y la clave en el cuerpo. Dos: el servidor comprueba esos datos y, si son correctos, responde con un trescientos dos hacia barra panel y añade la cabecera Set-Cookie con una cookie nueva. Tres: el navegador obedece y pide barra panel con un GET, y esta vez adjunta la cookie. Cuatro: el servidor reconoce la cookie, responde doscientos y te muestra tu panel. Son cuatro mensajes, y los vas a ver con tus propios ojos en un rato.""",
+ ['peticion', 'respuesta', 'cookie', 'metodo-http', 'codigo-estado']),
+]
+p3_micro = {
+ 'Método, cabecera y cuerpo': classify(f'{L}-u6', O2, 'aplicar', '¿Qué método usaría cada acción: GET o POST?', ['GET (leer)', 'POST (enviar)'],
+   [('Abrir la lista de médicos', 'GET (leer)'), ('Ver el producto número 7', 'GET (leer)'), ('Descargar la foto de perfil', 'GET (leer)'),
+    ('Enviar el formulario de inicio de sesión', 'POST (enviar)'), ('Guardar una cita nueva', 'POST (enviar)'), ('Mandar un comentario nuevo', 'POST (enviar)')],
+   'GET sirve para leer algo que ya existe; POST, para enviar datos que el servidor debe procesar.'),
+ 'La respuesta y su código de estado': classify(f'{L}-u7', O2, 'aplicar', '¿Qué tipo de resultado indica cada código?', ['Salió bien o redirige', 'Falló quien pidió', 'Falló el servidor'],
+   [('200: la página se mostró', 'Salió bien o redirige'), ('302: te manda a otra dirección', 'Salió bien o redirige'), ('403: no tienes permiso', 'Falló quien pidió'),
+    ('404: la dirección no existe', 'Falló quien pidió'), ('500: el programa del servidor falló', 'Falló el servidor'), ('503: el servidor está saturado', 'Falló el servidor')],
+   'Mira la primera cifra: 2 y 3 salió bien, 4 falló quien pidió y 5 falló el servidor.'),
+ 'Respuesta, código de estado y cookie': mcq(f'{L}-u8', O1, 'comprender', '¿Para qué sirve, sobre todo, una cookie de inicio de sesión?',
+   [('Para guardar tu contraseña en el servidor', 'La cookie no guarda tu clave: es un dato que identifica tu visita.'), ('Para que el servidor te reconozca entre una petición y la siguiente', None), ('Para cifrar el viaje entre navegador y servidor', 'De eso se encarga HTTPS, no la cookie.'), ('Para que la página cargue más rápido', 'Esa no es su función principal: sirve para reconocerte.')], 1,
+   'El servidor no recuerda nada entre peticiones; la cookie que devuelve tu navegador le permite reconocerte.'),
+ 'Ida y vuelta de un inicio de sesión': order(f'{L}-u9', O1, 'comprender', 'Ordena el recorrido de un inicio de sesión.',
+   ['El navegador envía POST /login con usuario y clave en el cuerpo', 'El servidor comprueba y responde 302 con una cookie nueva', 'El navegador pide GET /panel adjuntando la cookie', 'El servidor responde 200 con la página del panel'],
+   'Primero se envían los datos, luego el servidor responde con una cookie, el navegador la usa al pedir el panel y por fin llega la página.'),
+}
+part3 = {
+ 'id': P3, 'objectives': [O1, O2], 'title': 'Petición y respuesta', 'scenes': p3_scenes,
+ 'checkpoint': [
+  mcq(f'{L}-cp3a', O2, 'aplicar', 'En `POST /citas` con el cuerpo `medico=3&hora=9`, ¿qué viaja en el cuerpo?',
+      [('El método y la ruta', 'Esos van en la primera línea de la petición, no en el cuerpo.'), ('Los datos del formulario: medico=3 y hora=9', None), ('El código de estado de la respuesta', 'Ese lo escribe el servidor, en la respuesta.'), ('La cookie de sesión', 'La cookie va en una cabecera, no en el cuerpo.')], 1,
+      'El cuerpo lleva el contenido que se entrega, aquí los datos del formulario.'),
+  mcq(f'{L}-cp3b', O1, 'comprender', 'Tu navegador recibe un código `404`. ¿Qué pasó?',
+      [('El programa del servidor falló', 'Eso sería un 500: un error de quien responde.'), ('No tienes permiso para ver esa página', 'Eso sería un 403.'), ('Todo salió bien y la página se mostró', 'Eso sería un 200.'), ('El servidor respondió que esa dirección no existe', None)], 3,
+      '404 significa que el servidor no encontró lo que se pidió en esa ruta.'),
+ ],
+ 'reteach': S('analogy', 'Otra analogía: el sobre y la carta',
+ """| Carta por correo | Petición HTTP |
+|---|---|
+| Lo escrito en el sobre | Cabeceras |
+| La carta dentro | Cuerpo |
+| «Entregado» o «Rechazado» | Código de estado |""",
+ """Piensa en una carta por correo. En el sobre escribes a quién va dirigida y de parte de quién: son datos sobre el mensaje, no el mensaje en sí, como las cabeceras. Dentro va la carta, lo que realmente quieres entregar: el cuerpo. Y cuando alguien te responde, la respuesta puede traer un sello, entregado o rechazado, que resume qué pasó: eso es el código de estado. Quien escribe la carta puede escribir lo que quiera en el sobre y dentro de ella. El cartero no comprueba que sea verdad. Eso lo tiene que hacer quien la recibe, que en la web es el servidor.""")}
+
+# ───────────────────────── Parte 4 ─────────────────────────
+p4_scenes = [
+ ST('story', 'Una cifra, y luego un programa',
+ """Spitler cambió **una cifra** del número y obtuvo otro correo.
+
+Después escribió un programa que repitió el cambio miles de veces.""",
+ """Volvamos a junio de 2010 con lo que ya sabes. Spitler tenía la dirección de AT&T con el número del iPad. Cambió una sola cifra, pulsó entrar, y el servidor le devolvió el correo de otra persona. Hasta ahí, una curiosidad. Lo que convirtió el hallazgo en un caso judicial fue lo siguiente: escribió un programa que repetía ese cambio una y otra vez y guardaba cada correo. Entre cinco y nueve de junio juntó unos ciento catorce mil.""",
+ '1 cifra', 'Estados Unidos · 5 al 9 de junio de 2010', 'Engadget y Threatpost'),
+ S('concept', 'Todo lo que sale del navegador lo decide quien lo usa',
+ """| Lo que viaja | ¿Quién lo puede cambiar? |
+|---|---|
+| Ruta y parámetros | Quien use el navegador |
+| Campos del formulario, **también los ocultos** | Quien use el navegador |
+| Cookies | Quien use el navegador |
+| Cabeceras | Quien use el navegador |""",
+ """Aquí llegamos al corazón de la clase. Repasa lo que viaja en una petición: la ruta, los parámetros, los campos del formulario, las cookies, las cabeceras. ¿Quién puede cambiar cada uno? Quien tiene el navegador. Todos. Eso incluye los campos que no se ven en pantalla. Por eso, desde el punto de vista del servidor, todo lo que llega es una sugerencia que hay que comprobar, nunca un hecho.""",
+ ['entrada-usuario']),
+ S('definition', 'Entrada del usuario y campo oculto',
+ """- **Entrada del usuario**: todo dato que llega desde el navegador, se vea o no.
+- **Campo oculto**: dato que un formulario envía sin mostrarlo. Las herramientas lo muestran y lo permiten editar.""",
+ """Pongamos nombre a esto. La entrada del usuario es todo dato que llega desde el navegador, esté a la vista o no: lo que alguien escribe, los parámetros de la dirección, las cookies, las cabeceras. Y un campo oculto es un dato que un formulario envía sin mostrarlo en pantalla, como el precio que viaja junto al botón de comprar. Que no se vea no significa que no se pueda ver ni cambiar: las herramientas de desarrollo lo muestran y permiten editarlo. La regla que sale de aquí es simple de decir y difícil de cumplir: la entrada del usuario no es de fiar hasta que el servidor la comprueba.""",
+ ['entrada-usuario', 'campo-oculto']),
+ S('misconception', '«Lo que no se ve en pantalla no se puede cambiar»',
+ """| Protección | Por qué no frena a nadie |
+|---|---|
+| Campo oculto | Las herramientas lo muestran y lo editan |
+| Botón desactivado | Se activa con un clic |
+| Límite de letras de la caja | Se salta editando la petición |
+| Validar solo con JavaScript | Ese código corre en el navegador del usuario |""",
+ """Este es el error que comete muchísima gente. Se piensa que lo que no se ve en pantalla no se puede cambiar. Mira la tabla. Un campo oculto no se ve, pero las herramientas del navegador lo muestran y se puede editar. Un botón desactivado se activa con un clic. Un límite de letras en una caja de texto se salta editando la petición antes de enviarla. Y validar solo con JavaScript, el código de la página, tampoco protege, porque ese código se ejecuta en el navegador, que es de la persona que lo usa, y esa persona puede ignorarlo. Estas protecciones ayudan a quien usa bien la página, no detienen a quien quiere abusar.""",
+ ['campo-oculto']),
+ S('concept', 'Qué faltó en el servidor de AT&T',
+ """```mermaid
+flowchart LR
+  A[Petición con el número del iPad] --> B[Servidor busca el correo de ese número]
+  B --> C[Entrega el correo]
+  B -. no pregunta .-> D{{¿Quién pide?}}
+  classDef bad fill:#fee2e2,stroke:#dc2626,color:#7f1d1d
+  classDef ask fill:#fef3c7,stroke:#d97706,color:#78350f
+  class C bad
+  class D ask
+```""",
+ """Así funcionaba el servidor de AT&T, y mira lo que faltaba. La petición llega con un número. El servidor busca el correo que corresponde a ese número y lo entrega. Fin. En ningún punto se pregunta quién está pidiendo ni si tiene derecho a ver ese correo. El servidor trató el número como si fuera una prueba de identidad, cuando solo era un dato que venía de un navegador. La corrección conceptual es sencilla de decir: nunca basta con que el dato exista, hay que comprobar que quien lo envía tiene derecho a lo que pide."""),
+ ST('story', 'Imaginemos: Lucía cambia el precio',
+ """Lucía programa una tienda de práctica en su laptop. El botón dice **S/ 120**.
+
+Con las herramientas del navegador cambia `120` por `1`. La tienda responde: «Pedido confirmado: S/ 1».""",
+ """Ahora un caso imaginado, para que lo pruebes tú en tu propia máquina. Lucía hace una tienda de práctica, que solo vive en su laptop. El botón de comprar dice ciento veinte soles, y ese precio viaja escondido en un campo del formulario. Con las herramientas de su navegador, Lucía cambia el ciento veinte por un uno y pulsa comprar. La tienda responde: pedido confirmado, un sol. ¿Qué pasó? La tienda creyó el precio que llegó, igual que AT&T creyó el número. Son el mismo error con distinto disfraz.""",
+ 'S/ 1', 'Una tienda de práctica · imaginada', None, True),
+ S('concept', 'Cómo leer código (1/2): nombres, puntos y operaciones',
+ """| Escrito | Se lee |
+|---|---|
+| `peticion.precio` | el dato **precio** que llegó en la petición |
+| `=` | guarda el resultado en un nombre |
+| `*` | multiplica |
+| `nombre(dato)` | usa el bloque de pasos llamado *nombre* con ese dato |
+| `//` | nota para personas; no se ejecuta |""",
+ """Antes de mirar código, aprendamos a leerlo, porque lo vas a necesitar aunque nunca hayas programado. Cinco cosas bastan por ahora. Cuando ves una palabra, un punto y otra palabra, como petición punto precio, se lee: el dato precio que está dentro de la petición. El signo igual no significa igualdad como en matemáticas: significa guarda lo de la derecha con el nombre de la izquierda. El asterisco multiplica. Una palabra seguida de paréntesis, como buscar producto, es un bloque de pasos que ya existe y al que le pasas un dato. Y dos barras seguidas son una nota para personas: el programa la ignora.""",
+ ['entrada-usuario']),
+ S('concept', 'Cómo leer código (2/2): si pasa esto, haz esto',
+ """| Escrito | Se lee |
+|---|---|
+| `function nombre(dato) { … }` | define un bloque de pasos que recibe un dato |
+| `if (condición) { … }` | **si** se cumple la condición, haz lo de dentro |
+| `==` | pregunta si dos cosas son iguales |
+| `return` | devuelve esto como resultado |""",
+ """Falta la segunda mitad. La palabra function, que en español es función, define un bloque de pasos con un nombre y le dice qué dato va a recibir. La palabra if significa si: si se cumple lo que va entre paréntesis, se hace lo que va entre llaves. Dentro de ese paréntesis, el doble igual es una pregunta, no una orden: ¿son iguales estas dos cosas? Y return significa devuelve: es lo que el bloque entrega como resultado, por ejemplo, la factura, o un error cuatrocientos tres.""",
+ None),
+ S('compare', 'Dos tiendas, una regla',
+ """```js
+// ✗ Cree al navegador
+total = peticion.precio * peticion.cantidad
+
+// ✓ Decide el servidor
+precio = precioEnBaseDeDatos(peticion.producto)
+total = precio * peticion.cantidad
+```""",
+ """Comparemos dos formas de programar la compra. Arriba, el código de Lucía: calcula el total multiplicando el precio que llegó en la petición por la cantidad. Si la petición dice precio uno, cobra uno. Abajo, la versión correcta: de la petición toma solo qué producto quiere la persona, y el precio lo busca él mismo en su base de datos, que nadie puede editar desde un navegador.""",
+ ['entrada-usuario']),
+ S('concept', 'El navegador sugiere, el servidor decide',
+ """| El navegador **sugiere** | El servidor **decide** |
+|---|---|
+| Qué producto quieres | El precio real |
+| Qué cuenta quieres ver | Si esa cuenta es tuya |
+| Tu cookie | A quién pertenece |""",
+ """Resumamos la regla con tres parejas. Del navegador puede llegar qué producto quieres, y el servidor decide cuánto cuesta. Del navegador puede llegar qué cuenta quieres ver, y el servidor decide si esa cuenta es tuya. Del navegador llega tu cookie, y el servidor decide a quién pertenece. En los tres casos pasa lo mismo: lo que llega es una sugerencia, y la decisión se toma con información que el servidor tiene guardada."""),
+ S('pause-think', 'Pausa y piensa: ¿qué comprobarías?',
+ """Eres ingeniera en AT&T. Llega una petición con un número de iPad.
+
+¿Qué comprobarías **antes** de mostrar un correo?
+
+Escribe tu respuesta en una frase.""",
+ """Hagamos una pausa para que lo pienses tú. Imagina que eres la ingeniera de AT&T y acabas de enterarte del problema. Llega una petición con un número de iPad. Antes de mostrar un correo, ¿qué comprobarías? Escribe una respuesta corta. Te doy una pista: piensa en qué cosas sabe el servidor por sí mismo, sin que nadie se las diga en la petición, y en cómo podría confirmar que quien pide es de verdad la persona dueña de esos datos. Cuando termines, sigue para comparar tu respuesta con lo que viene.""",
+ None),
+]
+p4_micro = {
+ 'Todo lo que sale del navegador lo decide quien lo usa': multi(f'{L}-u10', O3, 'comprender', 'Marca TODO lo que quien usa el navegador puede cambiar antes de enviar la petición.',
+   [('Un parámetro de la dirección', None), ('El valor de un campo oculto del formulario', None), ('El contenido de una cookie', None),
+    ('La base de datos del servidor', 'La base de datos vive en el servidor: el navegador no puede editarla.'), ('El programa que el servidor ejecuta', 'Ese código está en el servidor, fuera del alcance del navegador.'),
+    ('El código de estado con el que responderá el servidor', 'Lo elige el servidor al responder; la petición no lo puede imponer.')], [0, 1, 2],
+   'Todo lo que sale del navegador es editable. Lo que vive en el servidor, no.'),
+ 'Entrada del usuario y campo oculto': fill(f'{L}-u11', O3, 'comprender', 'Completa la regla.', 'Un campo oculto del formulario es parte de la ___ del usuario y no es de fiar.',
+   [['entrada', 'entradas']], 'Todo dato que llega desde el navegador, esté oculto o no, es entrada del usuario.'),
+ 'Cómo leer código (1/2): nombres, puntos y operaciones': mcq(f'{L}-u18', O3, 'comprender', '¿Qué hace la línea `total = peticion.precio * peticion.cantidad`?',
+   [('Suma el precio y la cantidad y los muestra en pantalla', 'El asterisco multiplica, no suma, y la línea guarda el resultado en total, no lo muestra.'), ('Multiplica el precio y la cantidad que llegaron en la petición y guarda el resultado en total', None), ('Compara si el precio y la cantidad son iguales', 'Comparar se escribe con doble igual, y aquí hay un asterisco.'), ('Es una nota para personas que el programa ignora', 'Las notas empiezan con dos barras; esta línea sí se ejecuta.')], 1,
+   'Un solo igual guarda; el asterisco multiplica; peticion.precio es el dato precio que llegó.'),
+ 'Cómo leer código (2/2): si pasa esto, haz esto': fill(f'{L}-u19', O3, 'comprender', 'Completa: en `if (a == b) { … }`, el signo `==` ___ si a y b son iguales.', 'En if (a == b) { … }, el signo == ___ si a y b son iguales.',
+   [['pregunta', 'compara', 'comprueba']], 'El doble igual es una pregunta: compara dos cosas; un solo igual guardaría un valor.'),
+ 'Dos tiendas, una regla': spot(f'{L}-u12', O3, 'analizar', 'Esta función cobra una compra. Marca la línea donde el servidor cree algo que no debería.',
+   'function comprar(peticion, usuario) {\n  producto = buscarProducto(peticion.producto)\n  total = peticion.precio * peticion.cantidad\n  guardarPedido(usuario, producto, total)\n}', [3],
+   'La línea 3 toma el precio de la petición, que el usuario puede editar. El precio debe salir de la base de datos.'),
+}
+part4 = {
+ 'id': P4, 'objectives': [O3], 'title': 'Lo que controla el usuario', 'scenes': p4_scenes,
+ 'checkpoint': [
+  classify(f'{L}-cp4a', O3, 'aplicar', '¿Quién decide cada dato: el usuario o el servidor?', ['Lo puede cambiar el usuario', 'Lo decide el servidor'],
+           [('El precio dentro de un campo oculto', 'Lo puede cambiar el usuario'), ('El número de producto en la dirección', 'Lo puede cambiar el usuario'), ('El contenido de una cookie', 'Lo puede cambiar el usuario'),
+            ('El precio guardado en la base de datos', 'Lo decide el servidor'), ('Quién tiene permiso de ver una cita', 'Lo decide el servidor'), ('El código de estado de la respuesta', 'Lo decide el servidor')],
+           'Lo que viaja desde el navegador lo controla quien lo usa; lo que se guarda y se decide en el servidor, no.'),
+  mcq(f'{L}-cp4b', O3, 'aplicar', 'Una tienda segura recibe `precio=1` en la petición de compra. ¿Qué hace?',
+      [('Cobra 1 sol, porque ese dato vino en la petición', 'Es el fallo de la tienda de Lucía: cree un dato editable.'), ('Rechaza todas las compras de esa persona para siempre', 'Es una reacción exagerada: el fallo es creer el dato, no que alguien lo mande.'), ('Ignora ese dato y usa el precio de su propia base de datos', None), ('Oculta mejor el campo para que nadie lo vea', 'Ocultar no impide editar: el dato sigue viajando.')], 2,
+      'El servidor usa su propia información y trata lo que llega como una sugerencia que debe comprobar.'),
+ ],
+ 'reteach': S('analogy', 'Otra analogía: el cajero y el papelito',
+ """- Un cliente te entrega un papel: «Ya pagué S/ 100».
+- El cajero **no lo cree**: mira su propia caja.
+
+La caja manda; el papelito solo sugiere.""",
+ """Imagina a un cajero en una tienda. Un cliente se acerca y le entrega un papelito escrito a mano que dice: ya pagué cien soles. ¿Qué hace un buen cajero? No cree el papelito, por muy bien escrito que esté. Mira su propia caja registradora y comprueba si el pago existe. La caja es su fuente de verdad. Ahora cambia los personajes: el papelito es lo que llega en la petición, y la caja registradora es la base de datos del servidor. La regla es la misma: lo que llega es una afirmación, lo que el servidor guardó es la verdad.""")}
+
+# ───────────────────────── Parte 5 ─────────────────────────
+p5_scenes = [
+  ST('story', 'Un periodista miró el código de una página',
+ """Recuerdas el caso de Misuri: el periodista **miró el código** de una web oficial.
+
+Dentro había números de seguro social de más de **100.000** personas.""",
+ """Recuerdas el caso de Misuri, de la primera clase. Ahora mira su parte técnica. El periodista abrió una página pública del departamento de educación y miró el código de la página, algo que cualquiera puede hacer con la tecla F12, que abre las herramientas de desarrollo del navegador. Dentro, sin que se viera en pantalla, estaban los números de seguro social de maestros y administradores. El dato viajaba al navegador de cualquiera que visitara la página.""",
+ '100.000+', 'Misuri, EE. UU. · octubre de 2021', 'Missouri Independent y 3 News Now'),
+ S('concept', 'Las herramientas de desarrollo, paso a paso',
+ """1. Abre **tu** aplicación de práctica.
+2. Pulsa `F12`.
+3. Entra en la pestaña **Red** (*Network*) y marca **Conservar registro** (*Preserve log*).
+4. Haz la acción, por ejemplo iniciar sesión.
+5. Pulsa cada petición y mira método, dirección, código, cabeceras y cuerpo.""",
+ """Pasemos a la práctica con esa misma familia de herramientas. Todos los navegadores modernos traen herramientas de desarrollo que se abren con la tecla F12. Dentro hay una pestaña llamada Red, o Network si tu navegador está en inglés, que lista cada petición que hace tu navegador y cada respuesta que recibe. Sigue los pasos. Abres tu aplicación de práctica, pulsas F12, entras en Red y marcas conservar registro, para que la lista no se borre cuando la página cambia, algo que pasa justo después de iniciar sesión. Haces la acción y, al terminar, pulsas cada petición para ver sus detalles. Y recuerda: solo en tu propia aplicación, o en una hecha para practicar.""",
+ ['herramientas-desarrollo']),
+ S('analogy', 'Una grabadora entre el mesero y la cocina',
+ """- La pestaña Red **graba** la conversación.
+- No cambia nada: te deja **escucharla**.
+- Lo que oyes es el papel exacto que viajó.""",
+ """Para no confundirte, piensa en las herramientas de desarrollo como una grabadora que dejas entre el mesero y la cocina del restaurante. No hace nada por sí sola: no escribe comandas ni prepara platos. Solo te deja escuchar, palabra por palabra, qué dijo el mesero a la cocina y qué respondió la cocina. La pestaña Red es exactamente eso: una grabadora de la conversación entre tu navegador y el servidor. Cada petición de la lista es un mensaje de ida, y cada respuesta, un mensaje de vuelta.""",
+ ['herramientas-desarrollo']),
+ S('worked-example', 'Ejemplo resuelto: capturar el inicio de sesión (1/2)',
+ """1. Abro **mi** tienda de práctica y pulso `F12`.
+2. En **Red** marco *Conservar registro*.
+3. Escribo usuario y clave y pulso «Entrar».
+4. En la lista aparecen tres peticiones: `login`, `panel`, y archivos de la página.
+5. Pulso `login` y leo método, cuerpo y respuesta.""",
+ """Resolvamos un caso completo, y fíjate en el porqué de cada paso. Paso uno: abro mi propia tienda de práctica y pulso F12. Paso dos: en la pestaña Red marco conservar registro, porque al iniciar sesión la página cambia y, sin esa casilla, la lista se borraría. Paso tres: escribo usuario y clave y pulso entrar. Paso cuatro: en la lista aparecen varias peticiones; las que me interesan son login y panel, y ignoro los archivos de estilos e imágenes. Paso cinco: pulso login y leo con calma: el método es POST, en el cuerpo van el usuario y la clave, y la respuesta es un trescientos dos con una cookie.""",
+ ['herramientas-desarrollo', 'peticion'], 'recorrido-peticion'),
+ S('worked-example', 'Ejemplo resuelto: escribir el recorrido (2/2)',
+ """```text
+RECORRIDO · iniciar sesión en tienda-practica (mi app)
+
+1. Escribo usuario y clave y pulso «Entrar».
+2. Navegador → POST /login · cuerpo: usuario, clave
+3. Servidor → 302 hacia /panel · cabecera Set-Cookie
+4. Navegador → GET /panel · cabecera Cookie: sesion
+5. Servidor → 200 · la página del panel
+
+El usuario controla: usuario, clave, cookie, ruta, método
+El servidor decide: si la clave es válida y qué muestra /panel
+```""",
+ """Ahora escribo lo que vi como un recorrido ordenado, con la plantilla de la clase. Cada línea tiene quién envía, el método o el código, la ruta y el dato que viaja. Paso dos: el navegador envía un POST a barra login con el usuario y la clave. Paso tres: el servidor responde trescientos dos hacia barra panel y entrega la cookie con Set-Cookie. Paso cuatro: el navegador pide barra panel con un GET y adjunta la cookie. Paso cinco: el servidor responde doscientos con mi panel. Y mira las dos últimas líneas, que son el verdadero aprendizaje: anoto qué controla quien usa el navegador y qué decide el servidor.""",
+ ['peticion', 'respuesta', 'metodo-http', 'cookie'], 'recorrido-peticion'),
+ S('faded-example', 'Ahora tú: completa «ver mis citas»',
+ """```text
+RECORRIDO · ver mis citas en citas-practica (mi app)
+
+1. Pulso «Mis citas».
+2. Navegador → ___ /citas · cabecera Cookie: sesion
+3. Servidor → ___ · la lista de mis citas
+4. El usuario controla: la ruta y la ___
+5. El servidor decide: qué citas son mías
+```""",
+ """Ahora te toca completar un recorrido parecido, con algunos huecos. Estás en la aplicación de práctica de citas, tuya, y pulsas el botón mis citas. Piensa con las piezas que ya tienes. En el paso dos, ¿qué método usa el navegador para leer una lista? Recuerda: GET es para leer y POST para enviar datos. En el paso tres, si todo sale bien, ¿qué código responde el servidor? Repasa la tabla de códigos. En el paso cuatro, ¿qué dato viaja en la cabecera que quien usa el navegador puede cambiar? Y el paso cinco ya está completo, para que veas la idea central: es el servidor quien decide cuáles citas son tuyas.""",
+ ['metodo-http', 'codigo-estado', 'cookie'], 'recorrido-peticion'),
+ S('concept', 'Qué anotar: ¿quién controla cada dato?',
+ """| Dato | ¿Lo controla el usuario? | El servidor debe… |
+|---|---|---|
+| Parámetro `medico=3` | Sí | Comprobar que existe |
+| Cookie `sesion` | Sí | Compararla con lo que guardó |
+| Campo oculto `precio` | Sí | Usar su propio precio |
+| Código `200` | No | Elegirlo según lo comprobado |""",
+ """Cuando sigues un recorrido, hay un hábito que te convierte de curioso en profesional: junto a cada dato, anotar quién lo controla y qué debe hacer el servidor con él. Mira la tabla. El parámetro médico igual tres lo controla el usuario, así que el servidor debe comprobar que ese médico existe. La cookie también la puede cambiar o copiar quien usa el navegador, así que el servidor la compara con lo que él guardó. El campo oculto del precio lo controla el usuario, y el servidor usa su propio precio. Y el código de estado no lo controla el usuario: lo elige el servidor. Dos preguntas por cada dato, y las vas a usar en todos los niveles.""",
+ ['entrada-usuario', 'cookie']),
+]
+p5_micro = {
+ 'Las herramientas de desarrollo, paso a paso': order(f'{L}-u13', O4, 'aplicar', 'Ordena los pasos para ver qué envía tu app al iniciar sesión.',
+   ['Abrir tu app de práctica y pulsar F12', 'Entrar en la pestaña Red y marcar Conservar registro', 'Iniciar sesión en la app', 'Pulsar cada petición y leer método, código, cabeceras y cuerpo'],
+   'Primero abres las herramientas y activas el registro; después haces la acción y por último inspeccionas cada petición.'),
+ 'Ahora tú: completa «ver mis citas»': fill(f'{L}-u14', O4, 'aplicar', 'Completa los dos huecos del recorrido.', 'Navegador → ___ /citas · el servidor responde ___ con la lista de mis citas.',
+   [['GET'], ['200']], 'Leer una lista es GET; si todo sale bien, el servidor responde con el código 200.'),
+ 'Qué anotar: ¿quién controla cada dato?': mcq(f'{L}-u15', O3, 'analizar', 'En el recorrido de un inicio de sesión, ¿qué dato NO controla quien usa el navegador?',
+   [('La cookie que se devuelve al servidor', 'Una cookie se puede cambiar o copiar desde el navegador.'), ('El usuario y la clave que escribe', 'Los escribe la persona: los controla ella.'), ('El método con el que se envía el formulario', 'Se puede cambiar editando la petición.'), ('El código de estado que responde el servidor', None)], 3,
+   'El código de estado lo elige el servidor al responder; todo lo demás sale del navegador.'),
+}
+part5 = {
+ 'id': P5, 'objectives': [O3, O4], 'title': 'Seguir un inicio de sesión con las herramientas del navegador', 'scenes': p5_scenes,
+ 'checkpoint': [
+  mcq(f'{L}-cp5a', O4, 'comprender', 'En las herramientas de desarrollo, ¿qué pestaña lista las peticiones que envía y recibe tu navegador?',
+      [('Elementos, que muestra el código de la página', 'Muestra la estructura de la página, no el tráfico con el servidor.'), ('Consola, que muestra mensajes de errores', 'Muestra mensajes del código de la página, no las peticiones.'), ('Red (Network), que lista cada petición y respuesta', None), ('Aplicación, que muestra el nombre del programador', 'No existe nada con ese fin: esa pestaña muestra almacenamiento y cookies.')], 2,
+      'La pestaña Red registra cada petición y respuesta, con su método, código, cabeceras y cuerpo.'),
+  mcq(f'{L}-cp5b', O3, 'aplicar', 'En el recorrido del inicio de sesión, ¿quién decide si la clave es válida?',
+      [('El navegador, antes de enviarla', 'El navegador no conoce la clave guardada: solo la envía.'), ('El servidor, comparándola con lo que tiene guardado', None), ('La cookie, que ya sabe quién eres', 'La cookie llega después de que el servidor aceptó la clave.'), ('La persona, escribiendo la clave correcta', 'La persona la escribe, pero quien la comprueba es el servidor.')], 1,
+      'La comprobación ocurre en el servidor, que es quien guarda y conoce la clave verdadera.'),
+ ],
+ 'reteach': S('analogy', 'Otra analogía: la cinta de la cámara',
+ """- Una cámara de seguridad **graba** lo que pasa en la puerta.
+- No abre ni cierra nada.
+- Después puedes **ver la cinta** y leer cada detalle.""",
+ """Prueba con una cámara de seguridad en la puerta de una tienda. La cámara no abre ni cierra la puerta, no habla con nadie. Solo graba lo que pasa, y después puedes rebobinar la cinta y ver cada detalle: quién entró, a qué hora, qué llevaba. La pestaña Red de las herramientas de desarrollo funciona igual con tu navegador: graba cada mensaje que sale y cada respuesta que llega, y después puedes abrir cada uno y leerlo completo. No cambia lo que pasa; te deja verlo. Por eso es tan útil para aprender, y por eso conviene usarla solo en aplicaciones propias o hechas para practicar.""")}
+
+# ───────────────────────── Parte 6 ─────────────────────────
+p6_scenes = [
+  ST('story', 'La zona gris que dejó el caso',
+ """El fiscal no presentó cargos. Pero escribió que había **un argumento** para sostener que se violó la ley.""",
+ """Vuelvo un momento al periodista de Misuri, por un matiz que importa. En febrero de 2022 el fiscal del condado decidió no presentar cargos. Pero escribió que había un argumento para sostener que se violó la ley, y que no seguiría porque el asunto ya se había resuelto por otras vías. Es decir: aun siguiendo los pasos correctos, aun avisando y esperando, hubo meses de zona gris. Mirar el código de una página pública parece inocente, y aun así alguien pidió investigarlo. Esa incertidumbre es la razón por la que, en trabajo profesional, la protección es el permiso por escrito.""",
+ '2022', 'Misuri, EE. UU. · febrero de 2022', '3 News Now y Malwarebytes'),
+ S('misconception', '«Si puedo verlo en mi navegador, puedo probarlo donde sea»',
+ """| Situación | ¿Mirar y cambiar datos? |
+|---|---|
+| Tu tienda de práctica en tu laptop | Sí |
+| Una app hecha para practicar, en tu equipo | Sí |
+| La web de tu universidad, «por curiosidad» | No |
+| La web de un cliente con acuerdo firmado | Solo lo firmado |""",
+ """Aquí está el error que conecta esta clase con la primera. Como las herramientas de desarrollo vienen en cualquier navegador y funcionan en cualquier web, mucha gente piensa que, si puede ver una petición, puede jugar con ella donde sea. Mira la tabla. En tu propia tienda de práctica puedes mirar y cambiar lo que quieras. En una aplicación hecha para practicar, instalada en tu equipo, también. En la web de tu universidad, por curiosidad, no: es probar un sistema sin permiso. Y en la de un cliente con acuerdo firmado, solo lo que dice el acuerdo. Tener la herramienta no da el permiso: el permiso lo da el dueño, por escrito.""",
+ ['herramientas-desarrollo']),
+ S('concept', 'Tres preguntas antes de tocar una petición',
+ """1. ¿Es **mía** o es de práctica?
+2. ¿Tengo el **permiso por escrito** del dueño?
+3. ¿Lo que voy a hacer está **dentro del alcance**?
+
+Si una respuesta es «no», no sigas.""",
+ """Convirtamos todo en un hábito de tres preguntas que te haces siempre, antes de tocar una petición. Primera: ¿esta aplicación es mía o es una hecha para practicar? Si sí, adelante. Si no, segunda: ¿tengo el permiso por escrito del dueño? Y tercera: lo que voy a hacer, ¿está dentro del alcance que dice ese permiso? Si alguna respuesta es no, no sigues. Fíjate que el caso de AT&T y el de Misuri se parecen en la técnica, pero son distintos en lo que hicieron las personas después de encontrar el fallo: uno avisó y esperó, el otro automatizó la extracción de miles de datos. La técnica no cambia. Las decisiones sí.""",
+ ['herramientas-desarrollo']),
+ S('recap', 'Lo esencial en una pantalla',
+ """- Cada visita es una **petición** y una **respuesta**
+- La petición: método, ruta, parámetros, cabeceras y a veces cuerpo
+- La respuesta trae un **código de estado**
+- **Todo** lo que sale del navegador lo puede cambiar quien lo usa
+- El servidor **decide**; el navegador solo sugiere
+- Mira peticiones solo en **tu** app o en una de práctica""",
+ """Repasemos lo esencial. Uno: cada visita es una petición del navegador y una respuesta del servidor. Dos: una petición lleva un método, una ruta, parámetros, cabeceras, entre ellas la cookie, y a veces un cuerpo con datos. Tres: la respuesta trae un código de estado que resume qué pasó. Cuatro, la más importante: todo lo que sale del navegador, esté a la vista o no, lo puede cambiar quien lo usa. Cinco: por eso el servidor decide y el navegador solo sugiere; los datos importantes, como un precio o quién eres, salen de lo que el servidor sabe.""",
+ None),
+ S('concept', 'Lo que sigue: el mapa de los fallos',
+ """AT&T y Misuri tienen nombre y familia.
+
+La próxima clase: **OWASP Top 10**, el mapa de los fallos más comunes.""",
+ """Lo que acabas de ver tiene nombre. El caso de AT&T es un fallo de control de acceso: el servidor entregó datos sin comprobar quién los pedía. El caso de Misuri es un fallo de exposición de datos: información sensible viajando en una página pública. Ambos pertenecen a familias de fallos que se repiten una y otra vez, y existe un mapa que las agrupa y las ordena: se llama OWASP Top 10. En la próxima clase lo vas a conocer, y verás cómo cada categoría tiene casos reales como estos dos."""),
+]
+p6_micro = {
+ '«Si puedo verlo en mi navegador, puedo probarlo donde sea»': mcq(f'{L}-u16', O4, 'aplicar', 'Quieres practicar editando peticiones. ¿Dónde es correcto hacerlo?',
+   [('En la web de tu universidad, en horario nocturno', 'La hora no crea permiso: sigue siendo probar sin autorización.'), ('En cualquier web, si no robas ni rompes nada', 'Aunque no robes nada, probar un sistema ajeno sin permiso es el problema.'), ('En una aplicación tuya o hecha para practicar', None), ('En la web de una empresa, si tu amigo que trabaja ahí te dice que sí', 'Solo el dueño puede autorizar, por escrito: tu amigo no lo es.')], 2,
+   'Se practica en lo propio o en lo hecho para practicar. Para lo ajeno hace falta el permiso por escrito del dueño.'),
+ 'Tres preguntas antes de tocar una petición': classify(f'{L}-u17', O4, 'aplicar', '¿Puedes hacerlo ya o necesitas permiso antes?', ['Puedo hacerlo ya', 'Necesito permiso por escrito'],
+   [('Ver las peticiones de tu app de práctica', 'Puedo hacerlo ya'), ('Cambiar un precio en tu tienda hecha en tu laptop', 'Puedo hacerlo ya'), ('Probar una app de práctica instalada en tu equipo', 'Puedo hacerlo ya'),
+    ('Cambiar números en la dirección de la web de tu banco', 'Necesito permiso por escrito'), ('Revisar las peticiones de la web de una empresa que te lo pidió de palabra', 'Necesito permiso por escrito'), ('Probar el panel de un sitio ajeno solo por curiosidad', 'Necesito permiso por escrito')],
+   'En lo tuyo o de práctica puedes probar; en lo ajeno necesitas el permiso por escrito del dueño, aunque tengas la herramienta.'),
+}
+part6 = {
+ 'id': P6, 'objectives': [O4], 'title': 'Mirar sin tocar: dónde está la línea', 'scenes': p6_scenes,
+ 'checkpoint': [
+  mcq(f'{L}-cp6a', O4, 'aplicar', 'Encuentras datos sensibles en el código de una página pública que no es tuya. ¿Qué haces primero?',
+      [('Los descargo para demostrar lo grave que es', 'Te llevarías datos personales reales sin necesidad.'), ('Aviso por el canal oficial y no publico hasta que lo arreglen', None), ('Lo publico en redes para que reaccionen rápido', 'Avisarías también a quienes podrían aprovecharlo.'), ('Sigo explorando otras páginas del sitio', 'Te sales de lo que viste por casualidad y aumentas el riesgo.')], 1,
+      'Se avisa en privado, con los pasos para reproducirlo, y se espera a que lo corrijan antes de hablar en público.'),
+ ],
+ 'reteach': S('analogy', 'Otra analogía: mirar por la ventana',
+ """- Ver una casa **desde la calle** es mirar.
+- **Entrar** a ver qué hay es otra cosa.
+- Aunque la puerta esté abierta, no es tuya.""",
+ """Piensa en una casa. Pasar por la calle y ver que la ventana está abierta es mirar. Entrar a ver qué hay adentro es otra cosa, aunque la puerta esté abierta y aunque no vayas a llevarte nada. Ahora cambia los objetos: las herramientas de desarrollo te dejan mirar la conversación entre tu navegador y cualquier servidor, pero eso no significa que tengas permiso para cambiar lo que viaja. Cuando el sistema es tuyo o es de práctica, es como tu propia casa: haces lo que quieras. Cuando es de otro, la regla es la de la primera clase: permiso por escrito del dueño y solo dentro de lo que dice.""")}
+
+PARTS = [(part1, p1_micro), (part2, p2_micro), (part3, p3_micro), (part4, p4_micro), (part5, p5_micro), (part6, p6_micro)]
+# ───────────────────────── Práctica escalonada ─────────────────────────
+RECORRIDO_BLANK = """```text
+RECORRIDO · [ACCIÓN] en [APP] (mi app)
+
+1. [Lo que hago como persona]
+2. Navegador → [MÉTODO] [RUTA] · [datos que envía]
+3. Servidor → [CÓDIGO] · [qué entrega]
+
+El usuario controla: [datos]
+El servidor decide: [qué comprueba]
+```"""
+
+exA = {
+ 'id': f'{L}-pa', 'tier': 'A', 'title': 'Completa el recorrido de «iniciar sesión» en una biblioteca',
+ 'statement': 'Tienes la aplicación de práctica de una biblioteca (`biblioteca-practica.localhost`), hecha por ti. Abres las herramientas de desarrollo, inicias sesión y la pestaña Red muestra tres mensajes: `POST /entrar` con el cuerpo `correo` y `clave`; la respuesta `302` hacia `/mis-prestamos` con una cabecera `Set-Cookie`; y luego `GET /mis-prestamos` con la cabecera `Cookie`, que recibe `200`. Completa el recorrido siguiendo el modelo de la clase: método, código y qué controla cada lado.',
+ 'decoded': {'youAreAsked': ['Pasar tres mensajes de la pestaña Red a un recorrido ordenado', 'Completar método, rutas y códigos de estado', 'Escribir qué controla el usuario y qué decide el servidor'],
+             'noNeeded': ['Programar nada', 'Atacar ninguna app'],
+             'terms': ['peticion', 'respuesta', 'metodo-http', 'codigo-estado', 'cookie']},
+ 'produces': 'recorrido-peticion', 'aiPolicy': 'ia_tutor', 'objectives': [O1, O2, O3],
+ 'scaffold': """```text
+RECORRIDO · iniciar sesión en biblioteca-practica (mi app)
+
+1. Escribo correo y clave y pulso «Entrar».
+2. Navegador → ___ /entrar · cuerpo: correo, clave
+3. Servidor → ___ hacia /mis-prestamos · cabecera Set-Cookie
+4. Navegador → GET /mis-prestamos · cabecera Cookie
+5. Servidor → ___ · la página «Mis préstamos»
+
+El usuario controla: ___
+El servidor decide: ___
+```""",
+ 'steps': [
+  {'id': 'intenta', 'title': 'Intenta', 'prompt': 'Completa los huecos del recorrido con lo que muestra la pestaña Red.'},
+  {'id': 'compara', 'title': 'Compara', 'prompt': 'Mira el modelo y marca en qué se parece o se diferencia tu recorrido.'},
+  {'id': 'corrige', 'title': 'Corrige', 'prompt': 'Reescribe lo que estuviera vago o incompleto.'}],
+ 'hints': [
+  {'text': 'Mira el mensaje de ida: ¿lleva datos para enviar o solo pide leer algo?', 'taughtIn': P3},
+  {'text': 'Un código que empieza por 3 manda a otra dirección; uno que empieza por 2 dice que todo salió bien.', 'taughtIn': P3},
+  {'text': 'Para «El usuario controla» piensa en lo que se escribe, en la cookie y en la ruta.', 'taughtIn': P4}],
+ 'exemplar': 'Paso 2: POST /entrar, con correo y clave en el cuerpo. Paso 3: el servidor responde 302 hacia /mis-prestamos y entrega la cookie con Set-Cookie. Paso 5: el servidor responde 200 con la página Mis préstamos. El usuario controla: correo, clave, cookie, método y ruta. El servidor decide: si la clave es válida y qué préstamos muestra.',
+ 'exemplarNotes': ['Cada mensaje tiene método o código, y están en orden', 'La cookie aparece donde nace (Set-Cookie) y donde se usa (Cookie)', 'Separa lo que escribe el usuario de lo que comprueba el servidor'],
+ 'rubric': [
+  {'criterion': 'Ordena los mensajes y completa método y códigos', 'objective': O2, 'levels': {'bien': 'POST, 302 y 200 en el orden correcto', 'parcial': 'Acierta dos de los tres', 'falta': 'Los confunde o los deja vacíos'}},
+  {'criterion': 'Explica cómo viaja la cookie', 'objective': O1, 'levels': {'bien': 'La entrega con Set-Cookie y la devuelve en Cookie', 'parcial': 'Menciona la cookie sin decir de dónde sale', 'falta': 'No la menciona'}},
+  {'criterion': 'Separa lo que controla el usuario de lo que decide el servidor', 'objective': O3, 'levels': {'bien': 'Usuario: correo, clave, cookie, ruta. Servidor: validez y contenido', 'parcial': 'Solo completa una de las dos listas', 'falta': 'Las deja vacías'}}],
+ 'commonErrors': ['Poner GET en el inicio de sesión, que envía datos', 'Confundir el 302 con un error', 'Escribir que la cookie la controla solo el servidor'],
+ 'selfCheck': ['¿Cada mensaje tiene método o código?', '¿Se ve quién envía cada mensaje?', '¿Anoté quién controla cada dato?'],
+ 'checks': [
+  fill(f'{L}-pa-c1', O2, 'aplicar', 'Completa el primer mensaje.', 'Navegador → ___ /entrar · cuerpo: correo, clave', [['POST']], 'El inicio de sesión envía datos, así que usa POST.'),
+  classify(f'{L}-pa-c2', O3, 'aplicar', 'Clasifica cada dato del inicio de sesión.', ['Lo controla el usuario', 'Lo decide el servidor'],
+           [('El correo que escribe', 'Lo controla el usuario'), ('La clave que escribe', 'Lo controla el usuario'), ('El valor de la cookie que envía', 'Lo controla el usuario'),
+            ('Si la clave es válida', 'Lo decide el servidor'), ('El código con que responde', 'Lo decide el servidor'), ('Qué préstamos muestra', 'Lo decide el servidor')],
+           'Lo que sale del navegador lo controla quien lo usa; las comprobaciones y la respuesta, el servidor.')],
+}
+
+exB = {
+ 'id': f'{L}-pb', 'tier': 'B', 'title': 'Adapta el recorrido a «cambiar mi teléfono» en un gimnasio',
+ 'statement': 'En la aplicación de práctica de un gimnasio (`gimnasio-practica.localhost`), tuya, abres las herramientas de desarrollo y cambias tu teléfono desde tu perfil. La pestaña Red muestra: `GET /perfil` con respuesta `200`; luego `POST /perfil` con el cuerpo `telefono=999111222&socioId=57` y la cabecera `Cookie`, con respuesta `302` hacia `/perfil`. Escribe el recorrido en el formato de la clase, usando la plantilla en blanco, y señala qué dato del cuerpo no debería creer el servidor y por qué.',
+ 'decoded': {'youAreAsked': ['Convertir cuatro mensajes en un recorrido en el formato de la clase', 'Distinguir qué datos controla el usuario', 'Encontrar el dato del cuerpo que el servidor no debe creer'],
+             'noNeeded': ['Programar la corrección'],
+             'terms': ['peticion', 'metodo-http', 'cuerpo', 'cookie', 'entrada-usuario']},
+ 'produces': 'recorrido-peticion', 'aiPolicy': 'ia_tutor', 'objectives': [O2, O3],
+ 'scaffold': RECORRIDO_BLANK,
+ 'steps': [
+  {'id': 'intenta', 'title': 'Intenta', 'prompt': 'Escribe el recorrido con la plantilla en blanco, sin mirar el modelo.'},
+  {'id': 'compara', 'title': 'Compara', 'prompt': 'Contrasta tu recorrido con el modelo y con la lista de comprobación.'},
+  {'id': 'corrige', 'title': 'Corrige', 'prompt': 'Arregla lo que falló y explica en una frase por qué.'}],
+ 'hints': [
+  {'text': 'Pon los mensajes en el orden en que ocurren: primero se lee el perfil y luego se envía el cambio.', 'taughtIn': P3},
+  {'text': 'Mira el cuerpo del POST: ¿hay algún dato que el servidor ya podría saber por su cuenta?', 'taughtIn': P4},
+  {'text': 'Piensa en el papelito del cajero: ¿qué dato afirma algo que debería comprobarse?', 'taughtIn': P4}],
+ 'exemplar': 'Recorrido: 1) Abro mi perfil. Navegador → GET /perfil · servidor → 200. 2) Cambio mi teléfono y guardo. Navegador → POST /perfil · cuerpo: telefono, socioId · cabecera Cookie · servidor → 302 hacia /perfil. El usuario controla: telefono, socioId, cookie. El servidor decide: a qué socio corresponde la cookie. El dato peligroso es socioId: quien use el navegador puede cambiarlo y modificar el perfil de otro; el servidor debe ignorarlo y averiguar quién eres con lo que él mismo guardó.',
+ 'exemplarNotes': ['El recorrido respeta el orden de los mensajes', 'Detecta socioId como dato editable que no debe creerse', 'Dice de dónde debe sacar el servidor la identidad'],
+ 'rubric': [
+  {'criterion': 'Reconstruye los mensajes en orden con método, ruta y código', 'objective': O2, 'levels': {'bien': 'GET 200 y POST 302 en orden y con ruta', 'parcial': 'Falta un método, una ruta o un código', 'falta': 'Los desordena o los omite'}},
+  {'criterion': 'Rotula lo que controla el usuario', 'objective': O3, 'levels': {'bien': 'Incluye telefono, socioId y cookie', 'parcial': 'Solo incluye el teléfono', 'falta': 'No lo rotula'}},
+  {'criterion': 'Señala socioId como dato que no debe creerse y propone qué hacer', 'objective': O3, 'levels': {'bien': 'Lo identifica, explica el riesgo y dice de dónde sacar la identidad', 'parcial': 'Lo identifica sin proponer qué hacer', 'falta': 'No lo identifica'}}],
+ 'commonErrors': ['Pensar que socioId es seguro porque viaja en el cuerpo', 'Olvidar la cabecera Cookie en el POST', 'Escribir el código de la respuesta sin decir si salió bien'],
+ 'selfCheck': ['¿Los mensajes están en orden?', '¿Rotulé qué controla el usuario?', '¿Dije de dónde debe sacar el servidor la identidad?'],
+ 'checks': [
+  mcq(f'{L}-pb-c1', O3, 'analizar', '¿Qué dato del cuerpo `telefono=999111222&socioId=57` no debería creer el servidor?',
+      [('`telefono`, porque tiene nueve cifras', 'El teléfono es lo que la persona quiere cambiar: es parte esperable de la petición.'), ('`socioId`, porque afirma de quién es el perfil y el usuario puede cambiarlo', None), ('Ninguno, porque va en el cuerpo y no en la dirección', 'Estar en el cuerpo no lo protege: se edita igual.'), ('Los dos son seguros si la conexión usa HTTPS', 'HTTPS protege el viaje, no lo que decide enviar el usuario.')], 1,
+      'socioId afirma a quién pertenece el perfil; si el servidor lo cree, alguien podría cambiar el de otra persona.'),
+  fill(f'{L}-pb-c2', O2, 'aplicar', 'Completa el segundo mensaje.', 'Navegador → ___ /perfil · cuerpo: telefono, socioId', [['POST']], 'Se envían datos nuevos para guardarlos, así que el método es POST.')],
+}
+
+exC = {
+ 'id': f'{L}-pc', 'tier': 'C', 'title': 'Dibuja y rotula el recorrido de «reservar una cita»',
+ 'statement': 'En tu copia de la aplicación de la doctora Ruiz (`citas-practica.localhost`), abres las herramientas de desarrollo y reservas una cita. La pestaña Red muestra: `POST /citas` con el cuerpo `medico=3&hora=9&pacienteId=212&costo=80` y la cabecera `Cookie: sesion=ab12`; respuesta `302` hacia `/citas/confirmada`; luego `GET /citas/confirmada` con la misma cookie y respuesta `200`. Escribe en una página el recorrido completo en el formato de la clase, rotula qué controla el usuario y qué decide el servidor, señala los datos que el servidor no debe creer y di de dónde debe sacarlos, y describe los pasos para obtener esta captura con las herramientas de desarrollo.',
+ 'decoded': {'youAreAsked': ['Escribir los tres mensajes en orden, con método, ruta y código', 'Decidir qué datos de la reserva controla el usuario y cuáles el servidor', 'Detectar los datos que no deben creerse y explicar por qué', 'Describir cómo conseguir esta captura en tu propia app'],
+             'noNeeded': ['Programar ninguna corrección', 'Probar ninguna app ajena'],
+             'terms': ['peticion', 'respuesta', 'metodo-http', 'codigo-estado', 'cookie', 'entrada-usuario', 'herramientas-desarrollo']},
+ 'produces': 'recorrido-peticion', 'aiPolicy': 'ia_tutor', 'objectives': [O1, O2, O3, O4],
+ 'scaffold': RECORRIDO_BLANK,
+ 'steps': [
+  {'id': 'entender', 'title': 'Entender', 'prompt': 'Lee la lista «lo que te piden, traducido» y subraya los datos que viajan en la petición de reserva.'},
+  {'id': 'plan', 'title': 'Planificar', 'prompt': 'Decide, dato por dato, quién lo controla y qué debería comprobar el servidor.'},
+  {'id': 'construir', 'title': 'Construir', 'prompt': 'Escribe el recorrido de una página con los tres mensajes y los rótulos.'},
+  {'id': 'verificar', 'title': 'Verificar', 'prompt': 'Pasa la lista de comprobación: ¿cada dato tiene dueño y cada riesgo, una solución?'},
+  {'id': 'defender', 'title': 'Defender', 'prompt': 'Explica en 4-6 frases por qué el servidor no puede fiarse de `costo` ni de `pacienteId`, aunque no se vean en pantalla.'}],
+ 'hints': [
+  {'text': 'Recorre la lista de mensajes de arriba abajo: método, ruta y código de cada uno.', 'taughtIn': P3},
+  {'text': 'Pregúntate, dato por dato: ¿esto lo escribió la persona o lo sabe el servidor?', 'taughtIn': P4},
+  {'text': 'Si un dato afirma algo sobre quién eres o cuánto cuesta, ¿debería creerlo el servidor?', 'taughtIn': P4},
+  {'text': 'Para los pasos, vuelve a la lista: abrir tu app, F12, pestaña Red, Conservar registro, hacer la acción.', 'taughtIn': P5}],
+ 'exemplar': 'Recorrido: 1) Elijo médico y hora y pulso Reservar. Navegador → POST /citas · cuerpo: medico, hora, pacienteId, costo · cabecera Cookie. 2) Servidor → 302 hacia /citas/confirmada. 3) Navegador → GET /citas/confirmada · Cookie. 4) Servidor → 200 con la página de confirmación. El usuario controla: medico, hora, pacienteId, costo, cookie, ruta y método. El servidor decide: si el médico existe y la hora está libre, quién es el paciente y cuánto cuesta. No debe creer pacienteId ni costo: el primero afirma quién eres y el segundo cuánto pagas; debe sacar la identidad de lo que él mismo guardó sobre la cookie y el costo de su propia tarifa. Pasos para la captura: abrir mi app, pulsar F12, entrar en Red, marcar Conservar registro, reservar y pulsar cada petición.',
+ 'exemplarNotes': ['El recorrido tiene método, ruta y código en cada mensaje, en orden', 'Rotula pacienteId y costo como datos que no deben creerse y dice de dónde sacarlos', 'Los pasos de la captura son reproducibles y solo en la app propia'],
+ 'rubric': [
+  {'criterion': 'Escribe los tres mensajes en orden con método, ruta y código', 'objective': O1, 'levels': {'bien': 'POST 302 y GET 200 en orden y completos', 'parcial': 'Falta un método, ruta o código', 'falta': 'Los desordena o los omite'}},
+  {'criterion': 'Lee bien método, ruta, cuerpo y cookie de la petición', 'objective': O2, 'levels': {'bien': 'Nombra los cuatro datos del cuerpo y la cookie', 'parcial': 'Omite algún dato del cuerpo', 'falta': 'Los confunde con otras partes'}},
+  {'criterion': 'Rotula qué controla el usuario y qué decide el servidor', 'objective': O3, 'levels': {'bien': 'Ambas listas completas y coherentes', 'parcial': 'Solo una está completa', 'falta': 'No las separa'}},
+  {'criterion': 'Señala costo y pacienteId y dice de dónde debe sacarlos el servidor', 'objective': O3, 'levels': {'bien': 'Identifica los dos y propone la fuente de cada uno', 'parcial': 'Identifica uno o no propone fuente', 'falta': 'No los identifica'}},
+  {'criterion': 'Describe los pasos con las herramientas de desarrollo solo en su app', 'objective': O4, 'levels': {'bien': 'F12, Red, Conservar registro, acción e inspección, en su app', 'parcial': 'Omite un paso clave', 'falta': 'No describe los pasos'}}],
+ 'commonErrors': ['Creer que costo es seguro porque no se ve en pantalla', 'No incluir la cookie en el segundo mensaje', 'Describir los pasos sin aclarar que se hacen en una app propia'],
+ 'selfCheck': ['¿Cada mensaje tiene método, ruta y código?', '¿Cada dato tiene un dueño: usuario o servidor?', '¿Dije de dónde saca el servidor cada dato que no debe creer?', '¿Cabe en una página?'],
+ 'interviewQuestion': 'Si una petición de compra trae el precio, ¿qué problema hay y cómo lo corriges?',
+ 'harderVariant': 'Haz lo mismo con una petición que sube un archivo y envía el nombre de otro usuario en una cabecera.',
+}
+
+# ───────────────────────── Dominio, preparación y repaso ─────────────────────────
+mastery = [
+ mcq(f'{L}-m1', O1, 'comprender', '¿Qué dos mensajes componen cada visita a una página?',
+     [('Una petición del navegador y una respuesta del servidor', None), ('Una respuesta del servidor y luego una petición para confirmarla', 'El orden es al revés: primero se pide y después se responde.'), ('Dos peticiones seguidas del navegador, sin ninguna respuesta', 'Toda petición recibe una respuesta, aunque sea un error.'), ('Dos respuestas del servidor, una detrás de la otra', 'El servidor solo responde cuando le preguntan.')], 0,
+     'Cada visita tiene una petición del navegador y una respuesta del servidor, en ese orden.'),
+ order(f'{L}-m2', O1, 'comprender', 'Ordena lo que ocurre al reservar una cita en una app.',
+       ['Rellenas el formulario y pulsas «Reservar»', 'El navegador envía un POST con los datos en el cuerpo', 'El servidor guarda la cita y responde con un código de estado', 'El navegador muestra la confirmación'],
+       'Primero tú, luego la petición con los datos, después el servidor guarda y responde y al final se muestra el resultado.'),
+ mcq(f'{L}-m3', O1, 'comprender', 'Después de iniciar sesión, ¿qué hace tu navegador con la cookie que le dio el servidor?',
+     [('La borra apenas carga la siguiente página que visitas', 'Si la borrara, el servidor no te reconocería en la siguiente petición.'), ('La guarda y la devuelve en cada petición a ese servidor', None), ('La muestra en pantalla para que tú la copies a mano', 'La cookie viaja en las cabeceras, sin mostrarse en pantalla.'), ('La envía una sola vez, junto con tu usuario y tu clave', 'Debe enviarse en cada petición, para que el servidor te reconozca siempre.')], 1,
+     'La cookie viaja de ida y vuelta: el servidor la entrega y el navegador la devuelve en cada petición.'),
+ classify(f'{L}-m4', O2, 'aplicar', 'Clasifica cada fragmento de esta petición.', ['Método', 'Ruta', 'Parámetro', 'Cabecera'],
+          [('POST', 'Método'), ('GET', 'Método'), ('/citas/12', 'Ruta'), ('/medicos', 'Ruta'), ('?dia=lunes', 'Parámetro'), ('?talla=M&color=rojo', 'Parámetro'),
+           ('Cookie: sesion=ab12', 'Cabecera'), ('Accept-Language: es-PE', 'Cabecera')],
+          'El método es la acción, la ruta señala el recurso, el parámetro va tras el ? y la cabecera es una línea con un dato del mensaje.'),
+ fill(f'{L}-m5', O2, 'aplicar', 'Completa el análisis de esta petición.', 'En `GET /productos/7?talla=M`, el método es ___ y el parámetro se llama ___.', [['GET'], ['talla']],
+      'GET es el método y talla es el nombre del parámetro; M es su valor.'),
+ mcq(f'{L}-m6', O2, 'aplicar', 'Tu navegador recibe un `500`. ¿Qué significa?',
+     [('La dirección que pediste no existe en ese servidor', 'Eso sería un 404.'), ('No tienes permiso para ver esa página concreta', 'Eso sería un 403.'), ('Todo salió bien y la página se mostró completa', 'Eso sería un 200.'), ('Falló el programa del servidor al responder', None)], 3,
+     'Los códigos que empiezan por 5 indican un fallo del servidor, no de quien pidió.'),
+ multi(f'{L}-m7', O3, 'comprender', 'Una petición de compra trae `producto=7`, `cantidad=2`, `precio=120` y una cookie. Marca TODO lo que el usuario pudo cambiar antes de enviar.',
+       [('`producto=7`', None), ('`cantidad=2`', None), ('`precio=120`', None), ('La cookie', None),
+        ('El código de estado con que responderá el servidor', 'Ese código lo elige el servidor al responder.'), ('La regla de descuento guardada en el servidor', 'Esa regla vive en el servidor, fuera del alcance del navegador.')], [0, 1, 2, 3],
+       'Todo lo que viaja en la petición es editable; las reglas y las respuestas del servidor, no.'),
+ spot(f'{L}-m8', O3, 'analizar', 'Esta función muestra una factura. Marca la línea donde el servidor cree algo que no debería.',
+      'function verFactura(peticion) {\n  factura = buscarFactura(peticion.numero)\n  cliente = peticion.idCliente\n  if (factura.dueno == cliente) { return factura }\n  return error(403)\n}', [3],
+      'La línea 3 toma la identidad del cliente de la petición, que el usuario puede editar. Debe sacarla de lo que el servidor guardó.'),
+ mcq(f'{L}-m9', O3, 'aplicar', 'Un formulario envía un campo oculto `descuento=0`. ¿Cuál es la mejor defensa?',
+     [('Esconder el campo con estilos para que nadie lo encuentre', 'Ocultarlo en pantalla no impide verlo ni editarlo en las herramientas.'), ('Validar el campo con JavaScript dentro de la página', 'Ese código corre en el navegador, que controla quien lo usa.'), ('Que el servidor ignore el campo y use sus propias reglas', None), ('Cambiar el método de POST a GET para que no se vea', 'Cambiar el método no impide editar el dato.')], 2,
+     'El servidor debe tomar sus decisiones con lo que él mismo sabe, no con lo que llega en la petición.'),
+ mcq(f'{L}-m10', O3, 'comprender', 'Una caja de texto de la página solo deja escribir 10 letras. ¿Qué garantiza eso en el servidor?',
+     [('Nada: quien usa el navegador puede enviar más', None), ('Que nunca llegarán más de 10 caracteres al servidor', 'Ese límite se salta editando la petición.'), ('Que el dato ya está comprobado y es de fiar del todo', 'Una comprobación en el navegador no sustituye la del servidor.'), ('Que la petición viaja cifrada de punta a punta', 'El cifrado lo da HTTPS, no el límite de la caja.')], 0,
+     'Los límites del navegador ayudan a quien usa bien la página, pero el servidor debe volver a comprobar.'),
+ mcq(f'{L}-m11', O4, 'aplicar', 'Abres la pestaña Red, inicias sesión y la lista se borra al cambiar de página. ¿Qué opción activas?',
+     [('Desactivar la caché del navegador por completo', 'Eso cambia cómo se guardan los archivos, no evita que se borre la lista.'), ('Ordenar la lista por tamaño de cada archivo', 'Eso solo cambia el orden de lo que ya se ve.'), ('Conservar registro (Preserve log)', None), ('Cerrar y abrir de nuevo las herramientas de desarrollo', 'Haría perder más peticiones.')], 2,
+     'Conservar registro mantiene la lista aunque la página cambie, algo que pasa justo después de iniciar sesión.'),
+ mcq(f'{L}-m12', O4, 'aplicar', 'Un compañero te pide mirar con tus herramientas las peticiones de la web de su empresa «solo para ver». ¿Qué haces?',
+     [('Lo hago de noche, para no molestar a nadie en la empresa', 'La hora no crea permiso.'), ('Pido primero el permiso por escrito del dueño de esa web', None), ('Lo hago, porque mirar no cambia nada en el sistema', 'Probar un sistema ajeno sin permiso es el problema, aunque solo mires.'), ('Uso una VPN para que no me identifiquen en la empresa', 'Esconderte no vuelve legal la prueba.')], 1,
+     'Solo el dueño puede autorizar, y por escrito. Tu compañero no es el dueño.'),
+]
+
+mastery += [
+ mcq(f'{L}-m13', O3, 'analizar', 'Una web de reservas muestra tu correo en `/cuenta?id=5`. Cambias a `id=6` y ves el correo de otra persona. ¿Qué comprobación faltó?',
+     [('Que el id tenga más cifras para que sea más difícil de adivinar', 'Un número más largo no resuelve el fallo: un programa prueba miles.'), ('Que el servidor compruebe que esa cuenta es de quien pide', None), ('Que la página use HTTPS para cifrar todo el viaje de la petición', 'HTTPS cifra el viaje pero no impide pedir la cuenta de otro.'), ('Que el campo id se esconda dentro de un formulario de la página', 'Esconderlo no impide editarlo.')], 1,
+     'El servidor debe comprobar que quien pide tiene derecho a ese dato; el caso de AT&T falló exactamente en eso.'),
+ mcq(f'{L}-m14', O1, 'comprender', '¿Por qué una cookie permite que un servidor «te recuerde» si HTTP no recuerda nada entre peticiones?',
+     [('Porque el servidor guarda tu cara y tu nombre completo', 'El servidor no ve quién eres: solo recibe mensajes.'), ('Porque tu navegador devuelve el dato que el servidor le dio', None), ('Porque tu navegador envía la contraseña en cada petición que hace', 'La clave solo se envía al iniciar sesión.'), ('Porque HTTPS guarda un historial detallado de tus visitas', 'HTTPS cifra el viaje; no guarda historial.')], 1,
+     'La cookie es un dato que el servidor entrega y el navegador devuelve siempre; así el servidor reconoce la visita.'),
+]
+
+readiness = [
+ mcq(f'{L}-r1', O1, 'recordar', '¿Dónde está guardada una página web para que cualquiera pueda abrirla?',
+     [('En el teléfono de quien la creó', 'Si fuera así, la página caería cada vez que se apagara ese teléfono.'), ('En cada computadora que la visita', 'Cada visitante solo la ve; no la guarda para los demás.'), ('En una computadora siempre encendida y conectada a internet', None), ('En el cable de internet de tu casa', 'El cable solo transporta datos; no guarda páginas.')], 2,
+     'Una web vive en un servidor: una computadora que está siempre encendida y conectada.'),
+ mcq(f'{L}-r2', O3, 'recordar', 'Una compañera te pide que pruebes la web de su tienda. ¿Qué necesitas antes de hacerlo?',
+     [('El permiso por escrito de la dueña de la tienda', None), ('Que la prueba sea de noche', 'La hora no crea permiso.'), ('Que no vayas a robar nada', 'La intención no sustituye a la firma.'), ('Usar una red anónima', 'Esconderte no hace legal la prueba.')], 0,
+     'Probar un sistema ajeno exige el permiso por escrito de su dueño.'),
+ mcq(f'{L}-r3', O2, 'recordar', 'En una página, ¿para qué sirve un formulario?',
+     [('Para que la persona escriba datos y los envíe', None), ('Para cambiar el color de la página', 'Los colores se definen en el estilo, no en un formulario.'), ('Para guardar la página en tu computadora', 'Descargar una página es otra acción.'), ('Para borrar el servidor', 'Un formulario no puede borrar un servidor.')], 0,
+     'Un formulario recoge datos que la persona escribe y los envía.'),
+]
+remedial = [{'refresher': 'Una página web vive en un servidor: una computadora siempre encendida y conectada a internet. Un formulario es la parte de una página donde escribes datos (por ejemplo un correo y una clave) y los envías con un botón. Y para probar la seguridad de un sistema que no es tuyo necesitas el permiso por escrito de su dueño; esa es la idea central de la clase «Ética, permiso y alcance».'}]
+
+review = [
+ mcq(f'{L}-v1', O1, 'comprender', '¿Quién empieza siempre la conversación entre el navegador y el servidor?',
+     [('El servidor, avisando cuando hay algo nuevo', 'El servidor solo contesta.'), ('Los dos a la vez', 'La conversación tiene orden: primero se pide y luego se responde.'), ('El navegador, que envía una petición', None), ('Depende de la página', 'En la web siempre es el navegador.')], 2,
+     'Siempre pide el navegador y el servidor responde.'),
+ fill(f'{L}-v2', O2, 'comprender', 'Completa con el término correcto.', 'En `?dia=lunes&hora=9`, `dia` y `hora` son ___ de la dirección.', [['parámetros', 'parametros']],
+      'Los datos extra tras el signo ? son parámetros, con la forma nombre=valor.'),
+ mcq(f'{L}-v3', O3, 'comprender', '¿De dónde debe sacar el servidor el precio de un producto en una compra?',
+     [('Del campo oculto del formulario', 'Es editable por quien usa el navegador.'), ('De su propia base de datos', None), ('De la cookie', 'La cookie también se puede cambiar.'), ('De la dirección de la página', 'La dirección también se edita con el teclado.')], 1,
+     'Lo que importa se decide con lo que el servidor guardó, nunca con lo que llega en la petición.'),
+]
+
+
+lesson = {
+ 'id': L, 'title': 'Cómo funciona una web por dentro', 'minutes': 40,
+ 'objectives': [
+  {'id': O1, 'bloom': 'comprender', 'text': 'Podrás explicar con tus palabras el recorrido de una petición, del navegador al servidor y de vuelta.'},
+  {'id': O2, 'bloom': 'aplicar', 'text': 'Podrás leer una dirección y una petición y señalar su método, ruta, parámetros, cabeceras y cookie.'},
+  {'id': O3, 'bloom': 'analizar', 'text': 'Podrás decidir qué datos de una petición puede cambiar el usuario y por qué el servidor no debe fiarse de ellos.'},
+  {'id': O4, 'bloom': 'aplicar', 'text': 'Podrás seguir un inicio de sesión con las herramientas de desarrollo de tu propia app y decidir cuándo necesitas permiso.'}],
+ 'requires': ['permiso-escrito'],
+ 'teaches': [g['id'] for g in glossary],
+ 'modelsArtifacts': ['recorrido-peticion'],
+ 'realCase': realCase,
+ 'readiness': readiness, 'remedial': remedial,
+ 'hook': hook, 'parts': [p for p, _ in PARTS],
+ 'practice': [exA, exB, exC],
+ 'mastery': {'items': mastery, 'passPct': 80},
+ 'wrapup': {
+  'keyIdeas': ['Cada visita es una petición del navegador y una respuesta del servidor.', 'Una petición lleva método, ruta, parámetros, cabeceras y a veces un cuerpo.', 'El código de estado resume el resultado: 2 y 3 bien, 4 falló quien pidió, 5 falló el servidor.', 'Todo lo que sale del navegador lo puede cambiar quien lo usa.', 'El servidor decide con lo que él sabe; el navegador solo sugiere.'],
+  'cheatSheet': '**Partes de una dirección**\n\n`https://` protocolo · dominio · `/ruta` · `?nombre=valor&otro=valor`\n\n**Partes de una petición**\n\n1. Método: `GET` lee, `POST` envía\n2. Ruta y parámetros\n3. Cabeceras (aquí viaja la cookie)\n4. Cuerpo (los datos de un formulario)\n\n**Códigos de estado**\n\n`2xx` y `3xx` bien o redirige · `4xx` falló quien pidió · `5xx` falló el servidor\n\n**Dos preguntas por cada dato**\n\n¿Lo controla el usuario? ¿Qué debe comprobar el servidor?\n\n**Para mirar peticiones**: `F12` → pestaña Red → Conservar registro. Solo en tu app o en una de práctica, o con permiso por escrito.',
+  'commonMistakes': [
+   {'mistake': 'Creer que lo que no se ve en pantalla no se puede cambiar', 'fix': 'Todo lo que viaja en la petición es editable; el servidor debe comprobarlo'},
+   {'mistake': 'Pensar que POST o HTTPS protegen el dato que envía el usuario', 'fix': 'POST solo lo saca de la dirección y HTTPS cifra el viaje; ninguno impide que el usuario lo edite'},
+   {'mistake': 'Mirar o cambiar peticiones en una web que no es tuya', 'fix': 'Practica solo en tu app o en una de práctica; para lo ajeno, permiso por escrito'}],
+  'nextLesson': 'sec-l2'},
+ 'review': review,
+ 'resources': [
+  {'kind': 'doc', 'title': 'MDN: HTTP (documentación en español)', 'url': 'https://developer.mozilla.org/es-ES/docs/Web/HTTP'},
+  {'kind': 'doc', 'title': 'Chrome DevTools: referencia del panel Red (en inglés)', 'url': 'https://developer.chrome.com/docs/devtools/network/reference'}],
+ 'verify': ['En Chrome en español la casilla se llama «Conservar registro»; en otras versiones o navegadores el nombre puede variar.', 'Los nombres de pestaña de las herramientas de desarrollo cambian según el navegador y su idioma.', 'La URL de Google Privacy Sandbox se verificó en el dominio .cn; en .com debería ser idéntica.', 'Los números del caso AT&T: 114.000 (Threatpost) y unos 120.000 pares en la denuncia penal; la clase usa el primero.'],
+}
+
+for part, micro in PARTS:
+    titles = {s['title'] for s in part['scenes']}
+    for t in micro:
+        assert t in titles, f'micro sin escena: {t}'
+    for sc in part['scenes']:
+        if sc['title'] in micro:
+            sc['micro'] = micro[sc['title']]
+
+out = {'schema': 2, 'kind': 'lesson-sample', 'courseId': 'seguridad-web', 'glossary': glossary, 'lesson': lesson}
+dest = sys.argv[1] if len(sys.argv) > 1 else 'sec-l15.v2.json'
+json.dump(out, open(dest, 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
+print('ok', dest)

@@ -1,0 +1,1583 @@
+/* Academia v2 — la clase como pizarra: fondo pizarra teñido con el color de la ruta, tiza clara y marcador del color de la ruta.
+   Tipografía Atkinson Hyperlegible Next: diseñada para leerse sin esfuerzo. Todo el tamaño del escenario escala con su ancho (cqw). */
+
+.x2-lesson,
+.x2-practice,
+.x2-flow,
+.x2-map,
+.x2-project {
+  --x2-font: 'Atkinson Hyperlegible Next Variable', var(--font);
+  font-family: var(--x2-font);
+  max-width: 1120px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.x2-title {
+  margin: 0;
+  font-size: 1.7rem;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+}
+.x2-muted {
+  color: var(--muted);
+  margin: 0;
+  max-width: 68ch;
+}
+
+/* ───── Botones y filas ───── */
+.x2-btn {
+  font: inherit;
+  font-weight: 600;
+  border: 1px solid var(--border);
+  background: var(--panel);
+  color: var(--text);
+  padding: 10px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.x2-btn:hover:not(:disabled) {
+  background: var(--panel-2);
+}
+.x2-btn.primary {
+  background: var(--track, var(--accent));
+  border-color: transparent;
+  color: #fff;
+}
+.x2-btn.primary:hover:not(:disabled) {
+  filter: brightness(1.08);
+  background: var(--track, var(--accent));
+}
+.x2-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.x2-btn:focus-visible,
+.x2-ctl:focus-visible,
+.x2-option:focus-visible,
+.x2-line:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--track, var(--accent)) 70%, white);
+  outline-offset: 2px;
+}
+.x2-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+/* ───── Escenario: «documental» ─────
+   Papel claro para explicar, noche tintada para contar historias. Esquinas rectas, sin tarjetas:
+   la jerarquía la dan el tamaño de letra, las reglas finas y el color de la ruta. */
+.x2-player {
+  border-radius: 4px;
+  overflow: hidden;
+  background: #0c0d11;
+  box-shadow: 0 18px 50px rgb(0 0 0 / 0.2);
+  outline: none;
+}
+.x2-player:fullscreen {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-radius: 0;
+}
+.x2-stage {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  container-type: inline-size;
+  overflow: hidden;
+  --ink: #12151b;
+  --paper: color-mix(in srgb, var(--track) 4%, #f6f6f4);
+  --strong: color-mix(in srgb, var(--track) 86%, #000);
+  --signal: #c4372d;
+  --amber: #8a5a00;
+  color: var(--ink);
+  background: var(--paper);
+  --text: var(--ink);
+  --muted: rgb(18 21 27 / 0.64);
+  --panel: rgb(18 21 27 / 0.05);
+  --panel-2: rgb(18 21 27 / 0.09);
+  --border: rgb(18 21 27 / 0.18);
+  --code-bg: #14171d;
+  --accent: var(--strong);
+  --syn-kw: #f58ab5;
+  --syn-str: #ffa08f;
+  --syn-num: #86d4c0;
+  --syn-fn: #7cc0ff;
+  --syn-punct: #a7b3ae;
+}
+.x2-player:fullscreen .x2-stage {
+  width: min(100%, calc((100vh - 70px) * 16 / 9));
+  margin: 0 auto;
+}
+
+.x2-scene {
+  position: absolute;
+  inset: 0;
+  padding: 4.4cqw 6cqw 6.6cqw;
+  display: flex;
+  flex-direction: column;
+  gap: 1.8cqw;
+  overflow-y: auto;
+  scrollbar-width: auto;
+  scrollbar-color: color-mix(in srgb, var(--strong) 70%, transparent) color-mix(in srgb, var(--strong) 12%, transparent);
+  animation: x2-in 0.3s var(--ease);
+}
+.x2-scene > * {
+  flex-shrink: 0;
+}
+.x2-more {
+  position: absolute;
+  right: 3cqw;
+  bottom: 2.2cqw;
+  z-index: 3;
+  padding: 0.6cqw 1.6cqw;
+  font-size: max(13px, 1.5cqw);
+  font-weight: 700;
+  color: #fff;
+  background: var(--strong);
+  border: 0;
+  border-radius: 999px;
+  box-shadow: 0 4px 14px rgb(0 0 0 / 0.3);
+  cursor: pointer;
+}
+@keyframes x2-in {
+  from {
+    opacity: 0;
+  }
+}
+.x2-scene header {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1cqw;
+}
+/* La etiqueta solo aparece cuando dice qué hacer con la escena */
+.x2-kind {
+  display: inline-block;
+  padding: 0.35cqw 1.1cqw;
+  font-size: 1.45cqw;
+  font-weight: 700;
+  color: #fff;
+  background: var(--strong);
+}
+.kind-faded-example .x2-kind,
+.kind-pause-think .x2-kind {
+  background: var(--amber);
+}
+.kind-misconception .x2-kind,
+.kind-non-example .x2-kind {
+  background: var(--signal);
+}
+.x2-scene h3 {
+  margin: 0;
+  font-family: 'Bricolage Grotesque Variable', 'Atkinson Hyperlegible Next Variable', system-ui, sans-serif;
+  font-variation-settings: 'wdth' 88;
+  font-size: 4.3cqw;
+  line-height: 1.04;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  max-width: 62cqw;
+  text-wrap: balance;
+}
+.x2-scene h3.struck {
+  text-decoration: line-through;
+  text-decoration-color: var(--signal);
+  text-decoration-thickness: 0.4cqw;
+  text-decoration-skip-ink: none;
+}
+.x2-body {
+  font-size: 2.35cqw;
+  line-height: 1.42;
+  max-width: 58cqw;
+  display: flex;
+  flex-direction: column;
+  gap: 1.1cqw;
+}
+.x2-body .md {
+  font-size: inherit;
+}
+.x2-body .md p,
+.x2-body .md li {
+  margin: 0;
+  font-size: inherit;
+}
+.x2-body .md strong {
+  color: var(--strong);
+}
+.x2-body .md ul,
+.x2-body .md ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.9cqw;
+}
+.x2-body .md ul > li {
+  position: relative;
+  padding-left: 2.2cqw;
+}
+.x2-body .md ul > li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.8em;
+  width: 0.9cqw;
+  height: 0.9cqw;
+  background: var(--strong);
+}
+.x2-block {
+  animation: x2-in 0.4s var(--ease);
+}
+/* Lo visual (tabla, diagrama, código) ocupa el ancho: es lo que se mira mientras se escucha */
+.x2-body:has(table, .diagram, .code-block) {
+  max-width: 100%;
+}
+.x2-body table {
+  font-size: 2.2cqw;
+  border-collapse: collapse;
+  width: 100%;
+  background: none;
+}
+.x2-body th,
+.x2-body td {
+  padding: 0.9cqw 1.6cqw 0.9cqw 0;
+  border: 0;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+  background: none;
+}
+.x2-body th {
+  color: var(--strong);
+  font-weight: 800;
+  border-bottom: 0.25cqw solid var(--ink);
+}
+.x2-body .diagram svg {
+  max-height: 27cqw;
+  width: auto;
+  max-width: 100%;
+}
+.x2-body .code-block {
+  border-radius: 0;
+}
+.x2-body .code-block pre {
+  font-size: 2cqw;
+  line-height: 1.5;
+  color: #e9ecf1;
+}
+
+/* Historias y gancho: noche tintada, el dato en grande */
+.kind-hook,
+.kind-story {
+  --ink: #f4f1ec;
+  --strong: color-mix(in srgb, var(--track) 55%, #fff);
+  --muted: rgb(244 241 236 / 0.66);
+  --border: rgb(244 241 236 / 0.22);
+  --panel: rgb(255 255 255 / 0.08);
+  --panel-2: rgb(255 255 255 / 0.13);
+  color: var(--ink);
+  background: color-mix(in srgb, var(--track) 34%, #0a0b0f);
+  padding: 3.2cqw 6cqw 3.4cqw;
+  gap: 0;
+  justify-content: space-between;
+}
+.story-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 3cqw;
+  padding-bottom: 1cqw;
+  font-size: 1.55cqw;
+  color: var(--muted);
+  border-bottom: 1px solid var(--border);
+}
+.story-stamp {
+  margin: 1.2cqw 0 0;
+  font-family: 'Bricolage Grotesque Variable', system-ui, sans-serif;
+  font-variation-settings: 'wdth' 80;
+  font-weight: 800;
+  line-height: 0.84;
+  letter-spacing: -0.045em;
+  color: var(--strong);
+  white-space: nowrap;
+  animation: x2-stamp 0.9s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+@keyframes x2-stamp {
+  from {
+    clip-path: inset(0 100% 0 0);
+    transform: translateX(-2cqw);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+    transform: none;
+  }
+}
+.story-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2cqw;
+  max-width: 54cqw;
+}
+.kind-hook h3,
+.kind-story h3 {
+  font-size: 3.5cqw;
+  line-height: 1.06;
+  max-width: 54cqw;
+}
+.kind-hook .x2-body,
+.kind-story .x2-body {
+  font-size: 2.3cqw;
+  max-width: 54cqw;
+  gap: 0.9cqw;
+}
+.kind-hook .x2-body .md strong,
+.kind-story .x2-body .md strong {
+  color: var(--ink);
+  border-bottom: 0.25cqw solid var(--strong);
+}
+.kind-hook .x2-body .md ol {
+  counter-reset: opcion;
+  gap: 0;
+}
+.kind-hook .x2-body .md ol > li {
+  counter-increment: opcion;
+  padding: 0.7cqw 0 0.7cqw 3.4cqw;
+  position: relative;
+  border-top: 1px solid var(--border);
+}
+.kind-hook .x2-body .md ol > li::before {
+  content: counter(opcion, upper-alpha);
+  position: absolute;
+  left: 0;
+  font-family: 'Bricolage Grotesque Variable', system-ui, sans-serif;
+  font-weight: 800;
+  color: var(--strong);
+}
+.story-imagined {
+  color: var(--strong);
+  font-weight: 700;
+}
+
+/* Definiciones: como un diccionario, sin fichas */
+.kind-definition .x2-body {
+  max-width: 100%;
+  gap: 0;
+}
+.kind-definition .x2-body ul {
+  gap: 0;
+}
+.kind-definition .x2-body ul > li::before {
+  display: none;
+}
+.term-card {
+  display: grid;
+  grid-template-columns: 24cqw 1fr;
+  align-items: baseline;
+  gap: 2cqw;
+  padding: 1.3cqw 0 !important;
+  border-top: 1px solid var(--border);
+}
+.term-card:first-child {
+  border-top: 0.25cqw solid var(--ink);
+}
+.term-name {
+  font-family: 'Bricolage Grotesque Variable', system-ui, sans-serif;
+  font-variation-settings: 'wdth' 90;
+  font-size: 3.1cqw;
+  font-weight: 800;
+  line-height: 1.05;
+  color: var(--strong);
+}
+.term-name strong {
+  color: inherit !important;
+}
+.term-def {
+  font-size: 2.3cqw;
+}
+.term-def > * {
+  color: inherit;
+}
+.term-def strong {
+  color: var(--ink) !important;
+  background: color-mix(in srgb, var(--strong) 16%, transparent);
+}
+
+/* Ejemplos resueltos: pasos numerados en cuadrados */
+.kind-worked-example .x2-body ol,
+.kind-faded-example .x2-body ol {
+  counter-reset: paso;
+}
+.kind-worked-example .x2-body ol > li,
+.kind-faded-example .x2-body ol > li {
+  position: relative;
+  padding-left: 4cqw;
+}
+.kind-worked-example .x2-body ol > li::before,
+.kind-faded-example .x2-body ol > li::before {
+  content: counter(paso);
+  counter-increment: paso;
+  position: absolute;
+  left: 0;
+  top: 0.1cqw;
+  width: 2.8cqw;
+  height: 2.8cqw;
+  display: grid;
+  place-items: center;
+  font-size: 1.7cqw;
+  font-weight: 800;
+  color: #fff;
+  background: var(--strong);
+}
+.kind-worked-example .x2-body ol[start='2'] {
+  counter-reset: paso 1;
+}
+.kind-worked-example .x2-body ol[start='3'] {
+  counter-reset: paso 2;
+}
+.kind-worked-example .x2-body ol[start='4'] {
+  counter-reset: paso 3;
+}
+.kind-worked-example .x2-body ol[start='5'] {
+  counter-reset: paso 4;
+}
+.kind-worked-example .x2-body ol[start='6'] {
+  counter-reset: paso 5;
+}
+
+/* Errores típicos y lo que no es */
+.kind-misconception .x2-body th,
+.kind-non-example .x2-body th {
+  color: var(--signal);
+}
+.kind-misconception .x2-body .md strong,
+.kind-non-example .x2-body .md strong {
+  color: var(--signal);
+}
+
+/* Pausa y piensa: campo de color, la pregunta manda */
+.kind-pause-think {
+  --ink: #fff;
+  --strong: #fff;
+  --muted: rgb(255 255 255 / 0.78);
+  --border: rgb(255 255 255 / 0.35);
+  --panel: rgb(255 255 255 / 0.14);
+  color: #fff;
+  background: color-mix(in srgb, var(--track) 82%, #000);
+  justify-content: center;
+}
+.kind-pause-think h3 {
+  font-size: 5cqw;
+}
+.kind-pause-think .x2-body {
+  font-size: 2.6cqw;
+}
+.x2-pause {
+  max-width: 58cqw;
+  background: rgb(255 255 255 / 0.95);
+  color: #12151b;
+  border: 0;
+  border-radius: 0;
+}
+
+/* Resumen */
+.kind-recap .x2-body ul > li::before {
+  content: '✓';
+  top: 0;
+  width: auto;
+  height: auto;
+  background: none;
+  color: var(--strong);
+  font-weight: 800;
+}
+.kind-recap .x2-body ul > li {
+  padding-left: 3cqw;
+}
+
+.x2-glossary {
+  position: absolute;
+  left: 6cqw;
+  right: 6cqw;
+  bottom: 1.5cqw;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.8cqw;
+  font-size: 1.45cqw;
+}
+.x2-gl-label {
+  color: var(--muted);
+  margin-right: 0.4cqw;
+}
+.x2-glossary button {
+  font: inherit;
+  color: var(--ink);
+  background: none;
+  border: 0;
+  border-bottom: 0.2cqw solid var(--strong);
+  border-radius: 0;
+  padding: 0 0.2cqw;
+  cursor: pointer;
+}
+.x2-glossary button[aria-expanded='true'] {
+  background: color-mix(in srgb, var(--strong) 18%, transparent);
+}
+.x2-gl-def {
+  flex-basis: 100%;
+  margin: 0;
+  padding: 0.8cqw 1.2cqw;
+  color: #f4f1ec;
+  background: #12151b;
+  border-radius: 0;
+}
+
+.x2-caption {
+  position: absolute;
+  left: 50%;
+  bottom: 1.6cqw;
+  transform: translateX(-50%);
+  max-width: 76cqw;
+  margin: 0;
+  padding: 0.6cqw 1.6cqw;
+  font-size: 1.8cqw;
+  text-align: center;
+  color: #fff;
+  background: rgb(0 0 0 / 0.8);
+  border-radius: 0;
+}
+.x2-scene:has(.x2-glossary) ~ .x2-caption {
+  bottom: 5cqw;
+}
+.x2-bigplay {
+  position: absolute;
+  right: 5cqw;
+  bottom: 5cqw;
+  display: flex;
+  align-items: center;
+  gap: 1.2cqw;
+  padding: 0.9cqw 2.6cqw 0.9cqw 1cqw;
+  font: inherit;
+  font-size: 2cqw;
+  font-weight: 700;
+  color: #12151b;
+  background: #fff;
+  border: 0;
+  border-radius: 99px;
+  cursor: pointer;
+  box-shadow: 0 1cqw 3cqw rgb(0 0 0 / 0.35);
+}
+.x2-bigplay span {
+  display: grid;
+  place-items: center;
+  width: 4.6cqw;
+  height: 4.6cqw;
+  border-radius: 50%;
+  color: #fff;
+  background: color-mix(in srgb, var(--track) 85%, #000);
+}
+.x2-loading {
+  position: absolute;
+  inset: auto 0 2cqw 0;
+  text-align: center;
+  font-size: 1.8cqw;
+  color: var(--muted);
+}
+
+/* ───── Paneles dentro del escenario: mini-ejercicio, comprobación y otra explicación ───── */
+.x2-micro,
+.x2-checkpoint,
+.x2-alt {
+  position: absolute;
+  inset: 0;
+  overflow-y: auto;
+  padding: 3.4cqw 6cqw 3cqw;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2cqw;
+  font-size: 1.9cqw;
+  animation: x2-in 0.3s var(--ease);
+}
+.x2-micro h3,
+.x2-checkpoint h3,
+.x2-alt h3 {
+  margin: 0;
+  font-size: 3cqw;
+  letter-spacing: -0.01em;
+}
+.x2-micro .x2-muted,
+.x2-checkpoint .x2-muted {
+  font-size: 1.7cqw;
+}
+.x2-micro .md,
+.x2-checkpoint .md,
+.x2-alt .md {
+  font-size: inherit;
+}
+.x2-micro .x2-prompt .md p,
+.x2-checkpoint .x2-prompt .md p {
+  font-size: 2.2cqw;
+  font-weight: 650;
+  line-height: 1.35;
+}
+
+/* ───── Controles ───── */
+.x2-controls {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 10px 14px;
+  background: #0d1214;
+  color: #eef1ec;
+}
+.x2-ctl {
+  font: inherit;
+  font-size: 0.85rem;
+  display: grid;
+  place-items: center;
+  min-width: 36px;
+  height: 36px;
+  padding: 0 8px;
+  color: inherit;
+  background: transparent;
+  border: 0;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.x2-ctl:hover:not(:disabled) {
+  background: rgb(255 255 255 / 0.1);
+}
+.x2-ctl:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+.x2-ctl.play {
+  width: 44px;
+  height: 44px;
+  background: #f4f6f1;
+  color: #10171a;
+  border-radius: 50%;
+}
+.x2-ctl.text {
+  padding: 0 12px;
+  border: 1px solid rgb(255 255 255 / 0.18);
+  font-weight: 600;
+}
+.x2-ctl.text.on {
+  background: color-mix(in srgb, var(--track) 55%, transparent);
+  border-color: transparent;
+}
+.x2-parts {
+  display: flex;
+  gap: 5px;
+  flex: 1 1 160px;
+  min-width: 120px;
+  list-style: none;
+  margin: 0 6px;
+  padding: 0;
+}
+.x2-parts li {
+  flex: 1;
+}
+.x2-parts button {
+  display: block;
+  width: 100%;
+  height: 8px;
+  padding: 0;
+  border: 0;
+  border-radius: 99px;
+  background: rgb(255 255 255 / 0.18);
+  cursor: pointer;
+  overflow: hidden;
+}
+.x2-parts li.now button {
+  outline: 2px solid color-mix(in srgb, var(--track) 70%, white);
+  outline-offset: 2px;
+}
+.x2-parts span {
+  display: block;
+  height: 100%;
+  background: color-mix(in srgb, var(--track) 70%, white);
+  transition: width 0.25s linear;
+}
+.x2-where {
+  font-size: 0.85rem;
+  color: rgb(238 241 236 / 0.7);
+  max-width: 230px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.x2-error {
+  margin: 0;
+  padding: 8px 14px;
+  background: #2a1214;
+  color: #ffb4ab;
+  font-size: 0.85rem;
+}
+
+/* ───── Preparación y cierre (sobre el fondo de la app) ───── */
+.x2-ready,
+.x2-wrap {
+  display: grid;
+  gap: 28px;
+  padding: 26px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+}
+.x2-ready {
+  grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+}
+.x2-ready h3,
+.x2-wrap h3 {
+  margin: 0 0 8px;
+  font-size: 1.25rem;
+}
+.x2-wrap h4 {
+  margin: 18px 0 6px;
+}
+.x2-objectives {
+  margin: 8px 0 14px;
+  padding-left: 1.2em;
+  font-size: 1.1rem;
+  line-height: 1.5;
+}
+.x2-objectives li {
+  margin-bottom: 8px;
+}
+.x2-remedial {
+  margin: 12px 0;
+  padding: 12px 14px;
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--warn) 14%, transparent);
+}
+.x2-remedial p {
+  margin: 6px 0 0;
+}
+.x2-wrap-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 24px;
+}
+.x2-wrap ul {
+  margin: 0;
+  padding-left: 1.2em;
+  line-height: 1.5;
+}
+.x2-mistakes li {
+  margin-bottom: 6px;
+}
+.x2-cheat {
+  padding: 12px 14px;
+  background: var(--panel-2);
+  border-radius: 4px;
+  align-self: start;
+}
+.x2-cheat summary {
+  cursor: pointer;
+  font-weight: 650;
+}
+@media (max-width: 860px) {
+  .x2-ready,
+  .x2-wrap-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ───── Ítems ───── */
+.x2-item {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 8px 0 12px;
+}
+.x2-prompt .md p {
+  margin: 0;
+  font-weight: 600;
+  line-height: 1.4;
+}
+.x2-options {
+  display: grid;
+  gap: 8px;
+}
+.x2-option {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  text-align: left;
+  font: inherit;
+  line-height: 1.35;
+  color: var(--text);
+  background: var(--panel);
+  border: 1.5px solid var(--border);
+  border-radius: 4px;
+  padding: 11px 14px;
+  cursor: pointer;
+}
+.x2-option:hover:not(:disabled) {
+  border-color: color-mix(in srgb, var(--accent) 60%, var(--border));
+}
+.x2-option:disabled {
+  cursor: default;
+}
+.x2-mark {
+  flex: none;
+  width: 18px;
+  height: 18px;
+  margin-top: 1px;
+  border: 2px solid var(--muted);
+  border-radius: 50%;
+}
+.x2-option.check .x2-mark {
+  border-radius: 5px;
+}
+.x2-option.sel {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 12%, var(--panel));
+}
+.x2-option.sel .x2-mark {
+  border-color: var(--accent);
+  background: radial-gradient(var(--accent) 45%, transparent 50%);
+}
+.x2-option.check.sel .x2-mark {
+  background: var(--accent);
+}
+.x2-option.right,
+.x2-classify li.right,
+.x2-line.right,
+.x2-fill input.right {
+  border-color: var(--ok);
+  background: color-mix(in srgb, var(--ok) 14%, var(--panel));
+}
+.x2-option.wrong,
+.x2-classify li.wrong,
+.x2-line.wrong,
+.x2-fill input.wrong {
+  border-color: var(--error);
+  background: color-mix(in srgb, var(--error) 12%, var(--panel));
+}
+.x2-feedback {
+  padding: 10px 14px;
+  background: color-mix(in srgb, var(--ok) 14%, transparent);
+}
+.x2-feedback > strong:first-child {
+  color: var(--ok);
+}
+.x2-feedback.bad {
+  background: color-mix(in srgb, var(--error) 12%, transparent);
+}
+.x2-feedback.bad > strong:first-child {
+  color: var(--error);
+}
+.x2-feedback p {
+  margin: 4px 0 0;
+  line-height: 1.45;
+}
+.x2-solution {
+  font-size: 0.95em;
+}
+.x2-solution summary {
+  cursor: pointer;
+  color: var(--muted);
+}
+.x2-correct {
+  margin: 6px 0 0;
+  padding-left: 1.2em;
+}
+.x2-classify {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 8px;
+}
+.x2-classify li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 14px;
+  padding: 9px 12px;
+  background: var(--panel);
+  border: 1.5px solid var(--border);
+  border-radius: 4px;
+}
+.x2-seg {
+  display: inline-flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+.x2-seg button,
+.x2-move button {
+  font: inherit;
+  font-size: 0.9em;
+  color: var(--text);
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+.x2-seg button[aria-pressed='true'] {
+  background: var(--accent);
+  border-color: transparent;
+  color: var(--accent-text, #fff);
+}
+.x2-classify li.right .x2-seg button[aria-pressed='true'] {
+  background: var(--ok);
+  color: #fff;
+}
+.x2-classify li.wrong .x2-seg button[aria-pressed='true'] {
+  background: var(--error);
+  color: #fff;
+}
+.x2-fill {
+  font-size: 1.05em;
+  line-height: 2.2;
+  margin: 0;
+}
+.x2-fill input,
+.x2-classify select,
+.x2-textarea {
+  font: inherit;
+  color: var(--text);
+  background: var(--panel);
+  border: 1.5px solid var(--border);
+  border-radius: 3px;
+  padding: 5px 9px;
+}
+.x2-fill input {
+  width: 11em;
+  margin: 0 4px;
+}
+.x2-textarea {
+  width: 100%;
+  resize: vertical;
+  line-height: 1.5;
+  padding: 10px 12px;
+  border-radius: 4px;
+}
+.x2-textarea.mono {
+  font-family: var(--mono);
+  font-size: 0.92em;
+}
+.x2-order {
+  list-style: decimal;
+  margin: 0;
+  padding-left: 1.6em;
+  display: grid;
+  gap: 8px;
+}
+.x2-order li {
+  padding-left: 4px;
+}
+.x2-order li > span:first-child {
+  display: inline-block;
+  max-width: 80%;
+}
+.x2-move {
+  float: right;
+  display: inline-flex;
+  gap: 4px;
+}
+.x2-spot {
+  display: grid;
+  gap: 4px;
+}
+.x2-line {
+  display: flex;
+  gap: 12px;
+  align-items: baseline;
+  text-align: left;
+  font: inherit;
+  color: var(--text);
+  background: var(--panel);
+  border: 1.5px solid var(--border);
+  border-radius: 3px;
+  padding: 6px 10px;
+  cursor: pointer;
+}
+.x2-line.sel {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 12%, var(--panel));
+}
+.x2-ln {
+  flex: none;
+  width: 1.6em;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+.x2-line code {
+  font-family: var(--mono);
+  font-size: 0.92em;
+  white-space: pre-wrap;
+  background: none;
+}
+.x2-code {
+  display: grid;
+  gap: 8px;
+  justify-items: start;
+}
+@media (prefers-reduced-motion: reduce) {
+  .x2-scene,
+  .x2-block,
+  .x2-micro,
+  .x2-checkpoint,
+  .x2-alt {
+    animation: none;
+  }
+  .x2-parts span {
+    transition: none;
+  }
+}
+
+/* ───── Práctica escalonada ───── */
+.x2-practice,
+.x2-flow,
+.x2-map,
+.x2-project {
+  padding-bottom: 40px;
+}
+.x2-card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 18px 20px;
+}
+.x2-card h3 {
+  margin: 0 0 8px;
+  font-size: 1.1rem;
+}
+.x2-card h4 {
+  margin: 14px 0 6px;
+}
+.x2-card ul,
+.x2-card ol {
+  margin: 6px 0;
+  padding-left: 1.3em;
+  line-height: 1.5;
+}
+.x2-tiers {
+  display: flex;
+  gap: 8px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  flex-wrap: wrap;
+}
+.x2-tiers button {
+  font: inherit;
+  padding: 8px 14px;
+  border-radius: 99px;
+  border: 1.5px solid var(--border);
+  background: var(--panel);
+  color: var(--text);
+  cursor: pointer;
+}
+.x2-tiers button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.x2-tiers li.now button {
+  border-color: var(--track);
+  background: color-mix(in srgb, var(--track) 14%, var(--panel));
+}
+.x2-tiers li.done button {
+  border-color: var(--ok);
+}
+.x2-ok {
+  color: var(--ok);
+  font-size: 0.85em;
+}
+.x2-ex-head .x2-title {
+  font-size: 1.5rem;
+}
+.x2-decoded ul {
+  font-size: 1.05rem;
+}
+.x2-terms {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+.x2-terms button {
+  font: inherit;
+  font-size: 0.9em;
+  background: var(--panel-2);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 99px;
+  padding: 3px 12px;
+  cursor: pointer;
+}
+.x2-terms .x2-gl-def {
+  flex-basis: 100%;
+  margin: 4px 0 0;
+  padding: 10px 12px;
+  background: var(--panel-2);
+  border-radius: 4px;
+}
+.x2-textarea.big {
+  min-height: 180px;
+}
+.x2-btn.rec {
+  background: color-mix(in srgb, var(--error) 18%, var(--panel));
+  border-color: var(--error);
+}
+.x2-phases {
+  display: flex;
+  gap: 6px;
+  list-style: none;
+  padding: 0 !important;
+  flex-wrap: wrap;
+}
+.x2-phases button {
+  font: inherit;
+  padding: 5px 12px;
+  border-radius: 3px;
+  border: 1px solid var(--border);
+  background: var(--panel-2);
+  color: var(--text);
+  cursor: pointer;
+}
+.x2-phases li.now button {
+  background: var(--track);
+  color: #fff;
+  border-color: transparent;
+}
+.x2-phases li.done button {
+  border-color: var(--ok);
+}
+.x2-howto {
+  color: var(--muted);
+}
+.x2-hint {
+  padding: 8px 12px;
+  margin: 8px 0;
+  background: var(--panel-2);
+}
+.x2-hint p {
+  margin: 0 0 4px;
+}
+.x2-link {
+  font: inherit;
+  background: none;
+  border: 0;
+  padding: 0;
+  color: var(--accent);
+  text-decoration: underline;
+  cursor: pointer;
+}
+.x2-result {
+  background: color-mix(in srgb, var(--warn) 10%, var(--panel));
+}
+.x2-result.ok {
+  background: color-mix(in srgb, var(--ok) 10%, var(--panel));
+}
+.x2-score {
+  font-size: 1.1rem;
+}
+.x2-score b {
+  font-size: 2rem;
+}
+.x2-rubric {
+  list-style: none;
+  padding: 0 !important;
+  display: grid;
+  gap: 10px;
+}
+.x2-rubric li {
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+}
+.x2-rubric li.lv-bien {
+  background: color-mix(in srgb, var(--ok) 11%, transparent);
+}
+.x2-rubric li.lv-parcial {
+  background: color-mix(in srgb, var(--warn) 12%, transparent);
+}
+.x2-rubric li.lv-falta {
+  background: color-mix(in srgb, var(--error) 11%, transparent);
+}
+.x2-rubric p {
+  margin: 4px 0 0;
+}
+.x2-compare-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+.x2-pre {
+  white-space: pre-wrap;
+  font-family: var(--x2-font);
+  line-height: 1.5;
+  padding: 12px;
+  background: var(--panel-2);
+  border-radius: 4px;
+  margin: 0;
+  max-height: 360px;
+  overflow: auto;
+}
+@media (max-width: 860px) {
+  .x2-compare-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ───── Pruebas y resultados ───── */
+.x2-progress {
+  height: 8px;
+  border-radius: 99px;
+  background: var(--panel-2);
+  overflow: hidden;
+}
+.x2-progress i {
+  display: block;
+  height: 100%;
+  background: var(--track);
+  transition: width 0.3s var(--ease);
+}
+.x2-dots {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.x2-dots button {
+  width: 34px;
+  height: 34px;
+  font: inherit;
+  border-radius: 50%;
+  border: 1.5px solid var(--border);
+  background: var(--panel);
+  color: var(--text);
+  cursor: pointer;
+}
+.x2-dots li.done button {
+  background: color-mix(in srgb, var(--track) 22%, var(--panel));
+}
+.x2-dots li.now button {
+  border-color: var(--track);
+  font-weight: 800;
+}
+.x2-scorecard {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  background: color-mix(in srgb, var(--error) 8%, var(--panel));
+}
+.x2-scorecard.ok {
+  background: color-mix(in srgb, var(--ok) 9%, var(--panel));
+}
+.x2-bignum {
+  margin: 0;
+  font-size: 3.4rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+}
+.x2-bignum small {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+.x2-scorecard h3 {
+  margin: 0 0 4px;
+}
+.x2-scorecard p {
+  margin: 0;
+}
+.x2-bars {
+  list-style: none;
+  padding: 0 !important;
+  display: grid;
+  gap: 10px;
+}
+.x2-bars li {
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(80px, 2fr) 48px;
+  gap: 12px;
+  align-items: center;
+}
+.x2-bar {
+  height: 10px;
+  background: var(--panel-2);
+  border-radius: 99px;
+  overflow: hidden;
+}
+.x2-bar i {
+  display: block;
+  height: 100%;
+  background: var(--ok);
+}
+.x2-bars li.mid .x2-bar i {
+  background: var(--warn);
+}
+.x2-bars li.low .x2-bar i {
+  background: var(--error);
+}
+
+/* ───── Mapa del curso ───── */
+.x2-map-head {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 24px;
+  align-items: start;
+}
+.x2-cover {
+  border-radius: 4px;
+  overflow: hidden;
+  aspect-ratio: 4 / 3;
+}
+.x2-chip {
+  display: inline-block;
+  margin-left: 10px;
+  padding: 2px 10px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  border-radius: 99px;
+  background: var(--panel-2);
+  color: var(--muted);
+  vertical-align: middle;
+}
+.x2-chip.ok {
+  background: color-mix(in srgb, var(--ok) 18%, transparent);
+  color: var(--ok);
+}
+.x2-chip.now {
+  background: color-mix(in srgb, var(--track) 20%, transparent);
+  color: var(--text);
+}
+.x2-chip.warn {
+  background: color-mix(in srgb, var(--warn) 18%, transparent);
+  color: var(--warn);
+}
+.x2-level {
+  padding: 20px 22px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+}
+.x2-level.locked {
+  opacity: 0.72;
+  background: transparent;
+}
+.x2-level.passed {
+  background: color-mix(in srgb, var(--ok) 7%, var(--panel));
+}
+.x2-level header h3 {
+  margin: 0 0 4px;
+  font-size: 1.3rem;
+}
+.x2-module {
+  margin-top: 16px;
+}
+.x2-module h4 {
+  margin: 0;
+  font-size: 1.05rem;
+}
+.x2-lessons {
+  list-style: none;
+  margin: 10px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 6px;
+}
+.x2-lessons button {
+  display: grid;
+  grid-template-columns: 18px 1fr auto;
+  gap: 12px;
+  align-items: center;
+  width: 100%;
+  text-align: left;
+  font: inherit;
+  color: var(--text);
+  background: var(--panel-2);
+  border: 1px solid transparent;
+  border-radius: 4px;
+  padding: 10px 14px;
+  cursor: pointer;
+}
+.x2-lessons button:hover {
+  border-color: var(--border);
+}
+.x2-lessons button[aria-disabled='true'] {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+.x2-state {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 2px solid var(--muted);
+}
+.st-disponible .x2-state {
+  border-color: var(--track);
+}
+.st-en_curso .x2-state {
+  border-color: var(--track);
+  background: linear-gradient(90deg, var(--track) 50%, transparent 50%);
+}
+.st-dominada .x2-state {
+  border-color: var(--ok);
+  background: var(--ok);
+}
+.st-bloqueada .x2-state {
+  border-style: dashed;
+}
+.x2-meta {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+.x2-lessons .exam button {
+  background: transparent;
+  border: 1px dashed var(--border);
+}
+.x2-closing {
+  margin-top: 14px;
+}
+.x2-feedback.bad {
+  margin: 0;
+}
+.x2-due {
+  background: color-mix(in srgb, var(--track) 9%, var(--panel));
+}
+@media (max-width: 860px) {
+  .x2-map-head {
+    grid-template-columns: 1fr;
+  }
+  .x2-cover {
+    display: none;
+  }
+}
+
+/* Los paneles (mini-ejercicio, comprobación, otra explicación) crecen con su contenido en vez de recortarse a 16:9 */
+.x2-stage.panel {
+  aspect-ratio: auto;
+  min-height: 440px;
+}
+.x2-stage.panel .x2-micro,
+.x2-stage.panel .x2-checkpoint,
+.x2-stage.panel .x2-alt {
+  position: relative;
+  inset: auto;
+  overflow: visible;
+}
+/* Una pregunta ya corregida sigue legible */
+.x2-option:disabled,
+.x2-line:disabled,
+.x2-seg button:disabled {
+  color: var(--text);
+}
+.x2-option:disabled:not(.right):not(.wrong):not(.sel) {
+  opacity: 0.7;
+}
+
+.x2-row .x2-chip {
+  margin-left: 0;
+  align-self: center;
+}
+
+/* ───── Afinados del escenario (especificidad alta para ganarle a Markdown.css) ───── */
+.x2-stage .x2-body .md table {
+  display: table;
+  width: 100%;
+  font-size: 2.2cqw;
+  margin: 0.4cqw 0;
+  overflow: visible;
+}
+.x2-stage .x2-body .md th,
+.x2-stage .x2-body .md td {
+  font-size: inherit;
+  padding: 0.9cqw 1.6cqw 0.9cqw 0;
+}
+.x2-stage .x2-body .md th {
+  color: var(--strong);
+  font-weight: 800;
+}
+.x2-stage .x2-body .md code {
+  font-size: 0.88em;
+  background: color-mix(in srgb, var(--ink) 9%, transparent);
+  border-radius: 0;
+  padding: 0.05em 0.35em;
+}
+.x2-stage .x2-body .code-block {
+  margin: 0.4cqw 0;
+  border: 0;
+}
+.x2-stage .x2-body .code-block pre {
+  padding: 1.6cqw 2cqw;
+  font-size: 1.9cqw;
+}
+.x2-stage .x2-body .code-bar {
+  display: none;
+}
+.x2-stage .x2-body .md pre code {
+  background: none;
+  font-size: inherit;
+}
+/* Historias: el dato manda, las opciones se alinean sin chocar con el botón */
+.kind-hook .story-stamp {
+  margin-top: 0.4cqw;
+}
+.kind-hook .x2-body,
+.kind-hook .story-copy {
+  max-width: 50cqw;
+}
+.kind-hook .x2-body .md ol[start='2'] {
+  counter-reset: opcion 1;
+}
+.kind-hook .x2-body .md ol[start='3'] {
+  counter-reset: opcion 2;
+}
+.kind-hook .x2-body .md ol[start='4'] {
+  counter-reset: opcion 3;
+}
+.kind-hook .x2-body .md ol > li {
+  padding-top: 0.5cqw;
+  padding-bottom: 0.5cqw;
+}
+.kind-hook .x2-body .md ol {
+  margin-top: -0.2cqw;
+}
+.kind-hook .x2-body {
+  gap: 0.5cqw;
+}
+.x2-stage .diagram,
+.x2-stage .diagram-pending {
+  background: none;
+  border: 0;
+  padding: 0;
+  display: flex;
+  justify-content: flex-start;
+}
+.x2-stage .diagram svg {
+  max-height: 29cqw;
+}
+.x2-stage .x2-textarea.x2-pause {
+  background: #fff;
+  color: #12151b;
+  border: 0;
+  border-radius: 0;
+  font-size: 2cqw;
+  padding: 1cqw 1.4cqw;
+}
+.x2-stage .x2-textarea.x2-pause::placeholder {
+  color: rgb(18 21 27 / 0.55);
+}
+.x2-stage .diagram-pending pre {
+  color: #e9ecf1;
+  border-radius: 0;
+}
+.x2-stage .diagram svg {
+  width: 100%;
+  height: auto;
+  max-height: 31cqw;
+}
+.x2-stage .tok-com {
+  color: #9aa3b2;
+}

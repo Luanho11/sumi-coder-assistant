@@ -1,0 +1,2240 @@
+{
+ "schema": 2,
+ "kind": "lesson-sample",
+ "courseId": "seguridad-web",
+ "glossary": [
+  {
+   "id": "prueba-seguridad",
+   "term": "prueba de seguridad",
+   "plain": "Revisar un sistema buscando fallos que alguien malintencionado podría aprovechar, para arreglarlos antes de que los use.",
+   "example": "Comprobar si una web de reservas deja ver las citas de otras personas.",
+   "firstTaughtIn": "sec-l1",
+   "aliases": [
+    "pentest",
+    "prueba de penetración"
+   ]
+  },
+  {
+   "id": "hacker-etico",
+   "term": "hacker ético",
+   "plain": "Persona que usa técnicas de ataque, pero con permiso del dueño del sistema, para encontrar fallos y ayudar a corregirlos.",
+   "example": "Una analista contratada por una clínica para revisar su web de citas.",
+   "firstTaughtIn": "sec-l1"
+  },
+  {
+   "id": "permiso-escrito",
+   "term": "permiso por escrito",
+   "plain": "Documento firmado por quien es dueño del sistema que dice qué se puede probar, cuándo y cómo.",
+   "example": "Un acuerdo de una página firmado por la doctora y por quien hace la prueba.",
+   "firstTaughtIn": "sec-l1",
+   "aliases": [
+    "autorización",
+    "permiso firmado"
+   ]
+  },
+  {
+   "id": "alcance",
+   "term": "alcance",
+   "plain": "La lista exacta de sistemas que sí se pueden probar. Todo lo que no esté en esa lista queda fuera.",
+   "example": "Alcance: citas.consultorioruiz.com y su API.",
+   "firstTaughtIn": "sec-l1"
+  },
+  {
+   "id": "fuera-alcance",
+   "term": "fuera de alcance",
+   "plain": "Cualquier sistema que no aparece en la lista autorizada. No se toca, aunque esté conectado a uno que sí se puede probar.",
+   "example": "La pasarela de pagos del consultorio: pertenece a otra empresa.",
+   "firstTaughtIn": "sec-l1",
+   "aliases": [
+    "queda fuera"
+   ]
+  },
+  {
+   "id": "reglas-prueba",
+   "term": "reglas de la prueba",
+   "plain": "Documento corto que reúne todo lo acordado: alcance, ventana, técnicas, contacto, datos e informe.",
+   "example": "Una página con siete apartados que firman ambas partes.",
+   "firstTaughtIn": "sec-l1",
+   "aliases": [
+    "acuerdo de pruebas"
+   ]
+  },
+  {
+   "id": "ventana",
+   "term": "ventana de pruebas",
+   "plain": "Los días y las horas exactos en que sí se puede probar. Fuera de esa ventana no hay permiso.",
+   "example": "Sábados de 08:00 a 14:00, del 7 al 28 de noviembre.",
+   "firstTaughtIn": "sec-l1",
+   "aliases": [
+    "ventana"
+   ]
+  },
+  {
+   "id": "tecnica-prohibida",
+   "term": "técnica prohibida",
+   "plain": "Método que el acuerdo veta porque podría dañar el servicio o a las personas.",
+   "example": "Saturar el servidor o engañar a una recepcionista.",
+   "firstTaughtIn": "sec-l1",
+   "aliases": [
+    "técnicas prohibidas"
+   ]
+  },
+  {
+   "id": "denegacion-servicio",
+   "term": "denegación de servicio",
+   "plain": "Saturar un sistema con tantas peticiones que deja de atender a los usuarios reales.",
+   "example": "Mandar miles de peticiones por segundo a la web hasta que se cae.",
+   "firstTaughtIn": "sec-l1",
+   "aliases": [
+    "DoS"
+   ]
+  },
+  {
+   "id": "ingenieria-social",
+   "term": "ingeniería social",
+   "plain": "Engañar a personas (por llamada o correo) para que entreguen acceso o datos, en lugar de atacar la tecnología.",
+   "example": "Llamar a la recepción fingiendo ser del soporte técnico para que den una clave.",
+   "firstTaughtIn": "sec-l1"
+  },
+  {
+   "id": "contacto-emergencia",
+   "term": "contacto de emergencia",
+   "plain": "Persona con teléfono que puede decidir al instante qué hacer si algo se rompe durante la prueba.",
+   "example": "La doctora Ruiz, con su móvil, localizable las 24 horas.",
+   "firstTaughtIn": "sec-l1"
+  },
+  {
+   "id": "datos-personales",
+   "term": "datos personales",
+   "plain": "Información que identifica a una persona: nombre, teléfono, correo, historial médico.",
+   "example": "El nombre y el teléfono que aparecen en una cita.",
+   "firstTaughtIn": "sec-l1",
+   "aliases": [
+    "datos sensibles"
+   ]
+  },
+  {
+   "id": "evidencia-minima",
+   "term": "evidencia mínima",
+   "plain": "La menor prueba posible que demuestra que el fallo existe, sin llevarte más información de la necesaria.",
+   "example": "Una captura de un solo registro con el nombre tapado.",
+   "firstTaughtIn": "sec-l1"
+  },
+  {
+   "id": "informe",
+   "term": "informe",
+   "plain": "Documento que entrega quien prueba: qué encontró, cómo repetirlo, qué impacto tiene y cómo arreglarlo.",
+   "example": "Un PDF cifrado con tres hallazgos, sus pasos y su corrección.",
+   "firstTaughtIn": "sec-l1"
+  },
+  {
+   "id": "divulgacion-responsable",
+   "term": "divulgación responsable",
+   "plain": "Avisar del fallo en privado a quien puede arreglarlo, darle tiempo y no hablar en público antes.",
+   "example": "Escribir al correo de seguridad de una empresa y esperar 90 días.",
+   "firstTaughtIn": "sec-l1"
+  },
+  {
+   "id": "security-txt",
+   "term": "security.txt",
+   "plain": "Archivo público en una web que indica a quién escribir y cómo para reportar un fallo de seguridad.",
+   "example": "tuweb.com/.well-known/security.txt con un correo de contacto.",
+   "firstTaughtIn": "sec-l1"
+  },
+  {
+   "id": "tercero",
+   "term": "tercero",
+   "plain": "Empresa distinta de tu cliente que presta una pieza del sistema y es dueña de sus propios servidores.",
+   "example": "La empresa que aloja la web o la que cobra las tarjetas.",
+   "firstTaughtIn": "sec-l1",
+   "aliases": [
+    "proveedor"
+   ]
+  },
+  {
+   "id": "pasarela-pagos",
+   "term": "pasarela de pagos",
+   "plain": "Servicio externo que procesa el cobro de las tarjetas por cuenta de la tienda.",
+   "example": "El botón «Pagar» que te lleva a la página segura del banco.",
+   "firstTaughtIn": "sec-l1"
+  },
+  {
+   "id": "hosting",
+   "term": "hosting",
+   "plain": "Servicio de una empresa que mantiene tu página encendida en sus servidores.",
+   "example": "Pagar cada mes a un proveedor para que la web esté siempre disponible.",
+   "firstTaughtIn": "sec-l1",
+   "aliases": [
+    "alojamiento"
+   ]
+  }
+ ],
+ "lesson": {
+  "id": "sec-l1",
+  "title": "Ética, permiso y alcance",
+  "minutes": 45,
+  "objectives": [
+   {
+    "id": "sec-l1-o1",
+    "bloom": "comprender",
+    "text": "Podrás explicar por qué probar un sistema sin permiso es delito aunque no robes nada, y qué lo vuelve legal."
+   },
+   {
+    "id": "sec-l1-o2",
+    "bloom": "aplicar",
+    "text": "Podrás decidir de quién es cada pieza de un sistema y qué entra y qué queda fuera del alcance."
+   },
+   {
+    "id": "sec-l1-o3",
+    "bloom": "crear",
+    "text": "Podrás redactar un acuerdo de pruebas de una página con sus siete apartados y sin frases ambiguas."
+   },
+   {
+    "id": "sec-l1-o4",
+    "bloom": "aplicar",
+    "text": "Podrás decidir qué hacer ante un hallazgo que sale del alcance o que aparece sin buscarlo."
+   }
+  ],
+  "requires": [],
+  "teaches": [
+   "prueba-seguridad",
+   "hacker-etico",
+   "permiso-escrito",
+   "alcance",
+   "fuera-alcance",
+   "reglas-prueba",
+   "ventana",
+   "tecnica-prohibida",
+   "denegacion-servicio",
+   "ingenieria-social",
+   "contacto-emergencia",
+   "datos-personales",
+   "evidencia-minima",
+   "informe",
+   "divulgacion-responsable",
+   "security-txt",
+   "tercero",
+   "pasarela-pagos",
+   "hosting"
+  ],
+  "modelsArtifacts": [
+   "acuerdo-pruebas"
+  ],
+  "realCase": {
+   "title": "Tres historias reales sobre el permiso: Pentágono 2016, Iowa 2019 y Misuri 2021",
+   "summary": "En 2016 el Pentágono dio permiso legal a 1.410 hackers para atacar cinco webs públicas durante cuatro semanas. En 2019 dos consultores con una carta de autorización pasaron 12 horas en la cárcel porque el edificio era del condado y no del estado que los contrató. En 2021 un periodista de Misuri vio números de seguro social en el código de una web oficial, avisó y esperó a que lo corrigieran; el gobernador lo llamó hacker y el fiscal no presentó cargos.",
+   "sources": [
+    {
+     "title": "Departamento de Defensa de EE. UU.: hoja informativa de «Hack the Pentagon» (junio de 2016)",
+     "url": "https://nsarchive.gwu.edu/sites/default/files/documents/5977346/National-Security-Archive-Department-of-Defense.pdf",
+     "claim": "Se dio consentimiento legal a hackers para técnicas específicas contra cinco webs públicas entre el 18 de abril y el 12 de mayo de 2016; 1.410 participantes, 1.189 reportes y 138 válidos."
+    },
+    {
+     "title": "Departamento de Defensa: resultados de Hack the Pentagon (comunicado NR-228-16)",
+     "url": "https://www.globalsecurity.org/security/library/news/2016/06/sec-160617-dod02.htm",
+     "claim": "Ninguna de las redes críticas del Departamento formó parte de la competencia."
+    },
+    {
+     "title": "Dark Reading: Hack The Pentagon paid 117 hackers",
+     "url": "https://www.darkreading.com/vulnerabilities-threats/-hack-the-pentagon-paid-117-hackers-who-found-bugs-in-dod-websites",
+     "claim": "Los pagos fueron de 100 a 15.000 dólares y 117 participantes cobraron."
+    },
+    {
+     "title": "KrebsOnSecurity: arresto de dos pentesters de Coalfire en Iowa (2020)",
+     "url": "https://krebsonsecurity.com/?p=50334",
+     "claim": "El 11 de septiembre de 2019 dos expertos contratados por el estado de Iowa fueron arrestados en el juzgado del condado de Dallas; los cargos se retiraron el 30 de enero de 2020."
+    },
+    {
+     "title": "Computing: Penetration testers paid to break-in to Iowa courthouse have charges dropped",
+     "url": "https://www.computing.co.uk/news/3085247/pen-testers-iowa-charges",
+     "claim": "Tenían autorización escrita, pasaron 12 horas en la cárcel y el sheriff dijo que el estado no podía autorizar la entrada fuera de horario a una propiedad del condado; el contrato no aclaraba ciertos puntos."
+    },
+    {
+     "title": "The Register: Coalfire duo explain Iowa courthouse arrest debacle (2020)",
+     "url": "https://www.theregister.com/2020/08/05/coalfire_pentest_iowa_black_hat/",
+     "claim": "Los dos pentesters dijeron que el problema se habría evitado documentando mejor el alcance por escrito."
+    },
+    {
+     "title": "SC Media: Cybersecurity experts arrested during assessment settle for $600,000",
+     "url": "https://www.scworld.com/brief/cybersecurity-experts-arrested-during-assessment-settle-for-600000",
+     "claim": "Los dos expertos llegaron a un acuerdo de 600.000 dólares con el condado de Dallas y su exsheriff."
+    },
+    {
+     "title": "3 News Now: el fiscal no presentará cargos contra el periodista",
+     "url": "https://www.3newsnow.com/news/prosecutor-isnt-pressing-charges-against-st-louis-reporter-who-found-flaw-in-state-website",
+     "claim": "Renaud avisó al estado y prometió no publicar hasta la corrección; el gobernador lo llamó hacker; el fiscal decidió no presentar cargos."
+    },
+    {
+     "title": "Malwarebytes: Journalist won’t be indicted for viewing a state website’s HTML (2022)",
+     "url": "https://www.malwarebytes.com/ja/blog/news/2022/02/journalist-wont-be-indicted-for-hacking-for-viewing-a-state-websites-html",
+     "claim": "El fiscal escribió que había un argumento para sostener que se violó la ley, pero que el asunto se resolvió por vías no legales."
+    }
+   ]
+  },
+  "readiness": [
+   {
+    "id": "sec-l1-r1",
+    "type": "mcq",
+    "objective": "sec-l1-o1",
+    "bloom": "recordar",
+    "prompt": "¿Dónde está guardada una página web para que cualquiera pueda abrirla?",
+    "options": [
+     {
+      "text": "En cada computadora que la visita",
+      "whyNot": "Cada visitante solo la ve; no la guarda para los demás."
+     },
+     {
+      "text": "En un servidor: una computadora siempre encendida y conectada a internet"
+     },
+     {
+      "text": "En el teléfono de quien la creó",
+      "whyNot": "Si fuera así, la página caería al apagar el teléfono."
+     },
+     {
+      "text": "En el cable de internet de la casa",
+      "whyNot": "El cable solo transporta datos; no guarda nada."
+     }
+    ],
+    "correctIndex": 1,
+    "explanation": "Una web vive en un servidor, una computadora que está siempre encendida y conectada."
+   },
+   {
+    "id": "sec-l1-r2",
+    "type": "mcq",
+    "objective": "sec-l1-o2",
+    "bloom": "recordar",
+    "prompt": "En la dirección `citas.ejemplo.com`, ¿qué es `citas.ejemplo.com`?",
+    "options": [
+     {
+      "text": "El nombre con el que se encuentra la página en internet"
+     },
+     {
+      "text": "La contraseña de la página",
+      "whyNot": "Una contraseña es secreta; una dirección es pública."
+     },
+     {
+      "text": "El nombre del programador",
+      "whyNot": "No identifica a una persona, sino a un sitio."
+     },
+     {
+      "text": "El número de visitantes",
+      "whyNot": "Una dirección no cuenta visitantes."
+     }
+    ],
+    "correctIndex": 0,
+    "explanation": "Es el nombre (dominio) con el que se llega a la página."
+   },
+   {
+    "id": "sec-l1-r3",
+    "type": "mcq",
+    "objective": "sec-l1-o1",
+    "bloom": "comprender",
+    "prompt": "En la dirección `/facturas/1043`, el número `1043` suele ser…",
+    "options": [
+     {
+      "text": "Un identificador que señala una factura concreta"
+     },
+     {
+      "text": "La hora a la que se emitió la factura",
+      "whyNot": "Una hora no tendría ese formato de identificador."
+     },
+     {
+      "text": "La cantidad de dinero de la factura",
+      "whyNot": "El importe va dentro de la factura, no en la dirección."
+     },
+     {
+      "text": "Una contraseña temporal",
+      "whyNot": "Una contraseña nunca va visible en la dirección."
+     }
+    ],
+    "correctIndex": 0,
+    "explanation": "Suele ser el número de identificación de un registro en la base de datos."
+   }
+  ],
+  "remedial": [
+   {
+    "refresher": "Una página web vive en un servidor: una computadora siempre encendida y conectada a internet. Su nombre público (por ejemplo citas.ejemplo.com) se llama dominio. En una dirección como /facturas/1043, el número suele identificar un registro concreto (esa factura) guardado en una base de datos. Con eso es suficiente para esta clase: no hace falta saber programar."
+   }
+  ],
+  "hook": {
+   "kind": "hook",
+   "title": "El Pentágono invitó a hackers a atacarlo",
+   "content": "EE. UU. invitó a 1.410 hackers a atacar cinco de sus webs. Pagó hasta 15.000 dólares por fallo.\n\n¿Qué lo hizo legal?\n\n1. Que eran hackers famosos\n2. Que tenían permiso\n3. Que lo hicieron de noche",
+   "narration": "Abril de 2016. El Departamento de Defensa de Estados Unidos hace algo que parecía imposible: invita a más de mil cuatrocientos hackers a atacar cinco de sus páginas web. No solo lo permite: paga entre cien y quince mil dólares por cada fallo válido que encuentren. Durante cuatro semanas, personas que en otro contexto estarían cometiendo un delito grave hacen exactamente lo mismo, con las mismas técnicas, y reciben dinero y felicitaciones. La primera falla llegó trece minutos después de empezar. Entonces, ¿qué cambió entre un hacker delincuente y uno invitado? Quédate con la pregunta: toda esta clase es la respuesta, y al final sabrás escribir el documento que marca la diferencia.",
+   "stamp": "1.410",
+   "dateline": "Washington D. C. · abril de 2016",
+   "source": "Departamento de Defensa"
+  },
+  "parts": [
+   {
+    "id": "sec-l1-p1",
+    "objectives": [
+     "sec-l1-o1"
+    ],
+    "title": "Por qué el permiso lo cambia todo",
+    "scenes": [
+     {
+      "kind": "story",
+      "title": "Cinco webs, cuatro semanas, reglas escritas",
+      "content": "Solo cinco sitios públicos. Solo entre el **18 de abril y el 12 de mayo**.\n\nLas redes críticas del Pentágono quedaron **fuera**.",
+      "narration": "Mira qué tenía de especial esa invitación. No era un vale todo. El permiso decía qué páginas: cinco sitios públicos, entre ellos defense punto gov. Decía cuándo: de un día exacto de abril a un día exacto de mayo. Decía quién: había que registrarse antes. Y dejaba fuera lo más delicado: ninguna de las redes críticas del departamento formó parte del reto. Guarda esas tres cosas, qué, cuándo y quién, porque el resto de la clase consiste en aprender a escribirlas bien.",
+      "stamp": "5 webs",
+      "dateline": "Pentágono · 18 de abril al 12 de mayo de 2016",
+      "source": "Departamento de Defensa"
+     },
+     {
+      "kind": "concept",
+      "title": "Las mismas herramientas, dos resultados",
+      "content": "Un atacante y un hacker ético usan **las mismas técnicas**. Cambia una sola cosa: el permiso.\n\n| Situación | ¿Se puede probar? |\n|---|---|\n| Tu propia app, en tu computadora | Sí |\n| Una web con permiso firmado | Solo lo firmado |\n| La web de tu banco «por curiosidad» | No: es delito |",
+      "narration": "Aquí está la clave. Quien ataca una web para robar y quien la revisa para protegerla hacen casi lo mismo: prueban entradas raras, miran qué responde el sistema, buscan puertas mal cerradas. Mira la tabla. En tu propia aplicación, en tu computadora, puedes probar lo que quieras. En la web de un cliente que firmó, solo lo firmado. Y en la de tu banco, por curiosidad, es delito. Las tres situaciones usan las mismas herramientas. Lo único que cambia es el permiso del dueño.",
+      "glossaryRefs": [
+       "hacker-etico"
+      ],
+      "micro": {
+       "id": "sec-l1-u1",
+       "type": "mcq",
+       "objective": "sec-l1-o1",
+       "bloom": "comprender",
+       "prompt": "Un atacante y un hacker ético usan casi las mismas técnicas. ¿Qué es lo que realmente los separa?",
+       "options": [
+        {
+         "text": "El permiso del dueño del sistema"
+        },
+        {
+         "text": "La marca de las herramientas",
+         "whyNot": "Las herramientas pueden ser idénticas."
+        },
+        {
+         "text": "Que uno programe mejor",
+         "whyNot": "El nivel técnico no define la ética."
+        },
+        {
+         "text": "Que uno trabaje de noche",
+         "whyNot": "La hora no crea permiso."
+        }
+       ],
+       "correctIndex": 0,
+       "explanation": "Las técnicas son las mismas: lo único que cambia es el permiso del dueño."
+      }
+     },
+     {
+      "kind": "analogy",
+      "title": "El cerrajero",
+      "content": "Un cerrajero abre cualquier puerta con las mismas herramientas.\n\n- Si el **dueño lo llamó**: es su trabajo.\n- Si abre la del vecino «para ver si era fácil»: es allanamiento.",
+      "narration": "Una forma de recordarlo es pensar en un cerrajero. Sabe abrir casi cualquier cerradura, y esa habilidad es exactamente la misma si trabaja o si delinque. ¿Qué cambia entonces? Que alguien lo llamó. Si el dueño de una casa lo contrata para abrir su puerta, es un trabajo respetable. Si abre la del vecino solo para comprobar si era fácil, aunque no entre ni se lleve nada, es una falta grave. Con los sistemas informáticos es igual: la habilidad no define si es delito, lo define la llamada del dueño.",
+      "glossaryRefs": [
+       "permiso-escrito"
+      ]
+     },
+     {
+      "kind": "definition",
+      "title": "Tres términos para empezar",
+      "content": "- **Prueba de seguridad**: revisar un sistema buscando fallos, para arreglarlos antes.\n- **Hacker ético**: quien lo hace **con permiso** del dueño.\n- **Permiso por escrito**: documento **firmado por el dueño** con qué, cuándo y cómo.",
+      "narration": "Pongamos nombre a lo que acabamos de ver, porque usaremos estas palabras toda la ruta. Una prueba de seguridad es revisar un sistema buscando fallos que un atacante podría usar, para arreglarlos antes de que los use. Un hacker ético es quien hace esa revisión con permiso del dueño del sistema. Y el permiso por escrito es el documento firmado por el dueño que dice qué se puede probar, cuándo y cómo. Fíjate en cómo se parecen las tres: sin la tercera, las otras dos no existen.",
+      "glossaryRefs": [
+       "prueba-seguridad",
+       "hacker-etico",
+       "permiso-escrito"
+      ],
+      "micro": {
+       "id": "sec-l1-u2",
+       "type": "fill",
+       "objective": "sec-l1-o1",
+       "bloom": "recordar",
+       "prompt": "Completa: el permiso por escrito lo firma el ___ del sistema.",
+       "template": "El permiso por escrito lo firma el ___ del sistema.",
+       "blanks": [
+        {
+         "accept": [
+          "dueño",
+          "dueno",
+          "propietario"
+         ]
+        }
+       ],
+       "explanation": "Solo quien es dueño puede autorizar la prueba; un becario o un amigo no."
+      }
+     },
+     {
+      "kind": "story",
+      "title": "Imaginemos: Marta encontró una puerta abierta",
+      "content": "Marta estudia sistemas. En la web de reservas de la clínica de su tía cambia `1043` por `1044` y aparece la cita de **otra paciente**.",
+      "narration": "Ahora un caso imaginado, para que lo pienses tú. Marta estudia sistemas y, un domingo, por curiosidad, abre la página de reservas de la clínica de su tía. En la dirección hay un número: cambia el mil cuarenta y tres por un mil cuarenta y cuatro y, de pronto, aparece la cita de otra paciente, con su nombre y su teléfono. Marta no buscaba nada: solo estaba curioseando. Pero ahora sabe algo que la clínica no sabe. Tiene tres caminos a la vista: seguir probando para entender el fallo, avisar a su tía, o publicarlo para que lo arreglen rápido. Guarda el dilema, volveremos a él.",
+      "stamp": "1043",
+      "dateline": "Una clínica · imaginada",
+      "imagined": true
+     },
+     {
+      "kind": "pause-think",
+      "title": "Pausa y piensa: ¿qué hace Marta?",
+      "content": "Marta ya vio la cita de otra paciente.\n\n**Antes de seguir:** escribe en una frase qué haría ella, y por qué.",
+      "narration": "Hagamos una pausa. Vuelve a Marta, que ya vio la cita de otra paciente. Antes de que sigamos, escribe en una sola frase qué harías tú en su lugar y por qué. No importa si no estás seguro; precisamente el ejercicio sirve para eso. Aprender funciona mejor cuando primero intentas responder y después ves la respuesta correcta, aunque tu intento sea flojo. Guarda tu frase: al final de la clase vamos a volver a ella y comprobarás cuánto cambió tu respuesta."
+     },
+     {
+      "kind": "misconception",
+      "title": "«Solo miré, no robé nada»",
+      "content": "| Excusa | Por qué no vale |\n|---|---|\n| «Solo leí datos» | Entrar sin autorización ya es el acto |\n| «Probé de noche» | La hora no crea permiso |\n| «Lo hice con buena intención» | La intención no sustituye a la firma |\n| «Usé una VPN» | Esconderte no lo hace legal |",
+      "narration": "Este es el error más común de quien empieza: pensar que mientras no rompas ni robes nada, no pasa nada. Mira la tabla. Solo leer datos: en la gran mayoría de países, entrar sin autorización ya es el delito, aunque solo mires. Probar de noche: la hora no te da permiso. Tener buena intención: cuenta para la conversación después, pero no sustituye la firma. Y usar una VPN no lo hace legal, solo más difícil de rastrear. Las leyes cambian de un país a otro, así que cuando trabajes en serio consulta la de tu país. Lo que no cambia es la regla práctica: tu mejor defensa es el papel firmado.",
+      "glossaryRefs": [
+       "prueba-seguridad"
+      ]
+     },
+     {
+      "kind": "non-example",
+      "title": "Un «dale, prueba» no es un permiso",
+      "content": "> Becario, por chat: «dale, revisa la web cuando quieras»\n\n- ¿Lo firma el **dueño**?\n- ¿Dice **qué**?\n- ¿Dice **cuándo**?\n- ¿Queda **por escrito**?",
+      "narration": "Veamos un ejemplo de lo que no es un permiso. Un becario te escribe por chat: dale, revisa la web cuando quieras. ¿Sirve? No. Fíjate en las cuatro preguntas. Primero, ¿lo firma el dueño? Un becario no decide sobre los servidores ni los datos de los clientes. Segundo, ¿dice qué se puede probar? La web es demasiado vago. Tercero, ¿dice cuándo? Y cuarto, ¿queda por escrito en un documento que ambas partes puedan enseñar después? Si falta una sola, no tienes permiso.",
+      "glossaryRefs": [
+       "permiso-escrito"
+      ],
+      "micro": {
+       "id": "sec-l1-u9",
+       "type": "mcq",
+       "objective": "sec-l1-o1",
+       "bloom": "aplicar",
+       "prompt": "Tu jefe te dice en una reunión: «revisa la web cuando puedas». ¿Qué falta para que sea un permiso válido?",
+       "options": [
+        {
+         "text": "Nada: es tu jefe y lo dijo delante de todos",
+         "whyNot": "Una frase dicha no dice qué, cuándo ni cómo, y no queda escrita."
+        },
+        {
+         "text": "Que sea el dueño quien firme un documento con qué, cuándo y cómo"
+        },
+        {
+         "text": "Que lo repita por mensaje de chat",
+         "whyNot": "Un chat sigue sin ser un documento firmado ni dice los límites."
+        },
+        {
+         "text": "Que lo pruebes de noche para no molestar",
+         "whyNot": "La hora no crea permiso."
+        }
+       ],
+       "correctIndex": 1,
+       "explanation": "Un permiso válido es un documento firmado por el dueño que dice qué, cuándo y cómo."
+      }
+     },
+     {
+      "kind": "compare",
+      "title": "Con permiso y sin permiso",
+      "content": "| | Pentágono, 2016 | Marta, imaginada |\n|---|---|---|\n| ¿Lo autorizó el dueño? | Sí | No |\n| ¿Qué se podía probar? | 5 webs concretas | Nadie lo dijo |\n| ¿Cuándo? | 18 abr. – 12 may. | Nadie lo dijo |\n| ¿Quedó escrito? | Sí | No |",
+      "narration": "Comparemos los dos casos de esta primera parte. Del lado del Pentágono, el dueño autorizó, se dijo qué se podía probar, se dijo cuándo y todo quedó escrito. Del lado de Marta, nada de eso existe: nadie dijo qué, nadie dijo cuándo, nada quedó escrito, y ella no es la dueña de la clínica. Fíjate que la técnica de ambos es la misma: encontrar una puerta abierta. Y fíjate en que Marta no hizo nada malo con mala intención. Pero la diferencia entre ellos no está en las intenciones: está en las cuatro filas de la tabla. Ese es el papel que vamos a aprender a escribir.",
+      "glossaryRefs": [
+       "permiso-escrito"
+      ]
+     },
+     {
+      "kind": "concept",
+      "title": "Un permiso responde tres preguntas",
+      "content": "**¿Qué** puedo probar?\n\n**¿Cuándo** puedo hacerlo?\n\n**¿Cómo**, con qué técnicas?\n\nSi falta una respuesta, el permiso está **incompleto**.",
+      "narration": "Convirtamos lo aprendido en un hábito: un permiso válido responde tres preguntas. Qué puedo probar, cuándo puedo hacerlo y cómo, es decir, con qué técnicas. El caso del Pentágono respondía las tres con precisión: cinco webs, cuatro semanas, reglas de qué sí y qué no. El caso de Marta no responde ninguna. Y entre medio están los casos más peligrosos: los que responden dos de las tres y dejan una vaga. Cuando leas un permiso, el tuyo o el de otro, repasa esas tres preguntas. Si falta una respuesta, el permiso está incompleto, y lo que quede sin responder lo decidirá otra persona después, probablemente en tu contra.",
+      "glossaryRefs": [
+       "permiso-escrito"
+      ]
+     }
+    ],
+    "checkpoint": [
+     {
+      "id": "sec-l1-cp1a",
+      "type": "mcq",
+      "objective": "sec-l1-o1",
+      "bloom": "comprender",
+      "prompt": "Una amiga te pide, por mensaje, que revises «un poco» la web de su tienda. ¿Qué te falta para poder hacerlo de forma legal?",
+      "options": [
+       {
+        "text": "Nada: ella es la dueña de la tienda y te lo pidió",
+        "whyNot": "Dice «un poco» y no define qué ni cuándo, y tampoco queda firmado: es un permiso vago."
+       },
+       {
+        "text": "Un documento firmado que diga qué puedes probar, cuándo y cómo"
+       },
+       {
+        "text": "Probar solo de madrugada, cuando casi nadie la visita",
+        "whyNot": "La hora no crea permiso; fuera de lo acordado sigues sin autorización."
+       },
+       {
+        "text": "Usar una conexión anónima para que no te relacionen con la prueba",
+        "whyNot": "Esconderte no lo hace legal, solo más difícil de rastrear."
+       }
+      ],
+      "correctIndex": 1,
+      "explanation": "Lo que convierte una revisión en prueba legítima es un acuerdo escrito con qué, cuándo y cómo. Ni la confianza, ni la hora, ni el anonimato lo sustituyen."
+     },
+     {
+      "id": "sec-l1-cp1b",
+      "type": "multi",
+      "objective": "sec-l1-o1",
+      "bloom": "comprender",
+      "prompt": "Marca TODAS las situaciones que sí necesitan un permiso por escrito antes de empezar.",
+      "options": [
+       {
+        "text": "Revisar la web de una empresa que te contrató para ello"
+       },
+       {
+        "text": "Probar una app que tú programaste y corre en tu computadora",
+        "whyNot": "Es tuya y está en tu equipo: nadie más tiene que autorizarte."
+       },
+       {
+        "text": "Mirar «solo un momento» la web de tu banco para ver si es segura"
+       },
+       {
+        "text": "Revisar el servidor de tu universidad porque eres alumno"
+       },
+       {
+        "text": "Practicar en una app diseñada para ser vulnerable y que instalaste tú",
+        "whyNot": "Está hecha para practicar y corre en tu propio equipo."
+       }
+      ],
+      "correctIndexes": [
+       0,
+       2,
+       3
+      ],
+      "explanation": "Cualquier sistema ajeno, aunque solo mires y aunque seas alumno o usuario, necesita autorización. Tu propio equipo y las apps hechas para practicar no."
+     }
+    ],
+    "reteach": {
+     "kind": "analogy",
+     "title": "Otra forma de verlo: la invitación a una casa",
+     "content": "- Con **invitación** del dueño: puedes pasar.\n- Sin invitación, aunque la puerta esté abierta: es entrar sin permiso.\n\nEl permiso por escrito es la invitación.",
+     "narration": "Si la idea del permiso todavía te parece abstracta, piensa en una casa. Si el dueño te invita a una fiesta, puedes entrar, mirar el salón y conversar. Pero si pasas por la calle y ves la puerta abierta, entrar no te da derecho: sigues sin invitación, y aunque solo mires los cuadros, estás dentro de una casa ajena. Con los sistemas informáticos pasa igual. Que un fallo deje la puerta abierta no significa que te hayan invitado a pasar. Y la invitación válida no es un gesto ni un cuando quieras: es una invitación concreta, que dice a qué habitaciones puedes entrar y hasta qué hora, y que queda escrita para los dos."
+    }
+   },
+   {
+    "id": "sec-l1-p2",
+    "objectives": [
+     "sec-l1-o3"
+    ],
+    "title": "Qué debe decir un buen acuerdo",
+    "scenes": [
+     {
+      "kind": "story",
+      "title": "Con una carta firmada… y doce horas en la cárcel",
+      "content": "Dos consultores con una **carta de autorización** entraron a un juzgado de Iowa para probar su seguridad.\n\nTerminaron arrestados, **12 horas** en la cárcel.",
+      "narration": "Septiembre de 2019, en Iowa. Dos profesionales de seguridad, contratados por el estado para probar sus edificios judiciales, entran al juzgado de un condado, de noche, y hacen saltar la alarma a propósito para medir la reacción. Llegan los policías. Los dos muestran una carta que autoriza el trabajo. Aun así, el sheriff los arresta. Pasan doce horas en la cárcel y los acusan de allanamiento. ¿Cómo es posible, si tenían un papel firmado? La respuesta está en las siete piezas que un acuerdo debe tener bien escritas, y vamos a recorrerlas una por una.",
+      "stamp": "12 horas",
+      "dateline": "Adel, Iowa · 11 de septiembre de 2019",
+      "source": "Computing y Krebs"
+     },
+     {
+      "kind": "concept",
+      "title": "El acuerdo de pruebas, pieza a pieza",
+      "content": "| Pieza | Responde a… |\n|---|---|\n| Alcance | ¿Qué sí se prueba? |\n| Fuera de alcance | ¿Qué no se toca? |\n| Ventana | ¿Cuándo? |\n| Técnicas | ¿Cómo sí y cómo no? |\n| Contacto de emergencia | ¿A quién llamo? |\n| Datos | ¿Qué hago con lo que vea? |\n| Informe | ¿Cómo y a quién se entrega? |",
+      "narration": "Un buen acuerdo de pruebas cabe en una página y tiene siete apartados. Mira la tabla: cada pieza responde a una pregunta. El alcance dice qué sí se prueba. Lo que queda fuera dice qué no se toca. La ventana dice cuándo. Las técnicas dicen cómo se puede probar y cómo no. El contacto de emergencia dice a quién llamar si algo se rompe. El apartado de datos dice qué hacer con lo que veas. Y el informe dice cómo y a quién se entrega el resultado. Cuando falla una de estas siete, aparecen los problemas como el de Iowa.",
+      "glossaryRefs": [
+       "reglas-prueba"
+      ],
+      "micro": {
+       "id": "sec-l1-u3",
+       "type": "classify",
+       "objective": "sec-l1-o3",
+       "bloom": "comprender",
+       "prompt": "¿Qué pregunta responde cada pieza del acuerdo?",
+       "buckets": [
+        "¿Qué?",
+        "¿Cuándo?",
+        "¿Cómo?"
+       ],
+       "cases": [
+        {
+         "text": "Alcance",
+         "bucket": "¿Qué?"
+        },
+        {
+         "text": "Fuera de alcance",
+         "bucket": "¿Qué?"
+        },
+        {
+         "text": "Ventana de pruebas",
+         "bucket": "¿Cuándo?"
+        },
+        {
+         "text": "Fechas y horas permitidas",
+         "bucket": "¿Cuándo?"
+        },
+        {
+         "text": "Técnicas prohibidas",
+         "bucket": "¿Cómo?"
+        },
+        {
+         "text": "Técnicas permitidas",
+         "bucket": "¿Cómo?"
+        }
+       ],
+       "explanation": "Alcance y lo que queda fuera dicen qué; la ventana dice cuándo; las técnicas dicen cómo."
+      }
+     },
+     {
+      "kind": "definition",
+      "title": "Alcance, fuera de alcance y ventana",
+      "content": "- **Alcance**: la lista exacta de lo que sí se prueba.\n- **Fuera de alcance**: todo lo que no está en la lista, aunque esté conectado.\n- **Ventana de pruebas**: días y horas permitidos.",
+      "narration": "Empecemos por las tres piezas que más errores provocan. El alcance es la lista exacta de lo que sí puedes probar, y exacta quiere decir con nombre: un dominio, una dirección, una aplicación concreta. No vale decir la web. Lo contrario es lo que queda fuera de alcance: todo lo que no esté en esa lista, aunque esté conectado a algo que sí puedes probar. Y la ventana de pruebas son los días y las horas exactos en que sí hay permiso. Fuera de esa ventana, no lo hay. Fíjate cuánto cambia la historia de Iowa si la ventana hubiera dicho de forma explícita que se podía entrar de noche.",
+      "glossaryRefs": [
+       "alcance",
+       "fuera-alcance",
+       "ventana"
+      ],
+      "micro": {
+       "id": "sec-l1-u4",
+       "type": "mcq",
+       "objective": "sec-l1-o3",
+       "bloom": "aplicar",
+       "prompt": "¿Cuál de estas es una forma correcta de escribir un alcance?",
+       "options": [
+        {
+         "text": "Todo lo que tenga relación con la clínica",
+         "whyNot": "Es demasiado vago: incluye terceros sin decirlo."
+        },
+        {
+         "text": "citas.consultorioruiz.com y su API"
+        },
+        {
+         "text": "La web de la doctora",
+         "whyNot": "No da un nombre exacto ni dice qué se incluye."
+        },
+        {
+         "text": "Lo que acordemos sobre la marcha",
+         "whyNot": "Un alcance debe estar escrito antes de empezar."
+        }
+       ],
+       "correctIndex": 1,
+       "explanation": "El alcance es una lista exacta, con nombres concretos de lo que sí se puede probar."
+      }
+     },
+     {
+      "kind": "concept",
+      "title": "Un alcance real: los cinco sitios del Pentágono",
+      "content": "```text\nAlcance · Hack the Pentagon, 2016\n  defense.gov\n  dodlive.mil\n  dvidshub.net\n  myafn.net\n  dimoc.mil\n```\n\nCinco nombres exactos. Nada de «sus webs».",
+      "narration": "Aquí tienes un alcance de verdad: el del reto del Pentágono. Cinco direcciones, con nombre exacto. No dice las páginas del Departamento ni todo lo relacionado con defensa: dice defense punto gov, dod live punto mil, y tres más. Cualquier otra dirección, aunque pareciera del mismo gobierno, estaba fuera. Fíjate en la lección de escritura: una persona ajena, sin conocer el proyecto, lee la lista y sabe exactamente hasta dónde puede llegar. Ese es el nivel de precisión que buscamos al redactar un alcance.",
+      "glossaryRefs": [
+       "alcance"
+      ]
+     },
+     {
+      "kind": "definition",
+      "title": "Técnicas prohibidas y contacto de emergencia",
+      "content": "- **Técnica prohibida**: método que el acuerdo veta porque puede dañar el servicio o a personas.\n  - **Denegación de servicio**: saturar el sistema hasta que no atienda a nadie.\n  - **Ingeniería social**: engañar a personas para que den acceso.\n- **Contacto de emergencia**: quien decide al instante si algo se rompe.",
+      "narration": "Siguen las técnicas y el contacto. Una técnica prohibida es un método que el acuerdo veta porque podría hacer daño. Dos clásicas: la denegación de servicio, que consiste en saturar un sistema con tantas peticiones que deja de atender a los usuarios reales, y la ingeniería social, que es engañar a personas, por llamada o por correo, para que te entreguen acceso o datos. Una afecta a las máquinas y la otra a las personas. Y el contacto de emergencia es alguien con teléfono que puede decidir al instante qué hacer si algo se rompe en plena prueba.",
+      "glossaryRefs": [
+       "tecnica-prohibida",
+       "denegacion-servicio",
+       "ingenieria-social",
+       "contacto-emergencia"
+      ],
+      "micro": {
+       "id": "sec-l1-u10",
+       "type": "fill",
+       "objective": "sec-l1-o3",
+       "bloom": "recordar",
+       "prompt": "Completa: saturar un sistema hasta que no atienda a nadie se llama denegación de ___.",
+       "template": "Saturar un sistema hasta que no atienda a nadie se llama denegación de ___.",
+       "blanks": [
+        {
+         "accept": [
+          "servicio"
+         ]
+        }
+       ],
+       "explanation": "La denegación de servicio deja el sistema sin atender a los usuarios reales."
+      }
+     },
+     {
+      "kind": "compare",
+      "title": "Vago contra preciso",
+      "content": "| Vago | Preciso |\n|---|---|\n| «Probar la web» | Solo `citas.consultorioruiz.com` y su API |\n| «Cuando quieras» | Sábados 08:00–14:00 (Lima), 7–28 nov. |\n| «Nada que dañe» | Prohibido: saturar, engañar al personal, tocar citas reales |\n| «Avísame si pasa algo» | Dra. Ruiz, +51 900 000 000, 24 h |",
+      "narration": "Aquí tienes cuatro frases vagas y su versión precisa. Probar la web dice poco; la versión precisa nombra una dirección y su API. Cuando quieras es una invitación a problemas; la buena da días, horas y zona horaria. Nada que dañe depende de qué entienda cada uno por dañar; la buena enumera lo prohibido. Y avísame si pasa algo no dice a quién ni cómo; la buena da nombre, teléfono y disponibilidad. Fíjate que la versión precisa nunca es más larga de una línea: precisión no significa más palabras, significa palabras concretas.",
+      "glossaryRefs": [
+       "alcance",
+       "ventana",
+       "tecnica-prohibida",
+       "contacto-emergencia"
+      ]
+     },
+     {
+      "kind": "definition",
+      "title": "Datos personales, evidencia mínima e informe",
+      "content": "- **Datos personales**: información que identifica a alguien: nombre, teléfono, historial médico.\n- **Evidencia mínima**: la menor prueba que demuestra el fallo.\n- **Informe**: qué encontraste, cómo repetirlo, qué impacto tiene y cómo arreglarlo.",
+      "narration": "Nos quedan tres piezas, y todas tienen que ver con lo que haces con lo que encuentras. Los datos personales son información que identifica a una persona: nombre, teléfono, correo, historial médico. En una prueba verás datos de verdad, y el acuerdo debe decir qué haces con ellos: normalmente, no los copias. Cuando necesites demostrar un fallo, usas la evidencia mínima: la menor prueba posible que demuestre que existe, sin llevarte más de lo necesario. Y el informe es el documento donde cuentas qué encontraste, cómo repetirlo, qué impacto tiene y cómo arreglarlo.",
+      "glossaryRefs": [
+       "datos-personales",
+       "evidencia-minima",
+       "informe"
+      ]
+     },
+     {
+      "kind": "story",
+      "title": "Lo que el contrato no aclaraba",
+      "content": "Según la prensa, el contrato no dejaba claro si incluía **abrir cerraduras** ni entrar **fuera de horario**.",
+      "narration": "Volvamos a Iowa con las siete piezas en la mano. Según los reportes de prensa, el contrato entre el estado y la empresa no dejaba claro varias cosas: si los ataques físicos incluían abrir cerraduras, y si se podía entrar fuera del horario de trabajo. Dos frases ambiguas, dos piezas mal escritas: técnicas y ventana. Años después, los propios consultores dijeron en una conferencia que el problema se habría evitado documentando mejor el alcance por escrito. Un papel firmado protege solo hasta donde sea claro. Una frase vaga es una grieta, y el día que alguien discute, la grieta se abre.",
+      "stamp": "Vago",
+      "dateline": "Iowa · 2019",
+      "source": "Computing y The Register"
+     },
+     {
+      "kind": "concept",
+      "title": "La prueba de la frase",
+      "content": "Antes de firmar, lee cada línea y pregúntate:\n\n**¿Puede alguien ajeno entenderla de dos maneras?**\n\nSi sí, reescríbela con un nombre, una hora o un número.",
+      "narration": "Te dejo una herramienta muy simple para revisar cualquier acuerdo que escribas: la prueba de la frase. Antes de firmar, lee cada línea como si fueras otra persona, alguien que no conoce el proyecto ni sabe qué quisiste decir. Y pregúntate si podría entenderla de dos maneras. Si la respuesta es sí, esa frase es una grieta. Se arregla de una forma: sustituyendo la palabra vaga por un nombre exacto, una hora exacta o un número exacto. Si hubieran pasado esta prueba en Iowa, la frase ataques físicos se habría convertido en una lista con lo que sí y lo que no.",
+      "glossaryRefs": [
+       "reglas-prueba"
+      ],
+      "micro": {
+       "id": "sec-l1-u11",
+       "type": "mcq",
+       "objective": "sec-l1-o3",
+       "bloom": "aplicar",
+       "prompt": "Un acuerdo dice: «Se probará la web en horario razonable». ¿Cómo lo reescribes?",
+       "options": [
+        {
+         "text": "«Se probará la web en horario razonable, con criterio del probador»",
+         "whyNot": "Sigue dependiendo de la interpretación de quien prueba."
+        },
+        {
+         "text": "«Sábados de 08:00 a 14:00, hora de Lima, del 7 al 28 de noviembre»"
+        },
+        {
+         "text": "«Se probará cuando haya pocos usuarios conectados»",
+         "whyNot": "Cuándo hay pocos usuarios no es un dato objetivo."
+        },
+        {
+         "text": "«Se probará a cualquier hora, para mayor rapidez»",
+         "whyNot": "Es todavía más vago que la frase original."
+        }
+       ],
+       "correctIndex": 1,
+       "explanation": "Reescribir es cambiar la palabra vaga por días, horas, zona horaria y fechas exactos."
+      }
+     },
+     {
+      "kind": "misconception",
+      "title": "«Ya nos entendemos, no hace falta escribirlo»",
+      "content": "| Creencia | Realidad |\n|---|---|\n| «Confío en mi cliente» | La confianza no te protege ante un tercero |\n| «Lo hablamos por teléfono» | Lo hablado no se puede enseñar |\n| «Es obvio qué incluye» | Cada parte lo entiende distinto |",
+      "narration": "Este es el error que se paga más caro: pensar que como se llevan bien, no hace falta escribirlo todo. Mira la tabla. Confiar en el cliente está bien, pero no te protege cuando aparece un tercero que no firmó, como el sheriff de Iowa. Haberlo hablado por teléfono tampoco sirve, porque lo hablado no se puede enseñar a nadie. Y decir que es obvio qué incluye es la frase que antecede a casi todas las discusiones: lo obvio para ti no lo es para quien lee después. Escribirlo todo no es desconfianza; es la forma de cuidarse los dos.",
+      "glossaryRefs": [
+       "permiso-escrito"
+      ]
+     }
+    ],
+    "checkpoint": [
+     {
+      "id": "sec-l1-cp2a",
+      "type": "fill",
+      "objective": "sec-l1-o3",
+      "bloom": "comprender",
+      "prompt": "Completa la frase con el término correcto.",
+      "template": "La ___ del acuerdo dice qué días y a qué horas se puede probar; fuera de ella, la prueba deja de estar autorizada.",
+      "blanks": [
+       {
+        "accept": [
+         "ventana",
+         "ventana de pruebas"
+        ]
+       }
+      ],
+      "explanation": "La ventana de pruebas fija el cuándo. Pasarse aunque sea unos minutos significa probar sin permiso."
+     },
+     {
+      "id": "sec-l1-cp2b",
+      "type": "classify",
+      "objective": "sec-l1-o3",
+      "bloom": "aplicar",
+      "prompt": "Ordena cada frase según la pieza del acuerdo a la que pertenece.",
+      "buckets": [
+       "Alcance",
+       "Técnicas prohibidas",
+       "Contacto de emergencia"
+      ],
+      "cases": [
+       {
+        "text": "Solo la aplicación de reservas y su API",
+        "bucket": "Alcance"
+       },
+       {
+        "text": "El panel de administración de la tienda online",
+        "bucket": "Alcance"
+       },
+       {
+        "text": "No se podrán lanzar ataques que saturen el servidor",
+        "bucket": "Técnicas prohibidas"
+       },
+       {
+        "text": "No se podrá llamar al personal haciéndose pasar por soporte",
+        "bucket": "Técnicas prohibidas"
+       },
+       {
+        "text": "Ana Ruiz, +51 900 000 000, localizable las 24 horas",
+        "bucket": "Contacto de emergencia"
+       },
+       {
+        "text": "Si el servicio se cae, se llama de inmediato a quien decide",
+        "bucket": "Contacto de emergencia"
+       }
+      ],
+      "explanation": "Cada frase responde a una pregunta distinta: qué se prueba, cómo no se prueba y a quién se llama si algo falla."
+     }
+    ],
+    "reteach": {
+     "kind": "compare",
+     "title": "Otro modo de recordar las siete piezas",
+     "content": "Las preguntas de un periodista:\n\n- **¿Qué?** → alcance y fuera de alcance\n- **¿Cuándo?** → ventana\n- **¿Cómo?** → técnicas\n- **¿A quién?** → contacto e informe\n- **¿Qué hago con lo que vea?** → datos",
+     "narration": "Si las siete piezas se te mezclan, agrúpalas con las preguntas que haría un periodista. Qué: el alcance dice qué sí se prueba y lo que queda fuera dice qué no. Cuándo: la ventana. Cómo: las técnicas permitidas y las prohibidas. A quién: el contacto de emergencia, para si algo se rompe, y el informe, para entregar los resultados. Y una pregunta más, la que más se olvida: qué hago con lo que vea, que son los datos. Cuando redactes un acuerdo, recorre esas cinco preguntas en orden y comprueba que cada una tiene una respuesta concreta escrita. Si alguna quedó sin responder, ahí falta una pieza."
+    }
+   },
+   {
+    "id": "sec-l1-p3",
+    "objectives": [
+     "sec-l1-o2",
+     "sec-l1-o3"
+    ],
+    "title": "De quién es cada pieza",
+    "scenes": [
+     {
+      "kind": "story",
+      "title": "El estado dijo sí; el condado dijo no",
+      "content": "El estado contrató la prueba. El edificio era del **condado**.\n\nPara el sheriff, el estado **no podía autorizar** lo que no era suyo.",
+      "narration": "Esta es la parte clave del caso de Iowa. Quien contrató la prueba fue la administración judicial del estado. Pero el juzgado donde entraron los consultores era un edificio del condado, y el condado no había firmado nada. Según la prensa, el sheriff sostuvo que el estado no tenía autoridad para permitir una entrada fuera de horario a una propiedad del condado. Fíjate en la idea: quien paga la prueba no siempre es dueño de todo lo que se prueba. La pregunta que debieron responder antes de empezar es la que vamos a aprender ahora: ¿de quién es cada pieza?",
+      "stamp": "2 dueños",
+      "dateline": "Iowa · 2019",
+      "source": "Computing y Krebs"
+     },
+     {
+      "kind": "concept",
+      "title": "Una web no es una sola cosa",
+      "content": "```mermaid\nflowchart LR\n  U[Paciente] --> A[App de citas]\n  A --> H[Hosting del proveedor]\n  A --> P[Pasarela de pagos]\n  A --> C[Servicio de correo]\n  classDef nuestro fill:#d1fae5,stroke:#059669,color:#064e3b\n  classDef tercero fill:#fee2e2,stroke:#dc2626,color:#7f1d1d\n  class A nuestro\n  class H,P,C tercero\n```",
+      "narration": "Una web parece una sola cosa, pero detrás hay varias piezas. Mira el esquema: el paciente usa la aplicación de citas. La aplicación, en verde, es lo que encargó la doctora. Pero esa aplicación vive en un hosting, que es de otra empresa. Cuando el paciente paga, el cobro lo gestiona una pasarela de otra compañía. Y los recordatorios salen por un servicio de correo, también ajeno. En rojo están las piezas de otros. Todas están conectadas, y por eso es tan fácil que, probando la aplicación, acabes tocando algo que no es de tu cliente.",
+      "glossaryRefs": [
+       "alcance"
+      ],
+      "micro": {
+       "id": "sec-l1-u5",
+       "type": "mcq",
+       "objective": "sec-l1-o2",
+       "bloom": "aplicar",
+       "prompt": "En una tienda online, ¿cuál de estas piezas es casi siempre de otra empresa?",
+       "options": [
+        {
+         "text": "La pasarela de pagos"
+        },
+        {
+         "text": "El formulario de pedidos de la tienda",
+         "whyNot": "Es parte de la aplicación propia."
+        },
+        {
+         "text": "El catálogo de productos que sube la tienda",
+         "whyNot": "Son datos de la propia tienda."
+        },
+        {
+         "text": "El panel de administración de la tienda",
+         "whyNot": "Lo usa y administra la propia tienda."
+        }
+       ],
+       "correctIndex": 0,
+       "explanation": "La pasarela de pagos la presta una empresa externa con sus propios servidores."
+      }
+     },
+     {
+      "kind": "definition",
+      "title": "Tercero, hosting y pasarela de pagos",
+      "content": "- **Tercero**: empresa distinta de tu cliente que presta una pieza y es dueña de sus servidores.\n- **Hosting**: servicio que mantiene la web encendida en servidores del proveedor.\n- **Pasarela de pagos**: servicio externo que procesa el cobro de las tarjetas.",
+      "narration": "Tres términos que aparecen en casi todos los acuerdos. Un tercero es cualquier empresa que no es tu cliente pero presta una pieza del sistema, y es dueña de sus propios servidores. El hosting es el servicio que mantiene una página encendida en los servidores de una empresa: cuando pagas cada mes por tener tu web publicada, pagas hosting. Y una pasarela de pagos es el servicio externo que procesa el cobro de las tarjetas por cuenta de la tienda: la página segura a la que te lleva el botón de pagar. Tu cliente puede ser cliente de ellos, pero no es su dueño.",
+      "glossaryRefs": [
+       "tercero",
+       "hosting",
+       "pasarela-pagos"
+      ],
+      "micro": {
+       "id": "sec-l1-u6",
+       "type": "fill",
+       "objective": "sec-l1-o2",
+       "bloom": "comprender",
+       "prompt": "Completa: el servicio que mantiene tu web encendida en servidores ajenos se llama ___.",
+       "template": "El servicio que mantiene tu web encendida en servidores ajenos se llama ___.",
+       "blanks": [
+        {
+         "accept": [
+          "hosting",
+          "alojamiento"
+         ]
+        }
+       ],
+       "explanation": "El hosting es de la empresa proveedora, no de quien tiene la web."
+      }
+     },
+     {
+      "kind": "concept",
+      "title": "Solo puede autorizar el dueño",
+      "content": "| Pieza | Suele ser de… | Quien firma |\n|---|---|---|\n| App y su código | El cliente | El cliente |\n| Hosting | Empresa de hosting | Esa empresa |\n| Pasarela de pagos | Empresa de pagos | Esa empresa |\n\n**Nadie puede dar permiso sobre lo que no es suyo.**",
+      "narration": "Aquí está la regla que más tropiezos evita: nadie puede dar permiso sobre lo que no es suyo. La doctora Ruiz puede autorizarte a probar su aplicación, porque es suya, pero no puede autorizarte a probar los servidores de su proveedor de hosting ni la pasarela de pagos. Aunque ella te diga sí, prueba todo, ese sí no cubre cosas de otras empresas. En la tabla ves cada pieza, a quién suele pertenecer y quién tendría que firmar. Es la regla que habría evitado doce horas de cárcel en Iowa.",
+      "glossaryRefs": [
+       "tercero",
+       "permiso-escrito"
+      ],
+      "micro": {
+       "id": "sec-l1-u12",
+       "type": "mcq",
+       "objective": "sec-l1-o2",
+       "bloom": "aplicar",
+       "prompt": "Tu cliente te dice: «prueba también el servidor de mi hosting, yo te autorizo». ¿Qué haces?",
+       "options": [
+        {
+         "text": "Acepto: él paga el servicio, así que puede autorizarlo",
+         "whyNot": "Pagar por un servicio no lo vuelve dueño de los servidores del proveedor."
+        },
+        {
+         "text": "Pido el permiso del proveedor o dejo esa pieza fuera, por escrito"
+        },
+        {
+         "text": "Pruebo igual, pero muy despacio para no molestar",
+         "whyNot": "La velocidad no crea permiso."
+        },
+        {
+         "text": "Pruebo de noche para que el proveedor no lo note",
+         "whyNot": "La hora no crea permiso, y ocultarlo lo empeora."
+        }
+       ],
+       "correctIndex": 1,
+       "explanation": "Nadie puede autorizar lo que no es suyo: el hosting es del proveedor."
+      }
+     },
+     {
+      "kind": "concept",
+      "title": "Dos caminos para lo que no es del cliente",
+      "content": "Si una pieza es de un **tercero**:\n\n- **Déjala fuera**, con su nombre, por escrito.\n- O consigue el **permiso de su dueño**.",
+      "narration": "Cuando una pieza es de un tercero, tienes solo dos caminos. El primero, el más sencillo y seguro: dejarla fuera del alcance y escribirlo con su nombre, por ejemplo, queda fuera el hosting del proveedor. El segundo: conseguir el permiso de la empresa dueña, y muchas veces esa empresa publica sus propias reglas para pruebas. Lo que nunca se hace es un tercer camino: asumir que como tu cliente lo usa, tú puedes probarlo. En la práctica, el primer camino cubre la gran mayoría de los casos, y por eso lo vas a practicar mucho.",
+      "glossaryRefs": [
+       "fuera-alcance"
+      ]
+     },
+     {
+      "kind": "worked-example",
+      "title": "Ejemplo resuelto: Panadería La Espiga (1/2)",
+      "content": "**Encargo**: «Revisa los pedidos online de la Panadería La Espiga».\n\n1. **Pregunto de quién es cada pieza**: la app es de La Espiga; hosting y pasarela, de otros.\n2. **Alcance**: dentro → `pedidos.laespiga.example` y su API. Fuera → hosting y pasarela.\n3. **Ventana**: martes 22:00–02:00, cuando casi no hay ventas.",
+      "narration": "Veamos esto en acción con un ejemplo resuelto, pensando en voz alta. El encargo dice: revisa los pedidos online de la Panadería La Espiga. Lo primero no es probar nada: es preguntar de quién es cada pieza. La aplicación de pedidos es de La Espiga. El hosting lo da otra empresa. Los cobros pasan por una pasarela. Con eso decido el alcance: dentro, la dirección de pedidos y su API; fuera, el hosting y la pasarela, escritos con nombre. Después elijo la ventana. Le pregunto al dueño cuándo vende menos, y me dice que los martes por la noche. Fíjate en el orden: primero las piezas, luego el alcance, luego la ventana.",
+      "glossaryRefs": [
+       "alcance",
+       "ventana"
+      ],
+      "artifact": "acuerdo-pruebas",
+      "micro": {
+       "id": "sec-l1-u13",
+       "type": "classify",
+       "objective": "sec-l1-o2",
+       "bloom": "aplicar",
+       "prompt": "En el caso de La Espiga, ¿qué pieza entra en el alcance y cuál queda fuera?",
+       "buckets": [
+        "Dentro del alcance",
+        "Fuera de alcance"
+       ],
+       "cases": [
+        {
+         "text": "pedidos.laespiga.example",
+         "bucket": "Dentro del alcance"
+        },
+        {
+         "text": "La API de pedidos de La Espiga",
+         "bucket": "Dentro del alcance"
+        },
+        {
+         "text": "El panel de administración de La Espiga",
+         "bucket": "Dentro del alcance"
+        },
+        {
+         "text": "Los servidores del hosting",
+         "bucket": "Fuera de alcance"
+        },
+        {
+         "text": "La pasarela de pagos",
+         "bucket": "Fuera de alcance"
+        },
+        {
+         "text": "El servicio de correo externo",
+         "bucket": "Fuera de alcance"
+        }
+       ],
+       "explanation": "Lo que es de La Espiga entra; hosting, pagos y correo son de terceros y quedan fuera con nombre propio."
+      }
+     },
+     {
+      "kind": "worked-example",
+      "title": "Ejemplo resuelto: Panadería La Espiga (2/2)",
+      "content": "```text\nPRUEBA DE SEGURIDAD · PANADERÍA LA ESPIGA\nAlcance: pedidos.laespiga.example y su API\nFuera de alcance: hosting del proveedor y pasarela\nVentana: martes 22:00–02:00, del 4 al 25 de nov.\nProhibido: saturar el servidor, engañar al personal,\n  cambiar o borrar pedidos reales\nContacto: Rosa Quispe, +51 900 000 001, 24 h\nDatos: no se copian; evidencia con datos tapados\nInforme: PDF cifrado, solo a Rosa, en 10 días\n```",
+      "narration": "Y este es el acuerdo terminado, que cabe en una página. Mira cómo cada línea responde a una de las siete preguntas. El alcance nombra la aplicación y su API; lo que queda fuera nombra el hosting y la pasarela. La ventana tiene días, horas y fechas. En técnicas prohibidas escribí tres cosas concretas. El contacto de emergencia tiene nombre, teléfono y disponibilidad. Para los datos, decidí que no se copian y que cualquier evidencia lleva los datos tapados. Y el informe se entrega en un PDF cifrado, a una persona y en un plazo. ¿Notas algo? No hay ni una frase que pueda interpretarse de dos maneras. Ahora te toca completar uno.",
+      "glossaryRefs": [
+       "reglas-prueba"
+      ],
+      "artifact": "acuerdo-pruebas"
+     },
+     {
+      "kind": "faded-example",
+      "title": "Ahora tú: completa el acuerdo del gimnasio",
+      "content": "FitPlus tiene app de reservas (propia), hosting de un proveedor y cobros por pasarela.\n\n```text\nAlcance: ____________________\nFuera de alcance: ____________________\nVentana: lunes 23:00–03:00\nProhibido: ____________________\nContacto: Luis Paz, +51 900 000 002\n```",
+      "narration": "Ahora te toca a ti, con ayuda. Te dejo el acuerdo del gimnasio FitPlus con huecos. Tiene una aplicación de reservas que es suya, un hosting de otra empresa y los cobros por una pasarela. La ventana y el contacto ya están hechos. Pausa y completa tres cosas: el alcance, lo que queda fuera, y las técnicas prohibidas. Usa el ejemplo de la panadería como guía, no lo copies sin pensar. Pregúntate de quién es cada pieza y qué podría hacer daño. Tómate un par de minutos, y cuando termines, sigue para comparar con la solución.",
+      "glossaryRefs": [
+       "alcance",
+       "fuera-alcance",
+       "tecnica-prohibida"
+      ],
+      "artifact": "acuerdo-pruebas"
+     },
+     {
+      "kind": "worked-example",
+      "title": "Así se completa el acuerdo del gimnasio",
+      "content": "```text\nAlcance: la app de reservas de FitPlus y su API\nFuera de alcance: hosting del proveedor y\n  pasarela de pagos (otras empresas)\nProhibido: saturar el servidor, engañar al personal,\n  cambiar reservas o cobros reales\n```\n\nRevisa el tuyo: ¿dejaste fuera el hosting y la pasarela?",
+      "narration": "Comprobemos. El alcance es la aplicación de reservas de FitPlus y su API: eso es lo único que es del gimnasio. Fuera de alcance van el hosting del proveedor y la pasarela de pagos, con esas palabras, porque son de otras empresas. En las técnicas prohibidas pongo saturar el servidor, engañar al personal y cambiar reservas o cobros reales. Compara con tu versión. Primera pregunta: ¿dejaste fuera el hosting y la pasarela? Si los metiste en el alcance, es el error más frecuente y el más grave, porque estarías probando sistemas ajenos. Segunda: ¿tus técnicas son concretas? Nada peligroso no vale; saturar el servidor sí.",
+      "glossaryRefs": [
+       "alcance",
+       "fuera-alcance"
+      ],
+      "artifact": "acuerdo-pruebas"
+     },
+     {
+      "kind": "story",
+      "title": "Cargos retirados y un acuerdo de 600.000 dólares",
+      "content": "Los cargos se retiraron en **enero de 2020**.\n\nAños después, los dos consultores llegaron a un acuerdo económico con el condado.",
+      "narration": "El final de la historia de Iowa. A finales de enero de 2020 se retiraron los cargos. Los dos consultores contaron su versión en una conferencia de seguridad y pidieron leyes que protejan a quienes hacen estas pruebas de buena fe. Y años más tarde, según el medio especializado SC Media, llegaron a un acuerdo de seiscientos mil dólares con el condado de Dallas y su exsheriff. Tuvieron razón en lo legal, pero igual pasaron meses de pesadilla. La lección es práctica: un permiso bien escrito, que nombre cada pieza y a su dueño, es la forma más barata de no vivir algo así.",
+      "stamp": "600.000",
+      "dateline": "Iowa · 2020 en adelante",
+      "source": "Krebs y SC Media"
+     }
+    ],
+    "checkpoint": [
+     {
+      "id": "sec-l1-cp3a",
+      "type": "classify",
+      "objective": "sec-l1-o2",
+      "bloom": "aplicar",
+      "prompt": "Una tienda de ropa te contrata para probar su web. Decide qué entra en el alcance y qué queda fuera.",
+      "buckets": [
+       "Dentro del alcance",
+       "Fuera de alcance"
+      ],
+      "cases": [
+       {
+        "text": "La aplicación de la tienda que programó su equipo",
+        "bucket": "Dentro del alcance"
+       },
+       {
+        "text": "El formulario de pedidos de la propia tienda",
+        "bucket": "Dentro del alcance"
+       },
+       {
+        "text": "Los servidores de la empresa de hosting",
+        "bucket": "Fuera de alcance"
+       },
+       {
+        "text": "La página de la pasarela de pagos",
+        "bucket": "Fuera de alcance"
+       },
+       {
+        "text": "El servicio de correo que envía los avisos",
+        "bucket": "Fuera de alcance"
+       },
+       {
+        "text": "El panel de administración de la propia tienda",
+        "bucket": "Dentro del alcance"
+       }
+      ],
+      "explanation": "Solo es alcance lo que es del cliente. Hosting, pagos y correo pertenecen a terceros y necesitarían su propia autorización."
+     },
+     {
+      "id": "sec-l1-cp3b",
+      "type": "mcq",
+      "objective": "sec-l1-o2",
+      "bloom": "aplicar",
+      "prompt": "La dueña de una tienda te dice: «prueba también los servidores de mi hosting, yo te doy permiso». ¿Qué haces?",
+      "options": [
+       {
+        "text": "Acepto: ella es quien paga, así que puede autorizarlo",
+        "whyNot": "Pagar por un servicio no vuelve a nadie dueño de los servidores del proveedor."
+       },
+       {
+        "text": "Pido el permiso de la empresa de hosting o dejo esa pieza fuera del alcance"
+       },
+       {
+        "text": "Pruebo igualmente, pero muy despacio para no molestar",
+        "whyNot": "La velocidad no crea permiso: seguirías probando algo ajeno."
+       },
+       {
+        "text": "Pruebo solo de noche para que el proveedor no lo note",
+        "whyNot": "La hora no crea permiso; además, ocultarlo agrava el problema."
+       }
+      ],
+      "correctIndex": 1,
+      "explanation": "Nadie puede autorizar lo que no es suyo. El hosting es del proveedor: o él firma, o queda fuera del alcance."
+     }
+    ],
+    "reteach": {
+     "kind": "analogy",
+     "title": "Otra analogía: el edificio de oficinas",
+     "content": "- **La oficina** es del cliente → puede darte permiso.\n- **El edificio** es del propietario → no puede.\n- **El banco de la planta baja** es de otra empresa.",
+     "narration": "Si te cuesta separar las piezas, piensa en una oficina dentro de un edificio alquilado. La oficina es de tu cliente: él puede decirte revisa mis cerraduras. Pero el edificio entero es del propietario, y las puertas del vestíbulo o los ascensores no son de tu cliente, aunque los use todos los días. Y el banco de la planta baja es de una tercera empresa, con sus propias reglas. Es justo lo que pasó en Iowa: quien contrató la prueba era dueño de una parte, pero el edificio entero tenía otro dueño. Con la web ocurre lo mismo: la aplicación es la oficina, el hosting es el edificio y la pasarela es el banco."
+    }
+   },
+   {
+    "id": "sec-l1-p4",
+    "objectives": [
+     "sec-l1-o4"
+    ],
+    "title": "Cuando algo sale del plan",
+    "scenes": [
+     {
+      "kind": "story",
+      "title": "Un periodista vio un número… y avisó",
+      "content": "Un periodista vio números de seguro social de maestros en el **código de una web oficial**.\n\nAvisó al estado y prometió **no publicar** hasta que lo arreglaran.",
+      "narration": "Octubre de 2021, estado de Misuri. Un periodista del diario Post-Dispatch visita una página pública del departamento de educación y, al mirar el código de la página, encuentra algo que no debería estar ahí: los números de seguro social de maestros, administradores y consejeros, más de cien mil personas. ¿Qué hace? No los descarga para guardarlos. No los publica. Escribe al estado, les explica los pasos que siguió para encontrarlo y promete no publicar nada hasta que el problema esté corregido. Quédate con esa secuencia, porque es casi un manual de lo que vamos a aprender.",
+      "stamp": "2021",
+      "dateline": "Misuri, EE. UU. · octubre de 2021",
+      "source": "3 News Now"
+     },
+     {
+      "kind": "concept",
+      "title": "Regla de oro: detente, documenta, avisa",
+      "content": "```mermaid\nflowchart TD\n  H[Encuentras un fallo] --> Q{¿Está dentro del alcance?}\n  Q -- Sí --> S[Evidencia mínima y sigues lo acordado]\n  Q -- No --> D[Detente]\n  D --> E[Documenta cómo llegaste]\n  E --> V[Avisa al cliente]\n  classDef ok fill:#d1fae5,stroke:#059669,color:#064e3b\n  classDef stop fill:#fee2e2,stroke:#dc2626,color:#7f1d1d\n  class S ok\n  class D,E,V stop\n```",
+      "narration": "Lo que ocurre cuando algo sale del plan cabe en tres verbos: detente, documenta, avisa. Mira el diagrama. Encuentras algo. La primera pregunta es siempre si está dentro del alcance. Si lo está, recoges la evidencia mínima y sigues con lo acordado. Si no lo está, te detienes de inmediato, aunque puedas seguir. Después documentas cómo llegaste ahí, con pasos que otra persona pueda repetir. Y por último avisas a tu cliente por el canal que acordaron. La decisión de seguir no es tuya: es de tu cliente y del dueño de esa pieza.",
+      "glossaryRefs": [
+       "fuera-alcance",
+       "evidencia-minima"
+      ],
+      "micro": {
+       "id": "sec-l1-u7",
+       "type": "order",
+       "objective": "sec-l1-o4",
+       "bloom": "aplicar",
+       "prompt": "Tu hallazgo sale del alcance. Ordena las acciones.",
+       "steps": [
+        "Detenerte",
+        "Documentar cómo llegaste",
+        "Avisar al cliente",
+        "Dejar que el cliente gestione el permiso"
+       ],
+       "explanation": "Primero paras, luego anotas el camino, después avisas; la decisión de seguir no es tuya."
+      }
+     },
+     {
+      "kind": "misconception",
+      "title": "Lo que nunca se hace con un fallo",
+      "content": "| Error | Por qué es grave |\n|---|---|\n| Descargar toda la base «para demostrarlo» | Te llevas datos personales reales |\n| Seguir explorando «un poco más» | Sales del permiso |\n| Publicarlo para presionar | Avisas también a los atacantes |\n| Pedir dinero por el detalle | Puede considerarse extorsión |",
+      "narration": "Veamos los errores clásicos, que casi siempre nacen de buenas intenciones. Descargar toda la base de datos para demostrar lo grave que es te convierte en alguien que se llevó datos personales reales, y eso es mucho peor que el fallo. Seguir explorando un poco más te saca del permiso, aunque lo hagas con curiosidad. Publicarlo para presionar a la empresa avisa también a quienes podrían aprovecharlo antes de que se corrija. Y pedir dinero a cambio de contar el detalle puede entenderse como extorsión. El periodista de Misuri hizo lo contrario de las cuatro cosas.",
+      "glossaryRefs": [
+       "datos-personales"
+      ]
+     },
+     {
+      "kind": "concept",
+      "title": "Evidencia mínima: probar sin llevarte nada",
+      "content": "**Sí guardas**\n\n- Una captura de **un** registro\n- Nombre y teléfono **tapados**\n- Los pasos para repetirlo\n\n**No guardas**\n\n- Tablas completas\n- Datos sin tapar",
+      "narration": "La evidencia mínima es una idea muy práctica. Tu trabajo es demostrar que el fallo existe, no demostrar hasta dónde llega llevándote todo. Si puedes ver la cita de otra paciente, haces una captura de una sola cita, tapas el nombre y el teléfono, y anotas los pasos exactos para repetirlo. Con eso, quien lo arregle puede reproducirlo, y tú no cargas con datos de nadie. Lo que no guardas son tablas completas ni datos sin tapar. Piensa que cada dato que te llevas es un riesgo que ahora es tuyo: si te roban la computadora, esos datos se pierden contigo.",
+      "glossaryRefs": [
+       "evidencia-minima",
+       "datos-personales"
+      ],
+      "micro": {
+       "id": "sec-l1-u8",
+       "type": "mcq",
+       "objective": "sec-l1-o4",
+       "bloom": "aplicar",
+       "prompt": "Para demostrar un fallo con datos de pacientes, ¿qué guardas?",
+       "options": [
+        {
+         "text": "Toda la tabla, por si acaso",
+         "whyNot": "Te llevarías datos personales reales sin necesidad."
+        },
+        {
+         "text": "Un registro con el nombre tapado"
+        },
+        {
+         "text": "Cinco registros completos",
+         "whyNot": "Más datos de los necesarios."
+        },
+        {
+         "text": "Nada y nunca lo cuentas",
+         "whyNot": "Sin evidencia mínima el fallo no se puede reproducir."
+        }
+       ],
+       "correctIndex": 1,
+       "explanation": "La evidencia mínima demuestra el fallo con el menor daño posible."
+      }
+     },
+     {
+      "kind": "concept",
+      "title": "Lo encontraste sin buscarlo: divulgación responsable",
+      "content": "1. No sigas probando ni lo compartas\n2. Busca el canal oficial: `security.txt`, un programa de recompensas o un correo de seguridad\n3. Reporta pasos, impacto y evidencia mínima\n4. Da un plazo para arreglarlo antes de hablar en público",
+      "narration": "Cuando encuentras un fallo sin buscarlo y sin ningún acuerdo, lo correcto se llama divulgación responsable, y tiene cuatro pasos. Uno: no sigas probando y no lo cuentes a nadie más. Dos: busca el canal oficial para avisar. Muchas webs publican un archivo llamado security punto txt que dice a quién escribir; otras tienen un programa de recompensas o un correo de seguridad. Tres: reporta los pasos, el impacto y la evidencia mínima. Cuatro: da un plazo razonable para que lo arreglen, noventa días es lo habitual, antes de hablar en público. Es la secuencia que siguió el periodista de Misuri.",
+      "glossaryRefs": [
+       "divulgacion-responsable",
+       "security-txt"
+      ],
+      "micro": {
+       "id": "sec-l1-u14",
+       "type": "mcq",
+       "objective": "sec-l1-o4",
+       "bloom": "aplicar",
+       "prompt": "Encontraste un fallo en una web sin ningún acuerdo. ¿Qué haces primero?",
+       "options": [
+        {
+         "text": "Publicarlo en redes para que lo arreglen rápido",
+         "whyNot": "Avisarías también a quienes podrían aprovecharlo antes del arreglo."
+        },
+        {
+         "text": "Dejar de probar y buscar su canal oficial para avisar"
+        },
+        {
+         "text": "Seguir probando para entender bien cuál es el fallo",
+         "whyNot": "Seguir probando sin permiso es justo lo que se evita."
+        },
+        {
+         "text": "Pedir dinero a cambio de contar el detalle",
+         "whyNot": "Puede interpretarse como extorsión."
+        }
+       ],
+       "correctIndex": 1,
+       "explanation": "Primero paras y avisas por el canal oficial; el resto viene después y con plazo."
+      }
+     },
+     {
+      "kind": "story",
+      "title": "El gobernador lo llamó hacker; el fiscal no presentó cargos",
+      "content": "El gobernador lo llamó **«hacker»** y pidió una investigación.\n\nEn febrero de 2022, el fiscal **no presentó cargos**.",
+      "narration": "Y entonces ocurrió lo que nadie esperaba. El gobernador de Misuri acusó al periodista públicamente de hackear y pidió que lo investigaran. En febrero de 2022, el fiscal del condado decidió no presentar cargos. Pero fíjate en un matiz que importa: el fiscal escribió que había un argumento para sostener que se violó la ley, y que no seguiría porque el asunto se había resuelto por otras vías. Es decir, aun haciendo todo bien, aun siguiendo los pasos correctos, el periodista pasó meses en una zona gris. Por eso, cuando trabajes en serio, tu mejor protección sigue siendo el permiso por escrito.",
+      "stamp": "2022",
+      "dateline": "Misuri, EE. UU. · febrero de 2022",
+      "source": "3 News Now y Malwarebytes"
+     },
+     {
+      "kind": "worked-example",
+      "title": "Ejemplo resuelto: el aviso de Marta",
+      "content": "```text\nAsunto: Posible fallo de seguridad en citas.clinica.example\nHola, soy una usuaria. Al cambiar el número de la\ndirección /citas/1043 por 1044 vi la cita de otra\npersona. No he probado nada más ni guardado datos.\nPasos: 1) abrir mi cita 2) cambiar el número final.\n¿Podrían confirmarme la recepción?\n```",
+      "narration": "Resolvamos el caso de Marta. Primero, se detiene: no prueba más. Segundo, busca cómo avisar: en la web de la clínica encuentra un correo de contacto. Tercero, redacta un aviso corto y claro. Mira lo que tiene: un asunto que dice de qué se trata, quién escribe, qué vio exactamente, la afirmación de que no probó nada más ni guardó datos, los pasos para repetirlo, y una petición concreta, que confirmen la recepción. Lo que no tiene: amenazas, plazos agresivos, datos de la otra paciente, ni pedidos de dinero. Un buen aviso es corto, preciso y amable.",
+      "glossaryRefs": [
+       "divulgacion-responsable",
+       "informe"
+      ],
+      "artifact": "aviso-hallazgo"
+     },
+     {
+      "kind": "concept",
+      "title": "Vuelve a tu respuesta sobre Marta",
+      "content": "Compara con lo que escribiste:\n\n- ¿Dijiste **detenerte**?\n- ¿Dijiste **avisar por el canal oficial**?\n- ¿Evitaste **publicarlo** o **seguir probando**?",
+      "narration": "Ahora vuelve a la frase que escribiste sobre Marta, al principio de la clase. Compárala con tres preguntas. ¿Dijiste que se detiene? ¿Dijiste que avisa por el canal oficial, y no que lo publica ni que sigue probando para entenderlo mejor? Si tu respuesta incluyó alguna de las dos cosas prohibidas, no te preocupes: es lo que hace casi todo el mundo al principio, porque la curiosidad empuja a seguir. Lo que cambia con la formación es el reflejo. Y si tu respuesta ya estaba bien, fíjate qué agregarías ahora: la evidencia mínima y el plazo.",
+      "glossaryRefs": [
+       "divulgacion-responsable"
+      ]
+     },
+     {
+      "kind": "recap",
+      "title": "Lo esencial en una pantalla",
+      "content": "- El **permiso por escrito** separa a un hacker ético de un delincuente\n- El acuerdo tiene **7 piezas**\n- Solo el **dueño** de cada pieza puede autorizar\n- Si algo sale del plan: **detente, documenta, avisa**\n- Evidencia **mínima**, divulgación **responsable**",
+      "narration": "Repasemos lo esencial. Uno: el permiso por escrito es lo que separa a un hacker ético de un delincuente, como en el Pentágono frente a Marta. Dos: un buen acuerdo tiene siete piezas, alcance, fuera de alcance, ventana, técnicas, contacto de emergencia, datos e informe. Tres: solo el dueño de cada pieza puede autorizar su prueba, como aprendiste con Iowa. Cuatro: si algo sale del plan, detente, documenta, avisa. Y cinco: demuestra el riesgo con la evidencia mínima y avisa con divulgación responsable, como el periodista de Misuri. Ahora vamos a practicar redactando acuerdos reales."
+     },
+     {
+      "kind": "concept",
+      "title": "Si el fallo está en una pieza de un tercero",
+      "content": "1. **Detente**\n2. Avisa a **tu cliente**\n3. Tu cliente avisa al **tercero**\n\nNo escribas tú al tercero sin que tu cliente lo sepa.",
+      "narration": "Hay un caso especial que merece su propia pantalla: el fallo aparece en una pieza de un tercero, por ejemplo en el hosting o en la pasarela de pagos de tu cliente. ¿A quién avisas? A tu cliente, primero. Te detienes, documentas cómo llegaste y se lo cuentas. Es tu cliente quien tiene relación con ese proveedor y quien decide cómo avisarle. Si tú le escribes directamente al tercero, estás hablando en nombre de alguien sin su permiso, y además el tercero no sabe quién eres ni por qué miraste sus sistemas. Esto también protege a tu cliente: le da la oportunidad de decidir con calma.",
+      "glossaryRefs": [
+       "tercero",
+       "divulgacion-responsable"
+      ]
+     }
+    ],
+    "checkpoint": [
+     {
+      "id": "sec-l1-cp4a",
+      "type": "order",
+      "objective": "sec-l1-o4",
+      "bloom": "aplicar",
+      "prompt": "Durante una prueba autorizada, un fallo de la app de tu cliente te lleva a un servidor que no es suyo. Ordena lo que debes hacer.",
+      "steps": [
+       "Detenerte de inmediato",
+       "Anotar cómo llegaste hasta ahí",
+       "Avisar al cliente por el canal acordado",
+       "Esperar a que el cliente gestione el permiso del dueño del servidor"
+      ],
+      "explanation": "Primero se corta el acceso, después se documenta el camino y se avisa. La decisión de seguir es del cliente y del dueño del servidor, nunca tuya."
+     },
+     {
+      "id": "sec-l1-cp4b",
+      "type": "mcq",
+      "objective": "sec-l1-o4",
+      "bloom": "aplicar",
+      "prompt": "Al probar la web de un gimnasio con permiso, ves los datos de varios socios. ¿Qué guardas como evidencia?",
+      "options": [
+       {
+        "text": "Una captura de un registro con el nombre y el teléfono tapados"
+       },
+       {
+        "text": "La tabla completa, para demostrar el alcance del fallo",
+        "whyNot": "Te llevarías datos personales reales sin necesidad."
+       },
+       {
+        "text": "Cinco registros sin tapar, por si piden pruebas",
+        "whyNot": "Más datos de los necesarios; la evidencia debe ser mínima y tapada."
+       },
+       {
+        "text": "Nada, y lo cuentas luego de memoria",
+        "whyNot": "Sin evidencia ni pasos, el fallo no se puede reproducir ni arreglar."
+       }
+      ],
+      "correctIndex": 0,
+      "explanation": "La evidencia mínima demuestra el fallo con el menor daño posible: un registro, datos tapados y pasos para repetirlo."
+     }
+    ],
+    "reteach": {
+     "kind": "analogy",
+     "title": "Otra analogía: el hallazgo en la obra",
+     "content": "- Un electricista ve un cable pelado en el piso del vecino.\n- No lo toca más. Anota dónde está. Avisa a su cliente.\n\nDetente, documenta, avisa.",
+     "narration": "Piensa en un electricista que trabaja en un piso y, al asomarse por la pared, ve un cable pelado que va hacia el piso del vecino. ¿Qué hace? No entra al piso del vecino a investigarlo, aunque tenga las herramientas. Se detiene, anota dónde lo vio y avisa a su cliente para que el cliente hable con el vecino. Con un fallo fuera de alcance pasa igual: tienes la herramienta y quizá la curiosidad, pero la decisión de entrar a eso no es tuya, ni siquiera de tu cliente: es del dueño de lo que encontraste. Tres verbos: detente, documenta, avisa."
+    }
+   }
+  ],
+  "practice": [
+   {
+    "id": "sec-l1-pa",
+    "tier": "A",
+    "title": "Completa el acuerdo de la florería",
+    "statement": "La florería Pétalo recibe pedidos por una aplicación propia (`pedidos.petalo.example`). La web está en un hosting de un proveedor y los cobros se hacen por una pasarela externa. La dueña, Elena Rojas (+51 900 000 003), pide revisar la aplicación los domingos de 06:00 a 10:00, del 8 al 29 de noviembre. Completa los apartados que faltan del acuerdo siguiendo el modelo de la panadería.",
+    "decoded": {
+     "youAreAsked": [
+      "Decidir qué piezas son de la florería y cuáles de terceros",
+      "Escribir el alcance y lo que queda fuera con nombres concretos",
+      "Completar técnicas prohibidas, datos e informe"
+     ],
+     "terms": [
+      "alcance",
+      "fuera-alcance",
+      "ventana",
+      "tecnica-prohibida",
+      "datos-personales",
+      "informe"
+     ],
+     "doNotNeed": [
+      "Saber programar",
+      "Conocer herramientas de pruebas"
+     ]
+    },
+    "produces": "acuerdo-pruebas",
+    "aiPolicy": "ia_tutor",
+    "objectives": [
+     "sec-l1-o2",
+     "sec-l1-o3"
+    ],
+    "scaffold": "```text\nPRUEBA DE SEGURIDAD · FLORERÍA PÉTALO\nAlcance: [qué sí, con nombres exactos]\nFuera de alcance: [qué no, con nombres]\nVentana: domingos 06:00–10:00, del 8 al 29 de nov.\nProhibido: [técnicas concretas]\nContacto de emergencia: Elena Rojas, +51 900 000 003, 24 h\nDatos: [qué haces con los datos que veas]\nInforme: [formato, a quién, plazo]\n```",
+    "steps": [
+     {
+      "id": "intenta",
+      "title": "Intenta",
+      "prompt": "Completa Alcance, Fuera de alcance, Prohibido, Datos e Informe en la plantilla."
+     },
+     {
+      "id": "compara",
+      "title": "Compara",
+      "prompt": "Mira el modelo y marca en qué se parece o se diferencia tu versión."
+     },
+     {
+      "id": "corrige",
+      "title": "Corrige",
+      "prompt": "Reescribe lo que estuviera vago o incompleto."
+     }
+    ],
+    "hints": [
+     {
+      "text": "Empieza por separar las piezas: aplicación, hosting y pasarela. ¿De quién es cada una?",
+      "taughtIn": "sec-l1-p3"
+     },
+     {
+      "text": "En «Prohibido» escribe técnicas concretas, como las del ejemplo de la panadería.",
+      "taughtIn": "sec-l1-p2"
+     },
+     {
+      "text": "En «Datos» piensa qué ocurre si ves el nombre de un cliente: ¿lo copias o lo tapas?",
+      "taughtIn": "sec-l1-p4"
+     }
+    ],
+    "exemplar": "Alcance: pedidos.petalo.example y su API. Fuera de alcance: hosting del proveedor y pasarela de pagos. Prohibido: saturar el servidor, engañar al personal, cambiar o borrar pedidos reales. Datos: no se copian datos de clientes; la evidencia lleva los datos tapados. Informe: PDF cifrado, solo a Elena Rojas, en 10 días.",
+    "exemplarNotes": [
+     "El alcance nombra solo lo que es de la florería",
+     "Hosting y pasarela quedan fuera con nombre propio",
+     "Las técnicas prohibidas son concretas y comprobables"
+    ],
+    "rubric": [
+     {
+      "criterion": "Separa lo que es de la florería de lo que es de terceros",
+      "objective": "sec-l1-o2",
+      "levels": {
+       "bien": "Alcance solo con la app; hosting y pasarela fuera",
+       "parcial": "Deja fuera uno de los dos terceros",
+       "falta": "Mete el hosting o la pasarela en el alcance"
+      }
+     },
+     {
+      "criterion": "Escribe técnicas prohibidas concretas",
+      "objective": "sec-l1-o3",
+      "levels": {
+       "bien": "Nombra al menos tres técnicas concretas",
+       "parcial": "Nombra una o usa frases vagas",
+       "falta": "No pone técnicas prohibidas"
+      }
+     },
+     {
+      "criterion": "Resuelve datos e informe",
+      "objective": "sec-l1-o3",
+      "levels": {
+       "bien": "Dice qué se hace con los datos y cómo se entrega el informe",
+       "parcial": "Solo resuelve uno de los dos",
+       "falta": "Los deja vacíos"
+      }
+     }
+    ],
+    "commonErrors": [
+     "Meter el hosting o la pasarela en el alcance",
+     "Escribir «nada peligroso» en vez de técnicas concretas",
+     "Olvidar qué se hace con los datos"
+    ],
+    "selfCheck": [
+     "¿Cada pieza del alcance es de la florería?",
+     "¿Cada técnica prohibida se puede comprobar?",
+     "¿Una persona ajena entendería lo mismo que yo?"
+    ],
+    "checks": [
+     {
+      "id": "sec-l1-pa-c1",
+      "type": "classify",
+      "objective": "sec-l1-o2",
+      "bloom": "aplicar",
+      "prompt": "Clasifica cada pieza de la florería.",
+      "buckets": [
+       "Dentro del alcance",
+       "Fuera de alcance"
+      ],
+      "cases": [
+       {
+        "text": "pedidos.petalo.example",
+        "bucket": "Dentro del alcance"
+       },
+       {
+        "text": "API de pedidos de la florería",
+        "bucket": "Dentro del alcance"
+       },
+       {
+        "text": "Servidores del hosting",
+        "bucket": "Fuera de alcance"
+       },
+       {
+        "text": "Pasarela de pagos",
+        "bucket": "Fuera de alcance"
+       },
+       {
+        "text": "Panel de administración de la florería",
+        "bucket": "Dentro del alcance"
+       },
+       {
+        "text": "Servicio de correo del proveedor",
+        "bucket": "Fuera de alcance"
+       }
+      ],
+      "explanation": "Lo que es de la florería entra; lo que pertenece a terceros queda fuera con nombre propio."
+     },
+     {
+      "id": "sec-l1-pa-c2",
+      "type": "fill",
+      "objective": "sec-l1-o3",
+      "bloom": "aplicar",
+      "prompt": "Completa la ventana a partir del enunciado.",
+      "template": "Ventana: ___ de 06:00 a 10:00, del 8 al 29 de noviembre.",
+      "blanks": [
+       {
+        "accept": [
+         "domingos",
+         "los domingos"
+        ]
+       }
+      ],
+      "explanation": "El enunciado dice domingos; una ventana sin el día exacto no sirve."
+     }
+    ]
+   },
+   {
+    "id": "sec-l1-pb",
+    "tier": "B",
+    "title": "Adapta el acuerdo a una tienda con envíos",
+    "statement": "La tienda de ropa Moda Sur vende en una plataforma de comercio electrónico (el hosting lo pone la plataforma). Cobra con una pasarela externa y calcula envíos con la API de una empresa de mensajería. Su dueño, Iván Soto (+51 900 000 004), quiere que revises solo su tienda y el panel de administración, los miércoles de 22:00 a 02:00, durante tres semanas desde el 12 de noviembre. Redacta el acuerdo completo usando la plantilla. Aquí hay más terceros que en el ejemplo: piénsalo antes de escribir.",
+    "decoded": {
+     "youAreAsked": [
+      "Identificar los tres terceros: plataforma, pasarela y mensajería",
+      "Escribir el alcance solo con lo que es de Moda Sur",
+      "Completar los siete apartados sin modelo previo"
+     ],
+     "terms": [
+      "tercero",
+      "alcance",
+      "fuera-alcance",
+      "ventana",
+      "contacto-emergencia"
+     ],
+     "doNotNeed": [
+      "Conocer la plataforma de comercio",
+      "Saber hacer las pruebas"
+     ]
+    },
+    "produces": "acuerdo-pruebas",
+    "aiPolicy": "ia_tutor",
+    "objectives": [
+     "sec-l1-o2",
+     "sec-l1-o3"
+    ],
+    "scaffold": "```text\nPRUEBA DE SEGURIDAD · [NOMBRE DEL CLIENTE]\nAlcance: [qué sí, con nombres exactos]\nFuera de alcance: [qué no, con nombres]\nVentana: [días, horas, zona horaria]\nProhibido: [técnicas concretas]\nContacto de emergencia: [nombre, teléfono, disponibilidad]\nDatos: [qué haces con los datos que veas]\nInforme: [formato, a quién, plazo]\n```",
+    "steps": [
+     {
+      "id": "intenta",
+      "title": "Intenta",
+      "prompt": "Escribe los siete apartados del acuerdo usando la plantilla en blanco."
+     },
+     {
+      "id": "compara",
+      "title": "Compara",
+      "prompt": "Contrasta tu acuerdo con el modelo y con la lista de comprobación."
+     },
+     {
+      "id": "corrige",
+      "title": "Corrige",
+      "prompt": "Arregla lo que falló y explica en una frase por qué."
+     }
+    ],
+    "hints": [
+     {
+      "text": "Haz una lista de todas las empresas que intervienen y marca cuáles son terceros.",
+      "taughtIn": "sec-l1-p3"
+     },
+     {
+      "text": "Si una pieza es de un tercero, solo hay dos caminos: queda fuera o necesitas su permiso.",
+      "taughtIn": "sec-l1-p3"
+     },
+     {
+      "text": "Revisa que la ventana tenga día, horas y fechas, y que el contacto tenga teléfono.",
+      "taughtIn": "sec-l1-p2"
+     }
+    ],
+    "exemplar": "Alcance: tienda y panel de administración de Moda Sur. Fuera de alcance: servidores de la plataforma, pasarela de pagos y API de mensajería. Ventana: miércoles 22:00–02:00, del 12 de nov. al 26 de nov. Prohibido: saturar el servidor, engañar al personal, crear o cancelar pedidos reales. Contacto: Iván Soto, +51 900 000 004, 24 h. Datos: no se copian; evidencia con datos tapados. Informe: PDF cifrado, solo a Iván, en 10 días.",
+    "exemplarNotes": [
+     "Detecta los tres terceros y los deja fuera por escrito",
+     "La ventana incluye día, horas y fechas",
+     "El contacto y el informe tienen destinatario concreto"
+    ],
+    "rubric": [
+     {
+      "criterion": "Identifica los tres terceros y los deja fuera",
+      "objective": "sec-l1-o2",
+      "levels": {
+       "bien": "Nombra plataforma, pasarela y mensajería como fuera de alcance",
+       "parcial": "Detecta solo uno o dos",
+       "falta": "Mete algún tercero en el alcance"
+      }
+     },
+     {
+      "criterion": "Ventana y contacto precisos",
+      "objective": "sec-l1-o3",
+      "levels": {
+       "bien": "Día, horas, fechas, nombre y teléfono",
+       "parcial": "Falta un dato",
+       "falta": "Son vagos o no están"
+      }
+     },
+     {
+      "criterion": "Técnicas, datos e informe completos",
+      "objective": "sec-l1-o3",
+      "levels": {
+       "bien": "Los tres apartados concretos",
+       "parcial": "Uno es vago",
+       "falta": "Faltan dos o más"
+      }
+     }
+    ],
+    "commonErrors": [
+     "Olvidar la API de mensajería como tercero",
+     "Escribir «cualquier día» en la ventana",
+     "Dejar el contacto sin teléfono"
+    ],
+    "selfCheck": [
+     "¿Aparecen los tres terceros como fuera de alcance?",
+     "¿La ventana tiene fechas exactas?",
+     "¿Podría entregar este acuerdo a un abogado sin vergüenza?"
+    ],
+    "checks": [
+     {
+      "id": "sec-l1-pb-c1",
+      "type": "multi",
+      "objective": "sec-l1-o2",
+      "bloom": "aplicar",
+      "prompt": "Marca TODAS las piezas que son de terceros en el caso de Moda Sur.",
+      "options": [
+       {
+        "text": "La plataforma de comercio donde está la tienda"
+       },
+       {
+        "text": "El panel de administración de Moda Sur",
+        "whyNot": "Es la gestión propia de la tienda: la autoriza Iván."
+       },
+       {
+        "text": "La pasarela de pagos"
+       },
+       {
+        "text": "La API de la empresa de mensajería"
+       },
+       {
+        "text": "Los pedidos de la propia tienda",
+        "whyNot": "Son datos y funciones de la tienda de Iván."
+       }
+      ],
+      "correctIndexes": [
+       0,
+       2,
+       3
+      ],
+      "explanation": "Plataforma, pasarela y mensajería son empresas distintas con servidores propios; panel y pedidos pertenecen a la tienda."
+     },
+     {
+      "id": "sec-l1-pb-c2",
+      "type": "mcq",
+      "objective": "sec-l1-o3",
+      "bloom": "aplicar",
+      "prompt": "¿Qué ventana está bien redactada?",
+      "options": [
+       {
+        "text": "Miércoles 22:00–02:00 (hora de Lima), del 12 al 26 de noviembre"
+       },
+       {
+        "text": "Por las noches, cuando haya poco tráfico",
+        "whyNot": "No fija días ni horas: cada parte puede interpretar una cosa."
+       },
+       {
+        "text": "Los miércoles, sin horario concreto",
+        "whyNot": "Falta el horario y las fechas de inicio y fin."
+       },
+       {
+        "text": "Tres semanas desde el 12 de noviembre",
+        "whyNot": "No dice qué días ni a qué horas de cada semana."
+       }
+      ],
+      "correctIndex": 0,
+      "explanation": "Una ventana válida concreta día, hora, zona horaria y fechas de inicio y fin."
+     }
+    ]
+   },
+   {
+    "id": "sec-l1-pc",
+    "tier": "C",
+    "title": "Redacta las reglas de una prueba para un consultorio",
+    "statement": "La doctora Ruiz tiene una aplicación de reservas para su consultorio (`citas.consultorioruiz.com`) y te pide revisarla. El hosting es de un proveedor y los pagos van por una pasarela externa. Redacta en una página las reglas de la prueba: alcance incluido y excluido, ventana horaria, técnicas permitidas y prohibidas, contacto de emergencia, manejo de datos de pacientes y cómo entregarás el informe.",
+    "decoded": {
+     "youAreAsked": [
+      "Decidir qué es de la doctora y qué es de terceros (hosting y pagos)",
+      "Escribir los siete apartados con datos concretos que tú elijas",
+      "Pensar en que hay datos de salud, que son especialmente delicados"
+     ],
+     "terms": [
+      "alcance",
+      "fuera-alcance",
+      "ventana",
+      "tecnica-prohibida",
+      "contacto-emergencia",
+      "datos-personales",
+      "informe"
+     ],
+     "doNotNeed": [
+      "Hacer ninguna prueba técnica",
+      "Más de una página"
+     ]
+    },
+    "produces": "acuerdo-pruebas",
+    "aiPolicy": "ia_tutor",
+    "objectives": [
+     "sec-l1-o1",
+     "sec-l1-o2",
+     "sec-l1-o3",
+     "sec-l1-o4"
+    ],
+    "scaffold": "```text\nPRUEBA DE SEGURIDAD · [NOMBRE DEL CLIENTE]\nAlcance: [qué sí, con nombres exactos]\nFuera de alcance: [qué no, con nombres]\nVentana: [días, horas, zona horaria]\nProhibido: [técnicas concretas]\nContacto de emergencia: [nombre, teléfono, disponibilidad]\nDatos: [qué haces con los datos que veas]\nInforme: [formato, a quién, plazo]\n```",
+    "steps": [
+     {
+      "id": "entender",
+      "title": "Entender",
+      "prompt": "Lee la lista «lo que te piden, traducido» y dibuja las piezas del sistema y quién es dueño de cada una."
+     },
+     {
+      "id": "plan",
+      "title": "Planificar",
+      "prompt": "Decide qué entra, qué queda fuera y qué técnicas prohibirás, antes de redactar."
+     },
+     {
+      "id": "construir",
+      "title": "Construir",
+      "prompt": "Escribe el acuerdo de una página con los siete apartados."
+     },
+     {
+      "id": "verificar",
+      "title": "Verificar",
+      "prompt": "Pasa la lista de comprobación: ¿alguna frase admite dos lecturas?"
+     },
+     {
+      "id": "defender",
+      "title": "Defender",
+      "prompt": "Responde en 4-6 frases: ¿qué documentos necesitas antes de empezar una prueba de seguridad y por qué?"
+     }
+    ],
+    "hints": [
+     {
+      "text": "Piensa en quién es dueño de cada pieza: la aplicación, el servidor y los pagos.",
+      "taughtIn": "sec-l1-p3"
+     },
+     {
+      "text": "Los datos de pacientes son especialmente delicados: ¿qué haces si ves uno durante la prueba?",
+      "taughtIn": "sec-l1-p2"
+     },
+     {
+      "text": "Incluye qué haces si encuentras un camino hacia un sistema que no está en la lista.",
+      "taughtIn": "sec-l1-p4"
+     },
+     {
+      "text": "Si dudas del formato, vuelve al ejemplo resuelto de la panadería y cámbialo pieza a pieza.",
+      "taughtIn": "sec-l1-p3"
+     }
+    ],
+    "exemplar": "Alcance: citas.consultorioruiz.com y su API, con cuentas de prueba entregadas por la doctora. Fuera de alcance: servidores del proveedor de hosting y pasarela de pagos (otras empresas; solo con su firma). Ventana: sábados 08:00–14:00 (hora de Lima), del 7 al 28 de nov. Prohibido: saturar el servidor, engañar al personal, ver o cambiar citas reales fuera de las cuentas de prueba. Contacto: Dra. Ruiz, +51 900 000 000, 24 h. Datos: no se copian historiales; evidencia con datos tapados; todo se borra al terminar. Si un fallo lleva fuera del alcance: detenerse, documentar y avisar. Informe: PDF cifrado, solo a la doctora, en 10 días.",
+    "exemplarNotes": [
+     "Separa lo de la doctora de lo del proveedor y la pasarela, y los nombra",
+     "Trata los datos de pacientes con medidas concretas",
+     "Incluye qué hacer si algo sale del alcance, que es la parte que más se olvida"
+    ],
+    "rubric": [
+     {
+      "criterion": "Separa alcance y fuera de alcance nombrando la pasarela y el hosting",
+      "objective": "sec-l1-o2",
+      "levels": {
+       "bien": "Ambos terceros fuera, con nombre",
+       "parcial": "Solo uno queda fuera",
+       "falta": "Mete terceros en el alcance"
+      }
+     },
+     {
+      "criterion": "Prohíbe técnicas que puedan tumbar el servicio o afectar a personas",
+      "objective": "sec-l1-o3",
+      "levels": {
+       "bien": "Saturación, ingeniería social y modificar datos reales",
+       "parcial": "Solo una o dos",
+       "falta": "Frases vagas o ninguna"
+      }
+     },
+     {
+      "criterion": "Define qué hacer con los datos de pacientes",
+      "objective": "sec-l1-o3",
+      "levels": {
+       "bien": "No copiar, tapar evidencia y borrar al terminar",
+       "parcial": "Menciona los datos sin medidas",
+       "falta": "No los menciona"
+      }
+     },
+     {
+      "criterion": "Indica la acción ante un fallo que sale del alcance",
+      "objective": "sec-l1-o4",
+      "levels": {
+       "bien": "Detenerse, documentar y avisar",
+       "parcial": "Solo avisar",
+       "falta": "No lo contempla"
+      }
+     },
+     {
+      "criterion": "En la defensa, justifica por qué hace falta permiso firmado y de quién",
+      "objective": "sec-l1-o1",
+      "levels": {
+       "bien": "Explica que sin permiso es delito aunque no robe y que firma el dueño",
+       "parcial": "Dice que hace falta permiso sin justificarlo",
+       "falta": "No responde o confunde permiso con confianza"
+      }
+     }
+    ],
+    "commonErrors": [
+     "Dar por hecho que la doctora puede autorizar pruebas sobre el servidor del proveedor",
+     "Olvidar el manejo de datos personales",
+     "No poner contacto de emergencia"
+    ],
+    "selfCheck": [
+     "¿Cada pieza del alcance es de la doctora?",
+     "¿Está escrito qué pasa si algo sale del alcance?",
+     "¿Hay teléfono, fechas y horas exactas?",
+     "¿Cabe en una página?"
+    ],
+    "interviewQuestion": "¿Qué documentos necesitas antes de empezar una prueba de penetración y por qué?",
+    "harderVariant": "Reescribe el acuerdo para una clínica con tres sedes, dos proveedores de hosting y un laboratorio externo que sube resultados."
+   }
+  ],
+  "mastery": {
+   "items": [
+    {
+     "id": "sec-l1-m1",
+     "type": "mcq",
+     "objective": "sec-l1-o1",
+     "bloom": "comprender",
+     "prompt": "Un amigo te pide que revises su tienda, alojada en una plataforma de comercio. Además de su permiso, ¿qué necesitas tener en cuenta?",
+     "options": [
+      {
+       "text": "Nada más: el dueño de la tienda ya autorizó y con eso basta para todo el sistema",
+       "whyNot": "Autoriza su tienda, no los servidores de la plataforma, que son de otra empresa."
+      },
+      {
+       "text": "Que la plataforma es otra empresa con reglas propias"
+      },
+      {
+       "text": "Usar una red anónima para que la plataforma no lo detecte durante la prueba",
+       "whyNot": "Ocultarte no vuelve legal la prueba."
+      },
+      {
+       "text": "Probar desde la casa de tu amigo",
+       "whyNot": "El lugar desde el que pruebas no crea permiso."
+      }
+     ],
+     "correctIndex": 1,
+     "explanation": "Tu amigo autoriza lo que es suyo. La infraestructura de la plataforma es de un tercero, que puede tener reglas o programas propios."
+    },
+    {
+     "id": "sec-l1-m2",
+     "type": "multi",
+     "objective": "sec-l1-o1",
+     "bloom": "comprender",
+     "prompt": "Marca TODAS las excusas que NO te protegen legalmente.",
+     "options": [
+      {
+       "text": "«Solo leí datos, no cambié nada»"
+      },
+      {
+       "text": "«Lo hice de noche para no molestar»"
+      },
+      {
+       "text": "«Tengo un acuerdo firmado por la dueña del sistema»",
+       "whyNot": "Ese sí es el permiso por escrito: protege, dentro de lo que dice."
+      },
+      {
+       "text": "«Usé una VPN»"
+      },
+      {
+       "text": "«Quería avisarles del fallo»"
+      }
+     ],
+     "correctIndexes": [
+      0,
+      1,
+      3,
+      4
+     ],
+     "explanation": "Leer, la hora, la VPN o la buena intención no sustituyen el permiso. Solo lo hace un acuerdo firmado por el dueño."
+    },
+    {
+     "id": "sec-l1-m3",
+     "type": "classify",
+     "objective": "sec-l1-o2",
+     "bloom": "aplicar",
+     "prompt": "Una clínica te contrata para revisar su web. Clasifica cada pieza.",
+     "buckets": [
+      "Dentro del alcance",
+      "Fuera de alcance"
+     ],
+     "cases": [
+      {
+       "text": "La aplicación de citas de la clínica",
+       "bucket": "Dentro del alcance"
+      },
+      {
+       "text": "El panel de recepción de la clínica",
+       "bucket": "Dentro del alcance"
+      },
+      {
+       "text": "Los servidores del proveedor de hosting",
+       "bucket": "Fuera de alcance"
+      },
+      {
+       "text": "La pasarela que cobra las consultas",
+       "bucket": "Fuera de alcance"
+      },
+      {
+       "text": "El laboratorio externo que sube resultados",
+       "bucket": "Fuera de alcance"
+      },
+      {
+       "text": "El formulario de contacto de la clínica",
+       "bucket": "Dentro del alcance"
+      }
+     ],
+     "explanation": "Lo propio entra. Hosting, pagos y laboratorio son terceros, con servidores y dueños distintos."
+    },
+    {
+     "id": "sec-l1-m4",
+     "type": "mcq",
+     "objective": "sec-l1-o2",
+     "bloom": "aplicar",
+     "prompt": "Para probar el servidor del hosting que usa tu cliente, ¿quién debe firmar el permiso?",
+     "options": [
+      {
+       "text": "La empresa de hosting, dueña de esos servidores"
+      },
+      {
+       "text": "Tu cliente, porque paga el servicio y lo usa todos los días",
+       "whyNot": "Pagar no da propiedad sobre los servidores del proveedor."
+      },
+      {
+       "text": "Cualquiera de los dos, porque da igual quién firme el permiso",
+       "whyNot": "Solo el dueño puede autorizar; no es indiferente."
+      },
+      {
+       "text": "Nadie: los servidores de otras empresas no se pueden probar nunca",
+       "whyNot": "Se pueden probar con la autorización de su dueño."
+      }
+     ],
+     "correctIndex": 0,
+     "explanation": "Solo puede dar permiso quien es dueño. El hosting es del proveedor."
+    },
+    {
+     "id": "sec-l1-m5",
+     "type": "spot",
+     "objective": "sec-l1-o2",
+     "bloom": "analizar",
+     "prompt": "Este borrador de acuerdo tiene dos líneas con errores graves. Marca esas dos líneas.",
+     "artifact": "Línea 1: PRUEBA DE SEGURIDAD · TIENDA LUNA\nLínea 2: Alcance: tienda.luna.example y su API\nLínea 3: Fuera de alcance: nada, se puede probar todo lo conectado\nLínea 4: Ventana: viernes 22:00–02:00, del 5 al 26 de nov.\nLínea 5: Prohibido: saturar el servidor, engañar al personal\nLínea 6: Contacto: Carla Luna, +51 900 000 005, 24 h\nLínea 7: Datos: se descargan las tablas para el informe",
+     "correctLines": [
+      3,
+      7
+     ],
+     "explanation": "La línea 3 convierte en alcance todo lo conectado, incluidos los terceros. La línea 7 permite llevarse datos personales en lugar de usar evidencia mínima."
+    },
+    {
+     "id": "sec-l1-m6",
+     "type": "fill",
+     "objective": "sec-l1-o3",
+     "bloom": "aplicar",
+     "prompt": "Completa el apartado de técnicas del acuerdo.",
+     "template": "Prohibido: ___ el servidor y ___ al personal para obtener accesos.",
+     "blanks": [
+      {
+       "accept": [
+        "saturar",
+        "colapsar",
+        "tumbar"
+       ]
+      },
+      {
+       "accept": [
+        "engañar",
+        "manipular"
+       ]
+      }
+     ],
+     "explanation": "Las dos técnicas clásicas que se vetan son la denegación de servicio (saturar) y la ingeniería social (engañar a personas)."
+    },
+    {
+     "id": "sec-l1-m7",
+     "type": "mcq",
+     "objective": "sec-l1-o3",
+     "bloom": "aplicar",
+     "prompt": "¿Cuál de estas frases del apartado «Ventana» está bien redactada?",
+     "options": [
+      {
+       "text": "Cuando el sistema esté tranquilo y haya pocos usuarios conectados",
+       "whyNot": "No fija día ni hora: cada parte entiende algo distinto."
+      },
+      {
+       "text": "Durante noviembre, siempre que el equipo tenga tiempo libre",
+       "whyNot": "No concreta días ni horas, y «cuando haya tiempo» no es una condición."
+      },
+      {
+       "text": "Los fines de semana, por la mañana, como se pueda",
+       "whyNot": "No dice horas ni fechas de inicio y fin."
+      },
+      {
+       "text": "Sábados 08:00–14:00 (hora de Lima), del 7 al 28 de nov."
+      }
+     ],
+     "correctIndex": 3,
+     "explanation": "Una ventana válida fija días, horas, zona horaria y fechas de inicio y fin."
+    },
+    {
+     "id": "sec-l1-m8",
+     "type": "order",
+     "objective": "sec-l1-o4",
+     "bloom": "aplicar",
+     "prompt": "Encuentras, sin acuerdo alguno, un fallo en la web de una tienda. Ordena la divulgación responsable.",
+     "steps": [
+      "Dejas de probar y no lo compartes",
+      "Buscas su canal oficial (security.txt, correo o programa)",
+      "Reportas pasos, impacto y evidencia mínima",
+      "Das un plazo razonable antes de hablar en público"
+     ],
+     "explanation": "Primero paras, luego avisas por el canal oficial con evidencia mínima y por último das tiempo para arreglarlo."
+    },
+    {
+     "id": "sec-l1-m9",
+     "type": "mcq",
+     "objective": "sec-l1-o4",
+     "bloom": "aplicar",
+     "prompt": "En una prueba autorizada, un fallo te permite leer la ficha de un cliente real. ¿Qué haces?",
+     "options": [
+      {
+       "text": "Descargo toda la tabla de clientes para demostrar lo grave que es",
+       "whyNot": "Te llevarías datos personales reales sin necesidad."
+      },
+      {
+       "text": "Sigo explorando otras tablas para ver hasta dónde llego",
+       "whyNot": "Te sales del permiso y aumentas el riesgo."
+      },
+      {
+       "text": "Captura con datos tapados, paro y lo reporto"
+      },
+      {
+       "text": "Lo publico en redes para presionar a que lo arreglen",
+       "whyNot": "Avisas también a los atacantes antes de que se arregle."
+      }
+     ],
+     "correctIndex": 2,
+     "explanation": "Se demuestra el riesgo con el mínimo daño: una evidencia y parar."
+    },
+    {
+     "id": "sec-l1-m10",
+     "type": "mcq",
+     "objective": "sec-l1-o4",
+     "bloom": "aplicar",
+     "prompt": "Terminó la ventana acordada y te queda una prueba pendiente. ¿Qué haces?",
+     "options": [
+      {
+       "text": "Pido una ampliación por escrito"
+      },
+      {
+       "text": "La hago igual, porque el cliente quería que se probara todo el sistema",
+       "whyNot": "La intención del cliente no sustituye una ampliación firmada."
+      },
+      {
+       "text": "La hago de madrugada para que nadie lo note en el sistema",
+       "whyNot": "Fuera de la ventana no hay permiso, y ocultarlo lo empeora."
+      },
+      {
+       "text": "La dejo sin comentar al cliente y entrego el informe",
+       "whyNot": "El cliente debe saber qué quedó sin revisar."
+      }
+     ],
+     "correctIndex": 0,
+     "explanation": "El permiso tiene ventana: fuera de ella vuelves a no estar autorizado. Se amplía por escrito."
+    }
+   ],
+   "passPct": 80
+  },
+  "wrapup": {
+   "keyIdeas": [
+    "El permiso por escrito separa a un hacker ético de un delincuente.",
+    "Un buen acuerdo tiene siete piezas y ninguna frase ambigua.",
+    "Solo el dueño de cada pieza puede autorizar su prueba.",
+    "Si algo sale del plan: detente, documenta, avisa.",
+    "Demuestra el riesgo con la evidencia mínima."
+   ],
+   "cheatSheet": "**Las 7 piezas del acuerdo**\n\n1. Alcance (qué sí, con nombres)\n2. Fuera de alcance (qué no, con nombres)\n3. Ventana (días, horas, zona horaria)\n4. Técnicas prohibidas (concretas)\n5. Contacto de emergencia (nombre, teléfono, 24 h)\n6. Datos (qué haces con lo que veas)\n7. Informe (formato, a quién, plazo)\n\n**Si algo sale del plan**: detente → documenta → avisa.\n\n**Prueba de la frase**: si alguien ajeno puede leerla de dos maneras, reescríbela.",
+   "commonMistakes": [
+    {
+     "mistake": "Meter el hosting o la pasarela en el alcance",
+     "fix": "Pregunta de quién es cada pieza y deja fuera lo de terceros, con su nombre"
+    },
+    {
+     "mistake": "Seguir probando «un poco más» tras un hallazgo fuera de plan",
+     "fix": "Detente, documenta cómo llegaste y avisa al cliente"
+    },
+    {
+     "mistake": "Llevarte tablas completas para demostrar el fallo",
+     "fix": "Usa evidencia mínima: un registro con datos tapados y los pasos"
+    }
+   ],
+   "nextLesson": "sec-l15"
+  },
+  "review": [
+   {
+    "id": "sec-l1-v1",
+    "type": "mcq",
+    "objective": "sec-l1-o1",
+    "bloom": "comprender",
+    "prompt": "¿Qué distingue a un hacker ético de un atacante?",
+    "options": [
+     {
+      "text": "Las herramientas que usa",
+      "whyNot": "Usan técnicas parecidas; no es la diferencia."
+     },
+     {
+      "text": "El permiso del dueño del sistema"
+     },
+     {
+      "text": "Que sea más experto",
+      "whyNot": "La experiencia no define la ética."
+     },
+     {
+      "text": "Que solo mire y no toque nada",
+      "whyNot": "Mirar sin permiso sigue siendo acceso no autorizado."
+     }
+    ],
+    "correctIndex": 1,
+    "explanation": "Las técnicas son las mismas: lo que cambia es la autorización del dueño."
+   },
+   {
+    "id": "sec-l1-v2",
+    "type": "fill",
+    "objective": "sec-l1-o3",
+    "bloom": "comprender",
+    "prompt": "Completa con el término correcto.",
+    "template": "La ___ de pruebas fija los días y las horas en que sí se puede probar.",
+    "blanks": [
+     {
+      "accept": [
+       "ventana"
+      ]
+     }
+    ],
+    "explanation": "La ventana limita el cuándo; fuera de ella no hay permiso."
+   },
+   {
+    "id": "sec-l1-v3",
+    "type": "mcq",
+    "objective": "sec-l1-o4",
+    "bloom": "comprender",
+    "prompt": "¿Qué es la divulgación responsable?",
+    "options": [
+     {
+      "text": "Publicar el fallo para que la empresa reaccione",
+      "whyNot": "Eso avisa también a los atacantes antes de la corrección."
+     },
+     {
+      "text": "Avisar en privado a quien puede arreglarlo y darle tiempo antes de hablar en público"
+     },
+     {
+      "text": "Cobrar por contar el fallo",
+      "whyNot": "Pedir dinero puede interpretarse como extorsión."
+     },
+     {
+      "text": "Probar más para estar seguro antes de avisar",
+      "whyNot": "Seguir probando sin permiso es el error que se evita."
+     }
+    ],
+    "correctIndex": 1,
+    "explanation": "Es avisar en privado, dar un plazo y no hablar en público antes."
+   }
+  ],
+  "resources": [
+   {
+    "kind": "doc",
+    "title": "OWASP: Vulnerability Disclosure Cheat Sheet",
+    "url": "https://cheatsheetseries.owasp.org/cheatsheets/Vulnerability_Disclosure_Cheat_Sheet.html"
+   },
+   {
+    "kind": "doc",
+    "title": "OWASP Web Security Testing Guide",
+    "url": "https://owasp.org/www-project-web-security-testing-guide/"
+   }
+  ],
+  "verify": [
+   "Las leyes de delitos informáticos varían por país: la clase lo dice y remite a la ley local; no se cita ninguna norma concreta.",
+   "El plazo de 90 días de divulgación es la práctica habitual, no una obligación legal.",
+   "Los detalles del caso de Iowa vienen de prensa especializada y difieren en cifras de fianza: la clase no las usa.",
+   "El importe de 600.000 dólares viene de SC Media, que fecha el inicio del caso en 2015 por error evidente (fue 2019); la clase usa 2019."
+  ]
+ }
+}

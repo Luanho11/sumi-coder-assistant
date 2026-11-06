@@ -1,0 +1,780 @@
+{
+  "trackId": "java",
+  "lessons": {
+    "ses-java-1-1": {
+      "emoji": "☕",
+      "summary": "Declaras variables con tipo, decides con if y switch, repites con bucles y ordenas tu código en métodos.",
+      "analogy": "El tipado estático es un estacionamiento con cajones marcados: en el de motos no cabe un camión, y te lo dicen al entrar, no cuando ya chocaste.",
+      "learned": [
+        "🅿️ Puedes guardar cada dato en el tipo de casilla que le corresponde",
+        "🚦 Haces que tu programa tome caminos distintos según una condición",
+        "🔂 Repites una tarea sobre una lista sin escribirla mil veces",
+        "🧰 Separas un cálculo en piezas con nombre que se reutilizan"
+      ],
+      "check": [
+        {
+          "question": "Comparas `if (nombre == \"Ana\")` con un nombre leído del teclado y falla aunque escribas Ana. ¿Qué usas?",
+          "options": [
+            "nombre === \"Ana\"",
+            "nombre = \"Ana\"",
+            "nombre.equals(\"Ana\")",
+            "(String) nombre == \"Ana\""
+          ],
+          "correctIndex": 2,
+          "explanation": "== compara si son el mismo objeto en memoria; equals compara el contenido. === no existe en Java y = es asignación."
+        },
+        {
+          "question": "¿Qué devuelve `switch (nivel) { case 1 -> \"Principiante\"; default -> \"Desconocido\"; }` con nivel = 5?",
+          "options": [
+            "null",
+            "\"Desconocido\"",
+            "Error de compilación",
+            "\"Principiante\""
+          ],
+          "correctIndex": 1,
+          "explanation": "El switch con flechas devuelve el valor de la rama que coincide y default cubre lo demás. No hay caída a la siguiente rama como en el switch clásico."
+        }
+      ]
+    },
+    "ses-java-1-2": {
+      "emoji": "🧬",
+      "summary": "Modelas el mundo con clases, heredas comportamiento, usas polimorfismo y prefieres componer piezas.",
+      "analogy": "Composición es armar un auto con piezas: tiene un motor y tiene una radio. Herencia es decir que un auto es un vehículo. Cambiar la radio es fácil; cambiar de padre, no.",
+      "learned": [
+        "🔐 Puedes proteger los datos de un objeto para que nadie los rompa",
+        "👨‍👧 Creas una versión especial de algo existente sin copiarlo",
+        "🎭 Tratas objetos distintos con la misma orden y cada uno responde a su modo",
+        "🧱 Armas objetos combinando piezas en vez de heredar todo"
+      ],
+      "check": [
+        {
+          "question": "`Empleado e = new Gerente(\"Ana\", 50000, 5); e.calcularBonificacion();` ¿Qué versión se ejecuta?",
+          "options": [
+            "La de Empleado: 5000",
+            "Error: e es Empleado",
+            "Ambas, se suman dos veces",
+            "La de Gerente: 5000 + 5×500 = 7500"
+          ],
+          "correctIndex": 3,
+          "explanation": "Polimorfismo: el método que corre depende del objeto real, no del tipo de la variable. Gerente llama a super (5000) y suma 2500."
+        },
+        {
+          "question": "Factura debe poder calcular impuesto y exportarse a PDF, y ya hereda de Documento. ¿Cómo lo modelas?",
+          "options": [
+            "extends Documento implements Tributable, Imprimible",
+            "extends Documento, Tributable, Imprimible",
+            "Copiar los métodos en Factura",
+            "Hacer Tributable una clase abstracta y heredarla también"
+          ],
+          "correctIndex": 0,
+          "explanation": "Java permite una sola superclase pero múltiples interfaces. Heredar de dos clases no compila."
+        }
+      ],
+      "diagram": "classDiagram\n  class Empleado {\n    -String nombre\n    -double salario\n    +calcularBonificacion() double\n  }\n  class Gerente {\n    -int equipo\n    +calcularBonificacion() double\n  }\n  Empleado <|-- Gerente\n  classDef padre fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef hija fill:#30D158,stroke:#30D158,color:#fff\n  class Empleado:::padre\n  class Gerente:::hija\n"
+    },
+    "ses-java-2-1": {
+      "emoji": "🗃️",
+      "summary": "Eliges entre List, Set y Map según lo que necesitas, y atrapas errores sin dejar recursos abiertos.",
+      "analogy": "List es una fila del banco (orden y se puede repetir), Set es la lista de invitados (cada nombre una vez) y Map es un llavero con etiquetas.",
+      "learned": [
+        "🎟️ Puedes elegir la forma de guardar datos según si se repiten o no",
+        "🏷️ Buscas algo por su etiqueta sin recorrer toda la lista",
+        "🪤 Atrapas un error y das un mensaje claro en vez de que todo se caiga",
+        "🚪 Te aseguras de cerrar archivos y conexiones aunque algo falle"
+      ],
+      "check": [
+        {
+          "question": "Tienes una lista de correos con repetidos y necesitas mostrarlos únicos y en orden alfabético. ¿Qué usas?",
+          "options": [
+            "ArrayList",
+            "HashSet",
+            "TreeSet",
+            "HashMap"
+          ],
+          "correctIndex": 2,
+          "explanation": "TreeSet elimina duplicados y ordena de forma natural. HashSet elimina duplicados pero no garantiza orden; ArrayList conserva repetidos."
+        },
+        {
+          "question": "`edades.get(\"Luis\")` cuando Luis no está en el Map, y haces `int e = edades.get(\"Luis\");`. ¿Qué pasa?",
+          "options": [
+            "NullPointerException al convertir null a int",
+            "e vale 0",
+            "Error de compilación",
+            "Se agrega Luis con 0"
+          ],
+          "correctIndex": 0,
+          "explanation": "get devuelve null y el unboxing a int falla. getOrDefault(\"Luis\", 0) es la forma segura."
+        }
+      ],
+      "diagram": "flowchart TD\n  Q{Qué necesitas}:::amarillo --> I[Acceso por índice]:::azul --> AL[ArrayList]:::verde\n  Q --> U[Sin duplicados]:::azul --> HS[HashSet o TreeSet]:::verde\n  Q --> K[Clave y valor]:::azul --> HM[HashMap o TreeMap]:::verde\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n  classDef amarillo fill:#FFD60A,stroke:#FFD60A,color:#1d1d1f"
+    },
+    "ses-java-2-2": {
+      "emoji": "🌊",
+      "summary": "Transformas, filtras y agrupas colecciones en pocas líneas con lambdas y streams.",
+      "analogy": "Un stream es una línea de producción: las estaciones (filter, map) no hacen nada hasta que llega el pedido final (collect); sin pedido, la fábrica no arranca.",
+      "learned": [
+        "🏭 Puedes procesar una lista paso a paso como una cadena de montaje",
+        "🧺 Agrupas personas por departamento en una sola instrucción",
+        "✂️ Escribes funciones cortas en una línea cuando la tarea es simple",
+        "🪜 Aplanas listas dentro de listas para trabajar con todo junto"
+      ],
+      "check": [
+        {
+          "question": "Escribes `personas.stream().filter(p -> p.getEdad() > 18).map(Persona::getNombre);` y no pasa nada. ¿Por qué?",
+          "options": [
+            "map no acepta referencias a métodos",
+            "Falta una operación terminal como collect; las intermedias son lazy",
+            "filter necesita un Predicate declarado",
+            "Hay que llamar a run()"
+          ],
+          "correctIndex": 1,
+          "explanation": "filter y map solo describen el proceso. Hasta un collect, count o forEach el stream no se ejecuta."
+        },
+        {
+          "question": "Cada pedido tiene una lista de líneas. Quieres un stream de todas las líneas de todos los pedidos. ¿Qué usas?",
+          "options": [
+            "pedidos.stream().map(p -> p.getLineas())",
+            "pedidos.stream().filter(p -> p.getLineas())",
+            "pedidos.stream().distinct()",
+            "pedidos.stream().flatMap(p -> p.getLineas().stream())"
+          ],
+          "correctIndex": 3,
+          "explanation": "map daría un stream de listas; flatMap aplana cada lista en un solo stream de líneas."
+        }
+      ],
+      "diagram": "flowchart LR\n  S[Lista]:::cian --> F[filter]:::azul --> M[map]:::azul --> O[sorted]:::azul --> C[collect]:::verde\n  F -.->|sin terminal no corre| X[Nada]:::rosa\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n  classDef rosa fill:#FF375F,stroke:#FF375F,color:#fff\n  classDef cian fill:#64D2FF,stroke:#64D2FF,color:#1d1d1f"
+    },
+    "ses-java-3-1": {
+      "emoji": "🍃",
+      "summary": "Construyes un servidor REST con Spring Boot separado en capas, con validación y errores claros.",
+      "analogy": "Las capas de Spring son un restaurante: el mesero (controller) toma el pedido, el chef (service) cocina y el almacenista (repository) trae ingredientes. El mesero no entra al almacén.",
+      "learned": [
+        "🍽️ Puedes separar quién recibe pedidos, quién decide y quién guarda datos",
+        "🚫 Rechazas datos mal escritos antes de que entren al sistema",
+        "📣 Respondes con mensajes de error que el cliente entiende",
+        "🔁 Usas el mismo formato de respuesta para crear, leer, cambiar y borrar"
+      ],
+      "check": [
+        {
+          "question": "Un POST con nombre vacío crea el producto igual, aunque el DTO tiene @NotBlank. ¿Qué falta?",
+          "options": [
+            "@Valid antes de @RequestBody en el controller",
+            "@Service en el DTO",
+            "@Entity en el DTO",
+            "Un try-catch en el controller"
+          ],
+          "correctIndex": 0,
+          "explanation": "Las anotaciones de validación solo se evalúan si el parámetro lleva @Valid. Un try-catch no activa la validación."
+        },
+        {
+          "question": "GET /api/productos/99 no existe. ¿Qué devuelve el controller del ejemplo?",
+          "options": [
+            "200 con body vacío",
+            "500 Internal Error",
+            "404 Not Found",
+            "400 Bad Request"
+          ],
+          "correctIndex": 2,
+          "explanation": "findById devuelve Optional vacío y .orElse(ResponseEntity.notFound().build()) responde 404. 400 es para datos inválidos del cliente."
+        }
+      ],
+      "diagram": "flowchart TD\n  C[Controller]:::azul --> S[Service]:::verde\n  S --> R[Repository]:::naranja\n  R --> D[(Base de datos)]:::morado\n  C -.->|prohibido| R2[Repository directo]:::rosa\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n  classDef naranja fill:#FF9F0A,stroke:#FF9F0A,color:#fff\n  classDef rosa fill:#FF375F,stroke:#FF375F,color:#fff\n  classDef morado fill:#BF5AF2,stroke:#BF5AF2,color:#fff"
+    },
+    "ses-java-3-2": {
+      "emoji": "🧪",
+      "summary": "Pruebas cada capa con la herramienta justa, documentas tu servidor y lo publicas con perfiles y Docker.",
+      "analogy": "Los perfiles de Spring son la ropa según la ocasión: el mismo tú, con pijama en casa (dev con H2) y traje en la oficina (prod con PostgreSQL).",
+      "learned": [
+        "🎯 Puedes probar una sola pieza sin encender todo el sistema",
+        "📖 Generas un manual interactivo de tu servidor sin escribirlo a mano",
+        "👔 Cambias de configuración entre tu computadora y producción sin tocar código",
+        "🔑 Mantienes las contraseñas fuera del código"
+      ],
+      "check": [
+        {
+          "question": "Quieres probar solo que ProductoController responde 200 en GET, sin levantar base de datos. ¿Qué usas?",
+          "options": [
+            "@SpringBootTest con base real",
+            "@DataJpaTest",
+            "Solo @Test sin Spring",
+            "@WebMvcTest con MockMvc y @MockBean ProductoService"
+          ],
+          "correctIndex": 3,
+          "explanation": "@WebMvcTest carga solo la capa web y simulas el servicio. @SpringBootTest levanta todo; @DataJpaTest es para repositorios."
+        },
+        {
+          "question": "jwt.secret aparece escrito en application.yml dentro del repo. ¿Qué haces?",
+          "options": [
+            "Moverlo a application-dev.yml",
+            "Usar jwt.secret=${JWT_SECRET} y pasar el valor por variable de entorno",
+            "Codificarlo en Base64",
+            "Ponerlo en un comentario"
+          ],
+          "correctIndex": 1,
+          "explanation": "Los secretos se inyectan desde el entorno. Moverlo de archivo o codificarlo en Base64 lo sigue dejando en el repositorio."
+        }
+      ],
+      "diagram": "flowchart LR\n  Y[application.yml]:::azul --> DV[dev H2]:::verde\n  Y --> PR[prod PostgreSQL]:::morado\n  ENV[Variables entorno]:::naranja --> PR\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n  classDef naranja fill:#FF9F0A,stroke:#FF9F0A,color:#fff\n  classDef morado fill:#BF5AF2,stroke:#BF5AF2,color:#fff"
+    },
+    "ses-java-4-1": {
+      "emoji": "🧰",
+      "summary": "Eliges la colección correcta mirando cuánto cuesta cada operación.",
+      "analogy": "ArrayList es un libro con índice: vas directo a la página 200. LinkedList es un collar de cuentas: para llegar a la 200 pasas una por una.",
+      "learned": [
+        "⚡ Puedes predecir si una operación será rápida o lenta con muchos datos",
+        "📖 Eliges entre ir directo a una posición o recorrer en orden",
+        "🗝️ Encuentras un dato por su llave casi al instante",
+        "🎤 Defiendes en entrevista por qué elegiste una estructura y no otra"
+      ],
+      "check": [
+        {
+          "question": "Haces miles de `lista.get(i)` aleatorios. ¿ArrayList o LinkedList?",
+          "options": [
+            "ArrayList: get(i) es O(1)",
+            "LinkedList: get(i) es O(1)",
+            "Da igual, ambas son O(1)",
+            "LinkedList porque usa menos memoria"
+          ],
+          "correctIndex": 0,
+          "explanation": "ArrayList guarda en un arreglo y salta directo a la posición. LinkedList recorre nodos: O(n) por cada get."
+        },
+        {
+          "question": "Tienes que verificar 100.000 veces si un ID ya fue procesado. ¿Qué estructura?",
+          "options": [
+            "ArrayList con contains, O(n)",
+            "TreeMap con get",
+            "HashSet con contains, O(1)",
+            "LinkedList con indexOf"
+          ],
+          "correctIndex": 2,
+          "explanation": "HashSet.contains es O(1) promedio. ArrayList.contains recorre todo cada vez: 100.000 × n operaciones."
+        }
+      ],
+      "diagram": "flowchart LR\n  AL[ArrayList get]:::verde --> O1[O de 1]:::verde\n  LL[LinkedList get]:::rosa --> ON[O de n]:::rosa\n  HM[HashMap get]:::verde --> O1\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n  classDef rosa fill:#FF375F,stroke:#FF375F,color:#fff"
+    },
+    "ses-java-5-1": {
+      "emoji": "🧯",
+      "summary": "Distingues tipos de excepciones, creas las tuyas y aplicas las prácticas que evitan errores silenciosos.",
+      "analogy": "Un catch vacío es quitarle la pila a la alarma de humo porque suena mucho: deja de molestar justo hasta que la casa se quema.",
+      "learned": [
+        "🚨 Puedes distinguir un error esperable de un error de programación",
+        "🏷️ Creas avisos de error con nombre propio de tu negocio",
+        "🧯 Evitas que un error desaparezca sin dejar rastro",
+        "⏱️ Detienes un proceso apenas detectas un dato malo"
+      ],
+      "check": [
+        {
+          "question": "Revisas un PR con `catch (Exception e) {}`. ¿Qué comentario dejas?",
+          "options": [
+            "Perfecto, así nunca falla",
+            "Cambiar a catch (Throwable e) {}",
+            "Agregar finally vacío",
+            "Atrapa algo específico y registra o relanza; un catch vacío esconde fallos"
+          ],
+          "correctIndex": 3,
+          "explanation": "Tragarse la excepción borra la pista del bug. Throwable es peor: también atrapa Errors como OutOfMemoryError."
+        },
+        {
+          "question": "Un método lee un archivo con FileReader y el compilador exige manejar IOException. ¿Por qué?",
+          "options": [
+            "Porque es RuntimeException",
+            "IOException es checked: hay que atraparla o declararla con throws",
+            "Por un error de sintaxis",
+            "Porque FileReader está obsoleto"
+          ],
+          "correctIndex": 1,
+          "explanation": "Las checked se verifican al compilar porque el fallo es esperable (archivo ausente). Las RuntimeException no obligan a nada."
+        }
+      ],
+      "diagram": "flowchart TD\n  T[Throwable]:::azul --> E[Error no atrapar]:::rosa\n  T --> X[Exception]:::azul\n  X --> C[Checked IOException]:::naranja\n  X --> R[RuntimeException]:::amarillo\n  R --> N[NullPointerException]:::amarillo\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef naranja fill:#FF9F0A,stroke:#FF9F0A,color:#fff\n  classDef rosa fill:#FF375F,stroke:#FF375F,color:#fff\n  classDef amarillo fill:#FFD60A,stroke:#FFD60A,color:#1d1d1f"
+    },
+    "ses-java-6-1": {
+      "emoji": "🛍️",
+      "summary": "Diseñas la API de una tienda: capas, recursos REST, códigos HTTP y entidades con sus relaciones.",
+      "analogy": "Las relaciones JPA son un álbum familiar: muchos productos pertenecen a una categoría (@ManyToOne) como muchos hermanos a una misma familia.",
+      "learned": [
+        "🏪 Puedes diseñar las direcciones web de una tienda en línea",
+        "🔢 Eliges el código de respuesta correcto para cada situación",
+        "🕸️ Dibujas cómo se relacionan productos, categorías y pedidos",
+        "🧱 Explicas por qué cada capa solo habla con la de abajo"
+      ],
+      "check": [
+        {
+          "question": "Un cliente hace POST /api/productos con datos válidos. ¿Qué código responde lo ideal?",
+          "options": [
+            "200 OK",
+            "204 No Content",
+            "201 Created",
+            "202 Accepted"
+          ],
+          "correctIndex": 2,
+          "explanation": "201 indica que se creó un recurso nuevo. 200 sirve, pero no comunica creación; 204 es típico de DELETE."
+        },
+        {
+          "question": "Un pedido tiene varias líneas y cada línea pertenece a un pedido. ¿Qué relación pones en Pedido?",
+          "options": [
+            "@OneToMany hacia LineaPedido",
+            "@ManyToOne hacia LineaPedido",
+            "@OneToOne hacia LineaPedido",
+            "Ninguna, solo un String con IDs"
+          ],
+          "correctIndex": 0,
+          "explanation": "Un pedido tiene muchas líneas: @OneToMany del lado de Pedido y @ManyToOne del lado de LineaPedido."
+        }
+      ],
+      "diagram": "flowchart LR\n  CA[Categoria]:::azul -->|1 a muchos| PR[Producto]:::verde\n  US[Usuario]:::morado -->|1 a muchos| PE[Pedido]:::naranja\n  PE -->|1 a muchos| LP[LineaPedido]:::cian\n  LP -->|muchos a 1| PR\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n  classDef naranja fill:#FF9F0A,stroke:#FF9F0A,color:#fff\n  classDef morado fill:#BF5AF2,stroke:#BF5AF2,color:#fff\n  classDef cian fill:#64D2FF,stroke:#64D2FF,color:#1d1d1f"
+    },
+    "ses-java-6-2": {
+      "emoji": "🔬",
+      "summary": "Escribes pruebas siguiendo la pirámide y el patrón AAA, y dejas la API documentada y lista para publicar.",
+      "analogy": "La pirámide de tests es una dieta: muchas verduras (unit), algo de proteína (integración) y postre de vez en cuando (E2E). Solo postre te deja lento y enfermo.",
+      "learned": [
+        "🥗 Puedes repartir tus pruebas entre muchas rápidas y pocas lentas",
+        "🅰️ Ordenas cada prueba en preparar, actuar y comprobar",
+        "🎭 Reemplazas una base de datos por un doble para probar la lógica",
+        "📦 Dejas tu servidor listo para correr en cualquier máquina"
+      ],
+      "check": [
+        {
+          "question": "En un test de ProductoService, ¿qué va en la parte Arrange?",
+          "options": [
+            "service.crear(dto)",
+            "when(repo.save(any())).thenReturn(producto)",
+            "assertThat(result.getNombre()).isEqualTo(\"Laptop\")",
+            "verify(repo).save(any())"
+          ],
+          "correctIndex": 1,
+          "explanation": "Arrange prepara datos y comportamiento de los mocks. crear es Act; assertThat y verify son Assert."
+        },
+        {
+          "question": "Tu equipo tiene 200 tests E2E de 30 s cada uno y 10 unitarios. ¿Qué propones?",
+          "options": [
+            "Agregar más E2E",
+            "Borrar todos los tests",
+            "Correr los E2E solo en producción",
+            "Invertir la proporción: muchos unitarios rápidos y pocos E2E"
+          ],
+          "correctIndex": 3,
+          "explanation": "La pirámide pone la base en unit tests rápidos y baratos. 200 E2E dan una espera de 100 minutos y fallos difíciles de diagnosticar."
+        }
+      ]
+    }
+  },
+  "modules": {
+    "mod-java-1": {
+      "emoji": "☕",
+      "exam": [
+        {
+          "question": "`final double PI = 3.14; PI = 3.1416;` ¿Qué pasa?",
+          "options": [
+            "PI pasa a 3.1416",
+            "Se lanza una excepción en ejecución",
+            "Error de compilación: una variable final no se reasigna",
+            "Se crea otra variable PI"
+          ],
+          "correctIndex": 2,
+          "explanation": "final impide reasignar y el compilador lo detecta antes de ejecutar."
+        },
+        {
+          "question": "Tienes `sumar(int, int)` y `sumar(double, double)`. Llamas `sumar(2, 3)`. ¿Cuál corre?",
+          "options": [
+            "sumar(int, int)",
+            "sumar(double, double)",
+            "Error de ambigüedad",
+            "Ambas"
+          ],
+          "correctIndex": 0,
+          "explanation": "La sobrecarga elige la firma que coincide exactamente. Con int existe una versión exacta, así que no se convierte a double."
+        },
+        {
+          "question": "Cuenta tiene saldo public y alguien hace cuenta.saldo = -500. ¿Qué pilar aplicas?",
+          "options": [
+            "Herencia",
+            "Polimorfismo",
+            "Abstracción con interfaz vacía",
+            "Encapsulamiento: saldo private y un método retirar que valide"
+          ],
+          "correctIndex": 3,
+          "explanation": "Encapsular oculta el dato y obliga a pasar por métodos con reglas. Heredar no impide el acceso directo."
+        },
+        {
+          "question": "¿Para qué existe Integer si ya hay int?",
+          "options": [
+            "Porque int es más lento",
+            "Para usar números en colecciones como List<Integer> y poder representar null",
+            "Para decimales",
+            "Porque int está obsoleto"
+          ],
+          "correctIndex": 1,
+          "explanation": "Las colecciones genéricas solo guardan objetos. int es primitivo y no puede ser null."
+        },
+        {
+          "question": "Forma es abstract con `abstract double area()`. ¿Qué pasa con `new Forma()`?",
+          "options": [
+            "Crea una forma con área 0",
+            "Lanza NullPointerException",
+            "No compila: una clase abstracta no se instancia",
+            "Funciona si area tiene return"
+          ],
+          "correctIndex": 2,
+          "explanation": "Solo se instancian subclases concretas que implementan area(). Es justo lo que define el contrato."
+        },
+        {
+          "question": "Un Auto debe poder cambiar de motor de gasolina a eléctrico en tiempo de ejecución. ¿Qué diseño?",
+          "options": [
+            "Composición: Auto tiene un Motor (interfaz) que se puede reemplazar",
+            "Herencia: AutoGasolina y AutoElectrico",
+            "Copiar el código del motor en Auto",
+            "Un switch gigante en Auto"
+          ],
+          "correctIndex": 0,
+          "explanation": "Con composición cambias la pieza sin crear subclases. La herencia fija el tipo al crear el objeto."
+        }
+      ]
+    },
+    "mod-java-2": {
+      "emoji": "🌊",
+      "exam": [
+        {
+          "question": "Recorres un ArrayList con for-each y haces lista.remove(x) dentro. Salta ConcurrentModificationException. ¿Arreglo?",
+          "options": [
+            "Atrapar la excepción e ignorarla",
+            "Cambiar a LinkedList",
+            "Usar un for-each dentro de otro",
+            "lista.removeIf(x -> condición) o usar un Iterator con it.remove()"
+          ],
+          "correctIndex": 3,
+          "explanation": "Modificar la lista mientras el for-each la recorre invalida el iterador. removeIf o Iterator.remove lo hacen de forma segura."
+        },
+        {
+          "question": "¿Qué produce `Collectors.partitioningBy(e -> e.getPromedio() >= 6)`?",
+          "options": [
+            "Una lista solo con aprobados",
+            "Un Map<Boolean, List> con aprobados (true) y reprobados (false)",
+            "Un Map por cada promedio",
+            "Un número con el total"
+          ],
+          "correctIndex": 1,
+          "explanation": "partitioningBy divide en dos grupos según un predicado. groupingBy crearía un grupo por cada valor distinto."
+        },
+        {
+          "question": "try-with-resources abre una conexión y ocurre una excepción en medio. ¿Qué pasa con la conexión?",
+          "options": [
+            "Se cierra automáticamente",
+            "Queda abierta hasta reiniciar",
+            "Se cierra solo si hay finally",
+            "Depende del driver"
+          ],
+          "correctIndex": 0,
+          "explanation": "Todo AutoCloseable declarado en el try se cierra al salir, haya error o no. No necesitas finally para eso."
+        },
+        {
+          "question": "`String::toUpperCase` equivale a…",
+          "options": [
+            "() -> toUpperCase()",
+            "s -> String.toUpperCase(s)",
+            "s -> s.toUpperCase()",
+            "new String().toUpperCase()"
+          ],
+          "correctIndex": 2,
+          "explanation": "Una referencia a método de instancia recibe el objeto como parámetro y llama al método sobre él."
+        },
+        {
+          "question": "Necesitas el promedio, mínimo y máximo de salarios en una pasada. ¿Qué usas?",
+          "options": [
+            "Tres streams distintos con reduce",
+            "sorted().findFirst()",
+            "peek(System.out::println)",
+            "mapToDouble(...).summaryStatistics()"
+          ],
+          "correctIndex": 3,
+          "explanation": "summaryStatistics calcula count, sum, min, max y average juntos. Tres streams recorren la lista tres veces."
+        },
+        {
+          "question": "¿Qué Predicate escribes para \"nombre con más de 10 letras\"?",
+          "options": [
+            "Predicate<String> esLargo = s -> s.length() > 10;",
+            "Function<String, Integer> esLargo = s -> s.length() > 10;",
+            "Supplier<String> esLargo = () -> s.length() > 10;",
+            "Consumer<String> esLargo = s -> s.length() > 10;"
+          ],
+          "correctIndex": 0,
+          "explanation": "Predicate devuelve boolean. Function debe devolver el tipo declarado, Supplier no recibe parámetros y Consumer no devuelve nada."
+        },
+        {
+          "question": "Tu SistemaEstudiantes recibe una calificación de 15 sobre 10. ¿Qué haces?",
+          "options": [
+            "Guardarla y corregir después",
+            "Lanzar CalificacionInvalidaException con un mensaje claro",
+            "Devolver -1",
+            "Imprimir un aviso y continuar"
+          ],
+          "correctIndex": 1,
+          "explanation": "Fail fast con una excepción de dominio detiene el dato malo. Códigos como -1 se olvidan de revisar y el error se propaga."
+        }
+      ]
+    },
+    "mod-java-3": {
+      "emoji": "🍃",
+      "exam": [
+        {
+          "question": "¿Por qué el ejemplo inyecta ProductoService por constructor en vez de @Autowired en el campo?",
+          "options": [
+            "Porque @Autowired no existe",
+            "Porque es más rápido en ejecución",
+            "Permite campos final y pasar un mock a mano en los tests",
+            "Porque Spring lo exige"
+          ],
+          "correctIndex": 2,
+          "explanation": "La inyección por constructor hace explícitas las dependencias y facilita los tests sin Spring. @Autowired en campos sigue funcionando."
+        },
+        {
+          "question": "Lanzas RecursoNoEncontradoException en el service. ¿Qué convierte eso en un 404 con JSON?",
+          "options": [
+            "Un @ExceptionHandler dentro de un @RestControllerAdvice",
+            "Un try-catch en cada controller",
+            "@ResponseStatus en el repository",
+            "El navegador"
+          ],
+          "correctIndex": 0,
+          "explanation": "El advice centraliza el manejo de errores de todos los controllers. Repetir try-catch duplica código."
+        },
+        {
+          "question": "¿Qué anotación usas para un test del repositorio con una base en memoria?",
+          "options": [
+            "@WebMvcTest",
+            "@MockBean",
+            "@RestController",
+            "@DataJpaTest"
+          ],
+          "correctIndex": 3,
+          "explanation": "@DataJpaTest carga solo JPA y una base embebida. @WebMvcTest es para la capa web."
+        },
+        {
+          "question": "Corres la imagen con `docker run -p 8080:8080 mi-api` y falla al conectar a la base. ¿Qué falta?",
+          "options": [
+            "EXPOSE 3000",
+            "Pasar -e DB_URL=... porque la config lee ${DB_URL}",
+            "Reinstalar Java",
+            "Un @Valid más"
+          ],
+          "correctIndex": 1,
+          "explanation": "application-prod usa variables de entorno; si no las pasas, la URL queda vacía. EXPOSE no configura la conexión."
+        },
+        {
+          "question": "En un test con Mockito, ¿qué comprueba `verify(repo).findAll()`?",
+          "options": [
+            "Que findAll devolvió datos",
+            "Que la base existe",
+            "Que el service llamó a findAll del repositorio",
+            "Que el controller respondió 200"
+          ],
+          "correctIndex": 2,
+          "explanation": "verify revisa interacciones con el mock. El resultado lo valida assertThat."
+        },
+        {
+          "question": "¿Dónde ves la documentación generada por springdoc-openapi?",
+          "options": [
+            "En /swagger-ui.html",
+            "En el README automáticamente",
+            "En /actuator/health",
+            "Solo en los logs"
+          ],
+          "correctIndex": 0,
+          "explanation": "springdoc publica Swagger UI con los endpoints, DTOs y validaciones detectadas."
+        }
+      ]
+    },
+    "mod-java-4": {
+      "emoji": "🧰",
+      "exam": [
+        {
+          "question": "Necesitas un ranking de puntajes ordenado por nombre de jugador. ¿Qué Map?",
+          "options": [
+            "HashMap",
+            "TreeMap",
+            "ArrayList",
+            "HashSet"
+          ],
+          "correctIndex": 1,
+          "explanation": "TreeMap mantiene las claves ordenadas. HashMap no garantiza orden; Set y List no son clave-valor."
+        },
+        {
+          "question": "Borras muchos elementos del inicio de un ArrayList de 1 millón. ¿Por qué va lento?",
+          "options": [
+            "Porque ArrayList no permite borrar",
+            "Porque get es O(n)",
+            "Por el recolector de basura",
+            "remove(0) desplaza todos los elementos restantes: O(n) cada vez"
+          ],
+          "correctIndex": 3,
+          "explanation": "Al quitar del inicio, cada elemento se mueve una posición. En LinkedList quitar el primero es O(1)."
+        },
+        {
+          "question": "Agrupas tareas por categoría. ¿Qué tipo declaras?",
+          "options": [
+            "Map<String, List<Task>>",
+            "List<Map<Task>>",
+            "Set<String, Task>",
+            "Map<Task, String>"
+          ],
+          "correctIndex": 0,
+          "explanation": "La categoría es la clave y cada una guarda su lista de tareas. Set no tiene pares clave-valor."
+        },
+        {
+          "question": "Un HashSet<Task> acepta dos tareas con el mismo título como distintas. ¿Qué falta en Task?",
+          "options": [
+            "Implementar toString",
+            "Hacer Task final",
+            "Implementar equals y hashCode basados en el título",
+            "Usar TreeSet sin cambios"
+          ],
+          "correctIndex": 2,
+          "explanation": "HashSet decide duplicados con hashCode y equals. Sin ellos compara referencias y dos objetos iguales cuentan como distintos."
+        },
+        {
+          "question": "Una lectura afirma que en Java `linkedList.remove(objeto)` es O(1). ¿Es cierto?",
+          "options": [
+            "Sí, siempre es O(1)",
+            "No: primero busca el objeto recorriendo la lista, O(n)",
+            "Solo si está ordenada",
+            "Solo con Integer"
+          ],
+          "correctIndex": 1,
+          "explanation": "Quitar un nodo ya localizado es O(1), pero remove(Object) debe encontrarlo antes. La slide simplifica este punto."
+        }
+      ]
+    },
+    "mod-java-5": {
+      "emoji": "🧯",
+      "exam": [
+        {
+          "question": "UserValidator recibe un email sin @. ¿Qué excepción encaja con las buenas prácticas?",
+          "options": [
+            "InvalidEmailException, específica del dominio",
+            "Exception genérica",
+            "RuntimeException(\"error\")",
+            "Devolver false sin explicar"
+          ],
+          "correctIndex": 0,
+          "explanation": "Una excepción con nombre de dominio deja claro qué falló y permite atraparla aparte. Una genérica obliga a leer mensajes."
+        },
+        {
+          "question": "¿Cuál es un uso indebido de excepciones?",
+          "options": [
+            "Validar un parámetro nulo al inicio",
+            "Relanzar envuelta con contexto",
+            "Crear DuplicateUserException",
+            "Lanzar una excepción para salir de un bucle normal"
+          ],
+          "correctIndex": 3,
+          "explanation": "Las excepciones son para situaciones anómalas, no para control de flujo: son lentas y confunden al lector."
+        },
+        {
+          "question": "Atrapas SQLException, la registras y relanzas una excepción propia. ¿Qué debes conservar?",
+          "options": [
+            "Solo el mensaje",
+            "Nada, ya está registrada",
+            "La causa original: new MiExcepcion(\"msg\", e)",
+            "El número de línea en texto"
+          ],
+          "correctIndex": 2,
+          "explanation": "Pasar e como causa mantiene el stack trace completo para depurar. Solo el mensaje pierde dónde ocurrió."
+        },
+        {
+          "question": "NullPointerException al leer usuario.getEmail(). ¿Qué tipo es y qué indica?",
+          "options": [
+            "Checked: hay que declararla",
+            "Unchecked: un bug, faltó validar que usuario no fuera null",
+            "Un Error de la JVM",
+            "Un problema de red"
+          ],
+          "correctIndex": 1,
+          "explanation": "Las RuntimeException señalan errores de programación. La solución es validar o evitar el null, no atraparla siempre."
+        },
+        {
+          "question": "¿Qué significa fail fast en un método crearUsuario?",
+          "options": [
+            "Validar los datos al inicio y lanzar error antes de hacer cambios",
+            "Atrapar todo al final",
+            "Reintentar hasta que funcione",
+            "Ignorar campos inválidos"
+          ],
+          "correctIndex": 0,
+          "explanation": "Detener al principio evita estados a medias, como un usuario guardado sin email válido."
+        }
+      ]
+    },
+    "mod-java-6": {
+      "emoji": "🛍️",
+      "exam": [
+        {
+          "question": "Un controller inyecta ProductoRepository y hace la lógica de stock ahí mismo. ¿Qué principio rompe?",
+          "options": [
+            "Ninguno, es más rápido",
+            "El de usar DTOs",
+            "Cada capa solo depende de la inferior: la lógica va en el Service",
+            "El de @Entity"
+          ],
+          "correctIndex": 2,
+          "explanation": "El controller recibe y delega; el service contiene las reglas y usa el repository. Saltarse la capa dispersa la lógica."
+        },
+        {
+          "question": "¿Por qué devolver ProductoDTO en vez de la entidad Producto en el controller?",
+          "options": [
+            "Porque las entidades no se pueden serializar",
+            "Porque es más rápido",
+            "Porque JPA lo prohíbe",
+            "Controlas qué campos salen y evitas exponer relaciones o datos internos"
+          ],
+          "correctIndex": 3,
+          "explanation": "El DTO es el contrato público; la entidad puede tener campos internos o relaciones lazy que fallan al serializar."
+        },
+        {
+          "question": "PUT /api/productos/5 con precio negativo. ¿Qué código responde?",
+          "options": [
+            "400 Bad Request",
+            "404 Not Found",
+            "500 Internal Error",
+            "201 Created"
+          ],
+          "correctIndex": 0,
+          "explanation": "Son datos inválidos del cliente: @DecimalMin falla y el handler responde 400. 500 indicaría un fallo del servidor."
+        },
+        {
+          "question": "Un test con @SpringBootTest tarda 20 s y solo prueba un cálculo del service. ¿Qué cambias?",
+          "options": [
+            "@DataJpaTest",
+            "Un unit test con @ExtendWith(MockitoExtension.class) y mocks",
+            "Más memoria a la JVM",
+            "Agregar @WebMvcTest"
+          ],
+          "correctIndex": 1,
+          "explanation": "@SpringBootTest levanta todo el contexto. Para lógica aislada basta Mockito: milisegundos en lugar de segundos."
+        },
+        {
+          "question": "Producto tiene @ManyToOne(fetch = LAZY) hacia Categoria. ¿Qué significa LAZY?",
+          "options": [
+            "Nunca se carga",
+            "Se carga siempre junto al producto",
+            "La categoría se carga de la base solo cuando se accede a ella",
+            "Se guarda en caché para siempre"
+          ],
+          "correctIndex": 2,
+          "explanation": "LAZY retrasa la consulta hasta usar getCategoria(). EAGER la traería siempre, aunque no la necesites."
+        },
+        {
+          "question": "MockMvc: POST /api/productos con nombre vacío. ¿Qué afirmas en el test?",
+          "options": [
+            "andExpect(status().isOk())",
+            "andExpect(status().isCreated())",
+            "andExpect(status().isNotFound())",
+            "andExpect(status().isBadRequest())"
+          ],
+          "correctIndex": 3,
+          "explanation": "testCrearProductoInvalido debe confirmar que la validación responde 400. Esperar 201 aprobaría justo el bug."
+        }
+      ]
+    }
+  }
+}

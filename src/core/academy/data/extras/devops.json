@@ -1,0 +1,479 @@
+{
+  "trackId": "devops",
+  "lessons": {
+    "ops-l1": {
+      "emoji": "🌿",
+      "summary": "Trabajas en paralelo sin pisar a tu equipo y resuelves choques de cambios con calma.",
+      "analogy": "Rebase es como volver a escribir tu receta en limpio sobre la última versión del recetario; merge es engrapar tu hoja con una nota de \"aquí se juntaron\".",
+      "learned": [
+        "🌿 Puedes probar una idea aparte sin tocar lo que ya funciona",
+        "⚔️ Resuelves cuando dos personas cambiaron la misma línea",
+        "🧹 Dejas un historial ordenado que otros entienden",
+        "↩️ Sabes cómo salir de un lío y volver al punto de partida"
+      ],
+      "check": [
+        {
+          "question": "Tu compañera ya bajó `feat/pagos` y trabaja sobre ella. Quieres rebasarla sobre main para limpiar la historia. ¿Qué haces?",
+          "options": [
+            "Hacer merge de main en la rama o coordinarlo antes con ella",
+            "Rebasar y hacer force push",
+            "Borrar su rama",
+            "Rebasar sin push"
+          ],
+          "correctIndex": 0,
+          "explanation": "Reescribir commits que otra persona ya tiene le duplica la historia. Merge no reescribe; si se quiere rebase, se acuerda primero."
+        },
+        {
+          "question": "En medio de un rebase con conflictos te das cuenta de que te equivocaste de rama base. ¿Qué comando te salva?",
+          "options": [
+            "git reset --hard",
+            "git commit -m arreglo",
+            "git stash drop",
+            "git rebase --abort"
+          ],
+          "correctIndex": 3,
+          "explanation": "--abort deja todo como antes de empezar el rebase. reset --hard en ese estado puede dejarte en un punto intermedio confuso."
+        }
+      ],
+      "diagram": "flowchart LR\n  M[main]:::azul --> F[feat rama]:::naranja\n  F --> C{Conflicto}:::rosa\n  C -->|resuelves| T[Tests pasan]:::verde\n  T --> I[Integrar a main]:::azul\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef naranja fill:#FF9F0A,stroke:#FF9F0A,color:#fff\n  classDef rosa fill:#FF375F,stroke:#FF375F,color:#fff\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff"
+    },
+    "ops-l2": {
+      "emoji": "🔍",
+      "summary": "Encuentras el cambio exacto que causó un error, rescatas trabajo perdido y presentas tus cambios para revisión.",
+      "analogy": "bisect es adivinar un número del 1 al 1000 diciendo \"más alto\" o \"más bajo\": en 10 intentos lo tienes. reflog es el historial de tu navegador, pero de tu repo.",
+      "learned": [
+        "🔍 Encuentras en minutos qué cambio exacto rompió algo entre cientos",
+        "🛟 Recuperas trabajo que creías perdido por un comando equivocado",
+        "🤝 Presentas tus cambios para que otros los revisen sin dudas",
+        "💬 Respondes una crítica de tu trabajo con propuestas concretas"
+      ],
+      "check": [
+        {
+          "question": "Entre v3.0 (bien) y hoy hay 512 commits. ¿Cuántas pruebas necesita bisect como máximo?",
+          "options": [
+            "512",
+            "Unas 9",
+            "256",
+            "Unas 50"
+          ],
+          "correctIndex": 1,
+          "explanation": "Cada prueba descarta la mitad: 2^9 = 512, así que unas 9. Probar commit por commit serían cientos."
+        },
+        {
+          "question": "Tu PR tiene 2 300 líneas entre refactor, una funcionalidad y cambios de formato. ¿Qué te pedirá un buen revisor?",
+          "options": [
+            "Aprobarlo rápido",
+            "Agregar más comentarios al código",
+            "Hacer squash de todos los commits",
+            "Dividirlo en PRs pequeños por tema"
+          ],
+          "correctIndex": 3,
+          "explanation": "PRs pequeños se revisan mejor y se revierten fácil. Squash solo junta commits; no reduce lo que hay que leer."
+        }
+      ],
+      "diagram": "flowchart LR\n  G[good v1]:::verde --> M1[mitad]:::amarillo\n  M1 -->|bad| M2[mitad izquierda]:::amarillo\n  M2 -->|good| X[primer commit malo]:::rosa\n  B[bad HEAD]:::rosa --> M1\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n  classDef amarillo fill:#FFD60A,stroke:#FFD60A,color:#1d1d1f\n  classDef rosa fill:#FF375F,stroke:#FF375F,color:#fff"
+    },
+    "ops-l3": {
+      "emoji": "🐳",
+      "summary": "Empaquetas tu app en una caja que corre igual en tu laptop, en la de tu equipo y en el servidor.",
+      "analogy": "Una imagen multi-stage es mudarte: empacas en la casa vieja con todas tus herramientas, pero al camión solo suben las cajas cerradas, no el taladro ni la cinta.",
+      "learned": [
+        "🐳 Empaquetas tu programa para que funcione igual en cualquier computadora",
+        "⚡ Ordenas los pasos para que reconstruir tarde segundos y no minutos",
+        "🪶 Entregas un paquete ligero sin las herramientas que solo usaste para armarlo",
+        "🔐 Haces que tu programa corra sin permisos de administrador"
+      ],
+      "check": [
+        {
+          "question": "Tu imagen final pesa 1,2 GB e incluye TypeScript y vitest. ¿Qué técnica la reduce más?",
+          "options": [
+            "Multi-stage: compilar en una etapa y copiar solo dist y deps de producción",
+            "Comprimir la imagen con zip",
+            "Borrar node_modules en el CMD",
+            "Usar más capas RUN"
+          ],
+          "correctIndex": 0,
+          "explanation": "Multi-stage descarta todo lo de la etapa de build. Borrar archivos en una capa posterior no reduce el tamaño de las capas anteriores."
+        },
+        {
+          "question": "Olvidaste el .dockerignore y tu `.env` con claves quedó en la imagen subida a un registro público. ¿Qué haces primero?",
+          "options": [
+            "Borrar el archivo y reconstruir",
+            "Hacer privado el registro y ya",
+            "Nada si nadie la descargó",
+            "Rotar todas las claves expuestas y luego corregir la imagen"
+          ],
+          "correctIndex": 3,
+          "explanation": "Debes asumir que las claves ya se filtraron: rotarlas es lo urgente. Reconstruir no invalida las copias que ya se descargaron."
+        }
+      ],
+      "diagram": "flowchart LR\n  S1[Etapa build]:::naranja --> D[dist compilado]:::verde\n  S1 -.->|se descarta| X[TS y devDeps]:::rosa\n  D --> S2[Imagen final]:::azul\n  P[deps producción]:::verde --> S2\n  classDef naranja fill:#FF9F0A,stroke:#FF9F0A,color:#fff\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n  classDef rosa fill:#FF375F,stroke:#FF375F,color:#fff\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff"
+    },
+    "ops-l4": {
+      "emoji": "🎼",
+      "summary": "Levantas tu app con su base de datos y todo su entorno usando un solo comando.",
+      "analogy": "compose es la partitura de una orquesta: dice qué instrumento entra primero y quién espera a quién; el volumen es el atril donde queda guardada la música.",
+      "learned": [
+        "🎼 Arrancas varias piezas de un sistema juntas con una sola orden",
+        "🌐 Sabes cómo se encuentran entre sí los programas de un mismo equipo",
+        "💾 Evitas que los datos se borren al apagar todo",
+        "⏳ Haces que cada pieza espere a que la otra esté lista de verdad"
+      ],
+      "check": [
+        {
+          "question": "La API arranca, intenta conectarse y falla porque Postgres aún inicializa, aunque tiene `depends_on: [db]`. ¿Qué agregas?",
+          "options": [
+            "Un sleep 30 en el CMD",
+            "healthcheck en db y condition: service_healthy",
+            "restart: never",
+            "Más memoria al contenedor"
+          ],
+          "correctIndex": 1,
+          "explanation": "depends_on simple solo espera a que el contenedor arranque. El healthcheck dice cuándo acepta conexiones; un sleep es frágil."
+        },
+        {
+          "question": "Tras `docker compose down` y `up` desaparecieron todos los pedidos. ¿Qué faltaba?",
+          "options": [
+            "Mapear el puerto 5432",
+            "Un restart: always",
+            "Correr las migraciones",
+            "Un volumen para la carpeta de datos de Postgres"
+          ],
+          "correctIndex": 3,
+          "explanation": "Sin volumen, los datos viven en la capa del contenedor y se borran con él. Los puertos y reinicios no afectan a la persistencia."
+        }
+      ]
+    },
+    "ops-l5": {
+      "emoji": "🔁",
+      "summary": "Haces que cada cambio se revise solo antes de entrar al proyecto, sin depender de la memoria de nadie.",
+      "analogy": "CI es el detector de metales del aeropuerto: todos pasan por él, sin excepciones por prisa. Si la alarma suena, no subes al avión, aunque seas el piloto.",
+      "learned": [
+        "🔁 Logras que cada cambio se revise solo antes de aceptarse",
+        "🚧 Impides que algo roto llegue a la versión principal",
+        "🧪 Pruebas tu proyecto en varias versiones sin hacerlo a mano",
+        "⏱️ Ahorras minutos guardando lo que no cambia entre revisiones"
+      ],
+      "check": [
+        {
+          "question": "Lint tarda 20 s y los tests 4 min. Quieres feedback rápido de ambos. ¿Qué haces?",
+          "options": [
+            "Separarlos en dos jobs que corren en paralelo",
+            "Ponerlos en el mismo paso",
+            "Quitar el lint",
+            "Correr tests solo en main"
+          ],
+          "correctIndex": 0,
+          "explanation": "Jobs distintos corren en paralelo por defecto, así ves el fallo de lint en segundos. Quitar checks o correrlos solo en main deja pasar errores."
+        },
+        {
+          "question": "Tu workflow tiene `on: push` en todas las ramas y además `pull_request`. ¿Qué notas?",
+          "options": [
+            "Nada raro",
+            "No corre en PR",
+            "Solo corre en main",
+            "Cada push a una rama con PR abierto corre CI dos veces"
+          ],
+          "correctIndex": 3,
+          "explanation": "Ambos eventos se disparan. Lo típico es pull_request más push solo a main para no duplicar ejecuciones."
+        }
+      ]
+    },
+    "ops-l6": {
+      "emoji": "🚀",
+      "summary": "Publicas tu app automáticamente cuando todo está en verde y guardas las claves donde nadie las vea.",
+      "analogy": "Un secreto en git es tatuarte la contraseña: aunque luego te pongas una venda, ya la vio todo el que pasó. La única salida es cambiar la contraseña.",
+      "learned": [
+        "🚀 Publicas una versión nueva sin pasos manuales cuando todo está bien",
+        "🔐 Guardas las claves del sistema fuera del código que otros leen",
+        "🧯 Vuelves a la versión anterior en minutos si algo sale mal",
+        "✋ Pides la aprobación de otra persona antes de tocar lo que usan los clientes"
+      ],
+      "check": [
+        {
+          "question": "Tu job de despliegue no tiene `needs: test`. ¿Qué puede pasar?",
+          "options": [
+            "Nada, los jobs corren en orden",
+            "Se despliega en paralelo aunque los tests fallen",
+            "El despliegue tarda más",
+            "Los secretos no llegan"
+          ],
+          "correctIndex": 1,
+          "explanation": "Sin needs, los jobs corren en paralelo e independientes. needs garantiza que solo se despliegue código que pasó CI."
+        },
+        {
+          "question": "Etiquetas la imagen solo como `latest` y la versión nueva rompe el login. ¿Qué problema tienes para volver atrás?",
+          "options": [
+            "Ninguno",
+            "Docker no permite volver atrás",
+            "Debes borrar el registro",
+            "latest ya apunta a la nueva y no tienes una etiqueta fija de la anterior"
+          ],
+          "correctIndex": 3,
+          "explanation": "latest se mueve con cada build. Con etiquetas por sha o versión, el rollback es desplegar la etiqueta anterior."
+        }
+      ],
+      "diagram": "flowchart LR\n  C[CI verde]:::verde --> I[Imagen con sha]:::azul\n  I --> S[Staging]:::cian\n  S --> A{Aprobación}:::amarillo\n  A -->|sí| P[Producción]:::verde\n  P -->|falla| R[Rollback sha previo]:::rosa\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef cian fill:#64D2FF,stroke:#64D2FF,color:#1d1d1f\n  classDef amarillo fill:#FFD60A,stroke:#FFD60A,color:#1d1d1f\n  classDef rosa fill:#FF375F,stroke:#FF375F,color:#fff"
+    },
+    "ops-l7": {
+      "emoji": "📜",
+      "summary": "Describes la infraestructura en archivos versionados y revisables.",
+      "analogy": "Como la receta escrita de un plato: cualquiera puede repetirlo igual, en vez de depender de la memoria del cocinero.",
+      "learned": [
+        "📜 Guardas la descripción de tus servidores en el repositorio",
+        "🔍 Lees el plan de cambios antes de aplicarlo",
+        "🔒 Proteges el archivo de estado porque puede tener secretos"
+      ],
+      "check": [
+        {
+          "question": "¿Qué hace terraform plan?",
+          "options": [
+            "Aplica los cambios en la nube",
+            "Muestra qué se va a crear, cambiar o destruir sin aplicarlo",
+            "Borra la infraestructura",
+            "Sube el estado a Git"
+          ],
+          "correctIndex": 1,
+          "explanation": "plan es una vista previa: te deja revisar el impacto antes de ejecutar apply."
+        },
+        {
+          "question": "Un compañero cambió a mano una regla de firewall en producción. ¿Qué ventaja da tener la infraestructura como código?",
+          "options": [
+            "Ninguna",
+            "Que la nube sea más barata",
+            "Que se detecte la diferencia con lo descrito en el repositorio",
+            "Que el cambio desaparezca solo"
+          ],
+          "correctIndex": 2,
+          "explanation": "Comparar lo real con lo descrito revela cambios manuales, y se corrigen con un cambio revisado."
+        }
+      ]
+    }
+  },
+  "modules": {
+    "ops-m1": {
+      "emoji": "🌿",
+      "exam": [
+        {
+          "question": "Tu rama local y la remota divergen después de un rebase que solo tú usas. ¿Qué push es el más seguro?",
+          "options": [
+            "git push --force-with-lease",
+            "git push --force",
+            "git push --no-verify",
+            "git push origin main"
+          ],
+          "correctIndex": 0,
+          "explanation": "--force-with-lease falla si alguien subió algo que no tienes, evitando borrar su trabajo. --force sobrescribe sin mirar."
+        },
+        {
+          "question": "¿Qué hace `git bisect run npm test`?",
+          "options": [
+            "Corre los tests en todos los commits",
+            "Arregla el bug",
+            "Usa el código de salida de npm test para marcar cada commit good o bad automáticamente",
+            "Crea una rama por commit"
+          ],
+          "correctIndex": 2,
+          "explanation": "bisect run automatiza la búsqueda binaria; solo prueba unos pocos commits, no todos."
+        },
+        {
+          "question": "Borraste una rama local sin hacer merge. ¿Cómo la recuperas?",
+          "options": [
+            "git revert",
+            "git pull",
+            "No se puede",
+            "git reflog, encontrar su último commit y crear la rama ahí"
+          ],
+          "correctIndex": 3,
+          "explanation": "Los commits siguen existiendo un tiempo y reflog muestra sus hashes. `git switch -c rama <hash>` la recrea."
+        },
+        {
+          "question": "Durante un merge ves `<<<<<<<` en `precios.js`. ¿Siguiente paso tras editar el archivo?",
+          "options": [
+            "git merge --continue sin más",
+            "git add precios.js y luego git commit (o git merge --continue)",
+            "git push --force",
+            "git reset --hard"
+          ],
+          "correctIndex": 1,
+          "explanation": "Hay que marcar el archivo como resuelto con add y cerrar el merge. reset --hard descartaría todo el trabajo."
+        },
+        {
+          "question": "¿Qué rebase está prohibido por la regla de oro?",
+          "options": [
+            "Rebasar tu rama local sobre main",
+            "Rebase interactivo de tus commits sin subir",
+            "Rebasar main, que todo el equipo usa, sobre otra rama",
+            "Rebasar una rama de prueba"
+          ],
+          "correctIndex": 2,
+          "explanation": "Reescribir una rama compartida rompe la historia de todos. Tus commits locales o ramas solo tuyas sí se pueden rebasar."
+        },
+        {
+          "question": "¿Qué debe tener la descripción de un PR para que se apruebe rápido?",
+          "options": [
+            "Qué cambia, por qué y cómo probarlo",
+            "Solo el número de ticket",
+            "El código copiado",
+            "Una lista de todos los archivos"
+          ],
+          "correctIndex": 0,
+          "explanation": "El revisor necesita contexto y pasos de verificación. El diff ya muestra los archivos y el código."
+        }
+      ]
+    },
+    "ops-m2": {
+      "emoji": "🐳",
+      "exam": [
+        {
+          "question": "¿Qué diferencia hay entre imagen y contenedor?",
+          "options": [
+            "La imagen es la plantilla; el contenedor es una instancia en ejecución",
+            "Son lo mismo",
+            "El contenedor es más pequeño que la imagen",
+            "La imagen solo existe en Docker Hub"
+          ],
+          "correctIndex": 0,
+          "explanation": "De una imagen puedes lanzar muchos contenedores. Las imágenes también viven en tu máquina local."
+        },
+        {
+          "question": "Un `RUN rm -rf node_modules` al final del Dockerfile no reduce el tamaño de la imagen. ¿Por qué?",
+          "options": [
+            "Docker ignora rm",
+            "Falta sudo",
+            "Las capas anteriores siguen guardando esos archivos",
+            "Alpine no permite borrar"
+          ],
+          "correctIndex": 2,
+          "explanation": "Cada capa es inmutable; borrar en una nueva solo oculta los archivos. Multi-stage es la forma real de dejarlos fuera."
+        },
+        {
+          "question": "Desde tu Windows quieres abrir la API del contenedor en el navegador. ¿Qué necesitas?",
+          "options": [
+            "networks personalizadas",
+            "depends_on",
+            "Un volumen",
+            "ports: [\"3000:3000\"]"
+          ],
+          "correctIndex": 3,
+          "explanation": "ports publica el puerto del contenedor en tu máquina. Entre servicios de compose no hace falta, pero desde fuera sí."
+        },
+        {
+          "question": "¿Qué hace `docker compose down -v`?",
+          "options": [
+            "Muestra la versión",
+            "Detiene contenedores y borra también los volúmenes con los datos",
+            "Reinicia en modo verbose",
+            "Borra solo las imágenes"
+          ],
+          "correctIndex": 1,
+          "explanation": "-v elimina los volúmenes nombrados: perderías la base de datos local. Úsalo solo cuando quieras empezar de cero."
+        },
+        {
+          "question": "¿Qué línea va primero en un Dockerfile de Node bien cacheado?",
+          "options": [
+            "COPY . .",
+            "RUN npm run build",
+            "COPY package*.json ./",
+            "CMD [\"node\", \"index.js\"]"
+          ],
+          "correctIndex": 2,
+          "explanation": "Copiar primero los manifiestos permite cachear npm ci mientras no cambien las dependencias."
+        },
+        {
+          "question": "¿Por qué agregar `USER node` en la imagen final?",
+          "options": [
+            "Para que, si alguien explota la app, no tenga privilegios de root en el contenedor",
+            "Para que arranque más rápido",
+            "Porque npm lo exige",
+            "Para acceder a la BD"
+          ],
+          "correctIndex": 0,
+          "explanation": "Correr como root amplía el daño posible de una vulnerabilidad. No afecta a la velocidad ni a la conexión con la BD."
+        }
+      ]
+    },
+    "ops-m3": {
+      "emoji": "🔁",
+      "exam": [
+        {
+          "question": "¿Dónde guardas el token de despliegue que usa tu workflow?",
+          "options": [
+            "En GitHub Secrets del repo o del environment",
+            "En el YAML del workflow",
+            "En un .env subido al repo",
+            "En el README"
+          ],
+          "correctIndex": 0,
+          "explanation": "Los secretos de GitHub se cifran y se enmascaran en logs. Cualquier archivo del repo lo ve quien tenga acceso o un fork."
+        },
+        {
+          "question": "Quieres que deploy solo corra después de que test termine en verde. ¿Qué usas?",
+          "options": [
+            "if: success()",
+            "runs-on: test",
+            "needs: test",
+            "env: test"
+          ],
+          "correctIndex": 2,
+          "explanation": "needs crea la dependencia entre jobs y omite el deploy si test falla. if: success() solo mira pasos previos del mismo job."
+        },
+        {
+          "question": "¿Qué ventaja tiene usar un environment de GitHub para producción?",
+          "options": [
+            "Corre más rápido",
+            "Elimina la necesidad de tests",
+            "Hace gratis el despliegue",
+            "Permite revisores obligatorios y secretos exclusivos de ese entorno"
+          ],
+          "correctIndex": 3,
+          "explanation": "Un environment puede pausar el job hasta que alguien apruebe y aísla sus secretos de otros entornos."
+        },
+        {
+          "question": "Una clave de AWS quedó en un commit público hace 10 minutos. ¿Prioridad número 1?",
+          "options": [
+            "Reescribir el historial con force push",
+            "Revocar o rotar la clave",
+            "Hacer el repo privado",
+            "Avisar al equipo por chat"
+          ],
+          "correctIndex": 1,
+          "explanation": "Los bots escanean GitHub en segundos. Revocarla corta el daño; limpiar el historial viene después."
+        },
+        {
+          "question": "Tu CI usa `npm install` y a veces falla por una versión nueva de una dependencia. ¿Qué cambias?",
+          "options": [
+            "Agregar retry",
+            "Fijar node a latest",
+            "Usar npm ci con el package-lock.json versionado",
+            "Quitar los tests"
+          ],
+          "correctIndex": 2,
+          "explanation": "npm ci instala exactamente lo del lock, así CI y local usan las mismas versiones."
+        },
+        {
+          "question": "¿Por qué los PR desde forks no reciben los secretos del repositorio?",
+          "options": [
+            "Porque un desconocido podría modificar el workflow para imprimirlos o enviarlos",
+            "Por un bug de GitHub",
+            "Porque los forks no tienen Actions",
+            "Para ahorrar minutos"
+          ],
+          "correctIndex": 0,
+          "explanation": "El código del fork no es de confianza. Si recibiera secretos, bastaría cambiar el YAML para exfiltrarlos."
+        },
+        {
+          "question": "Haces push de una versión que rompe el checkout. ¿Cuál es el rollback más rápido si etiquetas imágenes por sha?",
+          "options": [
+            "Arreglar el bug en caliente en el servidor",
+            "Revertir y esperar a que alguien revise",
+            "Volver a desplegar la imagen del sha anterior",
+            "Reiniciar el servidor"
+          ],
+          "correctIndex": 2,
+          "explanation": "Desplegar una imagen ya probada toma minutos. Arreglar en el servidor deja cambios fuera de git y difíciles de rastrear."
+        }
+      ]
+    }
+  }
+}

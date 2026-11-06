@@ -1,0 +1,80 @@
+.sidebar {
+  min-height: 0;
+  min-width: 0;
+  overflow: hidden;
+  background: var(--glass);
+  backdrop-filter: saturate(180%) blur(20px);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px 10px;
+}
+.session-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+  flex: 1;
+}
+.session-list li {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  border-radius: var(--radius);
+  transition: background 0.2s var(--ease);
+}
+.session-list li:hover {
+  background: color-mix(in srgb, var(--text) 5%, transparent);
+}
+.session-list li.selected {
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
+}
+.session-item {
+  flex: 1;
+  min-width: 0;
+  text-align: left;
+  background: none;
+  border-radius: var(--radius);
+  padding: 7px 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0;
+  font-weight: 400;
+}
+.session-item:hover:not(:disabled) {
+  background: none;
+}
+.session-title {
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 13px;
+  font-weight: 500;
+}
+.session-meta {
+  font-size: 11px;
+  color: var(--muted);
+}
+.icon-btn.del {
+  opacity: 0;
+  transition: opacity 0.2s var(--ease);
+}
+.session-list li:hover .del {
+  opacity: 1;
+}
+.confirm {
+  display: flex;
+  gap: 2px;
+}
+.confirm button {
+  font-size: 12px;
+  padding: 3px 9px;
+}
+.muted {
+  color: var(--muted);
+  padding: 8px 10px;
+  font-size: 13px;
+}

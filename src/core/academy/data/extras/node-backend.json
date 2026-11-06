@@ -1,0 +1,658 @@
+{
+  "trackId": "node-backend",
+  "lessons": {
+    "node-l1": {
+      "emoji": "📦",
+      "summary": "Ordenas tu proyecto en archivos que se importan y controlas qué versión de cada paquete usas.",
+      "analogy": "package.json es la lista del súper y el lock es el ticket: la lista dice \"leche\", el ticket dice qué marca y tamaño compraste exactamente.",
+      "learned": [
+        "📦 Puedes repartir un programa en archivos pequeños que se piden cosas entre sí",
+        "🧾 Sabes anotar qué piezas externas usa tu proyecto y para qué",
+        "🔒 Logras que tu compañero instale exactamente lo mismo que tú",
+        "🏷️ Lees un número de versión y sabes si una actualización puede romper algo"
+      ],
+      "check": [
+        {
+          "question": "Instalaste prettier con `npm i prettier`. En el code review te lo marcan. ¿Por qué?",
+          "options": [
+            "Es de desarrollo: va con -D en devDependencies",
+            "Debía instalarse global con -g",
+            "prettier no funciona con ESM",
+            "Faltó ejecutar npm ci después"
+          ],
+          "correctIndex": 0,
+          "explanation": "Prettier solo sirve al programar, así que va en devDependencies. Instalarlo global hace que cada máquina tenga una versión distinta."
+        },
+        {
+          "question": "`import { iva } from './precios'` falla con ERR_MODULE_NOT_FOUND en un proyecto con \"type\": \"module\". ¿Qué cambias?",
+          "options": [
+            "Usar require en vez de import",
+            "Quitar \"type\": \"module\"",
+            "Exportar iva con module.exports",
+            "Escribir './precios.js' con extensión"
+          ],
+          "correctIndex": 3,
+          "explanation": "En ESM de Node la ruta relativa debe incluir la extensión. Volver a CommonJS esquiva el error pero rompe el resto de imports."
+        }
+      ]
+    },
+    "node-l2": {
+      "emoji": "🧵",
+      "summary": "Predices en qué orden corre el código que espera y procesas archivos enormes por trozos.",
+      "analogy": "Node es un mesero solo en un restaurante: toma pedidos y no espera junto a la cocina. Pero si se pone a pelar papas, ninguna mesa es atendida.",
+      "learned": [
+        "🧵 Entiendes por qué un programa puede atender a muchos sin quedarse esperando",
+        "⏱️ Predices en qué orden pasan las cosas cuando algo tarda",
+        "🚿 Procesas archivos gigantes poco a poco sin llenar la memoria",
+        "🐢 Detectas la tarea pesada que congela a todos los usuarios"
+      ],
+      "check": [
+        {
+          "question": "¿Qué imprime? `setTimeout(()=>log('t'),0); Promise.resolve().then(()=>log('p')); log('s')`",
+          "options": [
+            "t, p, s",
+            "s, p, t",
+            "s, t, p",
+            "p, s, t"
+          ],
+          "correctIndex": 1,
+          "explanation": "Primero lo síncrono (s), luego microtareas de promesas (p) y al final temporizadores (t). Un timeout de 0 ms no salta la cola de promesas."
+        },
+        {
+          "question": "Debes subir un video de 4 GB a almacenamiento en la nube desde Node. ¿Qué enfoque eliges?",
+          "options": [
+            "readFile y enviar el Buffer completo",
+            "readFileSync para que sea más rápido",
+            "Partirlo a mano en 4 archivos de 1 GB",
+            "Leer con createReadStream y enviarlo por trozos"
+          ],
+          "correctIndex": 3,
+          "explanation": "Un stream mantiene la memoria baja. readFile intenta cargar 4 GB en RAM; la versión Sync además bloquea el event loop."
+        }
+      ],
+      "diagram": "flowchart LR\n  S[Síncrono]:::azul --> M[Microtareas promesas]:::verde\n  M --> T[Temporizadores]:::naranja\n  T --> I[Eventos de I/O]:::morado\n  X[Bucle pesado]:::rosa -.->|bloquea todo| S\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n  classDef naranja fill:#FF9F0A,stroke:#FF9F0A,color:#fff\n  classDef morado fill:#BF5AF2,stroke:#BF5AF2,color:#fff\n  classDef rosa fill:#FF375F,stroke:#FF375F,color:#fff"
+    },
+    "node-l3": {
+      "emoji": "📂",
+      "summary": "Guardas y lees archivos desde tu programa y evitas que alguien husmee fuera de la carpeta permitida.",
+      "analogy": "path.join es un GPS que sabe si estás en México o en Inglaterra y maneja por el lado correcto; concatenar strings es manejar a ciegas.",
+      "learned": [
+        "📂 Puedes guardar y recuperar información en archivos desde tu programa",
+        "🧭 Escribes direcciones de carpetas que funcionan en cualquier computadora",
+        "🚪 Impides que un visitante abra archivos que no le corresponden",
+        "🗂️ Sabes por qué un programa encuentra un archivo en un lugar y en otro no"
+      ],
+      "check": [
+        {
+          "question": "Recibes `foto=../../config/.env` en una ruta de descargas. ¿Qué validación sirve?",
+          "options": [
+            "Quitar \"../\" con replace",
+            "Revisar que el nombre tenga menos de 50 letras",
+            "Resolver la ruta y comprobar que empieza por la carpeta base y su separador",
+            "Codificar el nombre con encodeURIComponent"
+          ],
+          "correctIndex": 2,
+          "explanation": "Resolver y comparar contra la base cubre todas las variantes. replace se esquiva con \"....//\" y codificar no cambia el destino una vez decodificado."
+        },
+        {
+          "question": "`readFile('menu.json')` te devuelve `<Buffer 7b 22 ...>`. ¿Qué te faltó?",
+          "options": [
+            "Usar readFileSync",
+            "Hacer JSON.stringify",
+            "Importar desde node:path",
+            "Pasar 'utf8' como segundo argumento"
+          ],
+          "correctIndex": 3,
+          "explanation": "Sin codificación fs devuelve bytes crudos. Con 'utf8' recibes texto que ya puedes pasar a JSON.parse; la versión Sync no cambia eso."
+        }
+      ]
+    },
+    "node-l4": {
+      "emoji": "🛣️",
+      "summary": "Levantas un servidor que entiende pedidos por dirección y responde con el código que corresponde.",
+      "analogy": "Una API es la ventanilla de un banco: el número de cuenta va en la ruta, el trámite en el método y el semáforo de la ventanilla es el código de estado.",
+      "learned": [
+        "🛣️ Puedes armar un servicio que responde pedidos según la dirección que visitan",
+        "🔢 Eliges la respuesta que dice con honestidad qué pasó",
+        "📬 Sabes en qué parte de un pedido viene cada dato",
+        "🧪 Pruebas tu servicio sin necesidad de una pantalla"
+      ],
+      "check": [
+        {
+          "question": "Un usuario sin sesión pide `/admin/ventas`. ¿Qué código devuelves?",
+          "options": [
+            "403",
+            "401",
+            "404",
+            "400"
+          ],
+          "correctIndex": 1,
+          "explanation": "401 significa que no sabes quién es. 403 sería si está identificado pero su rol no le permite entrar."
+        },
+        {
+          "question": "`req.query.page` vale \"2\" y haces `page + 1`. ¿Qué obtienes?",
+          "options": [
+            "3",
+            "NaN",
+            "Un error de Express",
+            "\"21\""
+          ],
+          "correctIndex": 3,
+          "explanation": "Todo lo que llega en la query es string, así que + concatena. Convierte con Number(page) y valida antes de usarlo."
+        }
+      ],
+      "diagram": "flowchart LR\n  C[Cliente]:::azul -->|GET /productos/7| A[Express]:::morado\n  A --> P{Existe}:::amarillo\n  P -->|sí| OK[200 + JSON]:::verde\n  P -->|no| NF[404]:::rosa\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef morado fill:#BF5AF2,stroke:#BF5AF2,color:#fff\n  classDef amarillo fill:#FFD60A,stroke:#FFD60A,color:#1d1d1f\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n  classDef rosa fill:#FF375F,stroke:#FF375F,color:#fff"
+    },
+    "node-l5": {
+      "emoji": "🛡️",
+      "summary": "Revisas cada dato que llega antes de usarlo y respondes los fallos con mensajes claros y seguros.",
+      "analogy": "Zod es el guardia del cine que revisa boleto, sala y horario en la puerta; TypeScript es el cartel que dice \"solo con boleto\": nadie lo hace cumplir.",
+      "learned": [
+        "🛡️ Revisas cada formulario recibido antes de guardarlo",
+        "🧾 Le dices a quien envió datos qué campo exacto corregir",
+        "🤐 Evitas mostrarle a un extraño los detalles internos de tu sistema",
+        "🚦 Juntas todos los fallos en un solo lugar en vez de repetirlo"
+      ],
+      "check": [
+        {
+          "question": "Un cliente manda un email inválido y tu API responde 500. ¿Qué cambias?",
+          "options": [
+            "Nada, 500 es correcto para cualquier error",
+            "Responder 404",
+            "Validar con safeParse y responder 400 con el campo fallido",
+            "Reintentar la operación"
+          ],
+          "correctIndex": 2,
+          "explanation": "Un dato mal enviado es culpa del cliente: 400 con detalle por campo. 500 indica un fallo del servidor y dispara alertas falsas."
+        },
+        {
+          "question": "Registraste `app.use((err, req, res, next) => …)` al inicio del archivo y nunca se ejecuta. ¿Por qué?",
+          "options": [
+            "Le falta async",
+            "Express no soporta manejadores de error",
+            "Debe tener 3 parámetros",
+            "Debe ir después de las rutas para recibir sus errores"
+          ],
+          "correctIndex": 3,
+          "explanation": "Express recorre middleware en orden; el de errores debe estar después de las rutas. Con 3 parámetros Express lo trataría como uno normal."
+        }
+      ]
+    },
+    "node-l6": {
+      "emoji": "🔑",
+      "summary": "Proteges un sistema con login real, contraseñas a salvo y permisos según quién entra.",
+      "analogy": "Un JWT es una pulsera de festival: el guardia ve que es auténtica, pero cualquiera lee lo impreso y no se la puedes quitar a alguien antes de que acabe el día.",
+      "learned": [
+        "🔑 Guardas contraseñas de forma que ni tú puedas leerlas",
+        "🎫 Sabes qué información nunca debe ir en un pase de acceso",
+        "🚪 Dejas pasar a cada persona solo a lo que le corresponde",
+        "🍪 Eliges entre recordar al usuario en tu servidor o darle un pase firmado"
+      ],
+      "check": [
+        {
+          "question": "Un admin despide a un empleado y quiere cerrarle el acceso YA. Usas JWT de 7 días sin lista de revocación. ¿Qué pasa?",
+          "options": [
+            "El token deja de valer al borrar el usuario",
+            "El navegador borra el token solo",
+            "El empleado puede seguir entrando hasta que el token expire",
+            "El servidor rechaza el token por su IP"
+          ],
+          "correctIndex": 2,
+          "explanation": "Un JWT es válido hasta su exp si el servidor no consulta nada. Por eso se usan expiraciones cortas, revocación o sesiones."
+        },
+        {
+          "question": "¿Dónde guardas el token de sesión en una web para reducir el riesgo si hay XSS?",
+          "options": [
+            "Cookie httpOnly y Secure",
+            "localStorage",
+            "sessionStorage",
+            "Una variable global de JS"
+          ],
+          "correctIndex": 0,
+          "explanation": "Una cookie httpOnly no es accesible desde JavaScript, así que un script inyectado no puede leerla. localStorage y sessionStorage sí."
+        }
+      ],
+      "diagram": "flowchart LR\n  U[Usuario]:::azul -->|email y clave| L[Login]:::morado\n  L --> V{Hash coincide}:::amarillo\n  V -->|no| X[401 genérico]:::rosa\n  V -->|sí| C[Cookie httpOnly]:::verde\n  C --> R{Rol admin}:::amarillo\n  R -->|no| F[403]:::rosa\n  R -->|sí| OK[Acceso]:::verde\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef morado fill:#BF5AF2,stroke:#BF5AF2,color:#fff\n  classDef amarillo fill:#FFD60A,stroke:#FFD60A,color:#1d1d1f\n  classDef rosa fill:#FF375F,stroke:#FF375F,color:#fff\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff"
+    },
+    "node-l7": {
+      "emoji": "🗄️",
+      "summary": "Guardas los datos de tu app en tablas relacionadas y los consultas con autocompletado y sin trampas.",
+      "analogy": "El N+1 es ir al súper 51 veces por 51 productos en vez de llevar una sola lista; el ORM es el empleado que entiende tu lista y la traduce al pasillo correcto.",
+      "learned": [
+        "🗄️ Organizas la información de un negocio en tablas que se conectan",
+        "🛒 Pides de una sola vez todo lo que necesitas en vez de ir y volver",
+        "🔎 Encuentras datos con filtros y orden sin escribir instrucciones a mano",
+        "🪤 Detectas cuándo una pantalla hace cien viajes innecesarios a los datos"
+      ],
+      "check": [
+        {
+          "question": "Guardas precios de productos como Float y un total da 1199.9999. ¿Qué tipo usas en el esquema?",
+          "options": [
+            "String",
+            "Int en pesos",
+            "Double",
+            "Decimal"
+          ],
+          "correctIndex": 3,
+          "explanation": "Decimal guarda dinero exacto. Int en centavos también funciona, pero en pesos pierdes los centavos; Float y Double redondean en binario."
+        },
+        {
+          "question": "Un compañero escribe `prisma.$queryRawUnsafe(\"SELECT * FROM cliente WHERE email = '\" + email + \"'\")`. ¿Qué le dices?",
+          "options": [
+            "Está bien porque Prisma escapa todo",
+            "Reabre la inyección SQL; usa findUnique o $queryRaw con plantilla",
+            "Solo es lento",
+            "Debe usar comillas dobles"
+          ],
+          "correctIndex": 1,
+          "explanation": "$queryRawUnsafe no parametriza strings concatenados. findUnique o $queryRaw con template literal envían el valor como parámetro."
+        }
+      ],
+      "diagram": "flowchart LR\n  C[Cliente]:::azul -->|1 a muchos| P[Pedido]:::verde\n  P -->|1 a muchos| L[LineaPedido]:::naranja\n  L -->|muchos a 1| PR[Producto]:::morado\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n  classDef naranja fill:#FF9F0A,stroke:#FF9F0A,color:#fff\n  classDef morado fill:#BF5AF2,stroke:#BF5AF2,color:#fff"
+    },
+    "node-l8": {
+      "emoji": "🔒",
+      "summary": "Cambias la estructura de tus datos sin perder nada y garantizas que una compra pase completa o no pase.",
+      "analogy": "Una transacción es una transferencia bancaria: o sale de tu cuenta y llega a la otra, o no pasa nada. Nunca queda el dinero flotando a medio camino.",
+      "learned": [
+        "📜 Llevas un historial de cada cambio en la forma de tus datos",
+        "🔒 Logras que una compra se complete entera o no deje rastro",
+        "🏃 Evitas vender dos veces la última unidad cuando dos personas compran a la vez",
+        "🧯 Planeas un cambio grande en pasos para no tumbar el sistema"
+      ],
+      "check": [
+        {
+          "question": "Dentro de `$transaction` creas el pedido y luego falla el envío del correo con un throw. ¿Qué pasa con el pedido?",
+          "options": [
+            "Se revierte junto con todo lo de la transacción",
+            "Se guarda igual",
+            "Queda a medias",
+            "Se guarda pero sin cliente"
+          ],
+          "correctIndex": 0,
+          "explanation": "Cualquier error dentro de la transacción la revierte entera. Por eso los efectos externos como correos van después del commit."
+        },
+        {
+          "question": "¿Qué comando corres en el servidor de producción para aplicar migraciones de Prisma?",
+          "options": [
+            "prisma migrate dev",
+            "prisma db push",
+            "prisma migrate deploy",
+            "prisma migrate reset"
+          ],
+          "correctIndex": 2,
+          "explanation": "deploy solo aplica las migraciones pendientes del historial. dev puede generar nuevas y reset borra los datos."
+        }
+      ],
+      "diagram": "flowchart LR\n  I[Inicio]:::azul --> S[Descontar stock]:::naranja\n  S --> P[Crear pedido]:::naranja\n  P -->|todo bien| C[Commit]:::verde\n  S -->|sin stock| R[Rollback]:::rosa\n  P -->|error| R\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef naranja fill:#FF9F0A,stroke:#FF9F0A,color:#fff\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n  classDef rosa fill:#FF375F,stroke:#FF375F,color:#fff"
+    },
+    "node-l9": {
+      "emoji": "🖥️",
+      "summary": "Armas una web donde cada parte corre donde conviene: datos en el servidor y botones en el navegador.",
+      "analogy": "Server Components son la cocina del restaurante: ahí están los ingredientes y la receta secreta. Client Components son la mesa: solo llega el plato y el salero que el cliente usa.",
+      "learned": [
+        "📁 Creas las páginas de un sitio con solo ordenar carpetas",
+        "🖥️ Decides qué parte de una pantalla se prepara antes de llegar al usuario",
+        "🖱️ Identificas qué partes necesitan responder a clics",
+        "🤫 Mantienes las claves secretas lejos del navegador del visitante"
+      ],
+      "check": [
+        {
+          "question": "Pones `NEXT_PUBLIC_STRIPE_SECRET` en .env para usarlo en un componente. ¿Qué pasa?",
+          "options": [
+            "Nada, .env es privado",
+            "Next.js la cifra automáticamente",
+            "Solo se ve en desarrollo",
+            "La clave termina en el JS que descarga cualquier visitante"
+          ],
+          "correctIndex": 3,
+          "explanation": "El prefijo NEXT_PUBLIC_ incrusta el valor en el bundle del navegador. Los secretos se leen sin ese prefijo y solo en código de servidor."
+        },
+        {
+          "question": "Un Server Component necesita la lista de pedidos. ¿Qué es lo más directo?",
+          "options": [
+            "fetch a /api/pedidos de tu misma app",
+            "Consultar la BD directamente con await",
+            "useEffect con fetch",
+            "Pasarla por localStorage"
+          ],
+          "correctIndex": 1,
+          "explanation": "El Server Component ya corre en el servidor: puede consultar la BD sin un salto HTTP extra. useEffect ni siquiera existe ahí."
+        }
+      ]
+    },
+    "node-l10": {
+      "emoji": "⚡",
+      "summary": "Guardas lo que el usuario envía desde un formulario con seguridad y publicas tu app en internet.",
+      "analogy": "Una Server Action es el buzón de sugerencias de la tienda: está en la calle y cualquiera puede echar una carta, así que alguien debe revisar cada una antes de archivarla.",
+      "learned": [
+        "⚡ Guardas lo que un visitante escribe en un formulario sin piezas extra",
+        "🚨 Revisas quién envía cada formulario aunque el botón esté escondido",
+        "🚀 Publicas tu proyecto en internet para que otros lo usen",
+        "🔐 Configuras las claves del sistema sin dejarlas en tu código"
+      ],
+      "check": [
+        {
+          "question": "Creas una reseña con una Server Action pero el listado sigue mostrando las viejas hasta recargar. ¿Qué falta?",
+          "options": [
+            "revalidatePath de la ruta del listado",
+            "Un useEffect",
+            "Reiniciar el servidor",
+            "Desactivar la caché del navegador"
+          ],
+          "correctIndex": 0,
+          "explanation": "revalidatePath invalida los datos cacheados de esa ruta y Next.js la vuelve a renderizar. Un useEffect no toca la caché del servidor."
+        },
+        {
+          "question": "En el despliegue, ¿cuándo corres las migraciones de la base?",
+          "options": [
+            "Después de que los usuarios usen la versión nueva",
+            "Nunca en producción",
+            "Antes de arrancar la versión nueva de la app",
+            "Solo al crear el proyecto"
+          ],
+          "correctIndex": 2,
+          "explanation": "El código nuevo espera el esquema nuevo; si arranca antes, falla. Por eso migrate deploy va como paso previo al arranque."
+        }
+      ],
+      "diagram": "flowchart LR\n  F[Formulario]:::azul -->|POST| A[Server Action]:::morado\n  A --> U{Sesión}:::amarillo\n  U -->|no| X[Rechazo]:::rosa\n  U -->|sí| Z{Zod valida}:::amarillo\n  Z -->|no| E[Errores al campo]:::rosa\n  Z -->|sí| D[Guardar en BD]:::verde\n  D --> R[revalidatePath]:::verde\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef morado fill:#BF5AF2,stroke:#BF5AF2,color:#fff\n  classDef amarillo fill:#FFD60A,stroke:#FFD60A,color:#1d1d1f\n  classDef rosa fill:#FF375F,stroke:#FF375F,color:#fff\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff"
+    }
+  },
+  "modules": {
+    "node-m1": {
+      "emoji": "🟢",
+      "exam": [
+        {
+          "question": "Un endpoint que genera un PDF con un bucle síncrono hace que el login tarde 4 s. ¿Cuál es la causa más probable?",
+          "options": [
+            "La base de datos está lenta",
+            "El bucle bloquea el único hilo que ejecuta tu JS",
+            "Express limita a una petición por vez",
+            "Falta await en el login"
+          ],
+          "correctIndex": 1,
+          "explanation": "El trabajo síncrono pesado bloquea el event loop para todos. Express no limita peticiones; un await faltante no frenaría otras rutas."
+        },
+        {
+          "question": "¿Qué comando usas en el pipeline de CI para instalar dependencias de forma reproducible?",
+          "options": [
+            "npm install",
+            "npm update",
+            "npm ci",
+            "npx install"
+          ],
+          "correctIndex": 2,
+          "explanation": "npm ci instala exactamente lo del lock y falla si no coincide con package.json. npm install puede actualizar el lock."
+        },
+        {
+          "question": "Quieres leer un log de 3 GB línea a línea para contar errores 500. ¿Qué eliges?",
+          "options": [
+            "Un stream de lectura con readline",
+            "readFileSync y split",
+            "readFile con utf8 y split",
+            "Copiar el archivo a /tmp primero"
+          ],
+          "correctIndex": 0,
+          "explanation": "Un stream con readline procesa por trozos con memoria estable. Cualquier variante de readFile intenta cargar los 3 GB en RAM."
+        },
+        {
+          "question": "Orden de: `log(1); setTimeout(()=>log(2)); queueMicrotask(()=>log(3)); log(4)`",
+          "options": [
+            "1, 2, 3, 4",
+            "1, 3, 4, 2",
+            "1, 4, 3, 2",
+            "1, 4, 2, 3"
+          ],
+          "correctIndex": 2,
+          "explanation": "Síncrono primero (1, 4), luego la microtarea (3) y al final el temporizador (2). queueMicrotask va en la misma cola que las promesas."
+        },
+        {
+          "question": "Tu package.json dice `\"express\": \"^4.21.2\"`. Sale Express 5.0. ¿Qué pasa con `npm install` en un proyecto sin lock?",
+          "options": [
+            "Instala la 4.x más reciente",
+            "Instala 5.0 porque es la más nueva",
+            "Falla porque ^ exige la versión exacta",
+            "Pregunta cuál quieres"
+          ],
+          "correctIndex": 0,
+          "explanation": "El caret acepta cambios menores y parches pero nunca un cambio de versión mayor. Para subir a 5 debes cambiarlo a mano."
+        },
+        {
+          "question": "Un usuario pide `archivo=/etc/passwd` y tu código hace `path.join(BASE, archivo)`. ¿Qué devuelve join?",
+          "options": [
+            "/etc/passwd",
+            "Un error",
+            "BASE/archivo",
+            "BASE/etc/passwd"
+          ],
+          "correctIndex": 3,
+          "explanation": "join concatena segmentos, así que da BASE/etc/passwd; resolve sí saltaría a /etc/passwd. Por eso se resuelve y se compara contra BASE."
+        }
+      ]
+    },
+    "node-m2": {
+      "emoji": "🛣️",
+      "exam": [
+        {
+          "question": "POST /usuarios con un email ya registrado. ¿Qué código devuelves?",
+          "options": [
+            "400",
+            "500",
+            "409",
+            "201"
+          ],
+          "correctIndex": 2,
+          "explanation": "409 Conflicto: el dato es válido pero choca con el estado actual. 400 sería un email mal formado."
+        },
+        {
+          "question": "Tu ruta async lanza un error en Express 4 y el servidor se queda colgado sin responder. ¿Qué arreglo aplicas?",
+          "options": [
+            "Atrapar el error y pasarlo con next(err), o actualizar a Express 5",
+            "Agregar más RAM al servidor",
+            "Cambiar el puerto",
+            "Quitar express.json()"
+          ],
+          "correctIndex": 0,
+          "explanation": "Express 4 no captura rechazos de promesas: hay que pasarlos con next(err). Express 5 ya los envía al manejador de errores."
+        },
+        {
+          "question": "En un esquema Zod, ¿qué devuelve `safeParse` cuando los datos son inválidos?",
+          "options": [
+            "Lanza un ZodError",
+            "Devuelve null",
+            "Devuelve los datos sin los campos malos",
+            "Devuelve { success: false, error }"
+          ],
+          "correctIndex": 3,
+          "explanation": "safeParse nunca lanza; devuelve un objeto con success. parse es la variante que lanza el ZodError."
+        },
+        {
+          "question": "Un usuario con rol empleado intenta borrar un producto, acción solo de admin. ¿Qué respondes?",
+          "options": [
+            "401",
+            "403",
+            "404",
+            "400"
+          ],
+          "correctIndex": 1,
+          "explanation": "Está identificado (no es 401) pero no tiene permiso: 403. Algunos equipos usan 404 para ocultar recursos, pero no es la respuesta estándar aquí."
+        },
+        {
+          "question": "¿Qué parte de un JWT impide que el cliente cambie su rol de empleado a admin?",
+          "options": [
+            "El header",
+            "La firma",
+            "El payload",
+            "La expiración"
+          ],
+          "correctIndex": 1,
+          "explanation": "Si alguien modifica el payload, la firma deja de coincidir y el servidor lo rechaza. El payload es legible y editable, pero no se puede refirmar sin el secreto."
+        },
+        {
+          "question": "La respuesta de error de tu API incluye `at /app/src/db.js:42`. ¿Qué riesgo hay?",
+          "options": [
+            "Ninguno, ayuda al cliente",
+            "Hace la respuesta más lenta",
+            "Rompe el JSON",
+            "Revela estructura interna útil para un atacante"
+          ],
+          "correctIndex": 3,
+          "explanation": "Los stacks revelan rutas, librerías y versiones. Regístralo en tus logs y al cliente dale un mensaje genérico."
+        },
+        {
+          "question": "Tu login responde \"usuario no existe\" o \"contraseña incorrecta\" según el caso. ¿Qué problema introduce?",
+          "options": [
+            "Permite enumerar qué emails están registrados",
+            "Ninguno, es más claro",
+            "Rompe el hash",
+            "Hace fallar el rate limit"
+          ],
+          "correctIndex": 0,
+          "explanation": "Mensajes distintos dejan averiguar qué cuentas existen. Usa \"Credenciales inválidas\" en ambos casos."
+        }
+      ]
+    },
+    "node-m3": {
+      "emoji": "🗄️",
+      "exam": [
+        {
+          "question": "Un listado de 200 pedidos con su cliente tarda 3 s y el log muestra 201 consultas. ¿Causa y arreglo?",
+          "options": [
+            "N+1; traer clientes con include o join",
+            "Falta índice; crear uno",
+            "Red lenta; usar CDN",
+            "Prisma es lento; cambiar a SQL puro"
+          ],
+          "correctIndex": 0,
+          "explanation": "Una consulta por pedido es el patrón N+1. Con include son 1-2 consultas; un índice no reduce el número de viajes."
+        },
+        {
+          "question": "Alguien editó la migración 003 ya aplicada en staging. ¿Qué problema aparece?",
+          "options": [
+            "Ninguno",
+            "Se borran los datos automáticamente",
+            "Solo cambia el nombre",
+            "El historial de staging y el del repo ya no coinciden y migrate detecta el cambio"
+          ],
+          "correctIndex": 3,
+          "explanation": "Prisma guarda un checksum de cada migración aplicada; si cambia, avisa de la divergencia. Se corrige con una migración nueva."
+        },
+        {
+          "question": "¿Qué propiedad de ACID garantiza que una transferencia no quede a medias?",
+          "options": [
+            "Durabilidad",
+            "Atomicidad",
+            "Aislamiento",
+            "Consistencia"
+          ],
+          "correctIndex": 1,
+          "explanation": "Atomicidad: todo o nada. Durabilidad asegura que lo confirmado sobrevive a un corte; aislamiento trata la concurrencia."
+        },
+        {
+          "question": "Para evitar sobreventa, ¿cuál es la mejor opción?",
+          "options": [
+            "Leer stock, comparar en JS y luego actualizar",
+            "Update condicional con stock >= cantidad dentro de la transacción",
+            "Un setTimeout entre compras",
+            "Bloquear el botón en el navegador"
+          ],
+          "correctIndex": 1,
+          "explanation": "El update condicional verifica y escribe de forma atómica. Leer y luego escribir deja una ventana para otra petición; el botón se esquiva desde fuera."
+        },
+        {
+          "question": "¿Qué ventaja da derivar los tipos TypeScript del esquema del ORM?",
+          "options": [
+            "Las consultas corren más rápido",
+            "Elimina la necesidad de migraciones",
+            "Cifra los datos",
+            "Si cambias una columna, el compilador marca el código que se rompe"
+          ],
+          "correctIndex": 3,
+          "explanation": "Los tipos generados reflejan el esquema; un rename marca errores en compilación. No sustituyen migraciones ni afectan al rendimiento."
+        },
+        {
+          "question": "Debes agregar `rfc` NOT NULL a 50 000 proveedores. ¿Orden correcto?",
+          "options": [
+            "Agregar nullable → rellenar → NOT NULL",
+            "NOT NULL directo",
+            "Rellenar → agregar NOT NULL → borrar nulls",
+            "Recrear la tabla"
+          ],
+          "correctIndex": 0,
+          "explanation": "Primero existe la columna, luego se rellena y al final se exige. Agregarla obligatoria directo falla con filas existentes."
+        }
+      ]
+    },
+    "node-m4": {
+      "emoji": "🏗️",
+      "exam": [
+        {
+          "question": "¿Qué archivo define la ruta `/pedidos/42` en App Router?",
+          "options": [
+            "app/pedidos/[id]/page.tsx",
+            "pages/pedidos/42.tsx",
+            "app/pedidos/page.tsx",
+            "app/[pedidos]/[id].tsx"
+          ],
+          "correctIndex": 0,
+          "explanation": "Cada carpeta es un segmento y [id] es dinámico; page.tsx lo hace navegable. pages/ es el router antiguo."
+        },
+        {
+          "question": "Un componente usa useState y no tiene 'use client'. ¿Qué ocurre?",
+          "options": [
+            "Funciona igual",
+            "Se convierte en cliente automáticamente",
+            "Funciona solo en producción",
+            "Error: los hooks de estado solo funcionan en Client Components"
+          ],
+          "correctIndex": 3,
+          "explanation": "Por defecto todo en app/ es Server Component, donde no hay estado ni efectos. Next.js marca el error en el build."
+        },
+        {
+          "question": "¿Dónde validas los datos de una Server Action?",
+          "options": [
+            "Solo en el formulario con required",
+            "Dentro de la acción, en el servidor",
+            "En el layout",
+            "En el middleware de Next.js solamente"
+          ],
+          "correctIndex": 1,
+          "explanation": "Cualquiera puede invocar la acción sin tu formulario. La validación del navegador mejora la experiencia, pero la defensa real es en el servidor."
+        },
+        {
+          "question": "Quieres leer DATABASE_URL en un Server Component. ¿Cómo la nombras?",
+          "options": [
+            "NEXT_PUBLIC_DATABASE_URL",
+            "DATABASE_URL",
+            "PUBLIC_DATABASE_URL",
+            "VITE_DATABASE_URL"
+          ],
+          "correctIndex": 1,
+          "explanation": "Sin prefijo, la variable solo existe en el servidor. NEXT_PUBLIC_ la incrustaría en el JS del navegador."
+        },
+        {
+          "question": "Tu build en Vercel falla con un error de tipos que en `next dev` no veías. ¿Por qué?",
+          "options": [
+            "Vercel usa otra versión de TypeScript siempre",
+            "Falta una variable de entorno",
+            "dev y build compilan igual; es un bug",
+            "next build ejecuta la comprobación de tipos completa"
+          ],
+          "correctIndex": 3,
+          "explanation": "next build revisa tipos y lint del proyecto completo; dev compila solo lo que visitas. Corre next build en CI antes de desplegar."
+        },
+        {
+          "question": "¿Por qué conviene poner 'use client' en las hojas del árbol y no arriba?",
+          "options": [
+            "Todo lo importado bajo 'use client' se envía al navegador y crece el JS",
+            "Por estilo",
+            "Para que funcione el SEO del layout",
+            "Porque el servidor no soporta componentes"
+          ],
+          "correctIndex": 0,
+          "explanation": "La marca convierte en cliente ese módulo y sus importaciones. Ponerla en lo alto manda mucho más JS y quita el acceso directo a la BD."
+        }
+      ]
+    }
+  }
+}

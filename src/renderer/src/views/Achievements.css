@@ -1,0 +1,255 @@
+.achievements {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 24px clamp(16px, 5vw, 56px) 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  max-width: 980px;
+  width: 100%;
+  margin: 0 auto;
+  animation: fade-up 0.35s var(--ease);
+}
+.achievements h3 {
+  font-size: 17px;
+  margin: 0 0 12px;
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+.achievements h3 .muted-text {
+  font-size: 13px;
+  font-weight: 500;
+}
+.ach-kicker {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--accent);
+}
+
+.ach-hero {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 22px 24px;
+  border-radius: var(--radius-lg);
+  color: #fff;
+  background: linear-gradient(135deg, color-mix(in srgb, var(--accent) 88%, white), color-mix(in srgb, var(--accent) 70%, black));
+  box-shadow: 0 12px 30px color-mix(in srgb, var(--accent) 35%, transparent);
+}
+.ach-hero .ach-kicker,
+.ach-hero .muted-text {
+  color: rgb(255 255 255 / 0.85);
+}
+.ach-rank-emoji {
+  font-size: 46px;
+  width: 78px;
+  height: 78px;
+  flex: none;
+  display: grid;
+  place-items: center;
+  border-radius: 22px;
+  background: rgb(255 255 255 / 0.2);
+}
+.ach-hero-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.ach-hero h2 {
+  margin: 0;
+  font-size: 24px;
+}
+.ach-xp-bar {
+  height: 8px;
+  border-radius: 4px;
+  background: rgb(255 255 255 / 0.25);
+  overflow: hidden;
+}
+.ach-xp-bar span {
+  display: block;
+  height: 100%;
+  border-radius: 4px;
+  background: #fff;
+}
+.ach-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.ach-next {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 20px;
+  border-radius: var(--radius-lg);
+  background: var(--panel);
+  box-shadow: var(--shadow);
+  border: 1px dashed color-mix(in srgb, var(--accent) 45%, transparent);
+}
+.ach-next > div {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.ach-next b {
+  font-size: 16px;
+}
+.ach-next-emoji {
+  font-size: 30px;
+  filter: grayscale(1);
+  opacity: 0.6;
+}
+.ach-next-left {
+  font-weight: 650;
+  color: var(--accent);
+  white-space: nowrap;
+}
+
+.ach-ladder {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 12px;
+}
+.ach-ladder li {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  text-align: center;
+  padding: 16px 12px 14px;
+  border-radius: var(--radius-lg);
+  background: var(--panel);
+  box-shadow: var(--shadow);
+}
+.ach-ladder li.locked {
+  background: var(--panel-2);
+  box-shadow: none;
+}
+.ach-node {
+  font-size: 26px;
+  width: 50px;
+  height: 50px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  margin-bottom: 4px;
+  background: color-mix(in srgb, var(--theme) 16%, var(--panel));
+}
+.ach-ladder li.locked .ach-node {
+  background: var(--panel);
+  font-size: 20px;
+}
+.ach-swatch {
+  width: 46px;
+  height: 8px;
+  border-radius: 4px;
+  margin: 6px 0;
+  background: var(--theme);
+}
+.ach-ladder li.locked .ach-swatch {
+  opacity: 0.4;
+}
+.ach-ladder button {
+  font-size: 12px;
+  padding: 4px 12px;
+  background: var(--theme);
+  color: #fff;
+}
+.ach-ladder button:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--theme) 85%, black);
+}
+.ach-ladder button.on:disabled {
+  opacity: 1;
+  background: none;
+  color: var(--theme);
+  font-weight: 650;
+}
+.ach-theme-name {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.badge-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  gap: 12px;
+}
+.badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 4px;
+  padding: 18px 12px 16px;
+  border-radius: var(--radius-lg);
+  background: var(--panel);
+  box-shadow: var(--shadow);
+}
+.badge b {
+  font-size: 13.5px;
+}
+.badge .muted-text {
+  font-size: 12px;
+  line-height: 1.4;
+}
+.badge-emoji {
+  font-size: 34px;
+  width: 64px;
+  height: 64px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  margin-bottom: 4px;
+  background: radial-gradient(circle at 30% 30%, color-mix(in srgb, #ffd54a 60%, white), color-mix(in srgb, #ffb300 35%, var(--panel)));
+}
+/* Las insignias pendientes se ven apagadas: el color se gana */
+.badge.locked {
+  background: var(--panel-2);
+  box-shadow: none;
+}
+.badge.locked .badge-emoji {
+  filter: grayscale(1);
+  opacity: 0.45;
+  background: var(--panel);
+}
+.badge.got .muted-text {
+  color: var(--ok);
+  font-weight: 600;
+}
+
+.ach-ways ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 8px;
+}
+.ach-ways li {
+  padding: 10px 14px;
+  border-radius: var(--radius);
+  background: var(--panel);
+  font-size: 13.5px;
+}
+@media (max-width: 640px) {
+  .ach-hero {
+    flex-wrap: wrap;
+  }
+  .ach-stats {
+    flex-direction: row;
+    gap: 16px;
+  }
+}

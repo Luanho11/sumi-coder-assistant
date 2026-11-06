@@ -1,0 +1,625 @@
+{
+  "track": {
+    "id": "devops",
+    "title": "Git, Docker y CI/CD: del código a producción",
+    "description": "Domina Git en equipo, empaqueta tus apps con Docker y automatiza pruebas y despliegues con GitHub Actions sin filtrar secretos.",
+    "area": "devops",
+    "color": "#64D2FF",
+    "source": "xara",
+    "modules": [
+      {
+        "id": "ops-m1",
+        "trackId": "devops",
+        "title": "Git de verdad",
+        "description": "Más allá de add, commit y push: ramas, rebase, conflictos, recuperar trabajo perdido y un flujo de pull request como en un equipo real.",
+        "level": "principiante",
+        "lessons": [
+          {
+            "id": "ops-l1",
+            "title": "Ramas, rebase y conflictos",
+            "objective": "Trabajar en ramas, integrar cambios con merge o rebase y resolver conflictos sin perder código.",
+            "slides": [
+              {
+                "title": "🌿 Una rama = una línea de trabajo",
+                "content": "```bash\ngit switch -c feat/carrito   # crea y cambia\ngit commit -m \"feat: agrega total con IVA\"\ngit switch main && git pull\n```\n- Una rama es solo un **puntero** a un commit: crearla es gratis\n- Nombres claros: `feat/`, `fix/`, `chore/`"
+              },
+              {
+                "title": "🔀 merge vs rebase",
+                "content": "- **merge**: une historias con un commit de unión, no reescribe nada\n- **rebase**: re-aplica tus commits encima de main → historia **lineal**\n- Regla de oro: **no rebases commits que otros ya bajaron**\n- Si rebasaste tu propia rama ya subida: `git push --force-with-lease`\n```mermaid\nflowchart LR\n  A[main A]:::azul --> B[main B]:::azul\n  A --> C[tu commit C]:::naranja\n  C -.->|rebase| D[C prima sobre B]:::verde\n  B --> D\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef naranja fill:#FF9F0A,stroke:#FF9F0A,color:#fff\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n```"
+              },
+              {
+                "title": "⚔️ Resolver un conflicto",
+                "content": "```\n<<<<<<< HEAD\nconst IVA = 0.16\n=======\nconst IVA = Number(process.env.IVA)\n>>>>>>> feat/config\n```\n1. Decide qué debe quedar (a veces **ambos**)\n2. Borra los marcadores\n3. Corre los tests\n4. `git add` + `git rebase --continue` (o `git commit` si era merge)\n- ¿Te perdiste? `git rebase --abort` vuelve al inicio"
+              }
+            ],
+            "videos": [
+              {
+                "kind": "video",
+                "title": "Buscar en YouTube: git rebase vs merge conflictos español",
+                "url": "https://www.youtube.com/results?search_query=git+rebase+vs+merge+conflictos+espa%C3%B1ol"
+              }
+            ],
+            "quiz": {
+              "id": "quiz-ops-l1",
+              "area": "devops",
+              "difficulty": "principiante",
+              "question": "Rebasaste `feat/cupones` (ya subida, solo tú la usas) sobre main y `git push` es rechazado. ¿Qué haces?",
+              "options": [
+                "git pull y vuelve a hacer push",
+                "Borrar la rama remota y crear otra",
+                "git push --force-with-lease",
+                "git push --force a main"
+              ],
+              "correctIndex": 2,
+              "explanation": "El rebase reescribió tus commits, así que el remoto ya no es ancestro. --force-with-lease solo sobrescribe si nadie más subió cambios. git pull mezclaría las dos versiones duplicando commits."
+            },
+            "exerciseIds": [
+              "ops-l1-e1"
+            ]
+          },
+          {
+            "id": "ops-l2",
+            "title": "bisect, reflog y flujo de pull request",
+            "objective": "Encontrar el commit que introdujo un bug con bisect, recuperar trabajo con reflog y llevar un cambio por pull request.",
+            "slides": [
+              {
+                "title": "🔍 git bisect: búsqueda binaria de bugs",
+                "content": "```bash\ngit bisect start\ngit bisect bad            # el commit actual falla\ngit bisect good v1.4.0    # esta versión funcionaba\n# Git te lleva al medio: pruebas y dices good o bad\ngit bisect run npm test   # o que lo haga un script\ngit bisect reset\n```\n- 1000 commits → unas **10 pruebas**"
+              },
+              {
+                "title": "🛟 reflog: la caja negra de tu repo",
+                "content": "- Registra **a dónde apuntó HEAD** en cada paso, aunque borres ramas\n- ¿`reset --hard` por error? `git reflog` → busca el hash → `git reset --hard <hash>`\n- Es **local** y expira (por defecto ~90 días)\n- Lo que nunca hiciste commit **no** se recupera"
+              },
+              {
+                "title": "🤝 Pull request que se aprueba rápido",
+                "content": "- **Pequeño**: idealmente < 400 líneas\n- Título claro + **qué**, **por qué** y **cómo probarlo**\n- Capturas si cambia la UI\n- Responde cada comentario; no lo tomes personal\n- Se integra solo con **CI en verde** y al menos una aprobación"
+              }
+            ],
+            "videos": [
+              {
+                "kind": "video",
+                "title": "Buscar en YouTube: git bisect reflog pull request tutorial",
+                "url": "https://www.youtube.com/results?search_query=git+bisect+reflog+pull+request+tutorial"
+              }
+            ],
+            "quiz": {
+              "id": "quiz-ops-l2",
+              "area": "devops",
+              "difficulty": "principiante",
+              "question": "Hiciste `git reset --hard HEAD~3` y perdiste 3 commits que no habías subido. ¿Qué haces?",
+              "options": [
+                "Están perdidos para siempre",
+                "Buscar el hash en git reflog y volver a él",
+                "git pull para recuperarlos",
+                "git revert HEAD~3"
+              ],
+              "correctIndex": 1,
+              "explanation": "reflog guarda las posiciones anteriores de HEAD, incluidos esos commits. pull no los trae porque nunca se subieron; revert crea commits nuevos, no recupera."
+            },
+            "exerciseIds": [
+              "ops-l2-e1",
+              "ops-l2-e2"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "ops-m2",
+        "trackId": "devops",
+        "title": "Docker",
+        "description": "Empaqueta tu API en una imagen pequeña y segura, y levanta app + base de datos con un solo comando usando docker compose.",
+        "level": "intermedio",
+        "lessons": [
+          {
+            "id": "ops-l3",
+            "title": "Imágenes, capas y Dockerfile multi-stage",
+            "objective": "Escribir un Dockerfile para Node que aproveche la caché de capas, use multi-stage y no corra como root.",
+            "slides": [
+              {
+                "title": "🐳 Imagen vs contenedor",
+                "content": "- **Imagen**: plantilla de solo lectura (receta + ingredientes)\n- **Contenedor**: una imagen **ejecutándose** (el plato servido)\n- Cada instrucción del Dockerfile crea una **capa** cacheada\n- Si una capa cambia, **todas las siguientes** se reconstruyen"
+              },
+              {
+                "title": "⚡ Orden que aprovecha la caché",
+                "content": "```dockerfile\nFROM node:22-alpine\nWORKDIR /app\nCOPY package*.json ./\nRUN npm ci              # solo se repite si cambian deps\nCOPY . .\nCMD [\"node\", \"src/index.js\"]\n```\n- Copia `package*.json` **antes** del código\n- `.dockerignore`: `node_modules`, `.git`, `.env`"
+              },
+              {
+                "title": "🏗️ Multi-stage: construir aparte, enviar ligero",
+                "content": "```dockerfile\nFROM node:22-alpine AS build\nWORKDIR /app\nCOPY package*.json ./\nRUN npm ci\nCOPY . .\nRUN npm run build\n\nFROM node:22-alpine\nWORKDIR /app\nENV NODE_ENV=production\nCOPY package*.json ./\nRUN npm ci --omit=dev\nCOPY --from=build /app/dist ./dist\nUSER node\nCMD [\"node\", \"dist/index.js\"]\n```"
+              }
+            ],
+            "videos": [
+              {
+                "kind": "video",
+                "title": "Buscar en YouTube: dockerfile multi stage node español",
+                "url": "https://www.youtube.com/results?search_query=dockerfile+multi+stage+node+espa%C3%B1ol"
+              }
+            ],
+            "quiz": {
+              "id": "quiz-ops-l3",
+              "area": "devops",
+              "difficulty": "intermedio",
+              "question": "Cada vez que cambias una línea de código, `docker build` tarda 3 minutos reinstalando dependencias. ¿Qué arreglas?",
+              "options": [
+                "Usar una imagen base más grande",
+                "Agregar --no-cache al build",
+                "Copiar package*.json y correr npm ci antes de COPY . .",
+                "Correr npm install en el CMD"
+              ],
+              "correctIndex": 2,
+              "explanation": "Con COPY . . antes de npm ci, cualquier cambio invalida la capa de dependencias. --no-cache lo empeora y el CMD instalaría en cada arranque."
+            },
+            "exerciseIds": [
+              "ops-l3-e1"
+            ]
+          },
+          {
+            "id": "ops-l4",
+            "title": "docker compose: app + base de datos",
+            "objective": "Levantar API y PostgreSQL juntos con docker compose, con red, volúmenes, variables y healthchecks.",
+            "slides": [
+              {
+                "title": "🎼 Un archivo, todo el entorno",
+                "content": "```yaml\nservices:\n  api:\n    build: .\n    ports: [\"3000:3000\"]\n    environment:\n      DATABASE_URL: postgres://app:app@db:5432/tienda\n    depends_on:\n      db: { condition: service_healthy }\n  db:\n    image: postgres:17\n    environment: { POSTGRES_USER: app, POSTGRES_PASSWORD: app, POSTGRES_DB: tienda }\n    volumes: [datos:/var/lib/postgresql/data]\n    healthcheck: { test: [\"CMD\", \"pg_isready\", \"-U\", \"app\"], interval: 5s }\nvolumes: { datos: {} }\n```"
+              },
+              {
+                "title": "🌐 Los servicios se llaman por nombre",
+                "content": "- Dentro de compose, la API llega a la BD en **`db:5432`**, no en `localhost`\n- `localhost` dentro de un contenedor es **el propio contenedor**\n- `ports` solo hace falta para entrar **desde tu máquina**"
+              },
+              {
+                "title": "💾 Volúmenes y comandos",
+                "content": "- Sin volumen, `docker compose down` **borra los datos** de la BD\n- `docker compose up -d --build` · `logs -f api` · `exec db psql -U app`\n- `down -v` borra también volúmenes ⚠️\n- `depends_on` sin healthcheck solo espera a que **arranque**, no a que esté **lista**"
+              }
+            ],
+            "videos": [
+              {
+                "kind": "video",
+                "title": "Buscar en YouTube: docker compose node postgres español",
+                "url": "https://www.youtube.com/results?search_query=docker+compose+node+postgres+espa%C3%B1ol"
+              }
+            ],
+            "quiz": {
+              "id": "quiz-ops-l4",
+              "area": "devops",
+              "difficulty": "intermedio",
+              "question": "Tu API en compose falla con `ECONNREFUSED 127.0.0.1:5432` usando `DATABASE_URL=...@localhost:5432`. ¿Qué cambias?",
+              "options": [
+                "Abrir el puerto 5432 en el firewall",
+                "Usar el nombre del servicio: @db:5432",
+                "Usar network_mode host siempre",
+                "Instalar PostgreSQL en tu Windows"
+              ],
+              "correctIndex": 1,
+              "explanation": "Dentro del contenedor, localhost es la propia API. Compose crea una red donde cada servicio se resuelve por su nombre."
+            },
+            "exerciseIds": [
+              "ops-l4-e1"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "ops-m3",
+        "trackId": "devops",
+        "title": "CI/CD",
+        "description": "Automatiza lint, tests y build en cada pull request con GitHub Actions, y despliega de forma segura sin dejar secretos en el código.",
+        "level": "intermedio",
+        "lessons": [
+          {
+            "id": "ops-l5",
+            "title": "GitHub Actions: lint, tests y build",
+            "objective": "Crear un workflow de CI que valide cada pull request y bloquee la integración si algo falla.",
+            "slides": [
+              {
+                "title": "🔁 Anatomía de un workflow",
+                "content": "```yaml\n# .github/workflows/ci.yml\nname: CI\non:\n  pull_request:\n  push: { branches: [main] }\njobs:\n  test:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n      - uses: actions/setup-node@v4\n        with: { node-version: 22, cache: npm }\n      - run: npm ci\n      - run: npm run lint\n      - run: npm test\n      - run: npm run build\n```"
+              },
+              {
+                "title": "🧱 Piezas clave",
+                "content": "- **on**: qué evento lo dispara\n- **job**: corre en una máquina limpia; varios jobs van **en paralelo**\n- **needs**: hace que un job espere a otro\n- **matrix**: misma prueba en Node 20 y 22\n- `cache: npm` evita descargar todo cada vez"
+              },
+              {
+                "title": "🚧 Que CI sí bloquee",
+                "content": "- En el repo: **Settings → Rules / Branch protection**\n- Marca el job como **check requerido** para main\n- Sin eso, el PR se puede fusionar con CI en rojo\n- Un paso que falla (código ≠ 0) **detiene** el job\n```mermaid\nflowchart LR\n  P[Pull request]:::azul --> L[Lint]:::morado --> T[Tests]:::morado --> B[Build]:::morado\n  B -->|verde| M[Merge permitido]:::verde\n  T -->|rojo| X[Bloqueado]:::rosa\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef morado fill:#BF5AF2,stroke:#BF5AF2,color:#fff\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n  classDef rosa fill:#FF375F,stroke:#FF375F,color:#fff\n```"
+              }
+            ],
+            "videos": [
+              {
+                "kind": "video",
+                "title": "Buscar en YouTube: github actions node ci tutorial español",
+                "url": "https://www.youtube.com/results?search_query=github+actions+node+ci+tutorial+espa%C3%B1ol"
+              }
+            ],
+            "quiz": {
+              "id": "quiz-ops-l5",
+              "area": "devops",
+              "difficulty": "intermedio",
+              "question": "Tu workflow corre y falla en rojo, pero el equipo puede fusionar el PR igual. ¿Qué falta?",
+              "options": [
+                "Agregar más tests",
+                "Cambiar runs-on a windows-latest",
+                "Marcar el job como check requerido en la protección de la rama main",
+                "Usar npm install en vez de npm ci"
+              ],
+              "correctIndex": 2,
+              "explanation": "GitHub solo bloquea el merge si el check es requerido por una regla de la rama. Más tests no cambian que el rojo se pueda ignorar."
+            },
+            "exerciseIds": [
+              "ops-l5-e1"
+            ]
+          },
+          {
+            "id": "ops-l6",
+            "title": "Despliegue y secretos",
+            "objective": "Desplegar automáticamente tras CI en verde usando secretos y entornos protegidos, con un plan de reversa.",
+            "slides": [
+              {
+                "title": "🔐 Secretos fuera del código",
+                "content": "- `.env` en `.gitignore` **siempre**; sube un `.env.example` sin valores\n- En GitHub: **Settings → Secrets and variables → Actions**\n- En el workflow: `${{ secrets.DATABASE_URL }}`\n- Actions **enmascara** el valor en los logs, pero no imprimas variables a lo loco\n- Los PR desde forks **no** reciben tus secretos"
+              },
+              {
+                "title": "🚀 Desplegar solo si CI pasó",
+                "content": "```yaml\ndeploy:\n  needs: test\n  if: github.ref == 'refs/heads/main'\n  runs-on: ubuntu-latest\n  environment: produccion   # puede pedir aprobación\n  steps:\n    - uses: actions/checkout@v4\n    - run: ./scripts/deploy.sh\n      env:\n        DEPLOY_TOKEN: ${{ secrets.DEPLOY_TOKEN }}\n```\n- **environment** permite revisores obligatorios y secretos propios"
+              },
+              {
+                "title": "🧯 Cuando algo sale mal",
+                "content": "- Etiqueta cada versión (`v1.8.3` o el hash del commit) → **rollback** = desplegar la anterior\n- Migraciones compatibles hacia atrás\n- ¿Se filtró una clave? **Rótala ya**; borrar el commit no basta (ya está en el historial y en clones)\n- Mejor aún: **OIDC** con tu nube en vez de claves de larga duración"
+              }
+            ],
+            "videos": [
+              {
+                "kind": "video",
+                "title": "Buscar en YouTube: github actions secrets deploy tutorial",
+                "url": "https://www.youtube.com/results?search_query=github+actions+secrets+deploy+tutorial"
+              }
+            ],
+            "quiz": {
+              "id": "quiz-ops-l6",
+              "area": "devops",
+              "difficulty": "intermedio",
+              "question": "Un compañero subió por error `STRIPE_SECRET_KEY` en un commit y luego lo borró en el siguiente. ¿Qué haces?",
+              "options": [
+                "Nada, ya no está en el código",
+                "Rotar la clave en Stripe de inmediato y luego limpiar el historial",
+                "Hacer el repositorio privado",
+                "Agregar el archivo al .gitignore"
+              ],
+              "correctIndex": 1,
+              "explanation": "La clave sigue en el historial y en cualquier clon o fork: hay que asumirla comprometida y revocarla. .gitignore no afecta a lo ya subido."
+            },
+            "exerciseIds": [
+              "ops-l6-e1"
+            ]
+          },
+          {
+            "id": "ops-l7",
+            "title": "Infraestructura como código",
+            "objective": "Describir servidores y servicios en archivos versionados en lugar de configurarlos a mano.",
+            "slides": [
+              {
+                "title": "📜 La idea",
+                "content": "En vez de crear servidores, bases de datos y redes haciendo clic en un panel, los **describes en archivos** que se guardan en Git.\n\n- Se revisan en un pull request como el código\n- Se repiten idénticos en staging y producción\n- Si alguien cambia algo a mano, se nota la diferencia\n- Montar un entorno nuevo es ejecutar un comando"
+              },
+              {
+                "title": "🧱 Un ejemplo con Terraform",
+                "content": "```hcl\nresource \"aws_s3_bucket\" \"fotos\" {\n  bucket = \"mitienda-fotos-prod\"\n}\n```\n```bash\nterraform plan   # muestra qué va a cambiar\nterraform apply  # lo aplica\n```\n`plan` es tu red de seguridad: lee siempre qué va a **crear, cambiar o destruir** antes de aplicar."
+              },
+              {
+                "title": "🧰 Herramientas y cuidado",
+                "content": "- **Terraform / OpenTofu**: varias nubes con el mismo lenguaje\n- **Pulumi**: lo mismo con TypeScript o Python\n- **CloudFormation** (AWS) y **Bicep** (Azure)\n- **Ansible**: configurar lo que hay dentro de los servidores\n\nEl archivo de **estado** de Terraform puede contener secretos: se guarda cifrado en remoto, nunca en el repositorio."
+              }
+            ],
+            "videos": [
+              {
+                "kind": "video",
+                "title": "Buscar en YouTube: infraestructura como codigo terraform explicado espanol",
+                "url": "https://www.youtube.com/results?search_query=infraestructura+como+codigo+terraform+explicado+espanol"
+              }
+            ],
+            "exerciseIds": []
+          }
+        ]
+      }
+    ]
+  },
+  "exercises": [
+    {
+      "id": "ops-l1-e1",
+      "trackId": "devops",
+      "moduleId": "ops-m1",
+      "lessonId": "ops-l1",
+      "title": "Provoca y resuelve un conflicto en el carrito",
+      "difficulty": "principiante",
+      "kind": "guiado",
+      "aiPolicy": "sin_ia",
+      "objective": "Resolver conflictos con merge y con rebase, entendiendo la diferencia en la historia.",
+      "description": "En un repo de prueba con `carrito.js` (función `total`):\n1. Rama `feat/iva`: cambia total para sumar IVA del 16 %.\n2. Desde main, rama `feat/descuento`: cambia la misma línea para aplicar un 10 % de descuento.\n3. Integra `feat/iva` a main con merge.\n4. Integra `feat/descuento` con **rebase** sobre main y resuelve el conflicto aplicando descuento y luego IVA.\n5. Pega la salida de `git log --oneline --graph` y explica en 3 líneas por qué la historia se ve así.",
+      "hints": [
+        "Antes de cada paso, predice si Git podrá combinar solo o si tocará la misma línea.",
+        "Durante el rebase Git se detiene en el commit que choca; status te dice qué archivo resolver.",
+        "Después de editar el archivo, márcalo como resuelto con add y continúa el rebase, no hagas commit nuevo."
+      ],
+      "solution": "Tras el merge de feat/iva, `git switch feat/descuento && git rebase main`; conflicto en carrito.js; dejar `return subtotal * 0.9 * 1.16`; `git add carrito.js && git rebase --continue`; `git switch main && git merge feat/descuento` (fast-forward). El grafo muestra una línea recta.",
+      "criteria": [
+        "El conflicto se resolvió conservando ambas reglas en el orden correcto",
+        "No quedan marcadores <<<<<<< en el código",
+        "Se usó rebase --continue, no un commit de arreglo",
+        "La explicación distingue el efecto de merge y de rebase en la historia"
+      ],
+      "commonErrors": [
+        "Hacer git commit en medio del rebase",
+        "Quedarse solo con un lado del conflicto sin pensar"
+      ],
+      "interviewQuestion": "¿Cuándo usarías rebase y cuándo merge? ¿Qué riesgo tiene rebase?",
+      "resources": [
+        {
+          "kind": "doc",
+          "title": "Pro Git: Reorganizar el trabajo (rebase)",
+          "url": "https://git-scm.com/book/es/v2/Ramificaciones-en-Git-Reorganizar-el-Trabajo-Realizado"
+        },
+        {
+          "kind": "doc",
+          "title": "Pro Git: Procedimientos básicos de ramificación y fusión",
+          "url": "https://git-scm.com/book/es/v2/Ramificaciones-en-Git-Procedimientos-B%C3%A1sicos-para-Ramificar-y-Fusionar"
+        }
+      ],
+      "constraints": [],
+      "theory": false
+    },
+    {
+      "id": "ops-l2-e1",
+      "trackId": "devops",
+      "moduleId": "ops-m1",
+      "lessonId": "ops-l2",
+      "title": "Caza el commit que rompió el cálculo de envío",
+      "difficulty": "intermedio",
+      "kind": "reto",
+      "aiPolicy": "ia_tutor",
+      "objective": "Usar git bisect run con un test automático.",
+      "description": "Te damos un repo de una tienda con 40 commits; en algún punto el costo de envío gratis (compras > $999) dejó de aplicarse. Solo sabes que el tag `v2.0` funcionaba.\n1. Escribe un test mínimo `envio.test.js` que falle con el bug.\n2. Usa `git bisect run` para encontrar el commit culpable.\n3. Reporta el hash, el autor, el cambio exacto y una propuesta de arreglo.\n\nSi no tienes el repo, crea uno de 15 commits con un script y siembra tú el bug.",
+      "hints": [
+        "Primero confirma con tus ojos un commit bueno y uno malo.",
+        "bisect run usa el código de salida del comando: 0 es bueno, distinto de 0 es malo.",
+        "Si el test aún no existía en los commits viejos, guárdalo fuera del repo y ejecútalo con una ruta absoluta."
+      ],
+      "solution": "`git bisect start; git bisect bad HEAD; git bisect good v2.0; git bisect run npx vitest run /ruta/envio.test.js`. Git imprime \"<hash> is the first bad commit\"; `git show <hash>` revela, por ejemplo, `>` cambiado por `>=` con otro umbral. `git bisect reset` al terminar.",
+      "criteria": [
+        "El test falla con el bug y pasa sin él",
+        "Se usó bisect run en vez de probar a mano cada commit",
+        "Se identificó el commit exacto con hash y diff",
+        "Se ejecutó bisect reset al final"
+      ],
+      "commonErrors": [
+        "Marcar good/bad al revés",
+        "Olvidar git bisect reset y quedarse en HEAD separado"
+      ],
+      "resources": [
+        {
+          "kind": "doc",
+          "title": "Pro Git: Depurando con Git",
+          "url": "https://git-scm.com/book/es/v2/Herramientas-de-Git-Depurando-con-Git"
+        }
+      ],
+      "constraints": [],
+      "theory": false
+    },
+    {
+      "id": "ops-l2-e2",
+      "trackId": "devops",
+      "moduleId": "ops-m1",
+      "lessonId": "ops-l2",
+      "title": "Escribe el pull request del cupón de descuento",
+      "difficulty": "principiante",
+      "kind": "aplicacion_real",
+      "aiPolicy": "ia_tutor",
+      "objective": "Comunicar un cambio para que se revise rápido.",
+      "description": "Agregaste cupones de descuento al checkout de una tienda (archivos: `cupones.js`, `checkout.js`, tests y una migración). Redacta el pull request completo: título, contexto, qué cambia, cómo probarlo paso a paso, riesgos y capturas que adjuntarías. Luego responde por escrito a este comentario de review: *\"¿Qué pasa si aplican dos cupones?\"*",
+      "hints": [
+        "Imagina a alguien que no estuvo en la reunión: ¿qué necesita saber para aprobar?",
+        "Los pasos de prueba deben poder seguirse sin preguntarte nada.",
+        "Para el comentario, contesta qué hace hoy el código y, si falta, propón un cambio concreto o un issue aparte."
+      ],
+      "solution": "Título: \"feat(checkout): cupones de descuento por porcentaje\". Secciones: Contexto (pedido de marketing), Cambios (lista por archivo), Cómo probar (migrar, crear cupón BIEN10, comprar), Riesgos (migración agrega tabla, reversible), Capturas. Respuesta: hoy solo se acepta uno; agrego validación y test que rechaza el segundo.",
+      "criteria": [
+        "El título dice qué cambia, no \"cambios varios\"",
+        "Los pasos de prueba son reproducibles",
+        "Menciona riesgos (migración) y cómo revertir",
+        "La respuesta al review es concreta y propone acción"
+      ],
+      "commonErrors": [
+        "PR gigante que mezcla refactor y funcionalidad",
+        "Responder a la defensiva en la revisión"
+      ],
+      "interviewQuestion": "¿Cómo es un buen pull request y cómo reaccionas a un review duro?",
+      "resources": [
+        {
+          "kind": "doc",
+          "title": "GitHub Docs: acerca de las pull requests",
+          "url": "https://docs.github.com/es/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-pull-requests"
+        }
+      ],
+      "constraints": [],
+      "theory": false
+    },
+    {
+      "id": "ops-l3-e1",
+      "trackId": "devops",
+      "moduleId": "ops-m2",
+      "lessonId": "ops-l3",
+      "title": "Dockeriza la API de reservas en menos de 200 MB",
+      "difficulty": "intermedio",
+      "kind": "practica_autonoma",
+      "aiPolicy": "ia_par",
+      "objective": "Construir una imagen multi-stage pequeña y segura.",
+      "description": "Toma la API TypeScript del consultorio (o cualquier API Express con `npm run build`).\n1. Escribe un Dockerfile multi-stage y un `.dockerignore`.\n2. La imagen final no debe incluir devDependencies, código fuente TS ni `.env`.\n3. Debe correr como usuario no root.\n4. Reporta el tamaño con `docker images` antes y después del multi-stage, y demuestra que un cambio en `src/` no reinstala dependencias.",
+      "hints": [
+        "Piensa qué necesita la imagen para compilar y qué necesita solo para ejecutar.",
+        "La imagen oficial de Node ya trae un usuario sin privilegios; busca cómo cambiar a él.",
+        "Para ver la caché en acción, mira qué pasos dicen CACHED en la salida del segundo build."
+      ],
+      "solution": "Dockerfile como el de la slide multi-stage; `.dockerignore` con `node_modules`, `.git`, `.env*`, `dist`. Resultado típico: ~1 GB con node:22 completo → ~150 MB con alpine y multi-stage. `docker run --rm img whoami` imprime node.",
+      "criteria": [
+        "La imagen final pesa menos de 200 MB",
+        "whoami dentro del contenedor no es root",
+        "No hay .env ni carpeta src en la imagen final",
+        "El segundo build reutiliza la capa de npm ci"
+      ],
+      "commonErrors": [
+        "Olvidar .dockerignore y copiar node_modules del host Windows",
+        "Usar la etiqueta latest sin versión"
+      ],
+      "interviewQuestion": "¿Qué es un build multi-stage y por qué reduce riesgos además de tamaño?",
+      "resources": [
+        {
+          "kind": "doc",
+          "title": "Docker Docs: multi-stage builds",
+          "url": "https://docs.docker.com/build/building/multi-stage/"
+        },
+        {
+          "kind": "doc",
+          "title": "Docker Docs: caché de build",
+          "url": "https://docs.docker.com/build/cache/"
+        }
+      ],
+      "constraints": [],
+      "theory": false
+    },
+    {
+      "id": "ops-l4-e1",
+      "trackId": "devops",
+      "moduleId": "ops-m2",
+      "lessonId": "ops-l4",
+      "title": "Entorno completo de la tienda con un comando",
+      "difficulty": "intermedio",
+      "kind": "aplicacion_real",
+      "aiPolicy": "ia_par",
+      "objective": "Orquestar API, base de datos y migraciones con compose.",
+      "description": "Escribe un `compose.yaml` para la tienda online con:\n- `db`: PostgreSQL con volumen y healthcheck\n- `api`: tu imagen, que espera a la BD sana\n- un servicio `migrate` que corre `prisma migrate deploy` y termina antes de que arranque la API\n- variables en un `.env` que **no** se sube (y un `.env.example` que sí)\n\nDemuestra que los datos sobreviven a `docker compose down` y `up`, y explica qué haría `down -v`.",
+      "hints": [
+        "Dibuja el orden de arranque: quién necesita a quién y en qué estado.",
+        "depends_on acepta condiciones: una espera a que el servicio esté sano y otra a que termine con éxito.",
+        "Compose lee automáticamente un archivo .env en la misma carpeta para sustituir ${VARIABLES}."
+      ],
+      "solution": "`migrate` con `depends_on: { db: { condition: service_healthy } }` y `command: npx prisma migrate deploy`; `api` con `depends_on: { migrate: { condition: service_completed_successfully } }`. Volumen nombrado en db. Variables `${POSTGRES_PASSWORD}` desde .env.",
+      "criteria": [
+        "docker compose up levanta todo sin pasos manuales",
+        "La API no arranca antes de que la BD esté lista y migrada",
+        "Los datos persisten tras down/up",
+        "No hay contraseñas en compose.yaml ni en git"
+      ],
+      "commonErrors": [
+        "Usar localhost en DATABASE_URL",
+        "depends_on sin healthcheck y la API falla al inicio",
+        "Ejecutar down -v sin saber que borra los datos"
+      ],
+      "interviewQuestion": "¿Cómo se comunican dos contenedores en docker compose?",
+      "resources": [
+        {
+          "kind": "doc",
+          "title": "Docker Docs: Compose",
+          "url": "https://docs.docker.com/compose/"
+        },
+        {
+          "kind": "doc",
+          "title": "Docker Docs: control del orden de arranque",
+          "url": "https://docs.docker.com/compose/how-tos/startup-order/"
+        }
+      ],
+      "constraints": [],
+      "theory": false
+    },
+    {
+      "id": "ops-l5-e1",
+      "trackId": "devops",
+      "moduleId": "ops-m3",
+      "lessonId": "ops-l5",
+      "title": "CI para la API de la tienda",
+      "difficulty": "intermedio",
+      "kind": "guiado",
+      "aiPolicy": "ia_tutor",
+      "objective": "Escribir un workflow de GitHub Actions con caché, matriz y servicio de BD.",
+      "description": "Crea `.github/workflows/ci.yml` para la API de la tienda que:\n1. Corra en cada pull request y en push a main.\n2. Pruebe en Node 20 y 22 con una matriz.\n3. Ejecute lint, tests y build con caché de npm.\n4. Levante PostgreSQL como `services:` para los tests de integración.\n5. Configure la protección de main para exigir el check.\n\nAbre un PR con un test que falle a propósito y otro que lo arregle; adjunta capturas de ambos estados.",
+      "hints": [
+        "Arranca con el workflow mínimo de la slide y agrega una pieza a la vez.",
+        "La matriz va en strategy.matrix y se usa con ${{ matrix.node }} en setup-node.",
+        "Los servicios de un job exponen sus puertos en localhost del runner; necesitarás un healthcheck en options."
+      ],
+      "solution": "Job `test` con `strategy: { matrix: { node: [20, 22] } }`, `services: { postgres: { image: postgres:17, env: {...}, ports: ['5432:5432'], options: --health-cmd pg_isready ... } }`, pasos checkout, setup-node con `node-version: ${{ matrix.node }}` y `cache: npm`, `npm ci`, lint, `npx prisma migrate deploy`, test, build.",
+      "criteria": [
+        "El workflow corre en PR y en push a main",
+        "Hay matriz de dos versiones de Node",
+        "Los tests de integración usan el servicio de PostgreSQL",
+        "Hay evidencia de un PR bloqueado en rojo y luego en verde"
+      ],
+      "commonErrors": [
+        "Usar npm install y obtener versiones distintas que en local",
+        "No marcar el check como requerido"
+      ],
+      "interviewQuestion": "¿Qué debería correr en un pipeline de CI y por qué en ese orden?",
+      "resources": [
+        {
+          "kind": "doc",
+          "title": "GitHub Docs: compilar y probar Node.js",
+          "url": "https://docs.github.com/es/actions/use-cases-and-examples/building-and-testing/building-and-testing-nodejs"
+        },
+        {
+          "kind": "doc",
+          "title": "GitHub Docs: sintaxis de flujos de trabajo",
+          "url": "https://docs.github.com/es/actions/writing-workflows/workflow-syntax-for-github-actions"
+        }
+      ],
+      "constraints": [],
+      "theory": false
+    },
+    {
+      "id": "ops-l6-e1",
+      "trackId": "devops",
+      "moduleId": "ops-m3",
+      "lessonId": "ops-l6",
+      "title": "Despliegue continuo del panel de la pyme",
+      "difficulty": "avanzado",
+      "kind": "sintesis",
+      "aiPolicy": "ia_par",
+      "objective": "Unir CI, secretos, entornos y rollback en un pipeline completo.",
+      "description": "Extiende el workflow de CI del panel de inventario para:\n1. Construir y subir la imagen Docker a GitHub Container Registry con el hash del commit como etiqueta.\n2. Desplegar a `staging` en cada push a main y a `produccion` solo con aprobación manual (environment con revisor).\n3. Correr migraciones antes de cambiar el tráfico.\n4. Documentar en el README cómo hacer rollback a la versión anterior en menos de 5 minutos.\n\nNingún secreto puede aparecer en el repo ni en los logs.",
+      "hints": [
+        "Dibuja el pipeline como cajas: qué espera a qué y dónde se pide aprobación.",
+        "Para subir a GHCR el GITHUB_TOKEN necesita permiso packages: write en el workflow.",
+        "El rollback es más fácil si cada imagen se etiqueta con algo inmutable y el despliegue recibe esa etiqueta como parámetro."
+      ],
+      "solution": "Jobs: `test` → `image` (docker/login-action, docker/build-push-action con `tags: ghcr.io/org/panel:${{ github.sha }}`) → `deploy-staging` (environment staging) → `deploy-prod` (environment produccion con revisor requerido). Cada deploy: migrate deploy y luego actualiza el servicio a la etiqueta. Rollback: re-ejecutar deploy con el sha anterior.",
+      "criteria": [
+        "Producción exige aprobación manual mediante environment",
+        "La imagen se etiqueta con el sha, no solo latest",
+        "Las migraciones corren antes de cambiar la versión",
+        "El procedimiento de rollback está documentado y probado",
+        "No hay secretos en el repositorio ni en los logs"
+      ],
+      "commonErrors": [
+        "Desplegar sin needs y publicar código que no pasó CI",
+        "Etiquetar solo latest y no poder volver atrás",
+        "Hacer echo de un secreto para depurar"
+      ],
+      "interviewQuestion": "¿Cómo gestionas secretos y rollbacks en un pipeline de despliegue?",
+      "resources": [
+        {
+          "kind": "doc",
+          "title": "GitHub Docs: uso de secretos en Actions",
+          "url": "https://docs.github.com/es/actions/security-for-github-actions/security-guides/using-secrets-in-github-actions"
+        },
+        {
+          "kind": "doc",
+          "title": "GitHub Docs: entornos de despliegue",
+          "url": "https://docs.github.com/es/actions/managing-workflow-runs-and-deployments/managing-deployments/managing-environments-for-deployment"
+        },
+        {
+          "kind": "doc",
+          "title": "OWASP: Secrets Management Cheat Sheet",
+          "url": "https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_Cheat_Sheet.html"
+        }
+      ],
+      "constraints": [],
+      "theory": false
+    }
+  ]
+}

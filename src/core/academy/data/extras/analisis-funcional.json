@@ -1,0 +1,569 @@
+{
+  "trackId": "analisis-funcional",
+  "lessons": {
+    "mod-af-1-s1": {
+      "emoji": "🌉",
+      "summary": "Separas el porqué, el qué y el cómo de un pedido y sabes en cuál de esas capas trabajas tú.",
+      "analogy": "Como el intérprete entre un chef japonés y un proveedor peruano: no cocina ni vende, pero sin él nadie entiende el pedido.",
+      "learned": [
+        "🗣️ Puedes explicar la misma idea a un cliente y a un programador con palabras distintas",
+        "🎯 Distingues lo que alguien quiere lograr de la forma en que se va a construir",
+        "🧭 Sabes qué preguntar para descubrir el motivo real detrás de un pedido"
+      ],
+      "check": [
+        {
+          "question": "Un gerente dice: 'Quiero vender 20% más online'. Tú escribes: 'El cliente puede filtrar por precio y marca'. ¿Qué hiciste?",
+          "options": [
+            "Escribiste un requisito técnico",
+            "Repetiste el objetivo de negocio con otras palabras",
+            "Bajaste un objetivo de negocio a un requisito funcional",
+            "Definiste un requisito no funcional de rendimiento"
+          ],
+          "correctIndex": 2,
+          "explanation": "El 20% es el porqué (negocio); filtrar es el qué observable (funcional). No es técnico porque no dice cómo se implementa, ni mide calidad como un no funcional."
+        },
+        {
+          "question": "¿Cuál de estas frases debería reescribir un analista funcional antes de ponerla en el DEF?",
+          "options": [
+            "Se usará Elasticsearch para buscar por categoría",
+            "El usuario puede buscar productos por categoría",
+            "El admin puede exportar el reporte mensual de ventas",
+            "El cliente recibe un correo al confirmar su pedido"
+          ],
+          "correctIndex": 0,
+          "explanation": "Nombrar Elasticsearch es decidir el cómo, y eso le toca al equipo técnico. Las otras describen comportamiento observable, que sí es tu capa."
+        }
+      ],
+      "diagram": "flowchart LR\n  N[\"Negocio: ¿por qué?\"]:::naranja --> F[\"Funcional: ¿qué?\"]:::azul\n  F --> T[\"Técnico: ¿cómo?\"]:::morado\n  A[Analista funcional]:::verde -.-> F\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n  classDef naranja fill:#FF9F0A,stroke:#FF9F0A,color:#fff\n  classDef morado fill:#BF5AF2,stroke:#BF5AF2,color:#fff"
+    },
+    "mod-af-1-s2": {
+      "emoji": "📜",
+      "summary": "Armas un documento de especificación que desarrollo, QA y negocio leen igual y pueden verificar.",
+      "analogy": "Como el plano firmado de una remodelación: si dice 'cocina amplia', decide el maestro de obra; si dice '3 x 4 m', nadie discute.",
+      "learned": [
+        "📏 Cambias palabras como 'rápido' o 'fácil' por algo que se pueda medir",
+        "🗂️ Ordenas un documento largo para que cada lector encuentre su parte",
+        "✍️ Consigues que todos firmen lo mismo antes de empezar a construir"
+      ],
+      "check": [
+        {
+          "question": "Un requisito dice: 'El reporte debe ser completo'. ¿Qué reescritura pasaría el checklist del DEF?",
+          "options": [
+            "El reporte debe ser completo y muy detallado para el gerente",
+            "El reporte se genera con una consulta optimizada en la base de datos",
+            "El reporte debe ser fácil de leer y entender por todos",
+            "El reporte mensual incluye ventas por sucursal, producto y vendedor, y se exporta a PDF"
+          ],
+          "correctIndex": 3,
+          "explanation": "Solo la correcta lista qué contiene y se puede verificar. 'Muy detallado' y 'fácil de leer' siguen ambiguos; la consulta optimizada es técnica."
+        },
+        {
+          "question": "QA pregunta qué debe verificar en 'Pago con tarjeta'. ¿Qué sección del DEF le responde?",
+          "options": [
+            "El glosario de términos del dominio",
+            "Los criterios de aceptación del requisito funcional",
+            "La portada con versión y autor",
+            "La sección de aprobaciones y firmas"
+          ],
+          "correctIndex": 1,
+          "explanation": "Los criterios de aceptación dicen cuándo el requisito está cumplido: eso es lo que QA prueba. El glosario define palabras, no comportamientos."
+        }
+      ]
+    },
+    "mod-af-2-s1": {
+      "emoji": "🎟️",
+      "summary": "Escribes historias con su porqué y criterios Dado-Cuando-Entonces que dicen cuándo están terminadas.",
+      "analogy": "Como encargar una torta: 'para el cumple de mi hija' es el porqué; 'chocolate, 20 porciones, sin nueces' son los criterios para recibirla.",
+      "learned": [
+        "🎂 Puedes escribir un pedido diciendo para quién es y para qué lo quiere",
+        "✂️ Partes una tarea gigante en pedazos que se terminan en dos semanas",
+        "✅ Defines de antemano cómo se va a saber si algo quedó bien hecho"
+      ],
+      "check": [
+        {
+          "question": "'Como admin, quiero gestionar usuarios, roles, permisos, auditoría y reportes'. ¿Qué letra de INVEST falla primero?",
+          "options": [
+            "T: no se puede probar de ninguna forma",
+            "S: es demasiado grande para un sprint",
+            "V: no aporta valor al negocio",
+            "N: el formato no se puede negociar"
+          ],
+          "correctIndex": 1,
+          "explanation": "Mezcla cinco capacidades y no cabe en un sprint: hay que dividirla, por ejemplo por datos o reglas. Sí aporta valor y cada parte se puede probar."
+        },
+        {
+          "question": "Criterio: 'Dado un catálogo de $10 a $500, cuando el usuario elige $50-$100, entonces solo ve esos productos'. ¿Qué falta para el caso borde?",
+          "options": [
+            "El color del botón de filtrar",
+            "Qué tecnología filtra los productos",
+            "Quién escribió la historia en el backlog",
+            "Qué se muestra si ningún producto cae en ese rango"
+          ],
+          "correctIndex": 3,
+          "explanation": "La lección lo cubre con el mensaje 'Sin resultados': los casos vacíos son donde más se rompe. El color es diseño y la tecnología es el cómo."
+        }
+      ],
+      "diagram": "flowchart LR\n  G[\"Dado: catálogo cargado\"]:::cian --> W[\"Cuando: elige rango\"]:::azul\n  W --> T[\"Entonces: ve resultados\"]:::verde\n  W --> E[\"Entonces: Sin resultados\"]:::naranja\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n  classDef naranja fill:#FF9F0A,stroke:#FF9F0A,color:#fff\n  classDef cian fill:#64D2FF,stroke:#64D2FF,color:#1d1d1f"
+    },
+    "mod-af-2-s2": {
+      "emoji": "🧭",
+      "summary": "Detallas paso a paso cómo conversan actor y sistema, incluido qué pasa cuando algo falla.",
+      "analogy": "Como el manual de un piloto: el vuelo normal ocupa una página; casi todo el resto explica qué hacer si falla un motor o cambia el clima.",
+      "learned": [
+        "🛫 Puedes contar un proceso paso a paso sin saltarte lo que pasa si algo sale mal",
+        "🔀 Separas los desvíos válidos de los errores que hay que atender",
+        "🤝 Eliges cuándo basta una frase corta y cuándo hace falta el detalle completo"
+      ],
+      "check": [
+        {
+          "question": "En UC-001 Registrar Pedido, el cliente ingresa un cupón en el paso 3. ¿Dónde se documenta?",
+          "options": [
+            "En un flujo alternativo, porque es una variación válida",
+            "En un flujo de excepción, porque cambia el total",
+            "En las precondiciones, antes de confirmar",
+            "En las postcondiciones, junto al estado pendiente"
+          ],
+          "correctIndex": 0,
+          "explanation": "Usar cupón es un camino válido que vuelve al flujo normal (3a-3c). La excepción es para errores como stock insuficiente, no para opciones del cliente."
+        },
+        {
+          "question": "Entra un QA nuevo que debe probar 'Cancelar pedido' sin preguntarle a nadie. ¿Qué le entregas?",
+          "options": [
+            "La user story con su frase Como-quiero-para",
+            "El objetivo de negocio de reducir reclamos",
+            "El caso de uso con flujo normal, alternativos y de excepción",
+            "Un boceto de la pantalla de cancelación"
+          ],
+          "correctIndex": 2,
+          "explanation": "Para onboarding de QA la lección recomienda el caso de uso: detalla cada paso y cada error. La user story es negociable y sirve para planificar."
+        }
+      ],
+      "diagram": "flowchart TD\n  A[Confirmar pedido]:::azul --> B{\"¿Cupón?\"}:::amarillo\n  B -->|Sí| C[Aplicar descuento]:::cian\n  C --> D{\"¿Hay stock?\"}:::amarillo\n  B -->|No| D\n  D -->|Sí| E[Pedido pendiente]:::verde\n  D -->|No| F[Ofrecer alternativa]:::rosa\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n  classDef rosa fill:#FF375F,stroke:#FF375F,color:#fff\n  classDef cian fill:#64D2FF,stroke:#64D2FF,color:#1d1d1f\n  classDef amarillo fill:#FFD60A,stroke:#FFD60A,color:#1d1d1f"
+    },
+    "mod-af-3-s1": {
+      "emoji": "🗺️",
+      "summary": "Dibujas un proceso con eventos, tareas y compuertas que negocio y desarrollo leen igual.",
+      "analogy": "Como el mapa del metro: círculos de inicio y fin, estaciones, transbordos donde eliges ruta y una línea de color por responsable.",
+      "learned": [
+        "🚇 Puedes dibujar cómo avanza un trámite de inicio a fin en un solo vistazo",
+        "🔀 Marcas dónde alguien decide y dónde dos tareas avanzan al mismo tiempo",
+        "🏊 Muestras quién responde por cada paso separándolos en carriles"
+      ],
+      "check": [
+        {
+          "question": "Tras aprobar un crédito se envía el contrato y a la vez se abre la cuenta; después se notifica. ¿Qué compuerta usas?",
+          "options": [
+            "XOR, porque hay que elegir una de las dos",
+            "OR, porque puede ocurrir cualquiera",
+            "Ninguna: basta con dos flechas sueltas",
+            "AND (paralela), porque ambas tareas ocurren a la vez"
+          ],
+          "correctIndex": 3,
+          "explanation": "AND abre caminos que corren juntos y espera a ambos antes de notificar. XOR elige uno solo; las flechas sueltas no dejan claro que hay que esperar."
+        },
+        {
+          "question": "Vas a presentar el proceso de devoluciones al director comercial. ¿Qué nivel de BPMN llevas?",
+          "options": [
+            "Nivel 2: todas las excepciones y mensajes entre sistemas",
+            "Nivel 1: de 5 a 10 actividades, solo el camino feliz",
+            "Nivel 3: variables y condiciones ejecutables",
+            "El nivel 3, porque es el más completo"
+          ],
+          "correctIndex": 1,
+          "explanation": "Un directivo necesita la visión general (nivel 1). El nivel 2 es para analistas y devs, y el 3 ni siquiera es tarea del analista funcional."
+        }
+      ],
+      "diagram": "flowchart LR\n  I((Inicio)):::verde --> P{\"¿En plazo?\"}:::amarillo\n  P -->|No| R[Rechazar]:::rosa\n  P -->|Sí| E[Revisar estado]:::azul\n  E --> X[Reembolsar]:::azul\n  R --> F((Fin)):::morado\n  X --> F\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n  classDef rosa fill:#FF375F,stroke:#FF375F,color:#fff\n  classDef morado fill:#BF5AF2,stroke:#BF5AF2,color:#fff\n  classDef amarillo fill:#FFD60A,stroke:#FFD60A,color:#1d1d1f"
+    },
+    "mod-af-3-s2": {
+      "emoji": "🧶",
+      "summary": "Conectas cada requisito con su objetivo y sus pruebas, y mides el impacto antes de aceptar un cambio.",
+      "analogy": "Como el código de lote de un yogur: si sale uno malo, sabes de qué planta salió y qué tiendas lo recibieron sin revisar todo el país.",
+      "learned": [
+        "🧶 Puedes seguir el hilo de cualquier pedido hasta saber quién lo pidió y para qué",
+        "⚖️ Calculas cuánto mueve un cambio antes de decir que sí",
+        "🧹 Detectas pedidos huérfanos que nadie necesita y metas que nadie atiende"
+      ],
+      "check": [
+        {
+          "question": "En la matriz, RF-007 no se traza a ningún objetivo de negocio. ¿Qué haces?",
+          "options": [
+            "Asignarle un test case para que la fila quede completa",
+            "Dejarlo, porque ya está escrito y aprobado",
+            "Preguntar quién lo pidió y para qué; si nadie lo justifica, sacarlo",
+            "Trazarlo al objetivo más parecido para cerrar la fila"
+          ],
+          "correctIndex": 2,
+          "explanation": "Regla de oro: sin objetivo, ¿para qué existe? Agregarle un test no le da razón de ser, y forzarlo a otro objetivo esconde el problema."
+        },
+        {
+          "question": "El CEO pide notificación push y SMS en vez del email de confirmación. Ya lo documentaste. ¿Cuál es el siguiente paso?",
+          "options": [
+            "Usar la matriz para ver requisitos, tests y componentes afectados",
+            "Pedir al equipo que empiece a programar los SMS",
+            "Rechazarlo porque cambia el alcance aprobado",
+            "Editar solo el requisito del email y avisar al CEO"
+          ],
+          "correctIndex": 0,
+          "explanation": "Toca el análisis de impacto: la trazabilidad muestra qué tests y componentes dependen del email. Programar sin medir o rechazar sin evaluar salta pasos."
+        }
+      ],
+      "diagram": "flowchart LR\n  O[Objetivo]:::naranja --> R[Requisito]:::azul\n  R --> U[Caso de uso]:::azul\n  U --> T[Test case]:::verde\n  T --> C[Componente]:::morado\n  S[Stakeholder]:::naranja --> O\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n  classDef naranja fill:#FF9F0A,stroke:#FF9F0A,color:#fff\n  classDef morado fill:#BF5AF2,stroke:#BF5AF2,color:#fff"
+    },
+    "mod-af-4-s1": {
+      "emoji": "🏦",
+      "summary": "Arrancas un proyecto bancario real: objetivos medibles, alcance y a quién entrevistar primero.",
+      "analogy": "Como planear una boda de 500 invitados: primero hablas con quien paga y con los novios, luego con el catering y al final con la municipalidad.",
+      "learned": [
+        "🏦 Puedes leer un proyecto grande y decir qué entra y qué queda fuera",
+        "📊 Conviertes un deseo como 'clientes más felices' en una meta con número",
+        "🗣️ Decides a quién escuchar primero cuando todos quieren opinar"
+      ],
+      "check": [
+        {
+          "question": "Objetivo: reducir las llamadas al call center un 30%. ¿Qué función del alcance ataca eso más directo?",
+          "options": [
+            "Solicitud de créditos en línea",
+            "Integración con los cajeros de sucursales",
+            "Bloqueo y desbloqueo de tarjetas desde la app",
+            "Glosario de términos bancarios"
+          ],
+          "correctIndex": 2,
+          "explanation": "Bloquear una tarjeta perdida es un motivo clásico para llamar; resolverlo en la app evita la llamada. El crédito apunta a ventas y el glosario es un entregable."
+        },
+        {
+          "question": "El Dir. de Seguridad y un grupo de clientes piden reunión la misma semana y tienes un solo hueco. Según la prioridad del proyecto, ¿a quién eliges?",
+          "options": [
+            "A los clientes, que van antes que Seguridad",
+            "A Seguridad, porque el fraude es lo más grave",
+            "A los reguladores, porque pueden multar al banco",
+            "A Operaciones, porque conoce los procesos actuales"
+          ],
+          "correctIndex": 0,
+          "explanation": "El orden acordado es Digital > Clientes > Seguridad > Operaciones > Reguladores. Seguridad pesa mucho, pero se entrevista después."
+        }
+      ]
+    },
+    "mod-af-4-s2": {
+      "emoji": "🚦",
+      "summary": "Validas el documento con quien corresponde, pasas el checklist y acompañas al equipo mientras construye.",
+      "analogy": "Como un arquitecto que entrega el plano: lo recorre con el dueño, lo revisa el ingeniero y después visita la obra cada semana.",
+      "learned": [
+        "🚦 Puedes organizar quién revisa qué antes de dar algo por terminado",
+        "🔍 Revisas un documento con una lista y encuentras huecos antes que los demás",
+        "🤝 Sigues disponible después de entregar para resolver dudas sobre la marcha"
+      ],
+      "check": [
+        {
+          "question": "Un requisito dice 'la app debe ser intuitiva'. ¿Qué ítem del checklist falla?",
+          "options": [
+            "Todo requisito tiene ID único",
+            "El documento está versionado",
+            "Las aprobaciones están firmadas",
+            "No hay ambigüedades: 'intuitiva' no se puede verificar"
+          ],
+          "correctIndex": 3,
+          "explanation": "El checklist prohíbe 'fácil', 'rápido' e 'intuitivo'. El requisito puede tener ID y versión, y aun así nadie sabría cómo probarlo."
+        },
+        {
+          "question": "Operaciones nunca revisó el flujo de bloqueo de tarjetas. ¿Qué riesgo concreto corres?",
+          "options": [
+            "Que el flujo no cumpla las normas de seguridad",
+            "Que el proceso no sea viable en la operación real del banco",
+            "Que el sponsor no vea cumplidos sus objetivos",
+            "Que el equipo no pueda implementarlo técnicamente"
+          ],
+          "correctIndex": 1,
+          "explanation": "Cada validador responde una pregunta: Operaciones dice si el proceso es viable. Las normas las valida Seguridad; los objetivos, el Sponsor."
+        }
+      ],
+      "diagram": "flowchart LR\n  K[Kick-off]:::azul --> Q[Sesión de dudas]:::cian\n  Q --> D[Definition of Ready]:::amarillo\n  D --> C[Canal de consulta]:::cian\n  C --> R[Review de implementación]:::verde\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n  classDef cian fill:#64D2FF,stroke:#64D2FF,color:#1d1d1f\n  classDef amarillo fill:#FFD60A,stroke:#FFD60A,color:#1d1d1f"
+    }
+  },
+  "modules": {
+    "mod-af-1": {
+      "emoji": "🔎",
+      "exam": [
+        {
+          "question": "Un programador dice que 'El sistema debe responder en menos de 2 segundos' es funcional. ¿Qué le respondes?",
+          "options": [
+            "Es funcional porque el usuario lo nota",
+            "Es técnico porque habla de segundos",
+            "Es no funcional: mide calidad, no una acción del usuario",
+            "Es de negocio porque afecta las ventas"
+          ],
+          "correctIndex": 2,
+          "explanation": "Describe qué tan bien funciona (rendimiento). No dice qué puede hacer el usuario ni cómo se implementa; va en requisitos no funcionales del DEF."
+        },
+        {
+          "question": "Marketing y Ventas piden funciones distintas y ambos dicen que la suya va primero. ¿Qué haces?",
+          "options": [
+            "Trazar ambas a objetivos de negocio y validar la prioridad con el sponsor",
+            "Elegir la que parezca técnicamente más fácil",
+            "Escribir ambas en el DEF y que desarrollo decida",
+            "Elegir la del stakeholder de mayor cargo sin preguntar"
+          ],
+          "correctIndex": 0,
+          "explanation": "La trazabilidad muestra cuál sirve más al objetivo y la validación confirma la decisión. Delegarlo a desarrollo o al cargo más alto deja el conflicto vivo."
+        },
+        {
+          "question": "El DEF dice 'El sistema enviará notificaciones'. ¿Qué preguntas debes cerrar?",
+          "options": [
+            "Qué proveedor de mensajería y qué librería se usarán",
+            "Si las notificaciones se verán bonitas",
+            "Cuántos desarrolladores la van a construir",
+            "Qué evento la dispara, a quién llega, por qué canal y con qué contenido"
+          ],
+          "correctIndex": 3,
+          "explanation": "Un requisito sin ambigüedad dice qué, cuándo y a quién. El proveedor y la librería son decisiones técnicas; 'bonitas' sigue siendo ambiguo."
+        },
+        {
+          "question": "En una entrevista te preguntan: '¿Qué aporta un analista funcional?'. ¿Qué respuesta es más fuerte?",
+          "options": [
+            "Escribo documentos largos con todos los detalles técnicos",
+            "Evito retrabajo: traduzco objetivos en requisitos verificables que dev y QA entienden igual",
+            "Programo más rápido porque conozco el negocio",
+            "Me aseguro de que el proyecto use la mejor tecnología"
+          ],
+          "correctIndex": 1,
+          "explanation": "Muestra el valor de puente con un resultado concreto. Elegir tecnología o programar es la capa técnica, y un documento largo no es valor por sí solo."
+        },
+        {
+          "question": "Un dev dice que un requisito es 'imposible'. ¿Qué haces primero?",
+          "options": [
+            "Quitar el requisito del DEF sin consultar",
+            "Preguntar qué parte lo impide y volver al objetivo de negocio para buscar alternativas",
+            "Insistir porque el negocio ya lo aprobó",
+            "Escalar al sponsor para que obligue al equipo"
+          ],
+          "correctIndex": 1,
+          "explanation": "Entender el bloqueo y volver al porqué permite proponer otro qué que cumpla el objetivo. Borrar, insistir o escalar sin datos rompe la confianza."
+        },
+        {
+          "question": "Un DEF sin glosario usa 'cliente' a veces para una empresa y a veces para una persona. ¿Qué problema genera?",
+          "options": [
+            "El documento queda más corto y fácil de leer",
+            "Es un detalle de formato sin efecto real",
+            "Solo afecta a la portada y la versión",
+            "Desarrollo y QA interpretarán distinto el mismo requisito"
+          ],
+          "correctIndex": 3,
+          "explanation": "El glosario fija el significado de los términos del dominio. Si 'cliente' cambia de sentido, un requisito se programa de una forma y se prueba de otra."
+        }
+      ]
+    },
+    "mod-af-2": {
+      "emoji": "📝",
+      "exam": [
+        {
+          "question": "Story: 'Como cliente, quiero ver el estado de mi pedido en tiempo real'. ¿Qué criterio la vuelve testeable?",
+          "options": [
+            "El estado se ve rápido y sin problemas",
+            "Dado un pedido en camino, cuando cambia de estado, entonces lo veo en menos de 30 segundos",
+            "Se usa una conexión en tiempo real con el servidor",
+            "El cliente queda satisfecho con el seguimiento"
+          ],
+          "correctIndex": 1,
+          "explanation": "Dado-Cuando-Entonces con un número concreto se puede probar. 'Rápido' y 'satisfecho' no se miden, y la conexión es el cómo técnico."
+        },
+        {
+          "question": "La epic 'gestionar mi perfil completo' no cabe en un sprint. ¿Qué división sigue la técnica por datos?",
+          "options": [
+            "Primero el diseño y luego la programación",
+            "Editar foto, editar datos de contacto y cambiar contraseña",
+            "Una historia para desarrollo y otra para QA",
+            "Versión básica primero y versión optimizada después"
+          ],
+          "correctIndex": 1,
+          "explanation": "Cada parte del perfil entrega valor sola. Separar diseño y código o dev y QA crea tareas, no historias; básica/optimizada es la técnica por performance."
+        },
+        {
+          "question": "Debes firmar con un cliente externo cómo funciona 'Transferencia bancaria'. ¿Qué formato usas?",
+          "options": [
+            "Una user story evaluada con INVEST",
+            "Una lista de tareas técnicas del sprint",
+            "Un párrafo libre con la idea general",
+            "Un caso de uso con flujo normal, alternativos y de excepción"
+          ],
+          "correctIndex": 3,
+          "explanation": "Para algo contractual, el caso de uso da el detalle paso a paso. La user story es negociable por diseño, e INVEST evalúa historias, no las especifica."
+        },
+        {
+          "question": "En 'Registrar Pedido', ¿qué describe una postcondición?",
+          "options": [
+            "El pedido queda en estado pendiente y el stock reservado",
+            "El cliente está autenticado y tiene items en el carrito",
+            "El cliente ingresa un código de cupón",
+            "El sistema avisa que falta stock"
+          ],
+          "correctIndex": 0,
+          "explanation": "La postcondición es cómo queda el sistema al terminar bien. Autenticado es precondición, el cupón es flujo alternativo y la falta de stock es excepción."
+        },
+        {
+          "question": "Sobre un pago rechazado, el cliente dice: 'ya sabrán qué hacer'. ¿Qué haces?",
+          "options": [
+            "Dejar que el equipo lo decida al programar",
+            "Omitirlo porque pasa pocas veces",
+            "Escribir el flujo de excepción y validarlo con él: qué ve el cliente y qué opciones tiene",
+            "Pedirle a QA que lo invente al probar"
+          ],
+          "correctIndex": 2,
+          "explanation": "Lo que no se especifica, cada uno lo interpreta a su manera. Un flujo de excepción validado evita que dev y QA inventen comportamientos distintos."
+        },
+        {
+          "question": "'Como usuario, quiero que el sistema sea mejor'. ¿Qué falla según INVEST?",
+          "options": [
+            "Es demasiado pequeña para un sprint",
+            "Depende de otra historia anterior",
+            "Tiene un rol demasiado específico",
+            "No es valorable ni testeable: no dice qué mejora ni cómo comprobarlo"
+          ],
+          "correctIndex": 3,
+          "explanation": "'Mejor' no define acción ni beneficio, así que no hay valor claro ni prueba posible. Y el rol 'usuario' es genérico, no específico."
+        }
+      ]
+    },
+    "mod-af-3": {
+      "emoji": "🧵",
+      "exam": [
+        {
+          "question": "Proceso de crédito: el comité se reúne los martes y los rechazos se archivan sin avisar. ¿Qué mejora BPMN propones primero?",
+          "options": [
+            "Agregar en el camino de rechazo una tarea que notifique al cliente antes del fin",
+            "Quitar el comité para que todo sea más rápido",
+            "Agregar más lanes para el ejecutivo",
+            "Pasar el diagrama a nivel 3 ejecutable"
+          ],
+          "correctIndex": 0,
+          "explanation": "El camino de rechazo termina sin informar: notificar lo cierra bien. Quitar el comité cambia el negocio, y el nivel 3 no es tarea del analista."
+        },
+        {
+          "question": "Devoluciones: 'si está fuera de plazo se rechaza; si no, se revisa el estado'. ¿Qué elemento modela esa decisión?",
+          "options": [
+            "Un gateway AND con dos salidas paralelas",
+            "Un evento intermedio de temporizador",
+            "Un gateway XOR con dos salidas excluyentes",
+            "Un pool separado para el cliente"
+          ],
+          "correctIndex": 2,
+          "explanation": "Dentro o fuera de plazo es una decisión con un solo camino válido: XOR. AND ejecutaría ambos caminos, y el timer sirve para esperas."
+        },
+        {
+          "question": "Te piden cambiar el límite de transferencias. La matriz muestra RF-003 → UC-004 → TC-010, TC-011. ¿Qué sabes ya?",
+          "options": [
+            "Que el cambio no afecta a ningún test",
+            "Que solo cambia el texto del requisito",
+            "Que hay que rehacer todo el DEF",
+            "Que al menos dos casos de prueba deben actualizarse"
+          ],
+          "correctIndex": 3,
+          "explanation": "La trazabilidad hacia adelante muestra qué tests verifican RF-003. Sin ella creerías que basta editar el requisito; con ella no hace falta rehacer todo."
+        },
+        {
+          "question": "En el onboarding de empleados, RRHH prepara el contrato y TI crea la cuenta. ¿Cómo muestras quién hace qué?",
+          "options": [
+            "Con gateways XOR entre cada tarea",
+            "Con lanes: una para RRHH y otra para TI",
+            "Con un evento intermedio por área",
+            "Con un color distinto en cada flecha"
+          ],
+          "correctIndex": 1,
+          "explanation": "Pools y lanes separan responsabilidades. Un XOR decide caminos, no responsables, y los colores de flecha no forman parte del estándar BPMN."
+        },
+        {
+          "question": "Un directivo exige un cambio 'para mañana' sin pasar por el proceso. ¿Qué haces?",
+          "options": [
+            "Hacerlo ya, porque tiene el cargo más alto",
+            "Ignorarlo hasta la próxima reunión de cambios",
+            "Documentarlo y mostrarle el impacto en tiempo y pruebas antes de decidir",
+            "Pedirle al equipo que lo haga sin registrarlo"
+          ],
+          "correctIndex": 2,
+          "explanation": "Los pasos de gestión de cambios siguen aplicando: con el impacto a la vista, el directivo decide informado. Hacerlo sin registro rompe la trazabilidad."
+        },
+        {
+          "question": "En la matriz, el objetivo 'Reducir soporte' no tiene ningún requisito asociado. ¿Qué indica?",
+          "options": [
+            "Que no hay una forma planificada de alcanzar ese objetivo",
+            "Que el objetivo ya se cumplió",
+            "Que sobran requisitos en el documento",
+            "Que falta un test case para ese objetivo"
+          ],
+          "correctIndex": 0,
+          "explanation": "Regla de oro: todo objetivo necesita al menos un requisito, si no ¿cómo se alcanza? Los tests verifican requisitos, no objetivos directamente."
+        }
+      ]
+    },
+    "mod-af-4": {
+      "emoji": "🏛️",
+      "exam": [
+        {
+          "question": "Observación de validación: 'El límite diario de transferencias es muy bajo para empresas'. ¿Qué haces?",
+          "options": [
+            "Subir el límite en el documento sin avisar",
+            "Tratarlo como cambio: analizar impacto, decidir con el sponsor y versionar el DEF",
+            "Responder que ya se aprobó y no se puede tocar",
+            "Pasarlo a desarrollo como si fuera un bug"
+          ],
+          "correctIndex": 1,
+          "explanation": "Una observación que cambia una regla de negocio sigue el flujo de cambios. Editar sin versionar rompe la trazabilidad, y no es bug: aún no hay sistema."
+        },
+        {
+          "question": "¿Quién debe confirmar que el flujo de transferencias cumple la normativa de prevención de lavado?",
+          "options": [
+            "El sponsor de Dirección Digital",
+            "El equipo de desarrollo",
+            "La Dirección de Seguridad, con los requisitos de los reguladores",
+            "Los clientes en un walkthrough"
+          ],
+          "correctIndex": 2,
+          "explanation": "Seguridad valida cumplimiento normativo (BCRA, UIF). El sponsor valida objetivos, desarrollo que sea implementable y los clientes la usabilidad."
+        },
+        {
+          "question": "Quieres validar el flujo de bloqueo de tarjeta con clientes que no leen documentos técnicos. ¿Qué técnica usas?",
+          "options": [
+            "Prototipado: mostrar un wireframe del flujo",
+            "Inspección formal contra checklist",
+            "Enviarles el DEF completo por correo",
+            "Testing de aceptación en producción"
+          ],
+          "correctIndex": 0,
+          "explanation": "El prototipo deja opinar a quien no lee especificaciones. La inspección formal es para revisores expertos y el testing de aceptación necesita algo construido."
+        },
+        {
+          "question": "Desarrollo quiere empezar una historia sin estimación ni diseño técnico. ¿Qué acuerdo lo evita?",
+          "options": [
+            "La matriz de trazabilidad",
+            "El glosario del DEF",
+            "La Definition of Ready",
+            "El análisis de riesgo funcional"
+          ],
+          "correctIndex": 2,
+          "explanation": "La DoR fija qué necesita una historia para arrancar: diseño técnico, estimación y asignación. La matriz y el glosario no deciden cuándo empezar."
+        },
+        {
+          "question": "Entregaste el DEF y te asignan otro proyecto. ¿Qué pasa si desapareces?",
+          "options": [
+            "Las dudas funcionales de desarrollo se resuelven adivinando",
+            "El DEF pierde su versión y sus firmas",
+            "Los reguladores rechazan el proyecto",
+            "El equipo deja de usar el análisis de riesgos"
+          ],
+          "correctIndex": 0,
+          "explanation": "Durante el desarrollo surgen dudas sí o sí; sin canal de consulta cada dev decide solo. Las firmas y la versión ya quedaron en el documento."
+        },
+        {
+          "question": "Objetivo: subir el NPS 15 puntos. ¿Qué requisito es mejor candidato a trazarse a él?",
+          "options": [
+            "Las tablas de cuentas usan índices optimizados",
+            "El call center estrena un sistema de turnos",
+            "El banco migra su servidor de correo",
+            "El cliente recibe una alerta inmediata de cada movimiento en su cuenta"
+          ],
+          "correctIndex": 3,
+          "explanation": "Una alerta útil es una función que el cliente ve y valora. Índices y servidores son decisiones técnicas internas, y el turnero no está en el alcance."
+        }
+      ]
+    }
+  }
+}

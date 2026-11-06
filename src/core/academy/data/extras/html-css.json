@@ -1,0 +1,676 @@
+{
+  "trackId": "html-css",
+  "lessons": {
+    "ses-html-1-1": {
+      "emoji": "🏗️",
+      "summary": "Armas el esqueleto de una página con etiquetas que dicen qué es cada parte, no solo cómo se ve.",
+      "analogy": "Una página semántica es como un supermercado con letreros: pasillo de lácteos, cajas, salida. Sin letreros (solo div) todo existe, pero nadie encuentra nada.",
+      "learned": [
+        "🗺️ Puedes ordenar una página en zonas claras: arriba, menú, contenido, lateral y pie",
+        "🦯 Sabes describir una imagen con palabras para quien no puede verla",
+        "🏷️ Eliges la etiqueta por lo que significa un bloque, no por cómo se ve",
+        "✅ Puedes pasar tu página por un revisor gratuito y corregir lo que marque"
+      ],
+      "check": [
+        {
+          "question": "Un blog muestra 3 entradas; cada una podría compartirse sola en redes. ¿Qué etiqueta envuelve cada entrada?",
+          "options": [
+            "<article>",
+            "<section>",
+            "<div class=\"post\">",
+            "<aside>"
+          ],
+          "correctIndex": 0,
+          "explanation": "<article> es para contenido que se entiende solo, fuera de la página. <section> agrupa por tema dentro de algo mayor; un div no dice nada a lectores de pantalla."
+        },
+        {
+          "question": "Tu página tiene 2 bloques marcados con <main>: el contenido y la barra lateral. ¿Qué corriges?",
+          "options": [
+            "Cambiar ambos a <section>",
+            "Añadir id distintos a cada <main>",
+            "Dejar un solo <main> y pasar la barra lateral a <aside>",
+            "Meter los dos <main> dentro de un <div>"
+          ],
+          "correctIndex": 2,
+          "explanation": "Solo debe haber un <main> visible por página: es el contenido principal. Lo complementario va en <aside>; poner ids no arregla el significado."
+        }
+      ],
+      "diagram": "flowchart TD\n  H[html lang es]:::azul --> HD[head metadatos]:::morado\n  H --> B[body visible]:::azul\n  B --> HE[header y nav]:::verde\n  B --> M[main único]:::naranja\n  M --> S[section]:::cian\n  M --> A[article]:::cian\n  B --> AS[aside]:::amarillo\n  B --> F[footer]:::verde\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n  classDef naranja fill:#FF9F0A,stroke:#FF9F0A,color:#fff\n  classDef morado fill:#BF5AF2,stroke:#BF5AF2,color:#fff\n  classDef cian fill:#64D2FF,stroke:#64D2FF,color:#1d1d1f\n  classDef amarillo fill:#FFD60A,stroke:#FFD60A,color:#1d1d1f"
+    },
+    "ses-html-1-2": {
+      "emoji": "📦",
+      "summary": "Controlas qué regla CSS gana, cuánto mide de verdad cada caja y cómo alinear elementos en una fila.",
+      "analogy": "El modelo de caja es un cuadro enmarcado: la foto es el contenido, el paspartú el padding, el marco el border y el espacio en la pared el margin.",
+      "learned": [
+        "⚖️ Puedes predecir cuál de dos estilos en conflicto se va a aplicar",
+        "📏 Calculas el tamaño real de un bloque sumando relleno, borde y margen",
+        "↔️ Alineas varios elementos en fila o columna sin trucos raros",
+        "🧲 Sabes centrar algo en pantalla en pocas líneas"
+      ],
+      "check": [
+        {
+          "question": "Tienes `.card p { color: blue }` y `p { color: red }`. ¿De qué color sale el párrafo dentro de .card?",
+          "options": [
+            "Azul, porque clase + elemento pesa más que solo elemento",
+            "Rojo, porque es la regla más simple",
+            "Rojo si está escrita después en el archivo",
+            "Depende del navegador"
+          ],
+          "correctIndex": 0,
+          "explanation": "La especificidad (0,1,1) le gana a (0,0,1) sin importar el orden. El orden en el archivo solo decide cuando el peso es igual."
+        },
+        {
+          "question": "Una caja tiene width: 200px, padding: 20px y border: 5px, sin box-sizing. ¿Cuánto ocupa de ancho?",
+          "options": [
+            "200px",
+            "225px",
+            "240px",
+            "250px"
+          ],
+          "correctIndex": 3,
+          "explanation": "Con content-box se suma todo: 200 + 20×2 + 5×2 = 250px. Con border-box mediría 200px, por eso se pone * { box-sizing: border-box }."
+        }
+      ],
+      "diagram": "flowchart LR\n  M[margin fuera]:::cian --> B[border marco]:::naranja --> P[padding relleno]:::verde --> C[content]:::azul\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n  classDef naranja fill:#FF9F0A,stroke:#FF9F0A,color:#fff\n  classDef cian fill:#64D2FF,stroke:#64D2FF,color:#1d1d1f"
+    },
+    "ses-html-2-1": {
+      "emoji": "🧱",
+      "summary": "Diseñas páginas completas en filas y columnas, y decides cuándo Grid y cuándo Flexbox.",
+      "analogy": "Grid es el plano de un departamento: dibujas cocina, sala y cuarto en una cuadrícula. Flexbox es cómo acomodas los muebles en una sola pared.",
+      "learned": [
+        "🏢 Puedes dibujar en código el plano de una página entera",
+        "🧭 Decides si un diseño necesita una dirección o dos antes de empezar",
+        "📱 Reordenas toda la página para celular cambiando solo un mapa de zonas",
+        "➗ Repartes el espacio en partes iguales sin calcular porcentajes"
+      ],
+      "check": [
+        {
+          "question": "Necesitas un dashboard con header arriba, sidebar a la izquierda, contenido y footer abajo. ¿Qué eliges?",
+          "options": [
+            "Grid con grid-template-areas para la página y Flexbox dentro de cada zona",
+            "Solo Flexbox anidado en todos los niveles",
+            "Floats con clearfix",
+            "Una tabla HTML para la estructura"
+          ],
+          "correctIndex": 0,
+          "explanation": "Es un layout en dos direcciones: Grid lo resuelve con un mapa legible. Flexbox anidado funciona pero es frágil; tablas y floats no son para maquetar."
+        },
+        {
+          "question": "Con `grid-template-columns: 250px 1fr 1fr` en un contenedor de 1050px (sin gap), ¿cuánto mide cada columna fr?",
+          "options": [
+            "400px",
+            "350px",
+            "525px",
+            "1fr no tiene medida fija, siempre 0"
+          ],
+          "correctIndex": 0,
+          "explanation": "fr reparte lo que sobra tras lo fijo: 1050 − 250 = 800, entre 2 = 400px. 350 sería dividir 1050 entre 3 ignorando los 250px."
+        }
+      ]
+    },
+    "ses-html-2-2": {
+      "emoji": "🎨",
+      "summary": "Creas temas claro/oscuro con variables, animas sin trabar la página y adaptas texto e imágenes a cualquier pantalla.",
+      "analogy": "Las variables CSS son la paleta de un pintor: cambias el azul de la paleta y todos los cuadros que lo usan se repintan solos.",
+      "learned": [
+        "🌗 Puedes cambiar los colores de todo un sitio tocando un solo lugar",
+        "🎬 Haces que un botón reaccione suave al pasar el mouse",
+        "🔤 Logras que el texto crezca con la pantalla sin pasarse de grande",
+        "📐 Empiezas diseñando para celular y luego amplías a pantallas grandes"
+      ],
+      "check": [
+        {
+          "question": "Con mobile first, ¿cómo escribes la regla para que en pantallas ≥ 768px el menú pase a fila?",
+          "options": [
+            "@media (max-width: 768px) { .menu { flex-direction: row } }",
+            "@media (min-width: 768px) { .menu { flex-direction: row } }",
+            ".menu { flex-direction: row } sin media query",
+            "@container (max-width: 768px) { .menu { flex-direction: row } }"
+          ],
+          "correctIndex": 1,
+          "explanation": "Mobile first = estilos base para celular y min-width para crecer. max-width haría lo contrario: aplicaría la fila solo en pantallas pequeñas."
+        },
+        {
+          "question": "Tu tema oscuro usa `[data-theme=\"dark\"] { --color-bg: #1e293b }` pero la tarjeta sigue blanca. ¿Causa más probable?",
+          "options": [
+            "Las variables CSS no funcionan con atributos data-",
+            "Falta declarar la variable con $",
+            "Hay que recargar la página para que cambie",
+            "La tarjeta tiene background: #fff fijo en vez de var(--color-bg)"
+          ],
+          "correctIndex": 3,
+          "explanation": "Una variable solo afecta a quien la usa con var(). Si la tarjeta tiene un color escrito a mano, cambiar la variable no la toca. Los atributos data- sí sirven."
+        }
+      ],
+      "diagram": "flowchart LR\n  R[\":root variables\"]:::azul --> V[\"var(--color-bg)\"]:::verde\n  D[data-theme dark]:::morado --> V\n  V --> T[Tarjeta]:::cian\n  V --> BT[Botón]:::cian\n  X[Color fijo #fff]:::rosa -.-> T\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n  classDef rosa fill:#FF375F,stroke:#FF375F,color:#fff\n  classDef morado fill:#BF5AF2,stroke:#BF5AF2,color:#fff\n  classDef cian fill:#64D2FF,stroke:#64D2FF,color:#1d1d1f"
+    },
+    "ses-html-3-1": {
+      "emoji": "💼",
+      "summary": "Planeas, organizas y revisas un portfolio real con una lista de calidad que un reclutador notaría.",
+      "analogy": "Organizar tu CSS en archivos es como una caja de herramientas con compartimentos: no buscas el destornillador entre los clavos.",
+      "learned": [
+        "🧑‍💼 Puedes armar una página que te presente ante un reclutador",
+        "🗂️ Ordenas tus estilos en archivos con un propósito claro cada uno",
+        "📋 Revisas tu trabajo con una lista antes de mostrarlo",
+        "🐢 Respetas a quien pidió menos movimiento en su computadora"
+      ],
+      "check": [
+        {
+          "question": "Un reclutador abre tu portfolio en un celular de 320px y la sección Proyectos se sale de la pantalla. ¿Qué revisas primero?",
+          "options": [
+            "Que el HTML pase el validador W3C",
+            "Que el tema oscuro funcione",
+            "Que el grid de proyectos pase a 1 columna en móvil y no haya anchos fijos grandes",
+            "Que los enlaces no apunten a #"
+          ],
+          "correctIndex": 2,
+          "explanation": "Desbordar en 320px es un fallo de responsive: columnas o anchos fijos. Validar HTML o el tema oscuro son ítems del checklist, pero no causan este síntoma."
+        },
+        {
+          "question": "Con BEM, ¿cómo nombras el título de una tarjeta destacada?",
+          "options": [
+            "class=\"card-featured-title\"",
+            "class=\"card__title\" dentro de class=\"card card--featured\"",
+            "class=\"cardTitle featured\"",
+            "class=\"card--title__featured\""
+          ],
+          "correctIndex": 1,
+          "explanation": "BEM: bloque__elemento y bloque--modificador. El modificador va en el bloque (card--featured), el título es elemento (card__title). Mezclarlos rompe la convención."
+        }
+      ],
+      "diagram": "flowchart TD\n  ST[styles]:::azul --> VA[variables.css]:::morado\n  ST --> RE[reset.css]:::cian\n  ST --> LA[layout.css]:::verde\n  ST --> CO[components.css]:::verde\n  ST --> AN[animations.css]:::naranja\n  ST --> RS[responsive.css]:::amarillo\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n  classDef naranja fill:#FF9F0A,stroke:#FF9F0A,color:#fff\n  classDef morado fill:#BF5AF2,stroke:#BF5AF2,color:#fff\n  classDef cian fill:#64D2FF,stroke:#64D2FF,color:#1d1d1f\n  classDef amarillo fill:#FFD60A,stroke:#FFD60A,color:#1d1d1f"
+    },
+    "ses-html-4-1": {
+      "emoji": "↔️",
+      "summary": "Dominas los dos ejes de Flexbox para alinear, repartir y reordenar elementos sin floats.",
+      "analogy": "Flexbox es una repisa de libros: justify-content decide cómo se reparten a lo largo de la repisa, align-items qué tan arriba o abajo quedan.",
+      "learned": [
+        "🎯 Puedes centrar cualquier cosa en vertical y horizontal sin adivinar",
+        "📚 Repartes elementos a lo largo de una línea con espacios parejos",
+        "🔀 Cambias el orden visual de las piezas sin mover el contenido",
+        "🧩 Haces que una pieza crezca y llene el hueco que sobra"
+      ],
+      "check": [
+        {
+          "question": "Un contenedor flex tiene flex-direction: column. Quieres centrar los hijos horizontalmente. ¿Qué usas?",
+          "options": [
+            "align-items: center",
+            "justify-content: center",
+            "text-align: center",
+            "align-content: center"
+          ],
+          "correctIndex": 0,
+          "explanation": "En column el eje principal es vertical, así que el horizontal es el cruzado: align-items. justify-content centraría en vertical; es la trampa más común."
+        },
+        {
+          "question": "En una navbar: logo, links y botón. Quieres que los links ocupen todo el espacio libre del medio. ¿Qué pones a los links?",
+          "options": [
+            "order: 1 a los links",
+            "flex-shrink: 0 a los links",
+            "flex: 1 al contenedor de links",
+            "align-self: stretch a los links"
+          ],
+          "correctIndex": 2,
+          "explanation": "flex: 1 activa flex-grow y toma el espacio sobrante. order solo cambia la posición; flex-shrink: 0 evita encoger, no hace crecer."
+        }
+      ],
+      "diagram": "flowchart LR\n  C[Contenedor flex]:::azul --> P[Eje principal]:::verde\n  C --> X[Eje cruzado]:::naranja\n  P --> J[justify-content]:::verde\n  X --> A[align-items]:::naranja\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n  classDef naranja fill:#FF9F0A,stroke:#FF9F0A,color:#fff"
+    },
+    "ses-html-5-1": {
+      "emoji": "🗺️",
+      "summary": "Usas Grid para galerías que se adaptan solas y páginas que se leen como un mapa.",
+      "analogy": "grid-template-areas es como el plano de asientos de un cine: escribes qué fila es de quién y cada persona se sienta donde dice su boleto.",
+      "learned": [
+        "🖼️ Puedes hacer una galería que acomoda cuántas fotos caben según la pantalla",
+        "🪑 Asignas cada bloque a su lugar escribiendo un mapa con nombres",
+        "🤝 Combinas cuadrícula para la página y fila para los detalles internos",
+        "🔍 Explicas en una entrevista la diferencia entre llenar huecos y estirar tarjetas"
+      ],
+      "check": [
+        {
+          "question": "Quieres tarjetas de mínimo 280px que llenen el ancho y se reacomoden solas. ¿Qué columnas defines?",
+          "options": [
+            "repeat(3, 280px)",
+            "repeat(auto-fit, 280px)",
+            "minmax(280px, 1fr) sin repeat",
+            "repeat(auto-fit, minmax(280px, 1fr))"
+          ],
+          "correctIndex": 3,
+          "explanation": "auto-fit crea tantas columnas como quepan y minmax las estira hasta 1fr. repeat(3, 280px) es fijo; sin minmax las tarjetas no se estiran."
+        },
+        {
+          "question": "Con `\"sidebar main main\"` en grid-template-areas, ¿qué pasa con el elemento que tiene grid-area: main?",
+          "options": [
+            "Aparece dos veces en la página",
+            "Ocupa las dos últimas columnas de esa fila",
+            "Da error por nombre repetido",
+            "Solo ocupa la segunda columna"
+          ],
+          "correctIndex": 1,
+          "explanation": "Repetir un nombre en celdas contiguas hace que el área las abarque. No duplica el elemento; el error ocurre solo si el área no forma un rectángulo."
+        }
+      ],
+      "diagram": "flowchart TD\n  G[Layout Grid]:::azul --> HE[header]:::morado\n  G --> SB[sidebar]:::cian\n  G --> MA[main]:::verde\n  G --> FO[footer]:::morado\n  MA --> FX[Tarjetas con Flexbox]:::naranja\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n  classDef naranja fill:#FF9F0A,stroke:#FF9F0A,color:#fff\n  classDef morado fill:#BF5AF2,stroke:#BF5AF2,color:#fff\n  classDef cian fill:#64D2FF,stroke:#64D2FF,color:#1d1d1f"
+    },
+    "ses-html-6-1": {
+      "emoji": "🎬",
+      "summary": "Animas para comunicar cambios, eligiendo propiedades que no traban la página.",
+      "analogy": "Animar width es como mover un mueble y reacomodar toda la casa; animar transform es deslizar un cuadro sobre la pared sin tocar nada más.",
+      "learned": [
+        "🖱️ Puedes hacer que un botón avise que se puede presionar",
+        "🚀 Eliges movimientos que se ven fluidos hasta en un celular viejo",
+        "🌀 Creas un indicador de carga que gira sin parar",
+        "🪜 Haces que una lista aparezca pieza por pieza, en cascada"
+      ],
+      "check": [
+        {
+          "question": "Un menú lateral entra animando `left: -300px` a `left: 0` y se ve a tirones en móvil. ¿Qué cambias?",
+          "options": [
+            "Subir la duración a 2s",
+            "Animar transform: translateX(-300px) a translateX(0)",
+            "Animar margin-left en su lugar",
+            "Poner will-change en todos los elementos"
+          ],
+          "correctIndex": 1,
+          "explanation": "left provoca recálculo de layout en cada cuadro; transform lo mueve la GPU. margin tiene el mismo problema y will-change en todo gasta memoria."
+        },
+        {
+          "question": "Tu animación fadeIn termina y la tarjeta vuelve a quedar invisible. ¿Qué falta?",
+          "options": [
+            "animation-fill-mode: forwards",
+            "animation-iteration-count: infinite",
+            "transition: opacity 0.5s",
+            "animation-direction: reverse"
+          ],
+          "correctIndex": 0,
+          "explanation": "Sin forwards, al terminar se vuelve al estilo base (opacity 0 si así arranca). infinite la repetiría sin fin y transition no aplica a keyframes."
+        }
+      ],
+      "diagram": "flowchart LR\n  T[transform]:::verde --> G[GPU fluido]:::verde\n  O[opacity]:::verde --> G\n  W[width y left]:::rosa --> R[Reflow lento]:::rosa\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n  classDef rosa fill:#FF375F,stroke:#FF375F,color:#fff"
+    }
+  },
+  "modules": {
+    "mod-html-1": {
+      "emoji": "🧱",
+      "exam": [
+        {
+          "question": "Un lector de pantalla salta directo al contenido principal pero tu página no tiene ninguna marca para eso. ¿Qué agregas?",
+          "options": [
+            "Un <div id=\"contenido\">",
+            "Un <main> que envuelva el contenido central",
+            "Un <section> con clase main",
+            "Un comentario <!-- main -->"
+          ],
+          "correctIndex": 1,
+          "explanation": "Las tecnologías de asistencia reconocen <main> como punto de salto. Un div o section con nombre \"main\" no tiene ese significado."
+        },
+        {
+          "question": "Tienes `#header a { color: red }` y `.nav a { color: blue }` sobre el mismo enlace. ¿Qué color gana?",
+          "options": [
+            "Azul, porque está más abajo",
+            "Azul, porque tiene clase",
+            "Rojo, porque un ID pesa más que cualquier cantidad de clases",
+            "Ninguno, se anulan"
+          ],
+          "correctIndex": 2,
+          "explanation": "Especificidad (1,0,1) contra (0,1,1): el ID gana siempre. El orden solo desempata cuando el peso es igual."
+        },
+        {
+          "question": "Una imagen decorativa (una línea) y una foto del producto. ¿Cómo pones el alt?",
+          "options": [
+            "alt=\"\" en la decorativa y una descripción real en la foto",
+            "alt=\"imagen\" en ambas",
+            "Sin alt en ninguna",
+            "alt con el nombre del archivo en ambas"
+          ],
+          "correctIndex": 0,
+          "explanation": "alt vacío le dice al lector de pantalla que ignore la decoración. \"imagen\" o el nombre de archivo no describen nada útil."
+        },
+        {
+          "question": "Con box-sizing: border-box, width: 300px y padding: 20px, ¿cuánto mide el contenido por dentro?",
+          "options": [
+            "300px",
+            "340px",
+            "280px",
+            "260px"
+          ],
+          "correctIndex": 3,
+          "explanation": "border-box mete el padding dentro del ancho: 300 − 20×2 = 260px. 340 sería el cálculo de content-box."
+        },
+        {
+          "question": "En un formulario, el usuario hace clic en el texto \"Email\" y el cursor no entra al campo. ¿Qué falta?",
+          "options": [
+            "Un <label for=\"email\"> conectado al input con id=\"email\"",
+            "Un placeholder en el input",
+            "Un <span> antes del input",
+            "El atributo required"
+          ],
+          "correctIndex": 0,
+          "explanation": "for + id unen etiqueta y campo: clic en el texto enfoca el input y el lector lo anuncia. placeholder no sustituye al label."
+        },
+        {
+          "question": "Un contenedor flex con justify-content: space-between tiene 3 botones. ¿Dónde quedan?",
+          "options": [
+            "Los tres pegados a la izquierda",
+            "Los tres centrados juntos",
+            "Uno en cada extremo y el tercero en el centro",
+            "Con el mismo espacio también en los bordes"
+          ],
+          "correctIndex": 2,
+          "explanation": "space-between pone el espacio solo entre items: primero y último tocan los bordes. Espacio también en los bordes sería space-evenly."
+        }
+      ]
+    },
+    "mod-html-2": {
+      "emoji": "📐",
+      "exam": [
+        {
+          "question": "Un diseño tiene filas y columnas que deben alinearse entre sí, como una revista. ¿Qué herramienta encaja?",
+          "options": [
+            "Flexbox con flex-wrap",
+            "CSS Grid",
+            "Floats",
+            "position: absolute en cada bloque"
+          ],
+          "correctIndex": 1,
+          "explanation": "Alinear en dos direcciones a la vez es el terreno de Grid. Flexbox con wrap alinea cada fila por separado, no las columnas entre filas."
+        },
+        {
+          "question": "Quieres que en móvil el sidebar baje debajo del main. Usas grid-template-areas. ¿Qué haces?",
+          "options": [
+            "Cambiar el orden del HTML",
+            "Poner order: 2 al sidebar",
+            "Redefinir grid-template-areas en una media query con una sola columna",
+            "Usar display: none en el sidebar"
+          ],
+          "correctIndex": 2,
+          "explanation": "Con áreas nombradas basta reescribir el mapa en la media query. Cambiar el HTML no es necesario y display: none lo oculta en lugar de moverlo."
+        },
+        {
+          "question": "¿Qué título usa clamp(1rem, 2.5vw, 1.5rem) en una pantalla de 2000px de ancho?",
+          "options": [
+            "1.5rem, porque 2.5vw pasaría el máximo",
+            "50px exactos",
+            "1rem siempre",
+            "2.5rem"
+          ],
+          "correctIndex": 0,
+          "explanation": "2.5vw de 2000px son 50px, más que 1.5rem (24px), así que clamp lo limita al máximo. Por eso no se dispara en monitores grandes."
+        },
+        {
+          "question": "Un botón cambia de color al hover pero de golpe. ¿Qué agregas a .btn?",
+          "options": [
+            "@keyframes hover",
+            "animation: background 0.3s",
+            "will-change: background",
+            "transition: background 0.3s ease"
+          ],
+          "correctIndex": 3,
+          "explanation": "transition suaviza el cambio entre estados. keyframes sirven para secuencias propias y will-change solo es una pista de rendimiento."
+        },
+        {
+          "question": "Tus tarjetas usan `padding: 1rem`, `1.2rem` y `16px` mezclados. ¿Qué mejora propones?",
+          "options": [
+            "Cambiar todo a px",
+            "Definir --spacing-md en :root y usar var(--spacing-md) en todas",
+            "Usar !important en el padding",
+            "Crear una clase por cada tarjeta"
+          ],
+          "correctIndex": 1,
+          "explanation": "Una variable por valor repetido da consistencia y un solo punto de cambio. Pasar a px o usar !important no unifica nada."
+        },
+        {
+          "question": "Un hijo con font-size: 2em está dentro de un padre de 20px y el root es 16px. ¿Cuánto mide?",
+          "options": [
+            "40px",
+            "32px",
+            "36px",
+            "20px"
+          ],
+          "correctIndex": 0,
+          "explanation": "em es relativa al padre: 2 × 20 = 40px. 32px sería 2rem, que mira al root; es la confusión típica entre em y rem."
+        }
+      ]
+    },
+    "mod-html-3": {
+      "emoji": "💼",
+      "exam": [
+        {
+          "question": "Lighthouse marca Performance 62 en tu portfolio. Las imágenes de proyectos pesan 3 MB cada una. ¿Primer paso?",
+          "options": [
+            "Quitar las animaciones",
+            "Cambiar Grid por Flexbox",
+            "Comprimirlas y servir tamaños con srcset",
+            "Mover el CSS a un solo archivo"
+          ],
+          "correctIndex": 2,
+          "explanation": "Imágenes pesadas son lo que más baja la nota de rendimiento. srcset entrega una versión chica al celular. Grid o las animaciones casi no influyen aquí."
+        },
+        {
+          "question": "Un usuario activó \"reducir movimiento\" en Windows. ¿Cómo lo respetas?",
+          "options": [
+            "@media (prefers-reduced-motion: reduce) { * { animation: none } }",
+            "Quitando todas las animaciones para todos",
+            "Bajando la duración a 0.1s",
+            "Usando solo transform"
+          ],
+          "correctIndex": 0,
+          "explanation": "La media query aplica solo a quien lo pidió y deja la experiencia completa a los demás. Acortar la duración sigue moviendo cosas."
+        },
+        {
+          "question": "En el formulario de contacto quieres borde rojo solo si el email es inválido. ¿Qué selector usas?",
+          "options": [
+            "input:focus",
+            "input:hover",
+            "input::placeholder",
+            "input:invalid"
+          ],
+          "correctIndex": 3,
+          "explanation": ":invalid se activa cuando el valor no cumple type=\"email\" o required. :focus es solo cuando el campo está activo, válido o no."
+        },
+        {
+          "question": "¿Dónde va la regla * { box-sizing: border-box } en la arquitectura del proyecto?",
+          "options": [
+            "components.css",
+            "reset.css",
+            "animations.css",
+            "variables.css"
+          ],
+          "correctIndex": 1,
+          "explanation": "reset.css normaliza la base de todo el sitio: box-sizing es justo eso. variables.css guarda custom properties, no reglas globales."
+        },
+        {
+          "question": "Los enlaces de redes en el footer apuntan a \"#\". ¿Por qué el checklist lo marca?",
+          "options": [
+            "Porque un reclutador hace clic y no llega a ningún lado",
+            "Porque # rompe el validador HTML",
+            "Porque # bloquea el tema oscuro",
+            "Porque # baja Lighthouse a 0"
+          ],
+          "correctIndex": 0,
+          "explanation": "Un enlace a # es un enlace muerto: da mala impresión y no lleva a tu perfil. El HTML sigue siendo válido; el problema es de calidad."
+        }
+      ]
+    },
+    "mod-html-4": {
+      "emoji": "↔️",
+      "exam": [
+        {
+          "question": "Centra un div en vertical y horizontal dentro de su padre. ¿Cuál combinación funciona?",
+          "options": [
+            "display: flex; text-align: center",
+            "display: flex; align-content: center",
+            "display: flex; justify-content: center; align-items: center",
+            "margin: auto en el padre"
+          ],
+          "correctIndex": 2,
+          "explanation": "justify-content centra en el eje principal y align-items en el cruzado: los dos ejes. text-align solo centra texto en línea."
+        },
+        {
+          "question": "Cinco tarjetas de 300px en un contenedor de 900px se aplastan en lugar de bajar de línea. ¿Qué falta?",
+          "options": [
+            "flex-direction: column",
+            "flex-wrap: wrap",
+            "flex-grow: 0",
+            "align-items: stretch"
+          ],
+          "correctIndex": 1,
+          "explanation": "Por defecto es nowrap: todo en una línea y los items se encogen. column apilaría todo vertical, no en filas."
+        },
+        {
+          "question": "Con `flex: 1` en los tres hijos y `flex: 2` en el cuarto, ¿qué parte del espacio toma el cuarto?",
+          "options": [
+            "La mitad del contenedor",
+            "Lo mismo que los demás",
+            "Solo su contenido",
+            "El doble que cada uno de los otros: 2/5 del total"
+          ],
+          "correctIndex": 3,
+          "explanation": "flex-grow reparte proporcionalmente: 1+1+1+2 = 5 partes, el cuarto toma 2. No es \"la mitad\" porque suma con los demás."
+        },
+        {
+          "question": "Quieres que el botón \"Comprar\" aparezca primero en móvil sin cambiar el HTML. ¿Qué usas?",
+          "options": [
+            "order: -1 en el botón dentro de una media query",
+            "position: absolute; top: 0",
+            "z-index: 999",
+            "flex-direction: row-reverse en el botón"
+          ],
+          "correctIndex": 0,
+          "explanation": "order cambia la posición visual dentro del contenedor flex. z-index solo afecta qué se pinta encima, no el orden."
+        },
+        {
+          "question": "Un ícono queda arriba mientras el texto de al lado está centrado verticalmente. El padre tiene align-items: flex-start. ¿Qué haces solo para el ícono?",
+          "options": [
+            "justify-content: center en el ícono",
+            "vertical-align: middle",
+            "align-self: center en el ícono",
+            "flex: 1 en el ícono"
+          ],
+          "correctIndex": 2,
+          "explanation": "align-self sobrescribe align-items para un solo hijo. vertical-align no funciona dentro de un contenedor flex."
+        }
+      ]
+    },
+    "mod-html-5": {
+      "emoji": "🗺️",
+      "exam": [
+        {
+          "question": "En una galería con pocas imágenes, quieres que las tarjetas se estiren para llenar la fila. ¿auto-fill o auto-fit?",
+          "options": [
+            "auto-fit, porque colapsa las columnas vacías y estira las tarjetas",
+            "auto-fill, porque llena todo",
+            "Ninguno, hay que usar Flexbox",
+            "Son idénticos"
+          ],
+          "correctIndex": 0,
+          "explanation": "auto-fill deja huecos con columnas vacías; auto-fit las colapsa y el 1fr estira lo que hay. Solo se nota cuando sobran columnas."
+        },
+        {
+          "question": "Un elemento tiene grid-column: 1 / 3. ¿Cuántas columnas ocupa?",
+          "options": [
+            "Tres",
+            "Una",
+            "Desde la columna 1 hasta el final",
+            "Dos: de la línea 1 a la línea 3"
+          ],
+          "correctIndex": 3,
+          "explanation": "Los números son líneas, no columnas: entre la línea 1 y la 3 hay dos columnas. Pensar \"1 a 3 = tres\" es el error típico."
+        },
+        {
+          "question": "¿Qué hace grid-row: span 2 en una tarjeta destacada?",
+          "options": [
+            "La duplica en dos filas",
+            "La estira para ocupar dos filas",
+            "La mueve a la fila 2",
+            "Le da el doble de ancho"
+          ],
+          "correctIndex": 1,
+          "explanation": "span indica cuántas pistas abarca desde donde cae. Para ir a la fila 2 sería grid-row: 2; el ancho lo controla grid-column."
+        },
+        {
+          "question": "Un compañero hace la página entera con Flexbox anidado de 5 niveles. ¿Qué argumento le das?",
+          "options": [
+            "Flexbox es más lento que Grid siempre",
+            "Flexbox está obsoleto",
+            "Grid define filas y columnas a la vez en un solo contenedor, con menos anidación",
+            "Grid es obligatorio en HTML5"
+          ],
+          "correctIndex": 2,
+          "explanation": "La ventaja real es expresar un layout 2D en un solo lugar y legible. Flexbox no está obsoleto ni es lento; sigue siendo ideal dentro de componentes."
+        },
+        {
+          "question": "grid-template-areas: \"a a\" \"b c\" \"d c\". ¿Es válido el área c?",
+          "options": [
+            "Sí, porque forma un rectángulo de 1 columna por 2 filas",
+            "No, un nombre no puede repetirse",
+            "No, las áreas deben ser de una fila",
+            "Solo si c tiene grid-row"
+          ],
+          "correctIndex": 0,
+          "explanation": "Un área es válida si sus celdas forman un rectángulo. c ocupa la columna 2 en las filas 2 y 3. Repetir nombres está permitido."
+        }
+      ]
+    },
+    "mod-html-6": {
+      "emoji": "🎬",
+      "exam": [
+        {
+          "question": "Una tarjeta al hover hace translateY(-8px) y crece su sombra. ¿Qué transición escribes?",
+          "options": [
+            "transition: top 0.3s ease",
+            "transition: transform 0.3s ease, box-shadow 0.3s ease",
+            "animation: hover 0.3s",
+            "transition: all 3s linear"
+          ],
+          "correctIndex": 1,
+          "explanation": "Nombrar las propiedades evita animar cosas de más. top causa reflow; all 3s es lento y anima todo, incluido lo que no quieres."
+        },
+        {
+          "question": "Tu spinner gira pero se frena en cada vuelta. ¿Qué timing function corriges?",
+          "options": [
+            "ease-in-out",
+            "steps(1)",
+            "forwards",
+            "linear en lugar de ease"
+          ],
+          "correctIndex": 3,
+          "explanation": "ease acelera y frena en cada ciclo, y con infinite se nota como tirón. linear mantiene velocidad constante. forwards no es una curva de tiempo."
+        },
+        {
+          "question": "Cinco tarjetas con animation-delay de 0s, 0.15s, 0.3s… aparecen visibles antes de animar. ¿Qué falta?",
+          "options": [
+            "Empezar con opacity: 0 y usar animation-fill-mode: both o forwards con estado inicial oculto",
+            "Subir el delay",
+            "Quitar el delay",
+            "Usar transition en vez de animation"
+          ],
+          "correctIndex": 0,
+          "explanation": "Durante el delay se ve el estilo base. Si la base es visible, aparecen y luego animan. Hay que ocultarlas al inicio o usar fill-mode backwards/both."
+        },
+        {
+          "question": "¿Cuál de estas animaciones provoca reflow en cada cuadro?",
+          "options": [
+            "Cambiar opacity de 0 a 1",
+            "Cambiar transform: scale(1) a scale(1.02)",
+            "Cambiar padding de 10px a 20px",
+            "Cambiar transform: rotate(0) a rotate(360deg)"
+          ],
+          "correctIndex": 2,
+          "explanation": "padding cambia el tamaño de la caja y obliga a recalcular el layout. opacity y transform se componen en GPU sin mover a los vecinos."
+        },
+        {
+          "question": "En el shorthand `animation: slideIn 0.5s ease-out 0.2s`, ¿qué es 0.2s?",
+          "options": [
+            "La duración",
+            "El retardo antes de empezar",
+            "El número de repeticiones",
+            "El tiempo de la curva ease-out"
+          ],
+          "correctIndex": 1,
+          "explanation": "El primer tiempo es la duración y el segundo el delay. Las repeticiones van como número (2, infinite), no en segundos."
+        }
+      ]
+    }
+  }
+}

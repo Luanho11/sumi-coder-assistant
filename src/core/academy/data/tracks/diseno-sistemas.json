@@ -1,0 +1,732 @@
+{
+  "track": {
+    "id": "diseno-sistemas",
+    "title": "Diseño de sistemas para entrevistas",
+    "description": "Latencia, caché, bases de datos, colas y tres casos clásicos de entrevista resueltos con cuentas y diagramas.",
+    "area": "backend",
+    "color": "#0A84FF",
+    "source": "xara",
+    "modules": [
+      {
+        "id": "sd-m1",
+        "trackId": "diseno-sistemas",
+        "title": "Bases",
+        "description": "Números de latencia, percentiles, escalado horizontal, balanceo, caché y CDN.",
+        "level": "intermedio",
+        "lessons": [
+          {
+            "id": "sd-l1",
+            "title": "Latencia, escalado y balanceo",
+            "objective": "Razonar en números sobre tiempos de respuesta y repartir tráfico entre varios servidores.",
+            "slides": [
+              {
+                "title": "⏱️ Números que conviene saber",
+                "content": "Órdenes de magnitud (aprox.):\n- Leer de **memoria**: ~100 ns\n- Leer de **SSD**: ~100 µs\n- Ida y vuelta en el **mismo centro de datos**: ~0,5 ms\n- Ida y vuelta **entre continentes**: ~150 ms\n\nUna consulta lenta a la base de datos (50 ms) pesa más que cien operaciones en memoria."
+              },
+              {
+                "title": "📊 Mide percentiles, no promedios",
+                "content": "- **p50**: la mitad de las peticiones tarda menos que esto.\n- **p95 / p99**: lo que sufren los usuarios más afectados.\n- Un promedio de 120 ms puede esconder un p99 de 3 s.\n- En entrevistas: fija un objetivo (\"p99 < 300 ms\") y diseña para cumplirlo."
+              },
+              {
+                "title": "↔️ Escalar y balancear",
+                "content": "- **Vertical**: máquina más grande. Fácil, pero tiene techo y es un solo punto de fallo.\n- **Horizontal**: más máquinas iguales detrás de un **balanceador**.\n- Para escalar horizontal los servidores deben ser **sin estado**: la sesión va a Redis o a un token, no a la memoria del servidor.\n- Algoritmos: round robin, menos conexiones. **Health checks** sacan del reparto al servidor caído."
+              }
+            ],
+            "videos": [
+              {
+                "kind": "video",
+                "title": "Buscar en YouTube: system design latency load balancer horizontal scaling",
+                "url": "https://www.youtube.com/results?search_query=system+design+latency+load+balancer+horizontal+scaling"
+              }
+            ],
+            "quiz": {
+              "id": "quiz-sd-l1",
+              "area": "backend",
+              "difficulty": "intermedio",
+              "question": "Pones 3 servidores detrás de un balanceador y los usuarios pierden el carrito al recargar. ¿Qué pasa?",
+              "options": [
+                "El balanceador es demasiado lento",
+                "El carrito vive en la memoria de cada servidor; muévelo a un almacén compartido",
+                "Hacen falta 5 servidores",
+                "El navegador borra las cookies"
+              ],
+              "correctIndex": 1,
+              "explanation": "Cada recarga puede caer en otro servidor que no tiene ese carrito. Con el estado en un almacén compartido cualquier servidor responde igual."
+            },
+            "exerciseIds": [
+              "sd-l1-e1"
+            ]
+          },
+          {
+            "id": "sd-l2",
+            "title": "Caché y CDN",
+            "objective": "Elegir qué cachear, dónde y cuándo invalidarlo sin servir datos viejos que importen.",
+            "slides": [
+              {
+                "title": "🗄️ Cache-aside, el patrón base",
+                "content": "```ts\nlet p = await redis.get(`prod:${id}`)\nif (!p) {\n  p = await db.producto(id)\n  await redis.set(`prod:${id}`, p, { EX: 300 })\n}\n```\n1. Buscas en caché. 2. Si no está (**miss**), vas a la base. 3. Guardas con **TTL**.\n- **Tasa de aciertos** (hit ratio) = la métrica que dice si sirve."
+              },
+              {
+                "title": "♻️ Invalidar: el problema difícil",
+                "content": "- **TTL**: el dato caduca solo. Simple; aceptas X minutos de dato viejo.\n- **Borrar al escribir**: al actualizar el precio, `DEL prod:42`.\n- **Desalojo** (LRU) cuando se llena la memoria.\n- ⚠️ Estampida: expira una clave muy pedida y mil peticiones van a la base a la vez → bloqueo o TTL con algo de azar.\n\nNo cachees lo que no tolera retraso: saldo, stock en el último paso de pago."
+              },
+              {
+                "title": "🌎 CDN: la caché cerca del usuario",
+                "content": "- Servidores en muchas ciudades guardan **imágenes, JS, CSS, vídeo**.\n- Un usuario en Lima descarga la foto desde un nodo cercano, no desde tu servidor en Virginia.\n- Se controla con cabeceras: `Cache-Control: public, max-age=31536000, immutable` para archivos con hash en el nombre.\n- El HTML con datos del usuario normalmente **no** va a la CDN."
+              }
+            ],
+            "videos": [
+              {
+                "kind": "video",
+                "title": "Buscar en YouTube: caching strategies cache aside CDN system design",
+                "url": "https://www.youtube.com/results?search_query=caching+strategies+cache+aside+CDN+system+design"
+              }
+            ],
+            "quiz": {
+              "id": "quiz-sd-l2",
+              "area": "backend",
+              "difficulty": "intermedio",
+              "question": "Cacheas el detalle de producto con TTL de 1 hora. Marketing cambia un precio y los clientes ven el viejo durante 50 minutos. ¿Qué arreglo es más directo?",
+              "options": [
+                "Quitar la caché por completo",
+                "Bajar el TTL a 1 segundo",
+                "Poner el precio en la CDN",
+                "Borrar la clave del producto al actualizar su precio"
+              ],
+              "correctIndex": 3,
+              "explanation": "Invalidar al escribir mantiene la caché útil y el dato correcto. Un TTL de 1 s casi elimina los aciertos y la base vuelve a cargar todo."
+            },
+            "exerciseIds": [
+              "sd-l2-e1"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "sd-m2",
+        "trackId": "diseno-sistemas",
+        "title": "Datos a escala",
+        "description": "Elegir almacenamiento, índices, réplicas y particiones; colas, reintentos e idempotencia.",
+        "level": "intermedio",
+        "lessons": [
+          {
+            "id": "sd-l3",
+            "title": "SQL o NoSQL, índices y réplicas",
+            "objective": "Elegir almacenamiento por patrones de acceso y escalar lecturas con índices y réplicas.",
+            "slides": [
+              {
+                "title": "🧭 Elige por cómo vas a leer",
+                "content": "- **SQL** (PostgreSQL, MySQL): relaciones, transacciones, consultas flexibles. Pedidos, pagos, inventario.\n- **Documentos** (MongoDB): objetos anidados que se leen enteros. Catálogos con atributos variables.\n- **Clave-valor** (Redis, DynamoDB): acceso por clave a gran velocidad. Sesiones, contadores.\n- En entrevistas: \"empiezo con PostgreSQL porque necesito transacciones; cambiaría si...\" vale más que una moda."
+              },
+              {
+                "title": "📇 Índices",
+                "content": "```sql\nCREATE INDEX idx_pedidos_cliente_fecha\n  ON pedidos (cliente_id, creado_en DESC);\n```\n- Sin índice: la base recorre toda la tabla. Con índice (B-tree): salta a las filas.\n- El orden de columnas importa: sirve para `WHERE cliente_id = ?` pero no para solo `creado_en`.\n- Cada índice **acelera lecturas y frena escrituras**: no indexes todo.\n- Revisa con `EXPLAIN ANALYZE`."
+              },
+              {
+                "title": "🪞 Réplicas y particiones",
+                "content": "- **Réplicas de lectura**: copias que reciben los cambios del primario. Reparten lecturas.\n- ⚠️ **Retraso de réplica**: el usuario guarda su perfil y al recargar lee la réplica que aún no lo tiene. Solución: leer del primario justo después de escribir.\n- **Sharding**: partir datos entre bases (p. ej. por país o hash de cliente) cuando un primario no aguanta las **escrituras**. Complica joins y transacciones."
+              }
+            ],
+            "videos": [
+              {
+                "kind": "video",
+                "title": "Buscar en YouTube: SQL vs NoSQL indexes read replicas system design",
+                "url": "https://www.youtube.com/results?search_query=SQL+vs+NoSQL+indexes+read+replicas+system+design"
+              }
+            ],
+            "quiz": {
+              "id": "quiz-sd-l3",
+              "area": "backend",
+              "difficulty": "intermedio",
+              "question": "Un usuario cambia su dirección, recarga y ve la vieja; 2 segundos después ve la nueva. Usas réplicas de lectura. ¿Qué haces?",
+              "options": [
+                "Quitar las réplicas",
+                "Añadir un índice a direcciones",
+                "Leer del primario las lecturas del propio usuario justo después de escribir",
+                "Pasar a una base NoSQL"
+              ],
+              "correctIndex": 2,
+              "explanation": "Es retraso de réplica. Leer tus propias escrituras del primario lo resuelve sin perder las réplicas para el resto."
+            },
+            "exerciseIds": [
+              "sd-l3-e1"
+            ]
+          },
+          {
+            "id": "sd-l4",
+            "title": "Colas y procesos asíncronos",
+            "objective": "Sacar el trabajo lento de la petición del usuario con colas, reintentos e idempotencia.",
+            "slides": [
+              {
+                "title": "📬 Responde rápido, trabaja después",
+                "content": "El usuario paga y la app debe: generar factura PDF, mandar correo, avisar al almacén.\n- Hacerlo todo en la petición = 8 s de espera y si el correo falla, el pago parece fallido.\n- Con **cola**: guardas el pedido, publicas `pedido_pagado` y respondes en 200 ms.\n- **Workers** consumen la cola a su ritmo y escalan por separado."
+              },
+              {
+                "title": "🔁 Reintentos e idempotencia",
+                "content": "- Casi todas las colas entregan **al menos una vez**: un mensaje puede llegar dos veces.\n- El worker debe ser **idempotente**: procesar dos veces = mismo resultado.\n```ts\nif (await yaProcesado(msg.id)) return ack()\nawait enviarFactura(msg.pedidoId)\nawait marcarProcesado(msg.id)\n```\n- Reintentos con **backoff exponencial + jitter** (1 s, 2 s, 4 s… con azar)."
+              },
+              {
+                "title": "☠️ Cuando algo falla siempre",
+                "content": "- Tras N intentos el mensaje va a una **cola de mensajes muertos** (DLQ) para revisarlo.\n- Vigila el **tamaño de la cola**: si crece sin parar, faltan workers o hay un fallo.\n- Herramientas: RabbitMQ, SQS, Kafka (log de eventos con replay), BullMQ sobre Redis en Node."
+              }
+            ],
+            "videos": [
+              {
+                "kind": "video",
+                "title": "Buscar en YouTube: message queues async processing system design idempotency",
+                "url": "https://www.youtube.com/results?search_query=message+queues+async+processing+system+design+idempotency"
+              }
+            ],
+            "quiz": {
+              "id": "quiz-sd-l4",
+              "area": "backend",
+              "difficulty": "intermedio",
+              "question": "Algunos clientes reciben dos correos de confirmación del mismo pedido. Tu cola entrega \"al menos una vez\". ¿Qué arreglas?",
+              "options": [
+                "Hacer el worker idempotente: registrar el id del mensaje y saltar los ya procesados",
+                "Cambiar a otra cola que \"nunca\" duplique",
+                "Quitar los reintentos",
+                "Mandar el correo dentro de la petición del usuario"
+              ],
+              "correctIndex": 0,
+              "explanation": "Los duplicados son normales con entrega al menos una vez. La idempotencia los neutraliza; quitar reintentos hace que se pierdan correos."
+            },
+            "exerciseIds": [
+              "sd-l4-e1"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "sd-m3",
+        "trackId": "diseno-sistemas",
+        "title": "Casos de entrevista",
+        "description": "Acortador de URLs, chat en tiempo real y un sistema con LLM: de requisitos a diagrama.",
+        "level": "avanzado",
+        "lessons": [
+          {
+            "id": "sd-l5",
+            "title": "Un acortador de URLs",
+            "objective": "Resolver de principio a fin el clásico acortador: requisitos, estimación, claves, datos y caché.",
+            "slides": [
+              {
+                "title": "🧾 Requisitos y números",
+                "content": "- Funcionales: acortar una URL, redirigir, (opcional) contar clics y caducidad.\n- No funcionales: redirección p99 < 50 ms, alta disponibilidad.\n- Estimación: 100 M URLs nuevas/mes ≈ **40 escrituras/s**; lecturas 100:1 ≈ **4.000/s**.\n- 5 años × 1.200 M ≈ 6.000 M filas × ~500 bytes ≈ **3 TB**.\n\nConclusión: sistema **de lectura**; la caché manda."
+              },
+              {
+                "title": "🔑 Generar la clave corta",
+                "content": "- **Base62** (a-z, A-Z, 0-9): 7 caracteres = 62⁷ ≈ **3,5 billones** de claves.\n- Opción A: **contador** global → base62. Sin colisiones; el contador debe repartirse (rangos por servidor) y las claves son predecibles.\n- Opción B: **hash** (MD5 de la URL) y tomar 7 caracteres. Hay colisiones: comprobar y reintentar.\n- Explica el intercambio; no hay una única respuesta."
+              },
+              {
+                "title": "↪️ Redirigir rápido",
+                "content": "- `GET /aZ3k9Qx` → busca en **caché** (Redis); si falla, en la base.\n- **301** (permanente): el navegador la guarda y no vuelve → menos carga, pero pierdes conteo de clics.\n- **302** (temporal): cada clic pasa por ti → puedes contar.\n- Los clics se registran **en una cola**, no en la petición de redirección."
+              }
+            ],
+            "videos": [
+              {
+                "kind": "video",
+                "title": "Buscar en YouTube: system design URL shortener interview",
+                "url": "https://www.youtube.com/results?search_query=system+design+URL+shortener+interview"
+              }
+            ],
+            "quiz": {
+              "id": "quiz-sd-l5",
+              "area": "backend",
+              "difficulty": "avanzado",
+              "question": "El cliente quiere estadísticas de cada clic en sus enlaces cortos. ¿Qué redirección usas?",
+              "options": [
+                "301, porque es más rápida",
+                "200 con el HTML de la página destino",
+                "Ninguna: se pide al navegador que copie la URL",
+                "302, para que cada clic pase por tu servidor y se pueda contar"
+              ],
+              "correctIndex": 3,
+              "explanation": "Con 301 el navegador recuerda el destino y deja de pasar por ti, así que pierdes clics. 302 mantiene el conteo a cambio de más tráfico."
+            },
+            "exerciseIds": [
+              "sd-l5-e1",
+              "sd-l5-e2"
+            ]
+          },
+          {
+            "id": "sd-l6",
+            "title": "Un chat en tiempo real",
+            "objective": "Diseñar un chat con conexiones persistentes, varios servidores, orden de mensajes y entrega offline.",
+            "slides": [
+              {
+                "title": "🔌 Conexiones que se quedan abiertas",
+                "content": "- **WebSockets**: conexión bidireccional abierta; el servidor empuja mensajes al instante.\n- Alternativas: long polling (simple, más carga) o SSE (solo servidor → cliente).\n- Cada servidor de conexiones mantiene miles de sockets: es un servicio **con estado**.\n- El balanceador debe soportar conexiones largas."
+              },
+              {
+                "title": "📡 Varios servidores: pub/sub",
+                "content": "Ana está conectada al servidor 1 y Beto al 3. ¿Cómo llega el mensaje?\n1. El servidor 1 **guarda** el mensaje en la base.\n2. Lo **publica** en el canal de la conversación (Redis pub/sub, Kafka).\n3. El servidor 3, suscrito por Beto, lo **empuja** por su socket.\n\nUn registro dice en qué servidor está cada usuario conectado."
+              },
+              {
+                "title": "📴 Orden, offline y presencia",
+                "content": "- **Orden**: número de secuencia por conversación asignado al guardar; el cliente ordena por él, no por su reloj.\n- **Offline**: si Beto no está conectado, el mensaje queda guardado y se envía una **notificación push**; al reconectar pide \"desde el último id\".\n- **Presencia** (en línea): latidos cada 30 s; si faltan, pasa a desconectado.\n- **Confirmaciones**: enviado ✓, entregado ✓✓, leído."
+              }
+            ],
+            "videos": [
+              {
+                "kind": "video",
+                "title": "Buscar en YouTube: system design chat application websockets",
+                "url": "https://www.youtube.com/results?search_query=system+design+chat+application+websockets"
+              }
+            ],
+            "quiz": {
+              "id": "quiz-sd-l6",
+              "area": "backend",
+              "difficulty": "avanzado",
+              "question": "En un chat de grupo los mensajes aparecen desordenados para algunos usuarios. El cliente ordena por la hora de su celular. ¿Qué cambias?",
+              "options": [
+                "Sincronizar los relojes de todos los celulares",
+                "Usar HTTP en vez de WebSockets",
+                "Mandar los mensajes más despacio",
+                "Asignar un número de secuencia por conversación al guardar y ordenar por él"
+              ],
+              "correctIndex": 3,
+              "explanation": "Los relojes de los dispositivos no coinciden. Un número asignado por el servidor al guardar da un orden único para todos."
+            },
+            "exerciseIds": [
+              "sd-l6-e1"
+            ]
+          },
+          {
+            "id": "sd-l7",
+            "title": "Un sistema con LLM a escala: coste y límites",
+            "objective": "Diseñar un servicio que usa un LLM para miles de usuarios respetando límites de tasa y presupuesto.",
+            "slides": [
+              {
+                "title": "🚦 Los límites del proveedor",
+                "content": "- Los proveedores limitan **peticiones por minuto** y **tokens por minuto** por cuenta.\n- Al pasarte: respuesta **429** con `retry-after`.\n- Tu diseño: una **cola** delante del LLM y workers que consumen al ritmo permitido.\n- Reintentos con backoff y jitter; nunca un bucle inmediato.\n- **Límite por usuario** en tu app para que uno solo no se coma la cuota de todos."
+              },
+              {
+                "title": "💸 Bajar coste sin bajar calidad",
+                "content": "- **Caché de respuestas**: misma pregunta exacta → misma respuesta (hash del prompt).\n- **Caché de prompt** del proveedor: el prefijo largo (sistema, documentos) se cobra más barato al repetirse.\n- **Enrutar**: modelo pequeño para clasificar o resumir; el grande solo para lo difícil.\n- **Lotes** (batch) para trabajo no urgente: más barato a cambio de esperar horas.\n- **Presupuesto** diario por usuario y alertas de gasto."
+              },
+              {
+                "title": "🧯 Cuando el modelo falla o tarda",
+                "content": "- **Timeout** (p. ej. 30 s) y streaming para que la espera se note menos.\n- **Proveedor de respaldo** o modelo alternativo si el principal da errores.\n- **Modo degradado**: si no hay LLM, la app sigue funcionando (búsqueda normal, mensaje claro).\n- Mide: latencia p95, tasa de 429, coste por usuario, aciertos de caché."
+              }
+            ],
+            "videos": [
+              {
+                "kind": "video",
+                "title": "Buscar en YouTube: LLM system design rate limits cost production",
+                "url": "https://www.youtube.com/results?search_query=LLM+system+design+rate+limits+cost+production"
+              }
+            ],
+            "quiz": {
+              "id": "quiz-sd-l7",
+              "area": "backend",
+              "difficulty": "avanzado",
+              "question": "Al lanzar tu función de resúmenes recibes muchos 429 en las horas pico y los usuarios ven errores. ¿Qué diseño lo resuelve?",
+              "options": [
+                "Reintentar inmediatamente hasta que funcione",
+                "Una cola con workers al ritmo de tu cuota, backoff respetando retry-after y límite por usuario",
+                "Abrir 10 cuentas con el proveedor y repartir",
+                "Subir max_tokens para hacer menos llamadas"
+              ],
+              "correctIndex": 1,
+              "explanation": "La cola adapta tu demanda a la cuota y el backoff no empeora la saturación. Reintentar al instante multiplica los 429."
+            },
+            "exerciseIds": [
+              "sd-l7-e1"
+            ]
+          }
+        ],
+        "project": {
+          "title": "Simulacro de entrevista de diseño grabado",
+          "description": "Elige un caso (reservas de un consultorio, notificaciones o feed) y resuélvelo en 45 minutos en voz alta, con estimación, diagrama e intercambios.",
+          "deliverables": [
+            "Diagrama final con colores y leyenda",
+            "Hoja de estimaciones",
+            "Grabación de 45 minutos y autoevaluación con la rúbrica"
+          ]
+        }
+      }
+    ]
+  },
+  "exercises": [
+    {
+      "id": "sd-l1-e1",
+      "trackId": "diseno-sistemas",
+      "moduleId": "sd-m1",
+      "lessonId": "sd-l1",
+      "title": "Escala la tienda online para el Buen Fin",
+      "description": "Una tienda online corre en un solo servidor que aguanta 300 peticiones por segundo con p99 de 250 ms. Para el Buen Fin esperan 2.000 peticiones por segundo en pico. La sesión del usuario se guarda en la memoria del servidor. Propón cómo escalar: cuántos servidores, qué cambios necesita la sesión, qué algoritmo de balanceo y qué health check. Dibuja el diagrama.",
+      "objective": "Pasar de un servidor a varios sin perder estado ni disponibilidad.",
+      "difficulty": "intermedio",
+      "kind": "guiado",
+      "theory": true,
+      "aiPolicy": "ia_tutor",
+      "constraints": [
+        "Deja un margen para la caída de un servidor",
+        "Incluye el diagrama"
+      ],
+      "hints": [
+        "Haz la cuenta: ¿cuántos servidores de 300 rps necesitas para 2.000? ¿y si uno se cae?",
+        "Pregúntate qué pasa con la sesión si la siguiente petición cae en otro servidor.",
+        "Un health check llama a una ruta como /salud cada pocos segundos y saca del reparto al que no responde."
+      ],
+      "solution": "2.000 / 300 ≈ 7 servidores; con margen N+1 o al 70 % de capacidad, 9-10. Sesión a Redis (o token firmado) para que sean sin estado. Balanceador con menos conexiones (peticiones de duración variable) o round robin. Health check GET /salud cada 5 s, 2 fallos → fuera. Diagrama: usuarios → balanceador → N servidores → Redis + base de datos.",
+      "criteria": [
+        "El número de servidores sale de una cuenta con margen",
+        "La sesión sale de la memoria del servidor",
+        "Hay health check concreto",
+        "El diagrama muestra el balanceador y el almacén compartido"
+      ],
+      "commonErrors": [
+        "Escalar en vertical sin mencionar el techo",
+        "Olvidar la sesión",
+        "Calcular sin margen para fallos"
+      ],
+      "interviewQuestion": "¿Qué significa que un servicio sea sin estado y por qué importa para escalar?",
+      "resources": [
+        {
+          "kind": "doc",
+          "title": "Cloudflare: qué es el balanceo de carga",
+          "url": "https://www.cloudflare.com/learning/performance/what-is-load-balancing/"
+        },
+        {
+          "kind": "doc",
+          "title": "System Design Primer",
+          "url": "https://github.com/donnemartin/system-design-primer"
+        }
+      ]
+    },
+    {
+      "id": "sd-l2-e1",
+      "trackId": "diseno-sistemas",
+      "moduleId": "sd-m1",
+      "lessonId": "sd-l2",
+      "title": "Qué cachear en una app de reservas de canchas",
+      "description": "Una app de reservas de canchas de fútbol tiene: lista de canchas con fotos, precios por hora (cambian 1 vez al mes), disponibilidad por franja (cambia en cada reserva) y el perfil del usuario. La base de datos va al 90 % de CPU los viernes. Para cada dato decide: ¿caché?, ¿dónde (CDN, Redis, ninguna)?, ¿TTL o invalidación al escribir? Justifica y estima qué carga le quitas a la base.",
+      "objective": "Decidir caché dato por dato según frecuencia de cambio y coste de un dato viejo.",
+      "difficulty": "intermedio",
+      "kind": "practica_autonoma",
+      "theory": true,
+      "aiPolicy": "ia_par",
+      "constraints": [
+        "Una decisión justificada por dato",
+        "Di qué pasa si se sirve un dato viejo en cada caso"
+      ],
+      "hints": [
+        "Ordena los datos por cada cuánto cambian y por lo que cuesta mostrar uno viejo.",
+        "Las fotos no cambian; la disponibilidad cambia todo el tiempo y un error causa dobles reservas.",
+        "La disponibilidad puede cachearse unos segundos para mostrar, pero la reserva final siempre consulta la base."
+      ],
+      "solution": "Fotos: CDN con max-age largo y nombre con hash. Lista de canchas y precios: Redis con TTL 1 h + borrado al editar. Disponibilidad: caché corta (5-10 s) solo para la vista; la reserva confirma contra la base con transacción. Perfil: Redis por usuario, borrado al editar, o sin caché si es poco leído. Ahorro: la mayoría de lecturas eran listas y precios.",
+      "criteria": [
+        "Cada dato tiene ubicación y política de caducidad",
+        "La reserva final no depende de la caché",
+        "Explica el coste de un dato viejo en cada caso",
+        "Las imágenes van a la CDN"
+      ],
+      "commonErrors": [
+        "Cachear la disponibilidad para confirmar reservas",
+        "TTL igual para todo",
+        "Poner datos privados en la CDN"
+      ],
+      "interviewQuestion": "¿Cómo invalidas una caché cuando cambia el dato?",
+      "resources": [
+        {
+          "kind": "doc",
+          "title": "Documentación de Redis",
+          "url": "https://redis.io/docs/latest/"
+        },
+        {
+          "kind": "doc",
+          "title": "MDN: caché HTTP",
+          "url": "https://developer.mozilla.org/es/docs/Web/HTTP/Caching"
+        },
+        {
+          "kind": "doc",
+          "title": "Cloudflare: qué es una CDN",
+          "url": "https://www.cloudflare.com/learning/cdn/what-is-a-cdn/"
+        }
+      ]
+    },
+    {
+      "id": "sd-l3-e1",
+      "trackId": "diseno-sistemas",
+      "moduleId": "sd-m2",
+      "lessonId": "sd-l3",
+      "title": "Datos de un marketplace de artesanías",
+      "description": "Un marketplace de artesanías tiene: usuarios, productos con atributos muy variados (talla para ropa, material para cerámica), pedidos con pagos y un historial de vistas por usuario (millones de filas al día). La consulta \"mis pedidos más recientes\" tarda 2 s. Elige almacenamiento para cada dato, escribe el índice que arregla esa consulta y explica cuándo añadirías réplicas y qué problema de consistencia vigilarías.",
+      "objective": "Justificar decisiones de almacenamiento y de índices con patrones de acceso reales.",
+      "difficulty": "intermedio",
+      "kind": "entrevista",
+      "theory": true,
+      "aiPolicy": "sin_ia",
+      "constraints": [
+        "Justifica cada elección con cómo se lee el dato",
+        "El índice debe servir para la consulta exacta"
+      ],
+      "hints": [
+        "Empieza por los datos que necesitan transacciones: ¿cuáles mueven dinero?",
+        "La consulta filtra por cliente y ordena por fecha: el índice debería seguir ese mismo orden.",
+        "Las réplicas ayudan si sobran lecturas; piensa qué ve un comprador justo después de pagar."
+      ],
+      "solution": "Usuarios, pedidos, pagos: PostgreSQL (transacciones). Productos: PostgreSQL con columna JSONB para atributos o documentos si varían mucho. Historial de vistas: almacén de alto volumen de escritura (tabla particionada por fecha o clave-valor/columnar) con caducidad. Índice: CREATE INDEX ON pedidos (cliente_id, creado_en DESC). Réplicas cuando la CPU del primario se va en lecturas; vigilar retraso: la página de confirmación de pago lee del primario.",
+      "criteria": [
+        "Pagos y pedidos en un almacén con transacciones",
+        "El índice tiene columnas en el orden de la consulta",
+        "Menciona el retraso de réplica con un caso concreto",
+        "Trata el historial de vistas como dato de alto volumen"
+      ],
+      "commonErrors": [
+        "Elegir NoSQL \"porque escala\" sin patrón de acceso",
+        "Índice solo en creado_en",
+        "Proponer sharding antes de índices y réplicas"
+      ],
+      "interviewQuestion": "¿Cuándo elegirías una base NoSQL en lugar de PostgreSQL?",
+      "resources": [
+        {
+          "kind": "doc",
+          "title": "PostgreSQL: índices",
+          "url": "https://www.postgresql.org/docs/current/indexes.html"
+        },
+        {
+          "kind": "doc",
+          "title": "System Design Primer",
+          "url": "https://github.com/donnemartin/system-design-primer"
+        }
+      ]
+    },
+    {
+      "id": "sd-l4-e1",
+      "trackId": "diseno-sistemas",
+      "moduleId": "sd-m2",
+      "lessonId": "sd-l4",
+      "title": "Saca del pago todo lo lento en una tienda de ropa",
+      "description": "En una tienda de ropa, el endpoint POST /pagar tarda 7 s: cobra con la pasarela, genera la factura PDF, envía el correo, descuenta stock y avisa por WhatsApp al almacén. Si WhatsApp falla, el cliente ve \"error\" aunque ya se le cobró. Rediseña: qué se queda en la petición, qué va a la cola, cómo haces idempotentes los workers, política de reintentos y qué haces con los mensajes que fallan siempre. Incluye diagrama.",
+      "objective": "Separar lo que el usuario debe esperar de lo que puede pasar después, sin perder ni duplicar trabajo.",
+      "difficulty": "intermedio",
+      "kind": "aplicacion_real",
+      "theory": false,
+      "aiPolicy": "ia_par",
+      "constraints": [
+        "El cobro y el stock no pueden quedar inconsistentes",
+        "Define número de reintentos y backoff"
+      ],
+      "hints": [
+        "Pregúntate qué necesita saber el cliente al pulsar \"pagar\" y qué puede enterarse más tarde.",
+        "El stock y el cobro deberían confirmarse juntos; los avisos pueden ir después.",
+        "Cada worker guarda qué mensajes ya procesó; tras 5 intentos el mensaje va a una cola aparte que alguien revisa."
+      ],
+      "solution": "En la petición: cobrar (con clave de idempotencia de la pasarela) y en la misma transacción crear pedido y descontar stock; publicar evento pedido_pagado; responder. Workers: factura, correo, WhatsApp, cada uno con tabla de procesados por id de mensaje. Reintentos: 5 con backoff exponencial y jitter; luego DLQ con alerta. Monitor del tamaño de cola.",
+      "criteria": [
+        "El cliente recibe respuesta sin esperar los avisos",
+        "Cobro y stock quedan consistentes",
+        "Cada worker es idempotente con un mecanismo concreto",
+        "Hay DLQ y alerta para fallos persistentes"
+      ],
+      "commonErrors": [
+        "Poner el cobro en la cola sin avisar al usuario",
+        "Reintentos infinitos",
+        "Workers que duplican correos"
+      ],
+      "interviewQuestion": "¿Qué es la idempotencia y por qué la necesitas con colas?",
+      "resources": [
+        {
+          "kind": "doc",
+          "title": "Tutoriales de RabbitMQ",
+          "url": "https://www.rabbitmq.com/tutorials"
+        },
+        {
+          "kind": "doc",
+          "title": "Amazon Builders Library: timeouts, reintentos y backoff",
+          "url": "https://aws.amazon.com/builders-library/timeouts-retries-and-backoff-with-jitter/"
+        }
+      ]
+    },
+    {
+      "id": "sd-l5-e1",
+      "trackId": "diseno-sistemas",
+      "moduleId": "sd-m3",
+      "lessonId": "sd-l5",
+      "title": "Diseña el acortador de enlaces de una agencia de marketing",
+      "description": "Una agencia de marketing quiere su propio acortador para campañas: 20 M enlaces nuevos al mes, 200 lecturas por cada escritura en picos de campaña, conteo de clics por país y enlaces que caducan al acabar la campaña. Resuelve como en una entrevista de 45 minutos: requisitos, estimación (escrituras/s, lecturas/s, almacenamiento a 3 años), generación de claves, esquema de datos, caché, tipo de redirección y diagrama final.",
+      "objective": "Practicar la estructura completa de una entrevista de diseño de sistemas.",
+      "difficulty": "avanzado",
+      "kind": "entrevista",
+      "theory": false,
+      "aiPolicy": "sin_ia",
+      "constraints": [
+        "Haz las cuentas por escrito",
+        "Justifica 301 o 302",
+        "Diagrama con máximo 10 cajas"
+      ],
+      "hints": [
+        "Empieza por las preguntas que harías al entrevistador antes de dibujar nada.",
+        "Convierte 20 M al mes en escrituras por segundo y multiplica por 200 para las lecturas en pico.",
+        "El conteo de clics no debe frenar la redirección: piensa en dónde guardarlo sin esperar."
+      ],
+      "solution": "20 M/mes ≈ 8 escrituras/s; lecturas pico ≈ 1.600/s. 3 años: 720 M × ~500 B ≈ 360 GB. Clave: contador por rangos → base62 de 7 caracteres. Tabla enlaces(clave PK, url, campaña, caduca_en, creado_en). Redis con las claves calientes y TTL hasta caduca_en. 302 para contar. Clics a una cola → worker agrega por país en una tabla de estadísticas. Caducados: 410 Gone.",
+      "criteria": [
+        "Las cuentas salen de los datos del enunciado",
+        "La generación de claves explica su intercambio",
+        "El conteo de clics va fuera de la ruta de redirección",
+        "La caducidad está resuelta en datos y caché"
+      ],
+      "commonErrors": [
+        "Dibujar sin estimar",
+        "301 cuando se piden estadísticas",
+        "Escribir cada clic en la base de forma síncrona"
+      ],
+      "interviewQuestion": "Diseña un acortador de URLs.",
+      "resources": [
+        {
+          "kind": "doc",
+          "title": "System Design Primer",
+          "url": "https://github.com/donnemartin/system-design-primer"
+        },
+        {
+          "kind": "doc",
+          "title": "MDN: redirecciones en HTTP",
+          "url": "https://developer.mozilla.org/es/docs/Web/HTTP/Redirections"
+        }
+      ]
+    },
+    {
+      "id": "sd-l5-e2",
+      "trackId": "diseno-sistemas",
+      "moduleId": "sd-m3",
+      "lessonId": "sd-l5",
+      "title": "Codifica un id en base62",
+      "description": "Escribe en TypeScript las funciones aBase62(n: number): string y deBase62(s: string): number con el alfabeto 0-9a-zA-Z. Prueba que deBase62(aBase62(n)) === n para 0, 61, 62, 3843 y 916132831, y explica cuántos caracteres hacen falta para 1.000 millones de enlaces.",
+      "objective": "Entender el mecanismo que convierte un contador en una clave corta.",
+      "difficulty": "intermedio",
+      "kind": "practica_autonoma",
+      "theory": false,
+      "aiPolicy": "ia_tutor",
+      "constraints": [
+        "Sin librerías",
+        "Cubre el caso n = 0"
+      ],
+      "hints": [
+        "Es la misma idea que pasar un número a binario, pero con 62 símbolos.",
+        "Divide entre 62 repetidamente y guarda los restos; luego inviértelos.",
+        "Para volver, recorre la cadena y acumula total = total × 62 + posición del carácter."
+      ],
+      "solution": "const A = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'; aBase62: if n === 0 return '0'; while n > 0 { s = A[n % 62] + s; n = Math.floor(n / 62) }. deBase62: for c of s: total = total * 62 + A.indexOf(c). 62^5 ≈ 916 M < 1.000 M ≤ 62^6 ≈ 56.800 M → 6 caracteres.",
+      "criteria": [
+        "Las cinco pruebas de ida y vuelta pasan",
+        "n = 0 devuelve \"0\"",
+        "La cuenta de caracteres usa potencias de 62"
+      ],
+      "commonErrors": [
+        "Olvidar invertir los restos",
+        "Devolver cadena vacía para 0"
+      ],
+      "interviewQuestion": "¿Cuántas claves distintas da base62 con 7 caracteres?",
+      "resources": [
+        {
+          "kind": "doc",
+          "title": "MDN: Math.floor",
+          "url": "https://developer.mozilla.org/es/docs/Web/JavaScript/Reference/Global_Objects/Math/floor"
+        }
+      ]
+    },
+    {
+      "id": "sd-l6-e1",
+      "trackId": "diseno-sistemas",
+      "moduleId": "sd-m3",
+      "lessonId": "sd-l6",
+      "title": "Chat entre pacientes y recepción de una red de clínicas",
+      "description": "Una red de 40 clínicas quiere un chat entre pacientes y recepción: 50.000 usuarios conectados en pico, conversaciones 1 a 1 y grupos de recepcionistas por clínica, historial de 2 años, notificaciones si el paciente no tiene la app abierta y marcas de leído. Diseña: tipo de conexión, cómo se enrutan mensajes entre servidores, esquema de mensajes, orden, entrega offline y presencia. Incluye diagrama y una cuenta de cuántos servidores de conexiones necesitas si cada uno aguanta 10.000 sockets.",
+      "objective": "Aplicar pub/sub, orden por secuencia y entrega offline a un caso real.",
+      "difficulty": "avanzado",
+      "kind": "reto",
+      "theory": false,
+      "aiPolicy": "ia_par",
+      "constraints": [
+        "Explica qué pasa si un servidor de conexiones se cae",
+        "Datos de salud: menciona cifrado y acceso"
+      ],
+      "hints": [
+        "Separa lo que guarda estado (los sockets) de lo que no (guardar y leer mensajes).",
+        "Piensa cómo sabe el servidor de Ana a qué servidor mandar el mensaje para Beto.",
+        "Si un servidor cae, los clientes reconectan a otro y piden mensajes desde su último id visto."
+      ],
+      "solution": "WebSockets; 50.000 / 10.000 = 5 servidores, con margen 7. Al recibir: guardar en tabla mensajes(conversacion_id, seq, autor, texto, creado_en) con seq por conversación; publicar en Redis pub/sub canal conv:{id}; servidores suscritos empujan. Offline: push vía servicio de notificaciones. Presencia con latidos en Redis con TTL. Caída: reconexión y sincronización por último seq. Cifrado en tránsito y en reposo, acceso solo a la clínica del paciente.",
+      "criteria": [
+        "Cuenta de servidores con margen",
+        "Enrutamiento entre servidores con pub/sub o equivalente",
+        "Orden por secuencia del servidor",
+        "Entrega offline y reconexión resueltas"
+      ],
+      "commonErrors": [
+        "Suponer un solo servidor",
+        "Ordenar por reloj del cliente",
+        "Olvidar los mensajes perdidos al reconectar"
+      ],
+      "interviewQuestion": "Diseña WhatsApp: ¿cómo llega un mensaje de un usuario a otro conectado a otro servidor?",
+      "resources": [
+        {
+          "kind": "doc",
+          "title": "MDN: API de WebSockets",
+          "url": "https://developer.mozilla.org/es/docs/Web/API/WebSockets_API"
+        },
+        {
+          "kind": "doc",
+          "title": "Documentación de Redis",
+          "url": "https://redis.io/docs/latest/"
+        }
+      ]
+    },
+    {
+      "id": "sd-l7-e1",
+      "trackId": "diseno-sistemas",
+      "moduleId": "sd-m3",
+      "lessonId": "sd-l7",
+      "title": "Resúmenes automáticos para 30.000 pymes",
+      "description": "Un software contable quiere un botón \"resúmeme el mes\" para sus 30.000 pymes clientes. Cada resumen usa ~6.000 tokens de entrada y 600 de salida. El día 1 de cada mes el 60 % de clientes lo pulsa entre las 9 y las 11 h. Tu cuota es de 2 M tokens de entrada por minuto. Diseña: cola, workers, límites por cliente, caché, enrutamiento de modelos, qué haces si te pasas de cuota y qué ve el usuario mientras espera. Incluye la cuenta de cuánto tardaría en procesarse el pico.",
+      "objective": "Ajustar un sistema con LLM a límites reales de cuota, coste y experiencia de usuario.",
+      "difficulty": "avanzado",
+      "kind": "sintesis",
+      "theory": false,
+      "aiPolicy": "ia_par",
+      "constraints": [
+        "Haz la cuenta del pico con la cuota dada",
+        "Incluye un modo degradado si el proveedor cae"
+      ],
+      "hints": [
+        "Calcula primero cuántos resúmenes por minuto permite la cuota de entrada.",
+        "Compáralo con cuántos piden en esas 2 horas: ¿alcanza o se acumula?",
+        "Si se acumula, piensa en generar por adelantado: el resumen del mes se puede preparar en lote la noche anterior."
+      ],
+      "solution": "Cuota: 2 M / 6.000 ≈ 333 resúmenes/min ≈ 40.000 en 2 h; demanda 18.000 → cabe, pero con picos al inicio habrá cola de varios minutos. Mejor: generar en lote la madrugada del día 1 (más barato) y servir desde caché; el botón solo regenera si cambian datos. Cola con workers al ritmo de la cuota, backoff con retry-after, 3 resúmenes/día por cliente. Modelo pequeño para extraer cifras, grande para redactar. UI: \"listo en ~2 min\" con aviso. Degradado: mostrar tabla de cifras sin texto.",
+      "criteria": [
+        "La cuenta de capacidad usa la cuota y la demanda del enunciado",
+        "Hay cola con backoff y límite por cliente",
+        "Propone al menos dos palancas de coste concretas",
+        "Define qué ve el usuario y el modo degradado"
+      ],
+      "commonErrors": [
+        "Ignorar la cuota",
+        "Reintentos inmediatos",
+        "No pensar en precalcular"
+      ],
+      "interviewQuestion": "¿Cómo diseñarías una función con LLM para miles de usuarios con presupuesto limitado?",
+      "resources": [
+        {
+          "kind": "doc",
+          "title": "MDN: 429 Too Many Requests",
+          "url": "https://developer.mozilla.org/es/docs/Web/HTTP/Status/429"
+        },
+        {
+          "kind": "doc",
+          "title": "Amazon Builders Library: timeouts, reintentos y backoff",
+          "url": "https://aws.amazon.com/builders-library/timeouts-retries-and-backoff-with-jitter/"
+        },
+        {
+          "kind": "doc",
+          "title": "Claude: límites de uso",
+          "url": "https://docs.claude.com/en/api/rate-limits"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,1005 @@
+{
+  "track": {
+    "id": "node-backend",
+    "title": "Node.js y Next.js: tu backend en TypeScript",
+    "description": "Construye APIs con Node, Express y Zod, conéctalas a SQL con un ORM y termina con una app full stack en Next.js lista para producción.",
+    "area": "backend",
+    "color": "#30D158",
+    "source": "xara",
+    "modules": [
+      {
+        "id": "node-m1",
+        "trackId": "node-backend",
+        "title": "Fundamentos de Node",
+        "description": "Módulos, npm, el event loop y el sistema de archivos: lo que necesitas antes de levantar tu primer servidor.",
+        "level": "principiante",
+        "lessons": [
+          {
+            "id": "node-l1",
+            "title": "Módulos y npm",
+            "objective": "Organizar un proyecto Node en módulos ESM y gestionar sus dependencias con npm sin romper versiones.",
+            "slides": [
+              {
+                "title": "📦 package.json: el DNI del proyecto",
+                "content": "- **name**, **version** y **scripts** (`npm run dev`)\n- `\"type\": \"module\"` → usas `import`/`export` (ESM)\n- **dependencies**: lo que corre en producción (express)\n- **devDependencies**: solo para programar (`npm i -D vitest`)\n- `package-lock.json` fija la versión exacta: **se sube a git**"
+              },
+              {
+                "title": "🔀 ESM vs CommonJS",
+                "content": "```js\n// ESM (moderno)\nimport { calcularTotal } from './carrito.js'\nexport function iva(x) { return x * 0.16 }\n\n// CommonJS (código antiguo)\nconst fs = require('fs')\nmodule.exports = { iva }\n```\n- En ESM la extensión `.js` del import **es obligatoria**\n- No mezcles `require` e `import` en el mismo archivo"
+              },
+              {
+                "title": "🏷️ Versiones: qué significa ^4.21.2",
+                "content": "- **MAYOR.MENOR.PARCHE** (semver)\n- `^4.21.2` acepta 4.x.x, nunca 5.0.0\n- `~4.21.2` solo acepta parches 4.21.x\n- `npm ci` instala **exacto** lo del lock: úsalo en CI\n- `npx` ejecuta una herramienta sin instalarla global"
+              }
+            ],
+            "videos": [
+              {
+                "kind": "video",
+                "title": "Buscar en YouTube: node js modulos npm package.json español",
+                "url": "https://www.youtube.com/results?search_query=node+js+modulos+npm+package.json+espa%C3%B1ol"
+              }
+            ],
+            "quiz": {
+              "id": "quiz-node-l1",
+              "area": "backend",
+              "difficulty": "principiante",
+              "question": "Tu compañero clona la tienda online y le salen versiones distintas de Express que a ti. ¿Qué falta casi seguro?",
+              "options": [
+                "Un .gitignore con node_modules",
+                "Instalar Express de forma global",
+                "El package-lock.json en el repositorio",
+                "Cambiar ^ por * en package.json"
+              ],
+              "correctIndex": 2,
+              "explanation": "El lock fija las versiones exactas para todos. Ignorar node_modules es correcto pero no fija versiones; * empeora el problema."
+            },
+            "exerciseIds": [
+              "node-l1-e1"
+            ]
+          },
+          {
+            "id": "node-l2",
+            "title": "Event loop, async y streams",
+            "objective": "Predecir el orden de ejecución de código asíncrono y procesar archivos grandes sin agotar la memoria.",
+            "slides": [
+              {
+                "title": "🧵 Un solo hilo, muchos encargos",
+                "content": "- Node ejecuta **tu JS en un hilo**\n- Lo lento (disco, red, BD) se delega y vuelve como evento\n- Si haces un cálculo pesado síncrono, **nadie más es atendido**\n```mermaid\nflowchart LR\n  A[Tu código]:::azul --> B[Pila]:::azul\n  B -->|I/O lento| C[Sistema y libuv]:::naranja\n  C -->|terminó| D[Cola de eventos]:::morado\n  D -->|pila vacía| B\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef naranja fill:#FF9F0A,stroke:#FF9F0A,color:#fff\n  classDef morado fill:#BF5AF2,stroke:#BF5AF2,color:#fff\n```"
+              },
+              {
+                "title": "⏱️ ¿Quién va primero?",
+                "content": "```js\nconsole.log('1')\nsetTimeout(() => console.log('4'), 0)\nPromise.resolve().then(() => console.log('3'))\nconsole.log('2')\n```\n- Primero todo lo síncrono: **1, 2**\n- Luego **microtareas** (promesas): **3**\n- Después **temporizadores**: **4**"
+              },
+              {
+                "title": "🚿 Streams: agua por tubería, no en cubetas",
+                "content": "- `readFile` de un CSV de 2 GB lo mete **entero** en RAM\n- Un stream lo procesa **por trozos**\n```js\nimport { pipeline } from 'node:stream/promises'\nimport { createReadStream, createWriteStream } from 'node:fs'\nimport { createGzip } from 'node:zlib'\nawait pipeline(createReadStream('ventas.csv'), createGzip(), createWriteStream('ventas.csv.gz'))\n```\n- `pipeline` cierra todo y propaga errores"
+              }
+            ],
+            "videos": [
+              {
+                "kind": "video",
+                "title": "Buscar en YouTube: node js event loop explicado español",
+                "url": "https://www.youtube.com/results?search_query=node+js+event+loop+explicado+espa%C3%B1ol"
+              }
+            ],
+            "quiz": {
+              "id": "quiz-node-l2",
+              "area": "backend",
+              "difficulty": "principiante",
+              "question": "Una ruta de tu API calcula un reporte con un bucle síncrono de 3 segundos. ¿Qué notan los demás clientes?",
+              "options": [
+                "Nada, Node atiende cada petición en su propio hilo",
+                "Todas sus peticiones esperan hasta que termine el bucle",
+                "Solo esperan los que piden el mismo reporte",
+                "Node lanza un error de timeout automático"
+              ],
+              "correctIndex": 1,
+              "explanation": "El JS corre en un único hilo: un bucle síncrono bloquea el event loop para todos. La idea de un hilo por petición es de otros servidores, no de Node."
+            },
+            "exerciseIds": [
+              "node-l2-e1",
+              "node-l2-e2"
+            ]
+          },
+          {
+            "id": "node-l3",
+            "title": "Archivos y rutas (fs, path)",
+            "objective": "Leer y escribir archivos con fs/promises y construir rutas seguras que funcionen en Windows y Linux.",
+            "slides": [
+              {
+                "title": "📂 fs/promises: lo moderno",
+                "content": "```js\nimport { readFile, writeFile, mkdir } from 'node:fs/promises'\nconst datos = JSON.parse(await readFile('citas.json', 'utf8'))\nawait mkdir('respaldos', { recursive: true })\nawait writeFile('respaldos/hoy.json', JSON.stringify(datos, null, 2))\n```\n- Evita `readFileSync` dentro de un servidor: **bloquea**\n- Sin `'utf8'` recibes un **Buffer**, no texto"
+              },
+              {
+                "title": "🧭 path: rutas que no se rompen",
+                "content": "- Windows usa `\\`, Linux usa `/` → **no concatenes strings**\n- `path.join(dir, 'datos', 'citas.json')`\n- `path.resolve()` → ruta absoluta\n- `path.extname('foto.PNG')` → `.PNG`\n- En ESM no existe `__dirname`: usa `import.meta.dirname` (Node 20.11+)\n- Las rutas relativas parten de **donde ejecutas node**, no del archivo"
+              },
+              {
+                "title": "🚨 Path traversal",
+                "content": "- Te piden `/descargas?archivo=../../.env` 😱\n- `join(BASE, archivo)` **sale de la carpeta**\n```js\nconst ruta = path.resolve(BASE, archivo)\nif (!ruta.startsWith(BASE + path.sep)) throw new Error('Ruta no permitida')\n```\n- Nunca uses un nombre de archivo del usuario sin validar"
+              }
+            ],
+            "videos": [
+              {
+                "kind": "video",
+                "title": "Buscar en YouTube: node js fs path tutorial español",
+                "url": "https://www.youtube.com/results?search_query=node+js+fs+path+tutorial+espa%C3%B1ol"
+              }
+            ],
+            "quiz": {
+              "id": "quiz-node-l3",
+              "area": "backend",
+              "difficulty": "principiante",
+              "question": "Tu script lee `./datos/citas.json`. Funciona con `node src/app.js` desde la raíz, pero falla al ejecutarlo desde `src/`. ¿Por qué?",
+              "options": [
+                "La ruta relativa depende de la carpeta desde donde ejecutas node",
+                "fs no soporta rutas relativas",
+                "Windows no acepta la barra /",
+                "Falta el flag utf8 en readFile"
+              ],
+              "correctIndex": 0,
+              "explanation": "Las rutas relativas se resuelven contra process.cwd(). Usa path.join(import.meta.dirname, …) para anclarlas al archivo. La barra / sí funciona en Windows."
+            },
+            "exerciseIds": [
+              "node-l3-e1"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "node-m2",
+        "trackId": "node-backend",
+        "title": "API REST",
+        "description": "Construye la API de una tienda con Express: rutas, códigos HTTP, validación con Zod, errores ordenados y login seguro.",
+        "level": "intermedio",
+        "lessons": [
+          {
+            "id": "node-l4",
+            "title": "HTTP con Express",
+            "objective": "Crear rutas REST con Express que lean params, query y body y respondan con el código HTTP correcto.",
+            "slides": [
+              {
+                "title": "🛣️ Tu primera API",
+                "content": "```js\nimport express from 'express'\nconst app = express()\napp.use(express.json()) // sin esto req.body es undefined\napp.get('/productos/:id', (req, res) => {\n  const p = buscar(req.params.id)\n  if (!p) return res.status(404).json({ error: 'No existe' })\n  res.json(p)\n})\napp.listen(3000)\n```"
+              },
+              {
+                "title": "📬 ¿De dónde sale cada dato?",
+                "content": "- **req.params** → `/productos/:id` (identifica el recurso)\n- **req.query** → `?categoria=ropa&page=2` (filtros, siempre strings)\n- **req.body** → JSON en POST/PUT/PATCH\n- **req.headers** → `authorization`, `content-type`"
+              },
+              {
+                "title": "🔢 Códigos que dicen la verdad",
+                "content": "- **200** ok · **201** creado · **204** sin contenido\n- **400** datos mal formados · **401** no sé quién eres · **403** sé quién eres y no puedes\n- **404** no existe · **409** conflicto (email repetido)\n- **500** fallo tuyo, no del cliente\n```mermaid\nflowchart LR\n  R[Petición]:::azul --> J[express.json]:::morado --> L[Log]:::morado --> H[Ruta]:::verde\n  H -->|error| E[Manejador de errores]:::rosa\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef morado fill:#BF5AF2,stroke:#BF5AF2,color:#fff\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n  classDef rosa fill:#FF375F,stroke:#FF375F,color:#fff\n```\n- Los middleware corren **en el orden en que los registras**"
+              }
+            ],
+            "videos": [
+              {
+                "kind": "video",
+                "title": "Buscar en YouTube: express js api rest tutorial español",
+                "url": "https://www.youtube.com/results?search_query=express+js+api+rest+tutorial+espa%C3%B1ol"
+              }
+            ],
+            "quiz": {
+              "id": "quiz-node-l4",
+              "area": "backend",
+              "difficulty": "intermedio",
+              "question": "Un POST /pedidos crea el pedido bien, pero tu API responde 200 y el body vacío. ¿Qué respuesta es la más correcta?",
+              "options": [
+                "200 con { ok: true }",
+                "201 con el pedido creado",
+                "204 sin contenido",
+                "202 con un mensaje"
+              ],
+              "correctIndex": 1,
+              "explanation": "201 indica que se creó un recurso, y devolverlo (con su id) evita otra petición. 204 sirve para borrados o updates sin cuerpo."
+            },
+            "exerciseIds": [
+              "node-l4-e1"
+            ]
+          },
+          {
+            "id": "node-l5",
+            "title": "Validación con Zod y manejo de errores",
+            "objective": "Validar toda entrada externa con Zod y centralizar los errores en un único manejador que no filtra detalles internos.",
+            "slides": [
+              {
+                "title": "🛡️ Nunca confíes en req.body",
+                "content": "```ts\nimport { z } from 'zod'\nconst Cita = z.object({\n  paciente: z.string().min(2),\n  email: z.email(),\n  fecha: z.coerce.date(),\n})\ntype Cita = z.infer<typeof Cita> // el tipo sale gratis\nconst r = Cita.safeParse(req.body)\nif (!r.success) return res.status(400).json({ errores: z.flattenError(r.error) })\n```\n- TypeScript **no** valida en tiempo de ejecución; Zod sí"
+              },
+              {
+                "title": "🚦 Un solo lugar para los errores",
+                "content": "```js\napp.use((err, req, res, next) => { // 4 parámetros\n  console.error(err)                // log completo para ti\n  res.status(err.status ?? 500)\n     .json({ error: err.publicMessage ?? 'Error interno' })\n})\n```\n- Se registra **al final**, después de las rutas\n- Express 5 pasa al manejador los errores de funciones **async**\n- Al cliente: mensaje claro, **nunca el stack**"
+              },
+              {
+                "title": "🧩 Errores con nombre",
+                "content": "- `400` Zod falló → dile **qué campo** está mal\n- `404` NoEncontrado · `409` Conflicto\n- Crea `class HttpError extends Error { constructor(status, msg) }`\n- Lánzalo en la ruta y deja que el manejador responda"
+              }
+            ],
+            "videos": [
+              {
+                "kind": "video",
+                "title": "Buscar en YouTube: zod validacion express typescript español",
+                "url": "https://www.youtube.com/results?search_query=zod+validacion+express+typescript+espa%C3%B1ol"
+              }
+            ],
+            "quiz": {
+              "id": "quiz-node-l5",
+              "area": "backend",
+              "difficulty": "intermedio",
+              "question": "Tu endpoint tiene tipos TypeScript para el body, pero un cliente manda `{ precio: \"gratis\" }` y se guarda. ¿Qué falta?",
+              "options": [
+                "Validar en tiempo de ejecución con un esquema como Zod",
+                "Activar strict en tsconfig",
+                "Usar interface en vez de type",
+                "Compilar con tsc antes de subir"
+              ],
+              "correctIndex": 0,
+              "explanation": "Los tipos desaparecen al compilar; no protegen datos que llegan por red. strict solo afecta al análisis de tu propio código."
+            },
+            "exerciseIds": [
+              "node-l5-e1",
+              "node-l5-e2"
+            ]
+          },
+          {
+            "id": "node-l6",
+            "title": "Autenticación con JWT y sesiones",
+            "objective": "Implementar login con contraseñas hasheadas y elegir con criterio entre sesiones y JWT.",
+            "slides": [
+              {
+                "title": "🔑 Contraseñas: nunca en texto plano",
+                "content": "- Guarda un **hash lento** con sal: **argon2** o **bcrypt**\n- `await argon2.hash(pass)` · `await argon2.verify(hash, pass)`\n- Mismo mensaje si falla usuario o contraseña: \"Credenciales inválidas\"\n- Limita intentos de login (rate limit)"
+              },
+              {
+                "title": "🎫 JWT: firmado, no cifrado",
+                "content": "- `header.payload.firma` en Base64URL → **cualquiera lee el payload**\n- La firma solo prueba que **nadie lo modificó**\n- Pon `sub` y `rol`; jamás contraseñas ni datos sensibles\n- Expiración corta (`exp` ~15 min) + refresh token\n- Revocarlo antes de que expire es **difícil**"
+              },
+              {
+                "title": "🍪 ¿Sesión o JWT?",
+                "content": "- **Sesión**: id aleatorio en cookie, datos en el servidor → cerrar sesión es instantáneo\n- **JWT**: el servidor no guarda nada → útil entre varios servicios\n- Para una web propia, la sesión suele bastar\n- Guarda en cookie `httpOnly; Secure; SameSite=Lax`, no en `localStorage` (XSS lo roba)"
+              },
+              {
+                "title": "🚪 401 vs 403",
+                "content": "```js\nfunction requireRol(rol) {\n  return (req, res, next) => {\n    if (!req.user) return res.status(401).end()\n    if (req.user.rol !== rol) return res.status(403).end()\n    next()\n  }\n}\n```"
+              }
+            ],
+            "videos": [
+              {
+                "kind": "video",
+                "title": "Buscar en YouTube: jwt vs sesiones autenticacion node español",
+                "url": "https://www.youtube.com/results?search_query=jwt+vs+sesiones+autenticacion+node+espa%C3%B1ol"
+              }
+            ],
+            "quiz": {
+              "id": "quiz-node-l6",
+              "area": "backend",
+              "difficulty": "intermedio",
+              "question": "Un junior guarda el email y la dirección del cliente dentro del JWT \"porque está cifrado\". ¿Qué le respondes?",
+              "options": [
+                "Está bien si usa HS256",
+                "El payload solo va codificado en Base64URL: cualquiera puede leerlo",
+                "Está bien si el token expira en 15 minutos",
+                "Solo es problema si usa localStorage"
+              ],
+              "correctIndex": 1,
+              "explanation": "Un JWT firmado protege la integridad, no la confidencialidad. El algoritmo y la expiración no ocultan el contenido."
+            },
+            "exerciseIds": [
+              "node-l6-e1"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "node-m3",
+        "trackId": "node-backend",
+        "title": "Datos",
+        "description": "Conecta tu API a PostgreSQL con un ORM tipado, cambia el esquema con migraciones y protege operaciones que deben pasar completas o no pasar.",
+        "level": "intermedio",
+        "lessons": [
+          {
+            "id": "node-l7",
+            "title": "SQL con un ORM (Prisma o Drizzle)",
+            "objective": "Modelar tablas con Prisma o Drizzle, hacer consultas tipadas y evitar el problema N+1.",
+            "slides": [
+              {
+                "title": "🗺️ El esquema es la fuente de verdad",
+                "content": "```prisma\nmodel Cliente {\n  id      Int      @id @default(autoincrement())\n  email   String   @unique\n  pedidos Pedido[]\n}\nmodel Pedido {\n  id        Int     @id @default(autoincrement())\n  total     Decimal\n  cliente   Cliente @relation(fields: [clienteId], references: [id])\n  clienteId Int\n}\n```\n- Drizzle hace lo mismo pero el esquema es **TypeScript**"
+              },
+              {
+                "title": "🔎 Consultas tipadas",
+                "content": "```ts\nconst pedidos = await prisma.pedido.findMany({\n  where: { total: { gte: 500 } },\n  include: { cliente: true },\n  orderBy: { id: 'desc' },\n  take: 20,\n})\n```\n- Autocompletado y errores de tipo si un campo no existe\n- Los valores van **parametrizados** → sin inyección SQL\n- `$queryRawUnsafe` con strings concatenados **reabre** la inyección"
+              },
+              {
+                "title": "🐌 El problema N+1",
+                "content": "- 1 consulta para 100 clientes + 100 consultas para sus pedidos = **101**\n- Pasa al hacer `await` dentro de un `for`\n- Solución: `include` / `with` (Drizzle) o un `where: { id: { in: ids } }`\n- Activa el log de consultas y **cuéntalas**"
+              }
+            ],
+            "videos": [
+              {
+                "kind": "video",
+                "title": "Buscar en YouTube: prisma orm postgresql node tutorial español",
+                "url": "https://www.youtube.com/results?search_query=prisma+orm+postgresql+node+tutorial+espa%C3%B1ol"
+              }
+            ],
+            "quiz": {
+              "id": "quiz-node-l7",
+              "area": "backend",
+              "difficulty": "intermedio",
+              "question": "Tu endpoint lista 50 productos y, en un for, pide la categoría de cada uno. El log muestra 51 consultas. ¿Qué haces?",
+              "options": [
+                "Agregar un índice a productos",
+                "Cachear la respuesta 1 hora",
+                "Traer las categorías en la misma consulta con include o un join",
+                "Usar Promise.all en el for"
+              ],
+              "correctIndex": 2,
+              "explanation": "Es N+1: include o un join lo resuelve en 1-2 consultas. Promise.all hace las 50 en paralelo, pero siguen siendo 51 viajes a la base."
+            },
+            "exerciseIds": [
+              "node-l7-e1"
+            ]
+          },
+          {
+            "id": "node-l8",
+            "title": "Migraciones y transacciones",
+            "objective": "Evolucionar el esquema con migraciones versionadas y agrupar operaciones críticas en transacciones.",
+            "slides": [
+              {
+                "title": "📜 Migraciones: el historial de tu base",
+                "content": "- Cada cambio de esquema = un archivo SQL **versionado en git**\n- Local: `npx prisma migrate dev --name agrega_telefono`\n- Producción: `npx prisma migrate deploy` (solo aplica, no genera)\n- **Nunca edites** una migración ya aplicada: crea otra\n- Drizzle: `drizzle-kit generate` + `drizzle-kit migrate`"
+              },
+              {
+                "title": "⚠️ Cambios que rompen",
+                "content": "- Columna nueva **NOT NULL** en tabla con datos → falla\n- Haz 3 pasos: agregar nullable → rellenar → poner NOT NULL\n- Renombrar = la app vieja sigue leyendo el nombre viejo\n- Haz **respaldo** antes de migrar producción"
+              },
+              {
+                "title": "🔒 Transacciones: todo o nada",
+                "content": "```ts\nawait prisma.$transaction(async (tx) => {\n  const p = await tx.producto.update({\n    where: { id }, data: { stock: { decrement: 1 } } })\n  if (p.stock < 0) throw new Error('Sin stock') // revierte todo\n  await tx.pedido.create({ data: { productoId: id, clienteId } })\n})\n```\n- **A**tómica · **C**onsistente · a**I**slada · **D**urable\n- Si algo lanza dentro, **nada** se guarda"
+              }
+            ],
+            "videos": [
+              {
+                "kind": "video",
+                "title": "Buscar en YouTube: prisma migrate transacciones base de datos español",
+                "url": "https://www.youtube.com/results?search_query=prisma+migrate+transacciones+base+de+datos+espa%C3%B1ol"
+              }
+            ],
+            "quiz": {
+              "id": "quiz-node-l8",
+              "area": "backend",
+              "difficulty": "intermedio",
+              "question": "Tu migración agrega `telefono String` obligatorio a una tabla con 20 000 clientes y falla en producción. ¿Qué plan sigues?",
+              "options": [
+                "Borrar la tabla y recrearla",
+                "Editar la migración ya aplicada",
+                "Agregarla opcional, rellenar datos y luego volverla obligatoria",
+                "Desactivar las restricciones de la base"
+              ],
+              "correctIndex": 2,
+              "explanation": "Las filas existentes no tienen valor, así que NOT NULL falla. Se hace en pasos. Editar una migración aplicada desincroniza el historial entre entornos."
+            },
+            "exerciseIds": [
+              "node-l8-e1"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "node-m4",
+        "trackId": "node-backend",
+        "title": "Next.js",
+        "description": "Del servidor Express a una app full stack con Next.js: App Router, Server Components, Server Actions y despliegue con variables de entorno.",
+        "level": "avanzado",
+        "lessons": [
+          {
+            "id": "node-l9",
+            "title": "App Router y Server Components",
+            "objective": "Estructurar una app con App Router y decidir qué va en Server Components y qué en Client Components.",
+            "slides": [
+              {
+                "title": "📁 Las carpetas son las rutas",
+                "content": "- `app/page.tsx` → `/`\n- `app/productos/[id]/page.tsx` → `/productos/7`\n- `layout.tsx` envuelve las páginas hijas y **no se re-monta**\n- `loading.tsx` y `error.tsx` por carpeta"
+              },
+              {
+                "title": "🖥️ Server Component por defecto",
+                "content": "```tsx\n// app/productos/page.tsx\nexport default async function Productos() {\n  const items = await db.producto.findMany() // directo, sin fetch a tu API\n  return <Lista items={items} />\n}\n```\n- Corre **solo en el servidor**: puede usar secretos y la BD\n- Su JS **no** se envía al navegador"
+              },
+              {
+                "title": "🖱️ Client Component cuando hay interacción",
+                "content": "```tsx\n'use client'\nimport { useState } from 'react'\nexport function BotonCarrito() { const [n, setN] = useState(0) /* ... */ }\n```\n- Necesitas `'use client'` para **useState, useEffect, onClick**, APIs del navegador\n- Ponlo en las **hojas** del árbol, no en el layout\n- `NEXT_PUBLIC_*` **sí llega al navegador**: nunca pongas secretos ahí"
+              },
+              {
+                "title": "🌳 Quién corre dónde",
+                "content": "```mermaid\nflowchart TD\n  L[layout servidor]:::azul --> P[page servidor]:::azul\n  P --> F[Filtros cliente]:::naranja\n  P --> T[Tabla servidor]:::azul\n  T --> B[Botón cliente]:::naranja\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef naranja fill:#FF9F0A,stroke:#FF9F0A,color:#fff\n```\n- Azul: servidor · Naranja: navegador"
+              }
+            ],
+            "videos": [
+              {
+                "kind": "video",
+                "title": "Buscar en YouTube: next js app router server components español",
+                "url": "https://www.youtube.com/results?search_query=next+js+app+router+server+components+espa%C3%B1ol"
+              }
+            ],
+            "quiz": {
+              "id": "quiz-node-l9",
+              "area": "backend",
+              "difficulty": "avanzado",
+              "question": "Agregas `onClick` a un componente en `app/productos/page.tsx` y Next.js da error. ¿Qué haces?",
+              "options": [
+                "Poner 'use client' en el layout raíz",
+                "Cambiar onClick por onSubmit",
+                "Mover el botón a un componente con 'use client' y usarlo desde la página",
+                "Usar getServerSideProps"
+              ],
+              "correctIndex": 2,
+              "explanation": "Solo la parte interactiva necesita ser de cliente. Marcar el layout manda toda la app al navegador; getServerSideProps es del Pages Router."
+            },
+            "exerciseIds": [
+              "node-l9-e1"
+            ]
+          },
+          {
+            "id": "node-l10",
+            "title": "Server Actions y despliegue",
+            "objective": "Mutar datos con Server Actions validadas y autorizadas, y desplegar con variables de entorno seguras.",
+            "slides": [
+              {
+                "title": "⚡ Formularios sin escribir una API",
+                "content": "```tsx\nasync function crearReseña(formData: FormData) {\n  'use server'\n  const user = await getUser()\n  if (!user) throw new Error('No autorizado')\n  const data = Reseña.parse(Object.fromEntries(formData))\n  await db.reseña.create({ data: { ...data, userId: user.id } })\n  revalidatePath('/libros')\n}\n// <form action={crearReseña}>…</form>\n```"
+              },
+              {
+                "title": "🚨 Una Server Action es un endpoint público",
+                "content": "- Next.js la expone como **POST**: cualquiera puede llamarla\n- **Valida** con Zod y **autoriza** dentro de la acción\n- Que el botón esté oculto en la UI **no protege nada**\n- `revalidatePath` / `revalidateTag` refrescan los datos cacheados"
+              },
+              {
+                "title": "🚀 Desplegar",
+                "content": "- `next build` → detecta errores de tipos y genera la app optimizada\n- **Vercel**: conecta el repo, cada PR tiene su vista previa\n- **Node propio / Docker**: `next start` o `output: 'standalone'`\n- Variables de entorno en el panel del hosting, **no** en git\n- Corre `prisma migrate deploy` **antes** de arrancar la versión nueva"
+              }
+            ],
+            "videos": [
+              {
+                "kind": "video",
+                "title": "Buscar en YouTube: next js server actions despliegue vercel español",
+                "url": "https://www.youtube.com/results?search_query=next+js+server+actions+despliegue+vercel+espa%C3%B1ol"
+              }
+            ],
+            "quiz": {
+              "id": "quiz-node-l10",
+              "area": "backend",
+              "difficulty": "avanzado",
+              "question": "Tu Server Action `borrarProducto` solo se muestra a admins en la UI, pero no revisa el rol dentro. ¿Qué riesgo hay?",
+              "options": [
+                "Ninguno, el botón está oculto",
+                "Solo falla en desarrollo",
+                "Cualquier usuario puede invocarla con una petición POST",
+                "Next.js revisa roles automáticamente"
+              ],
+              "correctIndex": 2,
+              "explanation": "Las Server Actions son endpoints accesibles por POST. Ocultar el botón no impide llamarla; la autorización va dentro de la acción."
+            },
+            "exerciseIds": [
+              "node-l10-e1"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "exercises": [
+    {
+      "id": "node-l1-e1",
+      "trackId": "node-backend",
+      "moduleId": "node-m1",
+      "lessonId": "node-l1",
+      "title": "Arma el package.json de la API de un consultorio",
+      "difficulty": "principiante",
+      "kind": "guiado",
+      "aiPolicy": "ia_tutor",
+      "objective": "Separar dependencias de producción y desarrollo y definir scripts útiles.",
+      "description": "Vas a iniciar la API de reservas de un consultorio dental. Necesita **express** y **zod** en producción, y **vitest** y **tsx** solo para desarrollar.\n\n1. Crea el proyecto con npm y actívale ESM.\n2. Instala cada paquete en el grupo correcto.\n3. Añade los scripts `dev`, `test` y `start`.\n4. Crea `src/citas.js` que exporte `formatearCita(fecha, paciente)` e impórtalo desde `src/index.js`.",
+      "hints": [
+        "Piensa qué paquetes necesita el servidor cuando ya está en producción y cuáles solo tú al programar.",
+        "Hay un flag de npm install que manda el paquete a devDependencies.",
+        "Para que `import` funcione sin .mjs revisa el campo \"type\" del package.json, y recuerda la extensión en la ruta del import."
+      ],
+      "solution": "`npm init -y`, añadir `\"type\": \"module\"`. `npm i express zod` y `npm i -D vitest tsx`. Scripts: `\"dev\": \"tsx watch src/index.js\"`, `\"test\": \"vitest\"`, `\"start\": \"node src/index.js\"`. En index.js: `import { formatearCita } from './citas.js'`.",
+      "criteria": [
+        "express y zod están en dependencies; vitest y tsx en devDependencies",
+        "El package.json tiene \"type\": \"module\" y los tres scripts",
+        "El import incluye la extensión .js y funciona con npm start",
+        "package-lock.json existe y node_modules está en .gitignore"
+      ],
+      "commonErrors": [
+        "Instalar vitest como dependencia de producción",
+        "Omitir la extensión .js en imports ESM",
+        "Subir node_modules al repositorio"
+      ],
+      "interviewQuestion": "¿Qué diferencia hay entre npm install y npm ci, y cuándo usas cada uno?",
+      "resources": [
+        {
+          "kind": "doc",
+          "title": "Node.js: módulos ECMAScript",
+          "url": "https://nodejs.org/docs/latest/api/esm.html"
+        },
+        {
+          "kind": "doc",
+          "title": "npm: package.json",
+          "url": "https://docs.npmjs.com/cli/configuring-npm/package-json"
+        }
+      ],
+      "constraints": [],
+      "theory": false
+    },
+    {
+      "id": "node-l2-e1",
+      "trackId": "node-backend",
+      "moduleId": "node-m1",
+      "lessonId": "node-l2",
+      "title": "Predice el orden antes de ejecutar",
+      "difficulty": "principiante",
+      "kind": "practica_autonoma",
+      "aiPolicy": "sin_ia",
+      "theory": true,
+      "objective": "Razonar sobre síncrono, microtareas y temporizadores.",
+      "description": "Sin ejecutar, escribe en qué orden se imprime:\n```js\nconsole.log('A')\nsetTimeout(() => console.log('B'), 0)\nPromise.resolve().then(() => console.log('C'))\n;(async () => { console.log('D'); await null; console.log('E') })()\nconsole.log('F')\n```\nLuego ejecútalo, compara y explica en 3 líneas cada diferencia con tu predicción.",
+      "hints": [
+        "Separa las líneas en tres grupos: lo que corre ya, lo que va a la cola de promesas y lo que va a temporizadores.",
+        "Una función async corre de forma síncrona hasta su primer await.",
+        "Lo que sigue a un await se agenda como microtarea, en el mismo grupo que un .then."
+      ],
+      "solution": "A, D, F, C, E, B. A, D y F son síncronos (D porque la async corre hasta el await). C y E son microtareas en el orden en que se agendaron. B es un temporizador y va al final.",
+      "criteria": [
+        "La predicción está escrita antes de ejecutar",
+        "El orden final es A D F C E B",
+        "Explica por qué D sale antes que F",
+        "Distingue microtareas de temporizadores"
+      ],
+      "commonErrors": [
+        "Creer que setTimeout(…, 0) se ejecuta inmediatamente",
+        "Pensar que todo dentro de una async es asíncrono"
+      ],
+      "resources": [
+        {
+          "kind": "doc",
+          "title": "Node.js: el event loop",
+          "url": "https://nodejs.org/en/learn/asynchronous-work/event-loop-timers-and-nexttick"
+        }
+      ],
+      "constraints": []
+    },
+    {
+      "id": "node-l2-e2",
+      "trackId": "node-backend",
+      "moduleId": "node-m1",
+      "lessonId": "node-l2",
+      "title": "Comprime el histórico de ventas sin reventar la RAM",
+      "difficulty": "intermedio",
+      "kind": "aplicacion_real",
+      "aiPolicy": "ia_par",
+      "objective": "Usar streams con pipeline y manejar sus errores.",
+      "description": "Una pyme guarda `ventas-2025.csv` (1,5 GB). Escribe `comprimir.js` que lo convierta en `.csv.gz` usando streams y `pipeline`. Imprime los MB procesados cada 100 MB y, si el archivo no existe, muestra un mensaje claro y sale con código 1.\n\nCompara con `process.memoryUsage().rss` la memoria frente a una versión con `readFile`.",
+      "hints": [
+        "Busca qué módulo de Node comprime en gzip y si ofrece un stream.",
+        "La versión con promesas de pipeline vive en node:stream/promises y lanza si algún tramo falla.",
+        "Para contar bytes escucha el evento data del stream de lectura, sin consumirlo tú."
+      ],
+      "solution": "`await pipeline(createReadStream(src), createGzip(), createWriteStream(dst))` dentro de try/catch; en catch, si `err.code === 'ENOENT'` mostrar mensaje y `process.exitCode = 1`. Contador: `lectura.on('data', c => { bytes += c.length; ... })`.",
+      "criteria": [
+        "Usa pipeline en vez de encadenar .pipe sin control de errores",
+        "Maneja ENOENT con mensaje claro y código de salida 1",
+        "La memoria se mantiene estable aunque el archivo crezca",
+        "Reporta el progreso por cada 100 MB"
+      ],
+      "commonErrors": [
+        "Usar readFile y luego gzipSync sobre todo el archivo",
+        "Encadenar .pipe() sin manejar errores de cada tramo"
+      ],
+      "interviewQuestion": "¿Cuándo usarías un stream en vez de leer un archivo completo?",
+      "resources": [
+        {
+          "kind": "doc",
+          "title": "Node.js: Stream",
+          "url": "https://nodejs.org/docs/latest/api/stream.html"
+        },
+        {
+          "kind": "doc",
+          "title": "Node.js: Zlib",
+          "url": "https://nodejs.org/docs/latest/api/zlib.html"
+        }
+      ],
+      "constraints": [],
+      "theory": false
+    },
+    {
+      "id": "node-l3-e1",
+      "trackId": "node-backend",
+      "moduleId": "node-m1",
+      "lessonId": "node-l3",
+      "title": "Descarga de recetas médicas sin escapar de la carpeta",
+      "difficulty": "intermedio",
+      "kind": "reto",
+      "aiPolicy": "ia_tutor",
+      "objective": "Construir rutas seguras ante path traversal.",
+      "description": "El consultorio guarda PDFs en `uploads/recetas/`. Escribe `obtenerRutaReceta(nombre)` que devuelva la ruta absoluta del PDF o lance un error si:\n- el nombre intenta salir de la carpeta (`../`, rutas absolutas)\n- la extensión no es `.pdf` (sin importar mayúsculas)\n- el archivo no existe\n\nIncluye 5 casos de prueba, entre ellos `../../.env` y `C:\\Windows\\win.ini`.",
+      "hints": [
+        "Piensa qué pasa si el usuario manda una ruta absoluta o con dos puntos seguidos.",
+        "Primero resuelve la ruta completa y después compara contra la carpeta base resuelta.",
+        "path.extname más toLowerCase te da la extensión; access de fs/promises te dice si existe."
+      ],
+      "solution": "`const BASE = path.resolve(import.meta.dirname, 'uploads/recetas')`; `const ruta = path.resolve(BASE, nombre)`; si `!ruta.startsWith(BASE + path.sep)` lanzar; si `path.extname(ruta).toLowerCase() !== '.pdf'` lanzar; `await access(ruta)` y devolver ruta.",
+      "criteria": [
+        "Rechaza ../ y rutas absolutas",
+        "Acepta receta.PDF y rechaza receta.exe",
+        "Usa path en vez de concatenar strings",
+        "Incluye al menos 5 pruebas con el resultado esperado"
+      ],
+      "commonErrors": [
+        "Filtrar solo la cadena \"../\" con replace",
+        "Comparar con startsWith(BASE) sin el separador, lo que deja pasar uploads/recetas-viejas"
+      ],
+      "interviewQuestion": "¿Qué es un path traversal y cómo lo previenes en Node?",
+      "resources": [
+        {
+          "kind": "doc",
+          "title": "Node.js: path",
+          "url": "https://nodejs.org/docs/latest/api/path.html"
+        },
+        {
+          "kind": "doc",
+          "title": "OWASP: Path Traversal",
+          "url": "https://owasp.org/www-community/attacks/Path_Traversal"
+        }
+      ],
+      "constraints": [],
+      "theory": false
+    },
+    {
+      "id": "node-l4-e1",
+      "trackId": "node-backend",
+      "moduleId": "node-m2",
+      "lessonId": "node-l4",
+      "title": "API del catálogo de una tienda de ropa",
+      "difficulty": "intermedio",
+      "kind": "guiado",
+      "aiPolicy": "ia_tutor",
+      "objective": "Diseñar rutas REST con códigos HTTP correctos.",
+      "description": "Crea con Express una API en memoria para el catálogo de una tienda:\n- `GET /productos?categoria=&maxPrecio=` filtra\n- `GET /productos/:id` → 404 si no existe\n- `POST /productos` → 201 con el producto y su id\n- `PATCH /productos/:id` actualiza stock\n- `DELETE /productos/:id` → 204\n\nPrueba cada ruta con curl o la extensión REST Client y anota el código que recibiste.",
+      "hints": [
+        "Antes de programar, escribe una tabla método + ruta + código esperado.",
+        "Recuerda qué middleware necesitas para que req.body tenga datos, y que lo que llega en req.query es texto.",
+        "Convierte maxPrecio con Number() y valida que no sea NaN antes de filtrar."
+      ],
+      "solution": "`app.use(express.json())`; array en memoria; GET con `filter` usando `Number(req.query.maxPrecio)`; GET :id con `find` y `res.status(404)`; POST asigna `crypto.randomUUID()` y `res.status(201).json(p)`; DELETE con `res.sendStatus(204)`.",
+      "criteria": [
+        "Las 5 rutas responden con el código esperado",
+        "El filtro convierte maxPrecio a número",
+        "404 para id inexistente en GET, PATCH y DELETE",
+        "Hay evidencia de pruebas (comandos y respuestas)"
+      ],
+      "commonErrors": [
+        "Olvidar express.json() y recibir req.body undefined",
+        "Comparar el precio numérico con el string de la query",
+        "Responder 200 a todo"
+      ],
+      "interviewQuestion": "¿Qué diferencia hay entre 401 y 403? Dame un ejemplo de tu API.",
+      "resources": [
+        {
+          "kind": "doc",
+          "title": "Express: enrutamiento",
+          "url": "https://expressjs.com/es/guide/routing.html"
+        },
+        {
+          "kind": "doc",
+          "title": "MDN: códigos de estado HTTP",
+          "url": "https://developer.mozilla.org/es/docs/Web/HTTP/Status"
+        }
+      ],
+      "constraints": [],
+      "theory": false
+    },
+    {
+      "id": "node-l5-e1",
+      "trackId": "node-backend",
+      "moduleId": "node-m2",
+      "lessonId": "node-l5",
+      "title": "Valida las reservas del consultorio con Zod",
+      "difficulty": "intermedio",
+      "kind": "practica_autonoma",
+      "aiPolicy": "ia_tutor",
+      "objective": "Escribir esquemas Zod y responder 400 con errores útiles.",
+      "description": "La ruta `POST /citas` recibe `{ paciente, email, telefono, fecha, motivo? }`. Escribe el esquema Zod con estas reglas:\n- paciente: 2-80 caracteres\n- email válido\n- teléfono de 10 dígitos\n- fecha en el futuro y en horario 9:00-18:00\n- motivo opcional, máximo 300\n\nSi falla, responde 400 con los errores por campo. Deriva el tipo `Cita` con `z.infer` y úsalo en la función que guarda.",
+      "hints": [
+        "Repasa qué validadores trae Zod para strings, emails y fechas.",
+        "Para reglas que combinan valores (futuro + horario) busca refine.",
+        "safeParse no lanza: revisa success y usa flattenError para agrupar los mensajes por campo."
+      ],
+      "solution": "`z.object({ paciente: z.string().min(2).max(80), email: z.email(), telefono: z.string().regex(/^\\d{10}$/), fecha: z.coerce.date().refine(d => d > new Date(), 'Debe ser futura').refine(d => d.getHours() >= 9 && d.getHours() < 18, 'Fuera de horario'), motivo: z.string().max(300).optional() })`.",
+      "criteria": [
+        "Rechaza cada regla con un mensaje por campo",
+        "Responde 400, no 500, ante datos inválidos",
+        "El tipo Cita se deriva con z.infer, sin duplicar una interface",
+        "Incluye pruebas de al menos 4 casos inválidos"
+      ],
+      "commonErrors": [
+        "Usar parse sin try y dejar que el error llegue como 500",
+        "Duplicar el tipo a mano y que se desincronice del esquema"
+      ],
+      "resources": [
+        {
+          "kind": "doc",
+          "title": "Zod: documentación",
+          "url": "https://zod.dev/"
+        }
+      ],
+      "constraints": [],
+      "theory": false
+    },
+    {
+      "id": "node-l5-e2",
+      "trackId": "node-backend",
+      "moduleId": "node-m2",
+      "lessonId": "node-l5",
+      "title": "Manejador de errores que no filtra secretos",
+      "difficulty": "intermedio",
+      "kind": "entrevista",
+      "aiPolicy": "sin_ia",
+      "objective": "Centralizar errores y distinguir log interno de respuesta pública.",
+      "description": "Te pasan esta ruta en un code review:\n```js\napp.get('/pedidos/:id', async (req, res) => {\n  try { res.json(await db.pedido(req.params.id)) }\n  catch (e) { res.status(500).json({ error: e.stack }) }\n})\n```\nEscribe tus comentarios de revisión (qué está mal y por qué) y la versión corregida con una clase `HttpError` y un manejador de errores global.",
+      "hints": [
+        "Piensa qué información recibe un atacante al ver el stack.",
+        "¿Qué pasa si el pedido no existe? ¿Debería ser 500?",
+        "Mueve la respuesta de error a un middleware de 4 parámetros registrado después de las rutas."
+      ],
+      "solution": "Problemas: expone stack y rutas internas; trata \"no existe\" como 500; repite try/catch en cada ruta. Corrección: `if (!p) throw new HttpError(404, 'Pedido no encontrado')`; manejador global que hace log de err y responde `{ error: err.status ? err.message : 'Error interno' }`.",
+      "criteria": [
+        "Señala la fuga del stack como problema de seguridad",
+        "Devuelve 404 cuando el pedido no existe",
+        "El manejador global tiene 4 parámetros y va después de las rutas",
+        "El log interno conserva el error completo"
+      ],
+      "commonErrors": [
+        "Registrar el manejador antes de las rutas",
+        "Ocultar también el error en el log, perdiendo la causa"
+      ],
+      "interviewQuestion": "¿Cómo manejas los errores en una API Express para que sean útiles al cliente y seguros?",
+      "resources": [
+        {
+          "kind": "doc",
+          "title": "Express: manejo de errores",
+          "url": "https://expressjs.com/es/guide/error-handling.html"
+        },
+        {
+          "kind": "doc",
+          "title": "OWASP: Error Handling Cheat Sheet",
+          "url": "https://cheatsheetseries.owasp.org/cheatsheets/Error_Handling_Cheat_Sheet.html"
+        }
+      ],
+      "constraints": [],
+      "theory": false
+    },
+    {
+      "id": "node-l6-e1",
+      "trackId": "node-backend",
+      "moduleId": "node-m2",
+      "lessonId": "node-l6",
+      "title": "Login seguro para el panel de una pyme",
+      "difficulty": "avanzado",
+      "kind": "aplicacion_real",
+      "aiPolicy": "ia_par",
+      "objective": "Implementar registro, login y rutas protegidas por rol.",
+      "description": "El panel de inventario de una ferretería tiene dos roles: `empleado` y `admin`. Implementa:\n1. `POST /registro` que guarda la contraseña con argon2 o bcrypt.\n2. `POST /login` que emite una sesión en cookie httpOnly (o un JWT de 15 min en cookie).\n3. Middleware `requireRol` que responde 401 o 403.\n4. `DELETE /productos/:id` solo para admin.\n\nEntrega también un párrafo que justifique si elegiste sesiones o JWT.",
+      "hints": [
+        "Empieza por dónde vive la información del usuario después de iniciar sesión: ¿en el servidor o en el token?",
+        "Revisa qué atributos de cookie impiden que un script del navegador la lea.",
+        "Un middleware que recibe el rol devuelve otra función (req, res, next): ahí decides 401, 403 o next()."
+      ],
+      "solution": "Hash con `argon2.hash`; login compara con `argon2.verify` y responde el mismo error en ambos fallos; cookie `httpOnly, secure, sameSite: 'lax'`; `requireRol('admin')` como en la slide; la ruta DELETE lo usa antes del manejador.",
+      "criteria": [
+        "Las contraseñas nunca se guardan ni se registran en texto plano",
+        "La cookie es httpOnly y Secure",
+        "Responde 401 sin sesión y 403 con rol insuficiente",
+        "El mensaje de error de login no revela si existe el usuario",
+        "La justificación compara revocación y simplicidad"
+      ],
+      "commonErrors": [
+        "Guardar el token en localStorage",
+        "Usar un secreto de firma corto y subido al repositorio",
+        "Distinguir \"usuario no existe\" de \"contraseña incorrecta\""
+      ],
+      "interviewQuestion": "¿Cuándo usarías JWT y cuándo sesiones del lado del servidor?",
+      "resources": [
+        {
+          "kind": "doc",
+          "title": "OWASP: Authentication Cheat Sheet",
+          "url": "https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html"
+        },
+        {
+          "kind": "doc",
+          "title": "OWASP: Password Storage Cheat Sheet",
+          "url": "https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html"
+        },
+        {
+          "kind": "doc",
+          "title": "OWASP: JSON Web Token Cheat Sheet",
+          "url": "https://cheatsheetseries.owasp.org/cheatsheets/JSON_Web_Token_for_Java_Cheat_Sheet.html"
+        }
+      ],
+      "constraints": [],
+      "theory": false
+    },
+    {
+      "id": "node-l7-e1",
+      "trackId": "node-backend",
+      "moduleId": "node-m3",
+      "lessonId": "node-l7",
+      "title": "Modela clientes y pedidos de una tienda online",
+      "difficulty": "intermedio",
+      "kind": "guiado",
+      "aiPolicy": "ia_tutor",
+      "objective": "Crear un esquema relacional con un ORM y consultar sin N+1.",
+      "description": "Con Prisma (o Drizzle) y PostgreSQL o SQLite:\n1. Modela `Cliente`, `Pedido` y `Producto` con una tabla intermedia `LineaPedido` (cantidad y precio unitario).\n2. Siembra 10 clientes y 30 pedidos con un script `seed`.\n3. Escribe `topClientes(n)` que devuelva los n clientes con más gasto total.\n4. Activa el log de consultas y demuestra que `pedidosConCliente()` hace como máximo 2.",
+      "hints": [
+        "Dibuja primero las tablas y las flechas: ¿qué relación es muchos a muchos?",
+        "La tabla intermedia guarda el precio del momento de la compra, no una referencia al precio actual.",
+        "Para el gasto total piensa en groupBy/aggregate o en una consulta SQL con SUM y GROUP BY."
+      ],
+      "solution": "Modelos con `@relation`; LineaPedido con `pedidoId`, `productoId`, `cantidad`, `precioUnitario Decimal`. topClientes: `prisma.pedido.groupBy({ by: ['clienteId'], _sum: { total: true }, orderBy: { _sum: { total: 'desc' } }, take: n })`. Log: `new PrismaClient({ log: ['query'] })`.",
+      "criteria": [
+        "La relación muchos a muchos usa una tabla intermedia con precio histórico",
+        "El seed se puede ejecutar dos veces sin duplicar emails",
+        "topClientes devuelve el orden correcto",
+        "Hay evidencia de que no hay N+1 (conteo de consultas)"
+      ],
+      "commonErrors": [
+        "Guardar dinero como Float",
+        "Hacer await dentro de un for para traer relaciones"
+      ],
+      "interviewQuestion": "¿Qué es el problema N+1 y cómo lo detectas en producción?",
+      "resources": [
+        {
+          "kind": "doc",
+          "title": "Prisma: documentación",
+          "url": "https://www.prisma.io/docs"
+        },
+        {
+          "kind": "doc",
+          "title": "Drizzle ORM: documentación",
+          "url": "https://orm.drizzle.team/docs/overview"
+        }
+      ],
+      "constraints": [],
+      "theory": false
+    },
+    {
+      "id": "node-l8-e1",
+      "trackId": "node-backend",
+      "moduleId": "node-m3",
+      "lessonId": "node-l8",
+      "title": "Compra sin sobreventa en la tienda",
+      "difficulty": "avanzado",
+      "kind": "reto",
+      "aiPolicy": "ia_par",
+      "objective": "Usar transacciones para mantener stock y pedidos consistentes.",
+      "description": "Dos clientes compran a la vez la última unidad de unos audífonos. Escribe `comprar(clienteId, productoId, cantidad)` que:\n- descuente stock y cree el pedido de forma atómica\n- falle con 409 si no hay stock suficiente\n- nunca deje el stock negativo, aunque lleguen 10 compras simultáneas\n\nDemuéstralo con un script que lance 10 compras con `Promise.all` sobre un stock de 3.",
+      "hints": [
+        "Piensa qué pasa si lees el stock, decides y luego escribes: ¿qué hace la otra petición entre medio?",
+        "Un update condicional (stock >= cantidad) hace la verificación y la escritura en una sola operación.",
+        "Envuelve el update y la creación del pedido en $transaction y revisa cuántas filas se afectaron."
+      ],
+      "solution": "En `$transaction`: `const r = await tx.producto.updateMany({ where: { id, stock: { gte: cantidad } }, data: { stock: { decrement: cantidad } } })`; si `r.count === 0` lanzar HttpError(409); crear pedido. Resultado del script: 3 éxitos, 7 errores 409, stock final 0.",
+      "criteria": [
+        "El stock nunca queda negativo con compras simultáneas",
+        "Si falla la creación del pedido, el stock no se descuenta",
+        "Responde 409 cuando no hay stock",
+        "El script de prueba muestra 3 éxitos y 7 rechazos"
+      ],
+      "commonErrors": [
+        "Leer stock con findUnique y decidir en JS (condición de carrera)",
+        "Hacer el update fuera de la transacción"
+      ],
+      "interviewQuestion": "¿Qué es una condición de carrera en una base de datos y cómo la evitas?",
+      "resources": [
+        {
+          "kind": "doc",
+          "title": "Prisma: transacciones",
+          "url": "https://www.prisma.io/docs/orm/prisma-client/queries/transactions"
+        },
+        {
+          "kind": "doc",
+          "title": "Prisma Migrate",
+          "url": "https://www.prisma.io/docs/orm/prisma-migrate"
+        }
+      ],
+      "constraints": [],
+      "theory": false
+    },
+    {
+      "id": "node-l9-e1",
+      "trackId": "node-backend",
+      "moduleId": "node-m4",
+      "lessonId": "node-l9",
+      "title": "Catálogo de una librería con App Router",
+      "difficulty": "avanzado",
+      "kind": "practica_autonoma",
+      "aiPolicy": "ia_par",
+      "objective": "Repartir correctamente Server y Client Components.",
+      "description": "Crea con `npx create-next-app@latest` el catálogo de una librería:\n- `/libros` lista desde la BD en un Server Component\n- `/libros/[id]` muestra el detalle y `notFound()` si no existe\n- Un buscador con estado local (Client Component) filtra por título\n- `loading.tsx` con un esqueleto\n\nEntrega un diagrama del árbol marcando qué componente es de servidor y cuál de cliente, con una línea de justificación por cada uno de cliente.",
+      "hints": [
+        "Lista primero qué partes de la pantalla necesitan reaccionar a clics o al teclado.",
+        "Un Server Component puede pasar datos serializables como props a uno de cliente.",
+        "En la ruta dinámica, los params llegan como prop de la página; si el libro no existe llama a notFound de next/navigation."
+      ],
+      "solution": "`app/libros/page.tsx` async con `await db.libro.findMany()` y pasa `libros` a `<Buscador libros={libros} />` marcado con 'use client' que filtra con useState. `app/libros/[id]/page.tsx` busca por id y llama `notFound()`. `app/libros/loading.tsx` con el esqueleto.",
+      "criteria": [
+        "Solo el buscador lleva 'use client'",
+        "La consulta a la BD vive en el servidor, sin endpoint intermedio",
+        "El detalle de un id inexistente muestra 404",
+        "El diagrama justifica cada componente de cliente"
+      ],
+      "commonErrors": [
+        "Poner 'use client' en layout.tsx",
+        "Hacer fetch a tu propia ruta /api desde un Server Component",
+        "Exponer la URL de la BD con NEXT_PUBLIC_"
+      ],
+      "interviewQuestion": "¿Qué diferencia hay entre un Server Component y un Client Component en Next.js?",
+      "resources": [
+        {
+          "kind": "doc",
+          "title": "Next.js: Server y Client Components",
+          "url": "https://nextjs.org/docs/app/getting-started/server-and-client-components"
+        },
+        {
+          "kind": "doc",
+          "title": "Next.js: estructura del proyecto",
+          "url": "https://nextjs.org/docs/app/getting-started/project-structure"
+        }
+      ],
+      "constraints": [],
+      "theory": false
+    },
+    {
+      "id": "node-l10-e1",
+      "trackId": "node-backend",
+      "moduleId": "node-m4",
+      "lessonId": "node-l10",
+      "title": "Reseñas de libros con Server Actions",
+      "difficulty": "avanzado",
+      "kind": "aplicacion_real",
+      "aiPolicy": "ia_par",
+      "objective": "Implementar una mutación segura con Server Actions y desplegarla.",
+      "description": "En el catálogo de la librería agrega reseñas:\n1. Formulario con `action` que llama a una Server Action.\n2. Valida con Zod (texto 10-500, estrellas 1-5) y exige sesión.\n3. Muestra los errores de validación junto al campo con `useActionState`.\n4. Refresca el listado con `revalidatePath`.\n5. Despliega en Vercel o con Docker y documenta qué variables de entorno configuraste y dónde.",
+      "hints": [
+        "Piensa qué podría mandar alguien que llama la acción con curl, sin pasar por tu formulario.",
+        "useActionState recibe la acción y un estado inicial; la acción puede devolver un objeto con errores en vez de lanzar.",
+        "Para que el listado muestre la reseña nueva sin recargar, revalida la ruta que lo pinta."
+      ],
+      "solution": "Acción con 'use server': obtener usuario o devolver error; `Reseña.safeParse(Object.fromEntries(fd))`; si falla devolver `{ errores: z.flattenError(r.error).fieldErrors }`; crear y `revalidatePath('/libros/' + id)`. En Vercel, DATABASE_URL y AUTH_SECRET en Project Settings > Environment Variables.",
+      "criteria": [
+        "La acción valida y autoriza en el servidor",
+        "Los errores se muestran junto al campo",
+        "El listado se actualiza tras enviar",
+        "El despliegue funciona y ningún secreto está en el repositorio"
+      ],
+      "commonErrors": [
+        "Validar solo en el navegador",
+        "Olvidar revalidatePath y ver datos viejos",
+        "Subir .env.local a git"
+      ],
+      "interviewQuestion": "¿Qué es una Server Action y qué cuidados de seguridad requiere?",
+      "resources": [
+        {
+          "kind": "doc",
+          "title": "Next.js: Server Actions y mutaciones",
+          "url": "https://nextjs.org/docs/app/getting-started/updating-data"
+        },
+        {
+          "kind": "doc",
+          "title": "Next.js: despliegue",
+          "url": "https://nextjs.org/docs/app/getting-started/deploying"
+        }
+      ],
+      "constraints": [],
+      "theory": false
+    }
+  ]
+}

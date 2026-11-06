@@ -1,0 +1,1078 @@
+{
+  "trackId": "javascript",
+  "lessons": {
+    "js-l1": {
+      "emoji": "🏷️",
+      "summary": "Eliges const o let con criterio y esquivas las comparaciones que mienten en JavaScript.",
+      "analogy": "Una variable es la etiqueta de un frasco en la despensa: const la pega con cola para siempre, let te deja moverla a otro frasco.",
+      "learned": [
+        "🏷️ Puedes decidir qué datos de un programa deben quedarse fijos y cuáles van a cambiar",
+        "🧪 Reconoces de qué tipo es un dato antes de hacer cuentas con él",
+        "⚖️ Detectas cuándo una comparación dice «iguales» a dos cosas que no lo son"
+      ],
+      "check": [
+        {
+          "question": "Un formulario entrega `edad = '18'` y el código hace `if (edad === 18)`. ¿Qué pasa?",
+          "options": [
+            "Entra al if porque === convierte el texto",
+            "No entra: '18' es string y 18 es number",
+            "Lanza TypeError por comparar tipos distintos",
+            "Entra solo si edad se declaró con let"
+          ],
+          "correctIndex": 1,
+          "explanation": "=== no convierte: tipo distinto da false. Convierte antes con Number(edad). Con == sí entraría, pero esa conversión oculta errores."
+        },
+        {
+          "question": "¿Cuál de estas líneas lanza error?",
+          "options": [
+            "const precios = []; precios.push(5)",
+            "let total = 0; total = 10",
+            "const iva = 0.19; iva = 0.16",
+            "const cliente = {}; cliente.nombre = 'Ana'"
+          ],
+          "correctIndex": 2,
+          "explanation": "Reasignar una const falla. Las demás modifican el contenido de un array u objeto, algo que const sí permite."
+        }
+      ]
+    },
+    "js-l2": {
+      "emoji": "🚦",
+      "summary": "Tu código toma decisiones y repite tareas sin caer en la trampa del 0 y el texto vacío.",
+      "analogy": "Un if es el portero de una discoteca con lista: el 0 y el texto vacío llegan sin invitación aunque estén en la fila.",
+      "learned": [
+        "🚦 Puedes hacer que un programa elija qué hacer según la situación",
+        "🔁 Sabes repetir una tarea sobre una lista completa sin escribirla mil veces",
+        "🫥 Notas cuando un cero o un campo vacío se cuela como si fuera «no hay nada»"
+      ],
+      "check": [
+        {
+          "question": "Un descuento puede valer 0 (sin descuento) o no venir. ¿Qué condición detecta solo «no vino»?",
+          "options": [
+            "if (!descuento)",
+            "if (descuento == false)",
+            "if (descuento === undefined)",
+            "if (descuento < 1)"
+          ],
+          "correctIndex": 2,
+          "explanation": "!descuento también es true con 0, que es un valor válido. Comparar con undefined distingue 'no vino' de 'vale cero'."
+        },
+        {
+          "question": "Debes recorrer los pedidos y parar en el primero que esté cancelado. ¿Qué usas?",
+          "options": [
+            "for...of con break al encontrarlo",
+            "forEach con return",
+            "while (true) sin condición de salida",
+            "switch con un case por pedido"
+          ],
+          "correctIndex": 0,
+          "explanation": "break corta el for...of. return dentro de forEach solo sale de esa vuelta y el recorrido sigue con el resto."
+        }
+      ],
+      "diagram": "flowchart LR\n  A[Valor]:::azul --> B{Es 0, vacío, null, undefined, NaN o false?}:::amarillo\n  B -- Sí --> C[Falsy: if no entra]:::rosa\n  B -- No --> D[Truthy: if entra]:::verde\n  D --> E[\"Incluye '0' y listas vacías\"]:::naranja\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef amarillo fill:#FFD60A,stroke:#FFD60A,color:#1d1d1f\n  classDef rosa fill:#FF375F,stroke:#FF375F,color:#fff\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n  classDef naranja fill:#FF9F0A,stroke:#FF9F0A,color:#fff"
+    },
+    "js-l3": {
+      "emoji": "🧪",
+      "summary": "Escribes funciones que reciben datos, devuelven un resultado y se prueban en segundos.",
+      "analogy": "Una función pura es una máquina de jugos: misma fruta, mismo jugo, y no te desordena la cocina. Una con efectos además lava platos ajenos.",
+      "learned": [
+        "🧪 Puedes empaquetar una regla del negocio para usarla en muchos lugares",
+        "🎛️ Sabes dar valores por defecto para que nadie tenga que repetirlos",
+        "🧼 Distingues una tarea que solo calcula de una que cambia cosas alrededor"
+      ],
+      "check": [
+        {
+          "question": "¿Cuál de estas funciones es pura?",
+          "options": [
+            "const total = (items) => items.length * precioGlobal",
+            "const total = (items, precio) => items.length * precio",
+            "function total(items) { console.log(items); return items.length }",
+            "function total(items) { items.pop(); return items.length }"
+          ],
+          "correctIndex": 1,
+          "explanation": "Solo depende de sus parámetros y no toca nada externo. Leer una global, imprimir o modificar el array recibido son efectos."
+        },
+        {
+          "question": "`function saludo(nombre = 'cliente') { return 'Hola ' + nombre }`. ¿Qué devuelve `saludo(undefined)`?",
+          "options": [
+            "'Hola undefined'",
+            "'Hola '",
+            "Error por falta de argumento",
+            "'Hola cliente'"
+          ],
+          "correctIndex": 3,
+          "explanation": "Pasar undefined activa el valor por defecto igual que no pasar nada. Con null no: daría 'Hola null'."
+        }
+      ]
+    },
+    "js-l4": {
+      "emoji": "🏭",
+      "summary": "Conviertes listas de pedidos en reportes con filtrar, transformar y resumir, sin tocar el original.",
+      "analogy": "map, filter y reduce son una cadena de montaje de jugos: la primera estación descarta fruta mala, la segunda la pela, la última llena una sola jarra.",
+      "learned": [
+        "🏭 Puedes sacar de una lista larga solo lo que te interesa",
+        "🧮 Sabes resumir cientos de ventas en un número para un reporte",
+        "🛡️ Transformas datos sin estropear la lista original que otros usan"
+      ],
+      "check": [
+        {
+          "question": "`[3, 8, 1].reduce((a, b) => a + b)` funciona. ¿Qué pasa con `[].reduce((a, b) => a + b)`?",
+          "options": [
+            "Devuelve 0",
+            "Devuelve undefined",
+            "Lanza TypeError por no tener valor inicial",
+            "Devuelve []"
+          ],
+          "correctIndex": 2,
+          "explanation": "Sin valor inicial y sin elementos, reduce no tiene con qué empezar y lanza TypeError. Pasa siempre el inicial: reduce(fn, 0)."
+        },
+        {
+          "question": "Ordenas precios para mostrarlos con `precios.sort()` y luego el carrito muestra otro orden. ¿Por qué?",
+          "options": [
+            "sort devuelve una copia y el carrito usa otra variable",
+            "sort modificó el array original, que el carrito también usa",
+            "sort solo funciona con strings",
+            "sort es asíncrono y terminó tarde"
+          ],
+          "correctIndex": 1,
+          "explanation": "sort ordena en el lugar. Copia antes: [...precios].sort((a, b) => a - b), o usa toSorted. Sin comparador además ordena como texto."
+        }
+      ],
+      "diagram": "flowchart LR\n  A[\"4 pedidos\"]:::azul --> F[\"filter: 3 pagados\"]:::naranja\n  F --> M[\"map: 3 montos\"]:::morado\n  M --> R[\"reduce: 1 total\"]:::verde\n  A -.-> O[original intacto]:::cian\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef naranja fill:#FF9F0A,stroke:#FF9F0A,color:#fff\n  classDef morado fill:#BF5AF2,stroke:#BF5AF2,color:#fff\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n  classDef cian fill:#64D2FF,stroke:#64D2FF,color:#1d1d1f"
+    },
+    "js-l5": {
+      "emoji": "🗂️",
+      "summary": "Lees, copias y envías objetos sabiendo qué se comparte y qué se pierde al pasar a JSON.",
+      "analogy": "Copiar con spread es fotocopiar una carpeta: las hojas sueltas son nuevas, pero la carpetita de adentro sigue siendo la misma de siempre.",
+      "learned": [
+        "🗂️ Puedes sacar justo el dato que necesitas de una ficha llena de información",
+        "📋 Sabes hacer una copia de una ficha sin arruinar la original",
+        "📦 Anticipas qué información se pierde cuando los datos viajan como texto"
+      ],
+      "check": [
+        {
+          "question": "`JSON.parse(JSON.stringify({ total: 10, pagar() {}, nota: undefined }))` da…",
+          "options": [
+            "{ total: 10, pagar: [Function], nota: undefined }",
+            "{ total: 10, nota: null }",
+            "{ total: 10 }",
+            "Error: no se puede convertir funciones"
+          ],
+          "correctIndex": 2,
+          "explanation": "JSON no guarda funciones ni undefined: esas claves desaparecen sin error. Las fechas sobreviven pero como texto."
+        },
+        {
+          "question": "Quieres cambiar solo el email de `usuario.contacto` sin mutar `usuario`. ¿Qué escribes?",
+          "options": [
+            "{ ...usuario, email: nuevo }",
+            "usuario.contacto.email = nuevo",
+            "Object.assign(usuario, { email: nuevo })",
+            "{ ...usuario, contacto: { ...usuario.contacto, email: nuevo } }"
+          ],
+          "correctIndex": 3,
+          "explanation": "Hay que copiar los dos niveles. La primera opción crea una clave email suelta en el nivel de arriba; las otras dos mutan el original."
+        }
+      ]
+    },
+    "js-l6": {
+      "emoji": "📅",
+      "summary": "Muestras precios y citas en el formato del país del usuario sin errores de mes ni de zona horaria.",
+      "analogy": "Una fecha UTC es la hora del reloj de Greenwich colgado en la pared del servidor: cada paciente debe verla traducida a su propio reloj de muñeca.",
+      "learned": [
+        "✂️ Puedes limpiar nombres y correos escritos con espacios y mayúsculas raras",
+        "💲 Muestras dinero con el símbolo y los separadores que espera cada país",
+        "📅 Evitas que una cita aparezca un día antes por culpa de la zona horaria"
+      ],
+      "check": [
+        {
+          "question": "`new Date(2026, 11, 25)` representa…",
+          "options": [
+            "25 de noviembre de 2026",
+            "25 de diciembre de 2026",
+            "Error: el mes 11 no existe",
+            "11 de diciembre de 2026"
+          ],
+          "correctIndex": 1,
+          "explanation": "Los meses de Date empiezan en 0: 11 es diciembre. El error típico es creer que 11 es noviembre y sumar o restar a mano."
+        },
+        {
+          "question": "Debes sumar $10.10 + $20.20 en el carrito y comparar con $30.30. ¿Qué haces?",
+          "options": [
+            "Comparar directo con ===",
+            "Usar parseFloat en los tres valores",
+            "Trabajar en centavos enteros: 1010 + 2020 === 3030",
+            "Redondear con toFixed(1)"
+          ],
+          "correctIndex": 2,
+          "explanation": "Los decimales binarios dan 30.299999999999997. Con enteros en centavos la suma es exacta; formatea a pesos solo al mostrar."
+        }
+      ]
+    },
+    "js-l7": {
+      "emoji": "🧩",
+      "summary": "Entiendes qué es la programación orientada a objetos y modelas un producto real con una clase.",
+      "analogy": "Una clase es el molde de galletas con forma de estrella; cada galleta horneada es un objeto: misma forma, pero a cada una le pones chispas distintas.",
+      "learned": [
+        "🧩 Puedes explicar con un ejemplo de tienda qué es programar con objetos",
+        "🍪 Distingues el molde de las cosas que fabricas con él",
+        "🛒 Sabes juntar los datos de algo con las acciones que puede hacer",
+        "🗺️ Dibujas en una pizarra el plano de una pieza de tu programa"
+      ],
+      "check": [
+        {
+          "question": "En una app de reservas, ¿qué conviene modelar como clase?",
+          "options": [
+            "La palabra 'Reservar' del botón",
+            "Cita, con fecha, paciente y métodos confirmar() y cancelar()",
+            "El número 30 de los minutos por turno",
+            "El color azul del encabezado"
+          ],
+          "correctIndex": 1,
+          "explanation": "Una clase junta datos y comportamiento de una entidad del problema. Un texto, una constante o un color son valores simples, no objetos con reglas."
+        },
+        {
+          "question": "Dentro de `vender(cantidad) { this.stock -= cantidad }`, ¿a qué apunta `this` cuando haces `torta.vender(2)`?",
+          "options": [
+            "A la clase Producto",
+            "A todos los productos creados",
+            "Al objeto torta",
+            "Al método vender"
+          ],
+          "correctIndex": 2,
+          "explanation": "this es el objeto antes del punto en la llamada. Por eso vender(2) en torta no toca el stock del café."
+        }
+      ],
+      "diagram": "classDiagram\n  class Cita {\n    +fecha\n    +paciente\n    +estado\n    +confirmar()\n    +cancelar(motivo)\n  }\n  class Paciente {\n    +nombre\n    +telefono\n  }\n  Cita --> Paciente : pertenece a\n  class Cita:::azul\n  class Paciente:::verde\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff"
+    },
+    "js-l8": {
+      "emoji": "🧬",
+      "summary": "Sabes cuándo heredar y cuándo armar objetos con piezas, y lo defiendes en una entrevista.",
+      "analogy": "Heredar es recibir la casa de tus padres con todo y goteras; componer es amueblar tu depa con piezas de IKEA que cambias cuando quieras.",
+      "learned": [
+        "🧬 Puedes reconocer cuándo una cosa es una versión especial de otra",
+        "🧱 Armas comportamientos combinando piezas en vez de crear familias enormes",
+        "🎭 Haces que cosas distintas respondan a la misma orden cada una a su manera"
+      ],
+      "check": [
+        {
+          "question": "¿Qué relación justifica usar `extends`?",
+          "options": [
+            "Un Pedido tiene un Cliente",
+            "Un Carrito usa una Pasarela de pago",
+            "Un Administrador es un Usuario con permisos extra",
+            "Una Cita envía un Recordatorio"
+          ],
+          "correctIndex": 2,
+          "explanation": "Herencia = 'es un' estable. 'Tiene un' o 'usa un' son composición: el pedido no es un tipo de cliente."
+        },
+        {
+          "question": "`class Medico extends Usuario { constructor(n, e) { this.esp = e; super(n) } }` lanza error al crear. ¿Por qué?",
+          "options": [
+            "Usuario debe declararse después",
+            "Se usa this antes de llamar a super",
+            "Medico no puede tener constructor propio",
+            "Faltan los paréntesis en extends"
+          ],
+          "correctIndex": 1,
+          "explanation": "En una subclase hay que llamar a super() antes de tocar this. Mueve super(n) a la primera línea del constructor."
+        }
+      ],
+      "diagram": "flowchart TD\n  A{Relación entre A y B}:::amarillo --> B[A es un B estable]:::azul\n  A --> C[A tiene o usa B]:::verde\n  B --> D[Herencia: extends]:::azul\n  C --> E[Composición: recibir B]:::verde\n  D --> F[Riesgo: árbol gigante]:::rosa\n  classDef amarillo fill:#FFD60A,stroke:#FFD60A,color:#1d1d1f\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n  classDef rosa fill:#FF375F,stroke:#FF375F,color:#fff"
+    },
+    "js-l9": {
+      "emoji": "🔒",
+      "summary": "Proteges las reglas de tus objetos y aplicas S, O y D con ejemplos que puedes explicar en voz alta.",
+      "analogy": "Encapsular es la ventanilla del banco: pides un retiro y el cajero revisa tu saldo; nadie entra a la bóveda a sacar billetes con la mano.",
+      "learned": [
+        "🔒 Puedes impedir que alguien deje tus datos en un estado imposible",
+        "✂️ Separas un trabajo grande en piezas que cambian cada una por su motivo",
+        "🔌 Diseñas piezas que se cambian como un enchufe, sin romper el resto",
+        "🎤 Explicas tus decisiones de diseño con un ejemplo propio y concreto"
+      ],
+      "check": [
+        {
+          "question": "Una clase `Usuario` valida el formulario, guarda en la base de datos y envía el email de bienvenida. ¿Qué principio rompe primero?",
+          "options": [
+            "Responsabilidad única: tiene tres razones para cambiar",
+            "Liskov, porque no hereda de nadie",
+            "Encapsulación, porque tiene métodos públicos",
+            "Ninguno: es más cómodo tener todo junto"
+          ],
+          "correctIndex": 0,
+          "explanation": "Si cambia el texto del email, arriesgas la validación y el guardado. Separar en piezas deja que cada una cambie sola."
+        },
+        {
+          "question": "Con `class Cuenta { #saldo = 0 }`, ¿qué hace `cuenta.#saldo = 100` desde fuera?",
+          "options": [
+            "Cambia el saldo a 100",
+            "Crea una propiedad pública nueva llamada #saldo",
+            "Es un error de sintaxis: el campo es privado",
+            "Funciona solo en modo estricto"
+          ],
+          "correctIndex": 2,
+          "explanation": "Los campos con # solo se acceden dentro de la clase. Con _saldo sí funcionaría, porque el guion bajo es solo una convención."
+        }
+      ],
+      "diagram": "flowchart LR\n  F[Código externo]:::naranja --> M[recargar y canjear]:::azul\n  M --> V{Regla válida?}:::amarillo\n  V -- Sí --> S[\"#saldo privado\"]:::verde\n  V -- No --> E[Error claro]:::rosa\n  F -. bloqueado .-> S\n  classDef naranja fill:#FF9F0A,stroke:#FF9F0A,color:#fff\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef amarillo fill:#FFD60A,stroke:#FFD60A,color:#1d1d1f\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n  classDef rosa fill:#FF375F,stroke:#FF375F,color:#fff"
+    },
+    "js-l10": {
+      "emoji": "🧵",
+      "summary": "Predices en qué orden se ejecuta código que espera, y encadenas promesas sin pirámides.",
+      "analogy": "Una promesa es el ticket del restaurante de comida rápida: sigues con tu vida y cuando llaman tu número recoges el pedido o te dicen que se acabó.",
+      "learned": [
+        "🧵 Puedes predecir en qué orden pasan las cosas cuando algo tarda",
+        "🎟️ Sabes esperar un resultado sin congelar la pantalla del usuario",
+        "🏁 Lanzas varias esperas a la vez y reúnes las respuestas al final"
+      ],
+      "check": [
+        {
+          "question": "`Promise.all([a(), b(), c()])` y `b()` rechaza. ¿Qué recibes?",
+          "options": [
+            "Los resultados de a y c, y undefined para b",
+            "Un rechazo con el error de b",
+            "Espera para siempre",
+            "Solo el resultado de a"
+          ],
+          "correctIndex": 1,
+          "explanation": "Promise.all rechaza en cuanto una falla. Para obtener lo que sí funcionó usa Promise.allSettled."
+        },
+        {
+          "question": "¿Qué imprime? `setTimeout(() => log('T'), 0); Promise.resolve().then(() => log('P')); log('S')`",
+          "options": [
+            "T P S",
+            "S T P",
+            "P S T",
+            "S P T"
+          ],
+          "correctIndex": 3,
+          "explanation": "Primero lo síncrono (S), luego las microtareas de promesas (P) y por último los timers (T), aunque esperen 0 ms."
+        }
+      ],
+      "diagram": "flowchart LR\n  A[Código síncrono]:::azul --> B[Microtareas: promesas]:::morado\n  B --> C[Tareas: timers y eventos]:::naranja\n  C --> A\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef morado fill:#BF5AF2,stroke:#BF5AF2,color:#fff\n  classDef naranja fill:#FF9F0A,stroke:#FF9F0A,color:#fff"
+    },
+    "js-l11": {
+      "emoji": "🌐",
+      "summary": "Pides datos a un servidor con await, revisas si la respuesta salió bien y ahorras tiempo en paralelo.",
+      "analogy": "fetch es un mensajero que siempre vuelve, aunque traiga un «no estaba»; abre el sobre (res.ok) antes de leer la carta.",
+      "learned": [
+        "🌐 Puedes traer información de otro servidor y mostrarla en tu pantalla",
+        "📬 Revisas que una respuesta llegó bien antes de usarla",
+        "🏎️ Haces que una pantalla cargue en la mitad del tiempo pidiendo cosas juntas"
+      ],
+      "check": [
+        {
+          "question": "Necesitas el usuario y luego sus pedidos usando el id del usuario. ¿Cómo lo haces?",
+          "options": [
+            "Promise.all con las dos peticiones",
+            "await del usuario y luego await de sus pedidos",
+            "forEach(async) sobre las dos URLs",
+            "Dos fetch sin await"
+          ],
+          "correctIndex": 1,
+          "explanation": "La segunda petición depende del resultado de la primera, así que van en serie. Promise.all sirve cuando son independientes."
+        },
+        {
+          "question": "`ids.forEach(async (id) => await guardar(id)); console.log('listo')`. ¿Cuándo sale 'listo'?",
+          "options": [
+            "Después de guardar todos",
+            "Antes de que terminen de guardarse",
+            "Nunca: forEach no acepta async",
+            "Después del primer guardado"
+          ],
+          "correctIndex": 1,
+          "explanation": "forEach no espera las promesas que devuelve su función. Usa for...of con await, o await Promise.all(ids.map(guardar))."
+        }
+      ]
+    },
+    "js-l12": {
+      "emoji": "🧯",
+      "summary": "Capturas y clasificas errores para que el usuario vea un mensaje útil y el equipo vea la causa real.",
+      "analogy": "Un catch vacío es taparle con cinta la luz de «revisar motor» al auto: deja de molestar, pero el motor sigue fallando.",
+      "learned": [
+        "🧯 Puedes evitar que un fallo deje la pantalla cargando para siempre",
+        "🏷️ Distingues un error del usuario de una falla del sistema",
+        "🔎 Escribes mensajes de error que dicen qué falló y con qué dato"
+      ],
+      "check": [
+        {
+          "question": "¿Dónde pones `ocultarSpinner()` para que corra tanto si guardar funciona como si falla?",
+          "options": [
+            "Al final del try",
+            "Dentro del catch",
+            "En finally",
+            "Antes del try"
+          ],
+          "correctIndex": 2,
+          "explanation": "finally se ejecuta siempre. En el try se salta si hay error; en el catch se salta si todo sale bien."
+        },
+        {
+          "question": "Un compañero escribe `catch (e) {}` para que la app no se caiga al guardar. ¿Mejor alternativa?",
+          "options": [
+            "Dejarlo así, el usuario no ve errores",
+            "Mostrar un aviso al usuario y registrar o relanzar el error",
+            "Cambiarlo por throw 'falló'",
+            "Envolver toda la app en un solo try"
+          ],
+          "correctIndex": 1,
+          "explanation": "Un catch vacío esconde el bug. Hay que avisar al usuario y conservar la causa (log o relanzar). throw con string pierde el stack."
+        }
+      ],
+      "diagram": "flowchart TD\n  T[try: validar y guardar]:::azul --> OK[Éxito]:::verde\n  T --> X[catch]:::naranja\n  X --> V{ValidacionError?}:::amarillo\n  V -- Sí --> U[Marcar campo]:::verde\n  V -- No --> R[Registrar y aviso genérico]:::rosa\n  OK --> F[finally: ocultar spinner]:::morado\n  U --> F\n  R --> F\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n  classDef naranja fill:#FF9F0A,stroke:#FF9F0A,color:#fff\n  classDef amarillo fill:#FFD60A,stroke:#FFD60A,color:#1d1d1f\n  classDef rosa fill:#FF375F,stroke:#FF375F,color:#fff\n  classDef morado fill:#BF5AF2,stroke:#BF5AF2,color:#fff"
+    },
+    "js-l13": {
+      "emoji": "🛡️",
+      "summary": "Describes tus datos con tipos para que el editor te frene antes de que el error llegue al cliente.",
+      "analogy": "TypeScript es el corrector ortográfico del documento: subraya errores mientras escribes, pero no revisa la carta que te mandan por correo.",
+      "learned": [
+        "🛡️ Puedes hacer que el editor te avise de un error antes de probar la app",
+        "📐 Describes la forma exacta que deben tener los datos de tu programa",
+        "🚪 Sabes qué datos de fuera necesitan revisión aunque el editor no se queje"
+      ],
+      "check": [
+        {
+          "question": "¿Qué tipo usarías para el resultado de `JSON.parse(localStorage.getItem('carrito'))` antes de validarlo?",
+          "options": [
+            "any",
+            "Carrito",
+            "unknown",
+            "object"
+          ],
+          "correctIndex": 2,
+          "explanation": "unknown obliga a comprobar antes de usar. any desactiva la revisión y anotar Carrito sería afirmar algo que nadie verificó."
+        },
+        {
+          "question": "`interface Cita { id: number; nota?: string }`. ¿Cuál asignación da error?",
+          "options": [
+            "{ id: 1 }",
+            "{ id: 1, nota: 'ayuno' }",
+            "{ id: '1' }",
+            "{ id: 2, nota: undefined }"
+          ],
+          "correctIndex": 2,
+          "explanation": "id debe ser number, no string. nota es opcional, así que puede faltar o venir con texto."
+        }
+      ],
+      "diagram": "flowchart LR\n  A[Código .ts]:::azul --> B[Compilador revisa tipos]:::verde\n  B --> C[JavaScript sin tipos]:::naranja\n  D[Datos de fetch]:::rosa --> C\n  C --> E[Ejecución]:::morado\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n  classDef naranja fill:#FF9F0A,stroke:#FF9F0A,color:#fff\n  classDef rosa fill:#FF375F,stroke:#FF375F,color:#fff\n  classDef morado fill:#BF5AF2,stroke:#BF5AF2,color:#fff"
+    },
+    "js-l14": {
+      "emoji": "🔀",
+      "summary": "Modelas estados que no se pueden mezclar y escribes funciones útiles para cualquier tipo de dato.",
+      "analogy": "Un genérico es un táper con etiqueta en blanco: sirve para arroz o sopa, y una vez escrito «sopa» nadie lo abre esperando arroz.",
+      "learned": [
+        "🔀 Puedes describir los estados posibles de una pantalla sin que se mezclen",
+        "🧰 Escribes una herramienta que sirve para muchos tipos de datos sin perder precisión",
+        "🚨 Haces que el editor te avise si olvidaste manejar un caso nuevo"
+      ],
+      "check": [
+        {
+          "question": "¿Qué firma conserva el tipo de los elementos?",
+          "options": [
+            "function ultimo(lista: any[]): any",
+            "function ultimo<T>(lista: T[]): T | undefined",
+            "function ultimo(lista: unknown[]): unknown",
+            "function ultimo(lista: object[]): object"
+          ],
+          "correctIndex": 1,
+          "explanation": "Con el genérico T, ultimo(citas) devuelve Cita | undefined. Las demás pierden el tipo o te obligan a revisarlo de nuevo."
+        },
+        {
+          "question": "Agregas `{ estado: 'vacio' }` a una unión y tu switch tiene `default: const n: never = c`. ¿Qué pasa?",
+          "options": [
+            "Compila y 'vacio' cae en default sin aviso",
+            "Error de compilación: c no es never porque falta el caso 'vacio'",
+            "Error en ejecución al llegar 'vacio'",
+            "TypeScript borra el caso nuevo"
+          ],
+          "correctIndex": 1,
+          "explanation": "never solo acepta 'nada'. Si queda un caso sin cubrir, c todavía tiene tipo y no se puede asignar: el compilador te señala el olvido."
+        }
+      ]
+    },
+    "js-l15": {
+      "emoji": "📈",
+      "summary": "Estimas si tu código aguantará con miles de datos y detectas los bucles escondidos.",
+      "analogy": "Buscar un nombre leyendo toda la guía telefónica es O(n); abrirla por la mitad y descartar media guía cada vez es O(log n).",
+      "learned": [
+        "📈 Puedes anticipar si un programa se pondrá lento cuando crezcan los datos",
+        "🔍 Encuentras repeticiones escondidas que multiplican el trabajo",
+        "⚖️ Explicas cuándo vale la pena gastar más memoria para ir más rápido"
+      ],
+      "check": [
+        {
+          "question": "Dos bucles seguidos (no anidados) sobre la misma lista de n elementos. ¿Complejidad?",
+          "options": [
+            "O(n²)",
+            "O(2ⁿ)",
+            "O(log n)",
+            "O(n)"
+          ],
+          "correctIndex": 3,
+          "explanation": "Bucles en secuencia se suman: O(n + n) = O(2n) = O(n). Solo anidados se multiplican."
+        },
+        {
+          "question": "¿Qué operación es O(1) en promedio?",
+          "options": [
+            "lista.includes(x)",
+            "lista.indexOf(x)",
+            "set.has(x)",
+            "lista.find(fn)"
+          ],
+          "correctIndex": 2,
+          "explanation": "Set y Map buscan por hash sin recorrer. includes, indexOf y find revisan elemento por elemento: O(n)."
+        }
+      ],
+      "diagram": "flowchart LR\n  A[\"O(1) acceso directo\"]:::verde --> B[\"O(log n) mitades\"]:::cian\n  B --> C[\"O(n) un bucle\"]:::azul\n  C --> D[\"O(n log n) ordenar\"]:::naranja\n  D --> E[\"O(n²) bucles anidados\"]:::rosa\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n  classDef cian fill:#64D2FF,stroke:#64D2FF,color:#1d1d1f\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef naranja fill:#FF9F0A,stroke:#FF9F0A,color:#fff\n  classDef rosa fill:#FF375F,stroke:#FF375F,color:#fff"
+    },
+    "js-l16": {
+      "emoji": "🗃️",
+      "summary": "Resuelves en una sola pasada problemas de entrevista que a la fuerza bruta costarían millones de pasos.",
+      "analogy": "Un Map es el guardarropa del teatro: entregas tu abrigo, te dan el número 37 y al salir lo sacan directo, sin revisar abrigo por abrigo.",
+      "learned": [
+        "🗃️ Puedes recordar lo que ya viste para no volver a revisarlo",
+        "🎯 Encuentras dos cosas que se complementan en una lista con un solo recorrido",
+        "👉 Recorres una lista ordenada desde los dos extremos para ahorrar memoria"
+      ],
+      "check": [
+        {
+          "question": "Precios ordenados `[2, 5, 8, 12, 15]`, objetivo 20. Punteros en 2 y 15 suman 17. ¿Qué haces?",
+          "options": [
+            "Mover el puntero derecho a la izquierda",
+            "Mover el puntero izquierdo a la derecha",
+            "Mover ambos punteros",
+            "Volver a ordenar la lista"
+          ],
+          "correctIndex": 1,
+          "explanation": "17 < 20: necesitas una suma mayor, y solo subir el izquierdo la aumenta. Mover el derecho la achicaría."
+        },
+        {
+          "question": "En el patrón de presupuesto con Map, ¿por qué se pregunta `vistos.has(falta)` antes de guardar el precio actual?",
+          "options": [
+            "Porque Map no permite set antes de has",
+            "Para no emparejar un producto consigo mismo",
+            "Para que el algoritmo sea O(n²)",
+            "Porque has borra el elemento"
+          ],
+          "correctIndex": 1,
+          "explanation": "Si guardas primero, un precio de 50 con presupuesto 100 se encontraría a sí mismo. Preguntar antes asegura dos productos distintos."
+        }
+      ]
+    },
+    "js-l17": {
+      "emoji": "🪆",
+      "summary": "Escribes funciones que se llaman a sí mismas con un punto de parada claro y recorres datos anidados.",
+      "analogy": "La recursión es una matrioshka: abres cada muñeca hasta llegar a la más pequeña, que ya no se abre; ese es tu caso base.",
+      "learned": [
+        "🪆 Puedes resolver un problema grande repitiendo la misma idea en piezas más chicas",
+        "🌳 Recorres menús y carpetas sin saber cuántos niveles tienen",
+        "🧠 Evitas repetir cuentas ya hechas guardando los resultados"
+      ],
+      "check": [
+        {
+          "question": "`function suma(n) { return n + suma(n - 1) }`. ¿Qué pasa con suma(3)?",
+          "options": [
+            "Devuelve 6",
+            "Devuelve 3",
+            "Desborda la pila: no tiene caso base",
+            "Devuelve undefined"
+          ],
+          "correctIndex": 2,
+          "explanation": "Sin un `if (n === 0) return 0`, sigue con -1, -2… hasta 'Maximum call stack size exceeded'."
+        },
+        {
+          "question": "fib recursivo sin memoria tarda mucho con n = 45. ¿Por qué ayuda memoizar?",
+          "options": [
+            "Porque elimina la recursión",
+            "Porque cada fib(k) se calcula una sola vez y se reutiliza",
+            "Porque usa menos memoria",
+            "Porque cambia el caso base"
+          ],
+          "correctIndex": 1,
+          "explanation": "Sin memo, fib(43) y fib(42) se recalculan millones de veces: O(2ⁿ). Con memo cada valor se calcula una vez: O(n), a cambio de memoria."
+        }
+      ],
+      "diagram": "flowchart TD\n  A[Tienda]:::azul --> B[Bebidas]:::azul\n  A --> C[Postres]:::verde\n  B --> D[Café]:::verde\n  B --> E[Jugos]:::verde\n  D --> F[Caso base: sin hijos]:::morado\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n  classDef morado fill:#BF5AF2,stroke:#BF5AF2,color:#fff"
+    }
+  },
+  "modules": {
+    "js-m1": {
+      "emoji": "🧱",
+      "exam": [
+        {
+          "question": "En la tienda: `const stock = 0; const etiqueta = stock ? 'Disponible' : 'Agotado'`. ¿Qué etiqueta sale y por qué?",
+          "options": [
+            "'Agotado', porque 0 es falsy",
+            "'Disponible', porque stock existe",
+            "Error, porque stock es const",
+            "undefined, porque el ternario necesita return"
+          ],
+          "correctIndex": 0,
+          "explanation": "0 es falsy y el ternario elige la segunda opción. Aquí coincide con lo deseado, pero con precios en 0 la misma condición fallaría."
+        },
+        {
+          "question": "`const precioFinal = (p, desc = 10) => { p - p * desc / 100 }`. ¿Qué devuelve `precioFinal(200)`?",
+          "options": [
+            "180",
+            "undefined",
+            "200",
+            "Error por parámetro faltante"
+          ],
+          "correctIndex": 1,
+          "explanation": "Con llaves el cuerpo de la flecha necesita return. El parámetro por defecto está bien; el problema es el return ausente."
+        },
+        {
+          "question": "`let total = 0; for (const p of ['10', '5']) total = total + p`. ¿Cuánto vale total?",
+          "options": [
+            "15",
+            "'105'",
+            "'0105'",
+            "NaN"
+          ],
+          "correctIndex": 2,
+          "explanation": "0 + '10' concatena a '010' y luego + '5' da '0105'. Hay que convertir con Number(p) dentro del bucle."
+        },
+        {
+          "question": "¿Qué función de envío es pura?",
+          "options": [
+            "(peso) => peso * tarifaGlobal",
+            "(peso, tarifa) => { guardarLog(peso); return peso * tarifa }",
+            "(pedido) => { pedido.envio = 5; return 5 }",
+            "(peso, tarifa) => peso * tarifa"
+          ],
+          "correctIndex": 3,
+          "explanation": "Solo usa sus parámetros y no cambia nada fuera. Leer una global, escribir un log o modificar el pedido son efectos."
+        },
+        {
+          "question": "Un turno tiene `paciente: ''` cuando el nombre no se cargó. Con `if (turno.paciente)`, ¿cómo se trata?",
+          "options": [
+            "Como libre, porque '' es falsy",
+            "Como ocupado, porque la clave existe",
+            "Como error de tipo",
+            "Depende del navegador"
+          ],
+          "correctIndex": 0,
+          "explanation": "El texto vacío es falsy, así que el if lo trata igual que null. Si '' significa otra cosa, compara explícitamente."
+        },
+        {
+          "question": "Quieres repetir una pregunta al usuario hasta que escriba un número válido. ¿Qué bucle encaja?",
+          "options": [
+            "for...of sobre un array",
+            "while con la condición 'no es válido'",
+            "forEach",
+            "switch"
+          ],
+          "correctIndex": 1,
+          "explanation": "No sabes cuántas veces se repetirá: while sigue mientras la condición sea verdadera. for...of recorre una lista ya conocida."
+        }
+      ]
+    },
+    "js-m2": {
+      "emoji": "📊",
+      "exam": [
+        {
+          "question": "`ventas.map(v => v.monto).filter(m => m > 100).length`. ¿Qué obtienes?",
+          "options": [
+            "La suma de montos mayores a 100",
+            "Cuántas ventas superan 100",
+            "Las ventas mayores a 100 como objetos",
+            "El monto máximo"
+          ],
+          "correctIndex": 1,
+          "explanation": "map deja solo montos, filter se queda con los mayores a 100 y length los cuenta. Para sumarlos haría falta reduce."
+        },
+        {
+          "question": "Guardas una cita con `JSON.stringify` y al leerla haces `cita.fecha.getHours()`. ¿Qué pasa?",
+          "options": [
+            "Funciona igual que antes",
+            "Devuelve la hora en UTC",
+            "TypeError: fecha es un string y no tiene getHours",
+            "Devuelve null"
+          ],
+          "correctIndex": 2,
+          "explanation": "JSON convierte Date en texto ISO. Al leer hay que crear new Date(cita.fecha) antes de usar sus métodos."
+        },
+        {
+          "question": "`const copia = [...pedidos]; copia[0].estado = 'anulado'`. ¿Cambia `pedidos[0].estado`?",
+          "options": [
+            "No, spread copia todo en profundidad",
+            "Solo si pedidos se declaró con let",
+            "Error porque copia es const",
+            "Sí, los objetos de adentro son los mismos"
+          ],
+          "correctIndex": 3,
+          "explanation": "El spread de array crea una lista nueva pero con las mismas referencias a cada objeto. Para no mutar, copia el objeto: { ...p, estado }."
+        },
+        {
+          "question": "Un usuario busca 'café' y el producto se llama ' Café '. ¿Qué comparación encuentra coincidencia?",
+          "options": [
+            "nombre.trim().toLowerCase().includes(busqueda.toLowerCase())",
+            "nombre === busqueda",
+            "nombre.includes(busqueda)",
+            "nombre == busqueda"
+          ],
+          "correctIndex": 0,
+          "explanation": "Hay que normalizar ambos lados: quitar espacios y unificar mayúsculas. == no ignora mayúsculas ni espacios."
+        },
+        {
+          "question": "Necesitas saber si **algún** producto del carrito está agotado. ¿Qué método es más directo?",
+          "options": [
+            "map",
+            "some",
+            "filter(...).length > 0",
+            "reduce"
+          ],
+          "correctIndex": 1,
+          "explanation": "some devuelve true y se detiene en el primero que cumple. filter recorre todo y crea un array solo para contarlo."
+        },
+        {
+          "question": "Una cita creada con `new Date('2026-05-01')` se ve como 30 de abril en Lima. ¿Mejor corrección?",
+          "options": [
+            "Restar un día a mano",
+            "Usar new Date(2026, 5, 1)",
+            "Crear la fecha con hora local, p. ej. '2026-05-01T09:00', o mostrar con timeZone",
+            "Guardar la fecha como número de mes"
+          ],
+          "correctIndex": 2,
+          "explanation": "Sin hora, ISO se interpreta en UTC. new Date(2026, 5, 1) sería junio porque los meses empiezan en 0."
+        },
+        {
+          "question": "`[100, 25, 3].sort()` devuelve…",
+          "options": [
+            "[3, 25, 100]",
+            "[100, 3, 25]",
+            "[25, 3, 100]",
+            "[100, 25, 3]"
+          ],
+          "correctIndex": 3,
+          "explanation": "Sin comparador, sort compara como texto: '100' < '25' < '3'. Para números usa sort((a, b) => a - b)."
+        }
+      ]
+    },
+    "js-m3": {
+      "emoji": "🏛️",
+      "exam": [
+        {
+          "question": "Le explicas POO a un cliente de la tienda. ¿Cuál descripción es correcta?",
+          "options": [
+            "Programar solo con clases y nunca con funciones",
+            "Usar herencia en todas las entidades",
+            "Agrupar en objetos los datos de algo junto con lo que ese algo sabe hacer",
+            "Guardar todo en un único objeto global"
+          ],
+          "correctIndex": 2,
+          "explanation": "La idea central es juntar estado y comportamiento. Herencia es una herramienta opcional, no la definición."
+        },
+        {
+          "question": "Tienes `Medico extends Usuario` y `Paciente extends Usuario`, cada uno con su propio `saludo()`. `usuarios.forEach(u => u.saludo())` muestra saludos distintos. ¿Cómo se llama?",
+          "options": [
+            "Encapsulación",
+            "Composición",
+            "Abstracción",
+            "Polimorfismo"
+          ],
+          "correctIndex": 3,
+          "explanation": "La misma llamada produce comportamientos distintos según el objeto: polimorfismo. Encapsulación es proteger el estado interno."
+        },
+        {
+          "question": "Un `Carrito` calcula `producto.stock -= cantidad` él mismo al confirmar. ¿Qué problema de diseño hay?",
+          "options": [
+            "La regla de stock queda repartida fuera del Producto y puede saltarse sus validaciones",
+            "Ninguno, es más corto",
+            "El carrito debería heredar de Producto",
+            "stock debería ser una variable global"
+          ],
+          "correctIndex": 0,
+          "explanation": "La regla 'no vender sin stock' pertenece al Producto. Llamar a producto.vender() mantiene esa regla en un solo lugar."
+        },
+        {
+          "question": "Para notificaciones por email, SMS y WhatsApp en cualquier combinación, el diseño más mantenible es…",
+          "options": [
+            "Una subclase por combinación",
+            "Cita recibe una lista de canales con un método enviar()",
+            "Un if por canal dentro de la clase Cita",
+            "Heredar Cita de cada canal"
+          ],
+          "correctIndex": 1,
+          "explanation": "Composición: agregar un canal es crear un objeto nuevo, sin tocar Cita ni crear subclases combinadas."
+        },
+        {
+          "question": "¿Qué refleja la inversión de dependencias en un Checkout?",
+          "options": [
+            "Checkout crea new StripeSDK() adentro",
+            "Checkout hereda de StripeSDK",
+            "Checkout recibe por el constructor un objeto con cobrar()",
+            "Checkout tiene un campo privado #stripe creado adentro"
+          ],
+          "correctIndex": 2,
+          "explanation": "Depender de 'algo que cobra' inyectado permite cambiar de pasarela o usar una falsa en tests sin editar Checkout."
+        },
+        {
+          "question": "Una subclase `CuentaSinRetiros extends Cuenta` lanza error en `retirar()`, y el código que usa Cuenta se rompe. ¿Qué principio viola?",
+          "options": [
+            "Responsabilidad única",
+            "Abierto/cerrado",
+            "Segregación de interfaces",
+            "Sustitución de Liskov"
+          ],
+          "correctIndex": 3,
+          "explanation": "Un hijo debe poder reemplazar al padre sin sorpresas. Si Cuenta promete retirar(), una subclase que lo prohíbe rompe esa promesa."
+        },
+        {
+          "question": "¿Cuál protege de verdad el saldo de un objeto en JavaScript moderno?",
+          "options": [
+            "Un campo #saldo con métodos que validan",
+            "Un comentario '// no tocar'",
+            "this._saldo con guion bajo",
+            "Object.freeze en el constructor y luego modificarlo"
+          ],
+          "correctIndex": 0,
+          "explanation": "# hace el campo inaccesible desde fuera. El guion bajo es solo convención y cualquiera puede escribir objeto._saldo = 1e6."
+        },
+        {
+          "question": "En una entrevista te preguntan: '¿Cuándo usarías herencia?'. ¿Mejor respuesta?",
+          "options": [
+            "Siempre que dos clases compartan un método",
+            "Cuando hay una relación 'es un' estable, como Administrador es un Usuario; si no, compongo",
+            "Nunca, la herencia está prohibida",
+            "Cuando quiero reutilizar cualquier código"
+          ],
+          "correctIndex": 1,
+          "explanation": "Herencia para 'es un' estable; composición para 'tiene/usa'. Compartir un método no basta: se resuelve con una función o una pieza común."
+        }
+      ]
+    },
+    "js-m4": {
+      "emoji": "⏳",
+      "exam": [
+        {
+          "question": "¿Qué imprime? `log(1); setTimeout(() => log(2)); (async () => { log(3); await null; log(4) })(); log(5)`",
+          "options": [
+            "1 2 3 4 5",
+            "1 5 3 4 2",
+            "1 3 4 5 2",
+            "1 3 5 4 2"
+          ],
+          "correctIndex": 3,
+          "explanation": "La función async corre síncrona hasta el primer await (3). Tras el await, 4 va a microtareas: después del 5 y antes del timer 2."
+        },
+        {
+          "question": "`const res = await fetch(url)` devuelve status 500. ¿Qué tienes que hacer?",
+          "options": [
+            "Revisar res.ok y lanzar un Error tú mismo",
+            "Nada: fetch ya lanzó un error",
+            "Llamar a res.json() para ver si falla",
+            "Repetir el fetch hasta que dé 200"
+          ],
+          "correctIndex": 0,
+          "explanation": "fetch solo rechaza si no hay red. Con 500 resuelve normalmente; si no revisas res.ok, trabajarás con una respuesta de error."
+        },
+        {
+          "question": "Cargas médicos, sedes y especialidades, independientes entre sí, con tres await seguidos de 1 s cada uno. ¿Mejora?",
+          "options": [
+            "Ninguna, 3 s es inevitable",
+            "Promise.all para tardar ~1 s",
+            "Usar callbacks en vez de await",
+            "Poner las tres en un forEach(async)"
+          ],
+          "correctIndex": 1,
+          "explanation": "Peticiones independientes pueden ir en paralelo: tardas lo que la más lenta. forEach(async) no esperaría a ninguna."
+        },
+        {
+          "question": "`try { return guardar() } catch { avisar() }` en una función async, y guardar() rechaza. ¿Se llama avisar()?",
+          "options": [
+            "Sí, siempre",
+            "Solo si guardar lanza un Error y no un string",
+            "No: sin await el rechazo ocurre fuera del try",
+            "Sí, pero dos veces"
+          ],
+          "correctIndex": 2,
+          "explanation": "Sin await el try termina al devolver la promesa pendiente. Con `return await guardar()` el rechazo cae en el catch."
+        },
+        {
+          "question": "Quieres los resultados de 5 consultas aunque alguna falle. ¿Qué usas?",
+          "options": [
+            "Promise.all",
+            "Promise.race",
+            "Cinco await dentro de un solo try",
+            "Promise.allSettled"
+          ],
+          "correctIndex": 3,
+          "explanation": "allSettled espera a todas y te da status y valor o motivo de cada una. all rechaza al primer fallo y race solo da el primero que termina."
+        },
+        {
+          "question": "Un `catch (e) { console.log('error') }` hace que no sepas qué falló en producción. ¿Mejor práctica?",
+          "options": [
+            "Registrar el error real con contexto y mostrar al usuario un mensaje entendible",
+            "Borrar el try/catch",
+            "Mostrar e.stack al usuario",
+            "Usar throw 'error' en su lugar"
+          ],
+          "correctIndex": 0,
+          "explanation": "El equipo necesita la causa (e y datos de contexto); el usuario, un mensaje que entienda. Mostrar el stack expone detalles internos."
+        },
+        {
+          "question": "Tu clase `ValidacionError extends Error` no llama a `super(mensaje)`. ¿Qué pasa al crearla?",
+          "options": [
+            "Funciona, pero message queda vacío",
+            "ReferenceError: hay que llamar a super antes de usar this o terminar el constructor",
+            "Se convierte en un Error genérico",
+            "instanceof deja de funcionar"
+          ],
+          "correctIndex": 1,
+          "explanation": "Toda subclase con constructor debe llamar a super(); si no, crear la instancia lanza ReferenceError."
+        }
+      ]
+    },
+    "js-m5": {
+      "emoji": "🔷",
+      "exam": [
+        {
+          "question": "¿Qué afirmación sobre TypeScript es correcta?",
+          "options": [
+            "Revisa tipos al compilar y luego los borra",
+            "Valida en ejecución los datos que llegan del servidor",
+            "Hace el código más rápido en el navegador",
+            "Reemplaza la necesidad de tests"
+          ],
+          "correctIndex": 0,
+          "explanation": "Los tipos solo existen al escribir y compilar. En ejecución corre JavaScript normal, así que los datos externos se validan aparte."
+        },
+        {
+          "question": "`type Estado = 'pendiente' | 'pagado'`. ¿Qué línea compila?",
+          "options": [
+            "const e: Estado = 'Pagado'",
+            "const e: Estado = 'pagado'",
+            "const e: Estado = 'cancelado'",
+            "const e: Estado = 1"
+          ],
+          "correctIndex": 1,
+          "explanation": "Los literales distinguen mayúsculas: 'Pagado' no es 'pagado'. 'cancelado' no está en la unión."
+        },
+        {
+          "question": "Dentro de `function f(x: string | number[])`, ¿qué comprobación permite llamar a `x.toUpperCase()` sin error?",
+          "options": [
+            "if (x)",
+            "if (x.length)",
+            "if (typeof x === 'string')",
+            "if (x instanceof String)"
+          ],
+          "correctIndex": 2,
+          "explanation": "typeof x === 'string' estrecha a string en esa rama. instanceof String solo detecta objetos String creados con new, no strings normales."
+        },
+        {
+          "question": "Quieres `function primero(lista)` que funcione con productos y citas sin perder el tipo. ¿Firma?",
+          "options": [
+            "(lista: any[]): any",
+            "(lista: unknown): unknown",
+            "(lista: object[]): object",
+            "<T>(lista: T[]): T | undefined"
+          ],
+          "correctIndex": 3,
+          "explanation": "El genérico enlaza el tipo de entrada con el de salida. any y object pierden la información del tipo concreto."
+        },
+        {
+          "question": "Una interfaz tiene `readonly id: number`. ¿Qué evita?",
+          "options": [
+            "Reasignar `cita.id = 5` después de crear el objeto",
+            "Que id sea un número negativo",
+            "Que el servidor mande un id string",
+            "Que id se muestre en pantalla"
+          ],
+          "correctIndex": 0,
+          "explanation": "readonly bloquea la reasignación en el código que compila. No valida rangos ni lo que llega en ejecución."
+        },
+        {
+          "question": "En `type Carga = { estado: 'ok'; datos: string[] } | { estado: 'error'; mensaje: string }`, ¿cómo lees `datos` sin error?",
+          "options": [
+            "c.datos directamente",
+            "if (c.estado === 'ok') c.datos",
+            "if (c) c.datos",
+            "(c as any).datos"
+          ],
+          "correctIndex": 1,
+          "explanation": "Comprobar el discriminante estrecha a la variante 'ok'. El cast a any compila pero apaga justo la protección que querías."
+        }
+      ]
+    },
+    "js-m6": {
+      "emoji": "🏆",
+      "exam": [
+        {
+          "question": "`for (const a of lista) for (const b of lista) if (a.id === b.idPadre) ...`. ¿Complejidad con n elementos?",
+          "options": [
+            "O(n)",
+            "O(n²)",
+            "O(n log n)",
+            "O(1)"
+          ],
+          "correctIndex": 1,
+          "explanation": "Dos bucles anidados sobre la misma lista: n × n. Con un Map de id a elemento bajaría a O(n)."
+        },
+        {
+          "question": "Debes contar cuántas veces aparece cada SKU en 1 millón de ventas. ¿Mejor enfoque?",
+          "options": [
+            "Para cada SKU, filter sobre todas las ventas",
+            "Ordenar y comparar todos los pares",
+            "Una pasada con un Map sku → contador",
+            "Recursión sobre la lista"
+          ],
+          "correctIndex": 2,
+          "explanation": "Una pasada con Map es O(n). Hacer filter por cada SKU distinto es O(n × k), lentísimo con muchos SKU."
+        },
+        {
+          "question": "Dos punteros para encontrar un par que sume X funciona correctamente cuando…",
+          "options": [
+            "Siempre, en cualquier lista",
+            "La lista tiene números negativos",
+            "La lista tiene menos de 100 elementos",
+            "La lista está ordenada"
+          ],
+          "correctIndex": 3,
+          "explanation": "Mover un puntero solo tiene sentido si sabes que la suma sube o baja, y eso requiere orden. Sin orden, usa un Map."
+        },
+        {
+          "question": "Tu solución pasa de O(n²) a O(n) usando un Set. ¿Qué debes mencionar en la entrevista?",
+          "options": [
+            "Que usa O(n) de memoria extra a cambio de velocidad",
+            "Nada más, es estrictamente mejor",
+            "Que ahora es O(1)",
+            "Que Set ordena los datos"
+          ],
+          "correctIndex": 0,
+          "explanation": "Cambiaste espacio por tiempo. Decirlo muestra criterio: con poca memoria o n pequeño, la versión simple puede bastar."
+        },
+        {
+          "question": "¿Cuál función recursiva tiene un caso base correcto para recorrer categorías?",
+          "options": [
+            "const c = (n) => c(n.hijos[0])",
+            "const c = (n) => 1 + n.hijos.reduce((s, h) => s + c(h), 0)",
+            "const c = (n) => 1 + c(n)",
+            "const c = (n) => n.hijos.map(c).length + c(n)"
+          ],
+          "correctIndex": 1,
+          "explanation": "Cuando hijos está vacío, reduce devuelve 0 sin llamar a c: ese es el caso base implícito. Las otras se llaman sin achicar el problema."
+        },
+        {
+          "question": "fib(n) recursivo puro es O(2ⁿ). Con memo es O(n). ¿Qué cambia exactamente?",
+          "options": [
+            "Se quita la recursión",
+            "Se usa un caso base distinto",
+            "Cada subresultado se calcula una vez y se reutiliza",
+            "Se ordena la entrada"
+          ],
+          "correctIndex": 2,
+          "explanation": "La memoización guarda fib(k) la primera vez. Las siguientes llamadas lo leen del Map en O(1) en lugar de recalcular el subárbol."
+        },
+        {
+          "question": "`clientes.filter(c => vips.includes(c.id))` con n clientes y m vips. ¿Complejidad?",
+          "options": [
+            "O(n)",
+            "O(m)",
+            "O(n + m)",
+            "O(n × m)"
+          ],
+          "correctIndex": 3,
+          "explanation": "includes recorre vips en cada cliente. Con new Set(vips) y has, pasa a O(n + m)."
+        }
+      ]
+    }
+  }
+}

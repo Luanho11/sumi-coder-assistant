@@ -1,0 +1,757 @@
+{
+  "trackId": "python",
+  "lessons": {
+    "ses-python-1-1": {
+      "emoji": "🐍",
+      "summary": "Eliges la colección justa, recorres datos con for y comprehensions y escribes funciones claras.",
+      "analogy": "Las colecciones son cajones de cocina: la tupla es el especiero sellado, la lista el cajón que reordenas y el dict el frasco con etiqueta.",
+      "learned": [
+        "🗂️ Puedes elegir dónde guardar cada dato según si va a cambiar o no",
+        "🔁 Sabes recorrer una lista de cosas y quedarte solo con las que te sirven en una línea",
+        "🧮 Puedes convertir una fórmula de la vida real en una función que otros reutilicen"
+      ],
+      "check": [
+        {
+          "question": "Guardas las coordenadas fijas de una tienda y quieres usarlas como clave de un dict. ¿Qué tipo eliges?",
+          "options": [
+            "list: [lat, lon]",
+            "tuple: (lat, lon)",
+            "set: {lat, lon}",
+            "dict: {\"lat\": .., \"lon\": ..}"
+          ],
+          "correctIndex": 1,
+          "explanation": "La tupla es inmutable y por eso sirve como clave. La lista y el dict cambian y Python los rechaza como clave; el set pierde el orden lat/lon."
+        },
+        {
+          "question": "nums = [1, 2, 3, 4, 5]. ¿Qué devuelve [x * 10 for x in nums if x % 2 == 0]?",
+          "options": [
+            "[20, 40]",
+            "[10, 30, 50]",
+            "[2, 4]",
+            "[10, 20, 30, 40, 50]"
+          ],
+          "correctIndex": 0,
+          "explanation": "El if filtra primero los pares (2 y 4) y luego se multiplican por 10. [10, 30, 50] sale si confundes par con impar; [2, 4] si olvidas la transformación."
+        }
+      ],
+      "diagram": "flowchart TD\n  A{¿El dato cambia?}:::azul -->|No| T[tuple]:::verde\n  A -->|Sí| B{¿Clave y valor?}:::azul\n  B -->|Sí| D[dict]:::naranja\n  B -->|No| C{¿Sin duplicados?}:::azul\n  C -->|Sí| S[set]:::morado\n  C -->|No| Li[list]:::cian\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n  classDef naranja fill:#FF9F0A,stroke:#FF9F0A,color:#fff\n  classDef morado fill:#BF5AF2,stroke:#BF5AF2,color:#fff\n  classDef cian fill:#64D2FF,stroke:#64D2FF,color:#1d1d1f"
+    },
+    "ses-python-1-2": {
+      "emoji": "🧱",
+      "summary": "Creas clases con validación, heredas comportamiento y haces que tus objetos se usen como los de Python.",
+      "analogy": "Una clase es el molde de galletas: cada galleta (objeto) sale con la misma forma, pero cada una lleva su propio relleno.",
+      "learned": [
+        "🍪 Puedes describir una cosa del mundo real como un molde del que salen muchas copias",
+        "🚧 Sabes poner una barrera para que nadie guarde un valor imposible, como stock negativo",
+        "🪄 Puedes hacer que tus propias cosas respondan a len, in y + como si fueran nativas"
+      ],
+      "check": [
+        {
+          "question": "Producto tiene @property stock con un setter que lanza ValueError si el valor es negativo. ¿Qué pasa con p.stock = -3?",
+          "options": [
+            "Se guarda -3 en _stock",
+            "Python crea un atributo stock nuevo y salta la property",
+            "El setter lanza ValueError y _stock no cambia",
+            "Se guarda 0 en silencio"
+          ],
+          "correctIndex": 2,
+          "explanation": "Asignar a una property ejecuta su setter, y el setter valida antes de guardar. Muchos creen que asignar salta la validación, pero esa es justo la razón de usar @property."
+        },
+        {
+          "question": "Tienes @dataclass class Punto con x: int y y: int. ¿Qué da Punto(1, 2) == Punto(1, 2)?",
+          "options": [
+            "False: son dos objetos distintos en memoria",
+            "Error: falta escribir __eq__ a mano",
+            "True solo si usas is en vez de ==",
+            "True: dataclass genera __eq__ que compara los campos"
+          ],
+          "correctIndex": 3,
+          "explanation": "dataclass escribe __init__, __repr__ y __eq__ por ti, y __eq__ compara campo a campo. Sin dataclass sí daría False, porque compararía identidad."
+        }
+      ]
+    },
+    "ses-python-2-1": {
+      "emoji": "🎁",
+      "summary": "Envuelves funciones con decoradores, procesas archivos gigantes con generadores y cierras recursos con with.",
+      "analogy": "Un generador es una máquina de helados suave: sirve un cono cuando lo pides, en vez de llenar el congelador con mil conos de golpe.",
+      "learned": [
+        "🎀 Puedes añadir un cronómetro o reintentos a cualquier tarea sin tocar la tarea",
+        "🍦 Sabes procesar un archivo enorme pedazo a pedazo sin que la compu se ahogue",
+        "🚪 Puedes garantizar que algo se cierre o se limpie aunque el proceso falle a la mitad"
+      ],
+      "check": [
+        {
+          "question": "Escribes un decorador sin @wraps(func). ¿Qué notas al imprimir procesar_datos.__name__?",
+          "options": [
+            "Muestra 'wrapper' en vez de 'procesar_datos'",
+            "La función deja de ejecutarse",
+            "Lanza AttributeError",
+            "Muestra 'medir_tiempo'"
+          ],
+          "correctIndex": 0,
+          "explanation": "@wraps copia nombre y docstring de la función original al wrapper. Sin él, la función decorada ES el wrapper, así que logs y depuración muestran el nombre equivocado."
+        },
+        {
+          "question": "Tienes un log de 8 GB y quieres contar las líneas con ERROR sin llenar la memoria. ¿Qué haces?",
+          "options": [
+            "f.readlines() y luego filtrar la lista",
+            "f.read().split('\\n') y contar",
+            "Recorrer el archivo con for dentro de with, con un generador que suma",
+            "Guardar todas las líneas en una lista y usar len()"
+          ],
+          "correctIndex": 2,
+          "explanation": "Iterar el archivo entrega una línea a la vez (perezoso). readlines() y read() cargan los 8 GB completos en memoria antes de empezar a contar."
+        }
+      ],
+      "diagram": "flowchart LR\n  A[Archivo de logs]:::azul --> B[Filtrar errores]:::cian\n  B --> C[Parsear campos]:::cian\n  C --> D[Agrupar por código]:::cian\n  D --> E[Reporte]:::verde\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n  classDef cian fill:#64D2FF,stroke:#64D2FF,color:#1d1d1f"
+    },
+    "ses-python-2-2": {
+      "emoji": "📂",
+      "summary": "Lees y escribes texto, CSV y JSON sin sorpresas y manejas errores sin esconderlos.",
+      "analogy": "try/except es el airbag del coche: no evita el choque, pero decide qué pasa cuando ocurre y deja registro del golpe.",
+      "learned": [
+        "📄 Puedes pasar datos de una hoja de cálculo a otro formato sin perder filas",
+        "🧯 Sabes reaccionar distinto si un archivo falta o si viene dañado",
+        "📝 Puedes dejar un registro con fecha de lo que hizo tu programa para revisarlo después"
+      ],
+      "check": [
+        {
+          "question": "Escribes un CSV en Windows y aparece una línea en blanco entre cada fila. ¿Qué olvidaste?",
+          "options": [
+            "Pasar encoding='utf-8'",
+            "Llamar a writer.writeheader()",
+            "Abrir en modo 'a' en vez de 'w'",
+            "Pasar newline='' a open()"
+          ],
+          "correctIndex": 3,
+          "explanation": "En Windows el módulo csv ya escribe su propio salto de línea; sin newline='' Python añade otro. El encoding afecta tildes, no líneas en blanco."
+        },
+        {
+          "question": "Quieres que procesar(datos) corra solo si json.load no falló, sin que el except de JSON atrape errores de procesar. ¿Dónde va?",
+          "options": [
+            "En el bloque else",
+            "Dentro del try, después de json.load",
+            "En el bloque finally",
+            "Después de un except Exception genérico"
+          ],
+          "correctIndex": 0,
+          "explanation": "else corre solo si el try no lanzó nada y sus errores no los captura ese except. Dentro del try, un fallo de procesar se confundiría con un JSON inválido."
+        }
+      ]
+    },
+    "ses-python-3-1": {
+      "emoji": "🛎️",
+      "summary": "Armas una API en Flask con blueprints, modelos, validación y errores que el cliente entiende.",
+      "analogy": "Flask es la recepción de un hotel: el blueprint es cada mostrador, el schema revisa el pasaporte y el modelo es el libro de registro.",
+      "learned": [
+        "🏨 Puedes ordenar un servicio web por secciones para que no sea un archivo gigante",
+        "🛂 Sabes rechazar datos mal escritos con un mensaje claro antes de guardarlos",
+        "📑 Puedes entregar una lista larga por páginas para que cargue rápido"
+      ],
+      "check": [
+        {
+          "question": "GET /api/productos?page=abc con request.args.get('page', 1, type=int). ¿Qué valor recibe page?",
+          "options": [
+            "1, porque la conversión falla y usa el valor por defecto",
+            "'abc' como texto",
+            "Lanza ValueError y responde 500",
+            "None"
+          ],
+          "correctIndex": 0,
+          "explanation": "Con type=int, si la conversión falla, Flask devuelve el valor por defecto en vez de reventar. Por eso no hace falta un try alrededor."
+        },
+        {
+          "question": "Un cliente manda precio: 'gratis' y Marshmallow lanza ValidationError. ¿Qué debería responder tu handler?",
+          "options": [
+            "500 Error interno",
+            "400 con los detalles de qué campo falló",
+            "404 Recurso no encontrado",
+            "200 con un campo error en el cuerpo"
+          ],
+          "correctIndex": 1,
+          "explanation": "El fallo es del cliente (dato inválido), así que va un 4xx, y 400 con detalles le dice qué corregir. 500 culparía al servidor; 200 engaña a quien solo mira el código."
+        }
+      ],
+      "diagram": "flowchart LR\n  R[Petición]:::azul --> B[Ruta del blueprint]:::cian\n  B --> S{Schema valida}:::amarillo\n  S -->|OK| M[Modelo SQLAlchemy]:::verde\n  M --> DB[(Base de datos)]:::morado\n  S -->|Inválido| E[400 con detalles]:::rosa\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n  classDef rosa fill:#FF375F,stroke:#FF375F,color:#fff\n  classDef morado fill:#BF5AF2,stroke:#BF5AF2,color:#fff\n  classDef cian fill:#64D2FF,stroke:#64D2FF,color:#1d1d1f\n  classDef amarillo fill:#FFD60A,stroke:#FFD60A,color:#1d1d1f"
+    },
+    "ses-python-3-2": {
+      "emoji": "🧪",
+      "summary": "Pruebas tu API con pytest, la documentas con Swagger y la empaquetas con Docker y Gunicorn.",
+      "analogy": "Una fixture es el mise en place del chef: antes de cada plato deja la mesa limpia y los ingredientes medidos, y al final lava todo.",
+      "learned": [
+        "🧽 Puedes preparar un escenario limpio antes de cada prueba y borrarlo al terminar",
+        "📘 Sabes generar un manual navegable de tu servicio a partir del propio código",
+        "📦 Puedes empacar tu programa para que funcione igual en tu compu y en un servidor"
+      ],
+      "check": [
+        {
+          "question": "Tu fixture app usa sqlite:///:memory: y drop_all() tras el yield. ¿Qué ganas?",
+          "options": [
+            "Los tests corren contra PostgreSQL de producción",
+            "Los datos se comparten entre tests para ahorrar tiempo",
+            "Swagger se genera automáticamente",
+            "Cada test empieza con una base limpia y no toca datos reales"
+          ],
+          "correctIndex": 3,
+          "explanation": "Una base en memoria nace y muere con cada test, así ninguno depende de lo que dejó otro. Compartir datos entre tests es justo lo que vuelve una suite impredecible."
+        },
+        {
+          "question": "Tu docker-compose usa POSTGRES_PASSWORD: ${DB_PASSWORD}. ¿Por qué no escribir la contraseña directo?",
+          "options": [
+            "Porque Docker no acepta texto plano",
+            "Para que Gunicorn arranque más rápido",
+            "Para que el secreto viva en un .env fuera del repo y cambie por entorno",
+            "Porque PostgreSQL exige variables"
+          ],
+          "correctIndex": 2,
+          "explanation": "Docker acepta el valor literal, pero quedaría en git para siempre. Con la variable, cada entorno pone su propia clave y el repo no guarda secretos."
+        }
+      ]
+    },
+    "ses-python-4-1": {
+      "emoji": "👪",
+      "summary": "Diseñas jerarquías de clases donde cada hija responde a su manera, y lo explicas en una entrevista.",
+      "analogy": "El polimorfismo es el botón \"reproducir\": en Spotify suena música y en Netflix una serie, pero tú presionas el mismo botón.",
+      "learned": [
+        "🎛️ Puedes pedir lo mismo a cosas distintas y que cada una responda a su manera",
+        "🏛️ Sabes explicar en una entrevista los cuatro pilares con ejemplos propios",
+        "🧩 Puedes sumar un tipo nuevo de empleado sin reescribir lo que ya funcionaba"
+      ],
+      "check": [
+        {
+          "question": "EmpleadoFijo y EmpleadoPorHora implementan calcular_salario(). Un bucle llama e.calcular_salario() sin mirar el tipo. ¿Qué pilar es?",
+          "options": [
+            "Encapsulamiento",
+            "Polimorfismo",
+            "Herencia",
+            "Abstracción"
+          ],
+          "correctIndex": 1,
+          "explanation": "Mismo mensaje, distinto comportamiento según el objeto: eso es polimorfismo. La herencia hace posible compartir la base, pero no explica que cada uno calcule distinto."
+        },
+        {
+          "question": "Defines __str__ pero no __repr__ en Producto. ¿Qué ves al hacer print([p1, p2])?",
+          "options": [
+            "Algo como [<Producto object at 0x...>, ...]",
+            "El texto de __str__ de cada producto",
+            "Error: falta __repr__",
+            "Una lista vacía"
+          ],
+          "correctIndex": 0,
+          "explanation": "Una lista muestra a sus elementos con __repr__, no con __str__. Por eso conviene definir __repr__ siempre: es lo que ves al depurar."
+        }
+      ],
+      "diagram": "flowchart TD\n  E[Empleado]:::azul --> F[EmpleadoFijo]:::verde\n  E --> H[EmpleadoPorHora]:::verde\n  F --> C1[calcular_salario: mensual]:::naranja\n  H --> C2[calcular_salario: tarifa x horas]:::naranja\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n  classDef naranja fill:#FF9F0A,stroke:#FF9F0A,color:#fff"
+    },
+    "ses-python-5-1": {
+      "emoji": "🧯",
+      "summary": "Abres archivos siempre con with y conviertes los fallos en mensajes útiles con tus propias excepciones.",
+      "analogy": "with es la puerta de un refrigerador con cierre automático: aunque salgas corriendo con las manos llenas, se cierra sola.",
+      "learned": [
+        "🚪 Puedes trabajar con archivos sin dejar ninguno abierto aunque algo salga mal",
+        "🎯 Sabes ponerle nombre propio a un error de tu negocio para atraparlo aparte",
+        "🧹 Puedes asegurar que un paso de limpieza ocurra pase lo que pase"
+      ],
+      "check": [
+        {
+          "question": "f = open('datos.csv'); filas = procesar(f); f.close(). Si procesar lanza ValueError, ¿qué pasa con el archivo?",
+          "options": [
+            "Python lo cierra en el acto al lanzar el error",
+            "El ValueError se ignora y sigue",
+            "Queda abierto, porque f.close() nunca se ejecuta",
+            "close() corre igual porque está en la siguiente línea"
+          ],
+          "correctIndex": 2,
+          "explanation": "La excepción salta las líneas siguientes, incluido close(). with llama a __exit__ aunque haya error, por eso la lección insiste en usarlo siempre."
+        },
+        {
+          "question": "Necesitas que 'Conexión cerrada' se imprima siempre, falle o no la división. ¿En qué bloque va?",
+          "options": [
+            "finally",
+            "else",
+            "except ZeroDivisionError",
+            "Después del try, sin bloque"
+          ],
+          "correctIndex": 0,
+          "explanation": "finally corre con éxito, con error atrapado y hasta con error no atrapado. else solo corre si no hubo error; después del try no llega si la excepción sube."
+        }
+      ],
+      "diagram": "flowchart LR\n  T[try]:::azul -->|sin error| E[else]:::verde\n  T -->|error| X[except]:::rosa\n  E --> F[finally siempre]:::morado\n  X --> F\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n  classDef rosa fill:#FF375F,stroke:#FF375F,color:#fff\n  classDef morado fill:#BF5AF2,stroke:#BF5AF2,color:#fff"
+    },
+    "ses-python-6-1": {
+      "emoji": "📐",
+      "summary": "Planeas la API del blog: carpetas, rutas REST, códigos HTTP y modelos con sus relaciones.",
+      "analogy": "Diseñar antes de programar es hacer el plano de la casa: decides dónde van baño y cocina antes de levantar paredes.",
+      "learned": [
+        "🗺️ Puedes dibujar el mapa de un proyecto antes de escribir la primera línea",
+        "🚦 Sabes qué respuesta dar en cada situación: creado, no encontrado o no autorizado",
+        "🔗 Puedes describir cómo se conectan autores, artículos y comentarios"
+      ],
+      "check": [
+        {
+          "question": "Llega PUT /api/posts/7 y el post 7 no existe. ¿Qué código devuelves?",
+          "options": [
+            "400 Bad Request",
+            "500 Internal Server Error",
+            "200 OK con cuerpo vacío",
+            "404 Not Found"
+          ],
+          "correctIndex": 3,
+          "explanation": "El recurso pedido no existe: 404. 400 es para datos mal formados y 500 para fallos del servidor; un 200 vacío haría creer al cliente que se actualizó."
+        },
+        {
+          "question": "¿Dónde pones la regla 'solo el autor puede editar su post' en la estructura de la lección?",
+          "options": [
+            "En models/, junto a las columnas",
+            "En services/, la capa de lógica de negocio",
+            "En schemas/, que serializa",
+            "En config.py"
+          ],
+          "correctIndex": 1,
+          "explanation": "Las reglas del negocio van en services para que la ruta solo traduzca HTTP. El schema valida formato, no permisos; el modelo describe tablas."
+        }
+      ],
+      "diagram": "flowchart LR\n  R[routes]:::azul --> S[services]:::naranja\n  R --> SC[schemas]:::cian\n  S --> M[models]:::verde\n  M --> DB[(Base de datos)]:::morado\n  R -.-> ER[errors]:::rosa\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n  classDef naranja fill:#FF9F0A,stroke:#FF9F0A,color:#fff\n  classDef rosa fill:#FF375F,stroke:#FF375F,color:#fff\n  classDef morado fill:#BF5AF2,stroke:#BF5AF2,color:#fff\n  classDef cian fill:#64D2FF,stroke:#64D2FF,color:#1d1d1f"
+    },
+    "ses-python-6-2": {
+      "emoji": "🚀",
+      "summary": "Cierras el blog con tests, Swagger, Docker y una configuración distinta para desarrollo y producción.",
+      "analogy": "La configuración por entorno es tu ropa: pijama en casa (debug) y uniforme en el trabajo (producción), misma persona.",
+      "learned": [
+        "👕 Puedes cambiar cómo se comporta tu programa en casa y en el trabajo sin reescribirlo",
+        "🔐 Sabes detectar cuándo una clave secreta quedó a la vista de todos",
+        "✅ Puedes demostrar con pruebas que alguien sin permiso no puede publicar"
+      ],
+      "check": [
+        {
+          "question": "En producción olvidas definir SECRET_KEY. Con Config de la lección (os.environ.get('SECRET_KEY', 'dev-key')), ¿qué pasa?",
+          "options": [
+            "Usa 'dev-key', un secreto público: cualquiera podría firmar tokens",
+            "La app no arranca",
+            "Flask genera una clave aleatoria segura",
+            "Usa la clave de DevelopmentConfig cifrada"
+          ],
+          "correctIndex": 0,
+          "explanation": "get con valor por defecto nunca falla, así que arranca con una clave conocida. En producción conviene que falte = error: os.environ[\"SECRET_KEY\"]."
+        },
+        {
+          "question": "Tu test test_crear_post_sin_auth hace POST /api/posts sin token. ¿Qué assert esperas?",
+          "options": [
+            "assert response.status_code == 201",
+            "assert response.status_code == 401",
+            "assert response.status_code == 404",
+            "assert response.status_code == 500"
+          ],
+          "correctIndex": 1,
+          "explanation": "Sin credenciales la respuesta correcta es 401 Unauthorized. Si da 201, tu protección no funciona; 404 o 500 indican que la ruta o el manejo de errores fallan."
+        }
+      ]
+    }
+  },
+  "modules": {
+    "mod-python-1": {
+      "emoji": "🌱",
+      "exam": [
+        {
+          "question": "def agregar(item, lista=[]): lista.append(item); return lista. Llamas agregar(1) y luego agregar(2). ¿Qué devuelve la segunda?",
+          "options": [
+            "[1, 2]",
+            "[2]",
+            "[1]",
+            "TypeError"
+          ],
+          "correctIndex": 0,
+          "explanation": "El valor por defecto se crea una sola vez al definir la función y se reutiliza. Por eso se usa lista=None y se crea dentro."
+        },
+        {
+          "question": "def crear_usuario(nombre, rol='user', activo=True). Llamas crear_usuario('Ana', activo=False). ¿Qué rol queda?",
+          "options": [
+            "False",
+            "None",
+            "'user'",
+            "Error porque falta rol"
+          ],
+          "correctIndex": 2,
+          "explanation": "Al nombrar activo=False, rol conserva su valor por defecto. False iría a rol solo si lo pasaras por posición en segundo lugar."
+        },
+        {
+          "question": "Gerente.bonificacion() devuelve super().bonificacion() + equipo * 500. Salario 10000, equipo 3, base 10 %. ¿Resultado?",
+          "options": [
+            "1500",
+            "11500",
+            "1000",
+            "2500"
+          ],
+          "correctIndex": 3,
+          "explanation": "La base da 10000 × 0.1 = 1000 y el gerente suma 3 × 500 = 1500: total 2500. 1500 sale si olvidas llamar a super()."
+        },
+        {
+          "question": "Forma hereda de ABC y tiene area() con @abstractmethod. Escribes Forma(). ¿Qué pasa?",
+          "options": [
+            "Crea el objeto y area() devuelve None",
+            "TypeError: no se puede instanciar una clase abstracta",
+            "Funciona hasta que llamas a area()",
+            "SyntaxError al definir la clase"
+          ],
+          "correctIndex": 1,
+          "explanation": "Python bloquea la creación en el momento, no al llamar al método. Así te enteras pronto de que falta implementar algo."
+        },
+        {
+          "question": "Tu Cesta define __len__ y __contains__, nada más. ¿Qué funciona ahora?",
+          "options": [
+            "len(cesta) y 'pan' in cesta",
+            "cesta * 2",
+            "cesta == otra compara los items",
+            "for x in cesta sin __iter__ ni __getitem__"
+          ],
+          "correctIndex": 0,
+          "explanation": "Cada dunder habilita un operador concreto: __len__ para len y __contains__ para in. Multiplicar o iterar necesita sus propios métodos."
+        },
+        {
+          "question": "match nivel con case 1, case 2 y case _. Si nivel = 7, ¿qué se ejecuta?",
+          "options": [
+            "Nada: match no tiene caso por defecto",
+            "Lanza MatchError",
+            "El bloque de case _",
+            "El bloque de case 1"
+          ],
+          "correctIndex": 2,
+          "explanation": "case _ atrapa cualquier valor que no coincidió antes, como el default de otros lenguajes. Python no lanza error si nada coincide."
+        }
+      ]
+    },
+    "mod-python-2": {
+      "emoji": "🧰",
+      "exam": [
+        {
+          "question": "Quieres usar @reintentar(max_intentos=3). ¿Cuántas funciones anidadas necesita el decorador?",
+          "options": [
+            "Dos: decorador y wrapper",
+            "Una sola con *args",
+            "Tres: la que recibe los argumentos, el decorador y el wrapper",
+            "Cuatro, una por intento más el wrapper"
+          ],
+          "correctIndex": 2,
+          "explanation": "reintentar(3) debe devolver un decorador, que a su vez devuelve el wrapper. Con solo dos niveles, max_intentos ocuparía el lugar de la función."
+        },
+        {
+          "question": "gen = fibonacci(5); list(gen); list(gen). ¿Qué devuelve el segundo list(gen)?",
+          "options": [
+            "[]",
+            "[0, 1, 1, 2, 3] otra vez",
+            "Lanza StopIteration",
+            "[0]"
+          ],
+          "correctIndex": 0,
+          "explanation": "Un generador se agota tras recorrerlo una vez. list() maneja StopIteration por dentro, así que solo ves una lista vacía."
+        },
+        {
+          "question": "cronometro usa @contextmanager con try: yield / finally: print. Si el bloque with lanza error, ¿se imprime el tiempo?",
+          "options": [
+            "No, el error corta todo",
+            "Sí, porque el print está en finally",
+            "Solo si atrapas el error dentro del with",
+            "Se imprime dos veces"
+          ],
+          "correctIndex": 1,
+          "explanation": "El error del bloque with se relanza en el yield, y finally corre antes de que siga subiendo. Sin try/finally, el print se perdería."
+        },
+        {
+          "question": "except Exception as e: logging.exception(\"...\"); raise. ¿Para qué el raise final?",
+          "options": [
+            "Reintentar la operación",
+            "Convertirlo en ValueError",
+            "logging lo exige después de exception()",
+            "Registrar el error sin esconderlo: sigue subiendo al llamador"
+          ],
+          "correctIndex": 3,
+          "explanation": "raise sin argumentos relanza la misma excepción con su traza. Tragarse el error deja al llamador creyendo que todo salió bien."
+        },
+        {
+          "question": "raise DatosCorruptosError('data.json') from e. ¿Qué aporta from e?",
+          "options": [
+            "Guarda el JSONDecodeError original como causa en la traza",
+            "Silencia el error original",
+            "Copia el mensaje de e en el nuevo",
+            "Reintenta el json.load"
+          ],
+          "correctIndex": 0,
+          "explanation": "from encadena la causa: la traza muestra ambos errores. Así das un nombre de negocio sin perder el detalle técnico para depurar."
+        },
+        {
+          "question": "Lees con csv.DictReader y fila['edad'] + 1 lanza TypeError. ¿Por qué?",
+          "options": [
+            "edad viene como None",
+            "DictReader entrega todo como texto: edad es '30' y hay que usar int()",
+            "Las claves se guardan en mayúsculas",
+            "DictReader devuelve tuplas, no dicts"
+          ],
+          "correctIndex": 1,
+          "explanation": "CSV no guarda tipos, así que cada celda llega como str. Sumar str + int lanza TypeError; por eso se valida y convierte cada fila."
+        }
+      ]
+    },
+    "mod-python-3": {
+      "emoji": "🌐",
+      "exam": [
+        {
+          "question": "¿Por qué la lección usa create_app() en vez de app = Flask(__name__) global?",
+          "options": [
+            "Flask lo exige desde la versión 2",
+            "Hace la app más rápida en producción",
+            "Para crear apps con configuraciones distintas, como una de test con SQLite en memoria",
+            "Evita tener que registrar blueprints"
+          ],
+          "correctIndex": 2,
+          "explanation": "La fábrica crea una app nueva por llamada con la configuración que le des. Las fixtures de pytest la usan para levantar una app aislada por test."
+        },
+        {
+          "question": "Defines productos_schema = ProductoSchema(many=True). ¿Cuándo lo usas?",
+          "options": [
+            "Para convertir una lista de productos a JSON, como en listar()",
+            "Para validar un solo producto",
+            "Para crear la tabla en la base",
+            "Para paginar automáticamente"
+          ],
+          "correctIndex": 0,
+          "explanation": "many=True indica que dump recibe una colección. Para un solo producto usas producto_schema; crear tablas es tarea de SQLAlchemy."
+        },
+        {
+          "question": "Con paginate(page=3, per_page=10), ¿qué productos recibe el cliente?",
+          "options": [
+            "Del 30 al 40",
+            "Del 3 al 13",
+            "Los primeros 30",
+            "Del 21 al 30"
+          ],
+          "correctIndex": 3,
+          "explanation": "Página 1 = 1-10, página 2 = 11-20, página 3 = 21-30. El error típico es multiplicar page × per_page como punto de inicio."
+        },
+        {
+          "question": "@app.errorhandler(Exception) responde {'error': 'Error interno'} sin detalles. ¿Por qué?",
+          "options": [
+            "Flask no puede leer el mensaje del error",
+            "Para no mostrar trazas internas al cliente; el detalle va al log",
+            "Para que el cliente reintente",
+            "JSON no admite tracebacks"
+          ],
+          "correctIndex": 1,
+          "explanation": "Una traza revela rutas, versiones y consultas a un atacante. logger.exception guarda el detalle para ti y el cliente recibe un 500 genérico."
+        },
+        {
+          "question": "El Dockerfile arranca gunicorn -w 4 -b 0.0.0.0:5000 run:app. ¿Qué es -w 4?",
+          "options": [
+            "4 procesos trabajadores atendiendo peticiones en paralelo",
+            "4 segundos de timeout",
+            "La versión 4 de WSGI",
+            "4 contenedores de la app"
+          ],
+          "correctIndex": 0,
+          "explanation": "-w define cuántos workers lanza Gunicorn. El servidor de desarrollo de Flask atiende de forma limitada; por eso producción usa Gunicorn."
+        },
+        {
+          "question": "La fixture auth_headers recibe client como parámetro. ¿Qué hace pytest?",
+          "options": [
+            "Ejecuta las fixtures en orden alfabético",
+            "Lanza error: una fixture no puede depender de otra",
+            "Crea primero client (y app) y lo inyecta en auth_headers",
+            "Reusa un solo token para toda la suite"
+          ],
+          "correctIndex": 2,
+          "explanation": "pytest resuelve dependencias por nombre de parámetro. Su alcance por defecto es por test, así que cada test obtiene su propio login."
+        }
+      ]
+    },
+    "mod-python-4": {
+      "emoji": "🏛️",
+      "exam": [
+        {
+          "question": "Moto hereda de Vehiculo(ABC) pero olvida implementar calcular_consumo. ¿Cuándo falla?",
+          "options": [
+            "Al hacer Moto(), con TypeError",
+            "Al llamar a calcular_consumo()",
+            "Nunca: devuelve None",
+            "Al importar el módulo"
+          ],
+          "correctIndex": 0,
+          "explanation": "Una clase con métodos abstractos sin implementar no se puede instanciar. El error sale al crear el objeto, no al usar el método."
+        },
+        {
+          "question": "Un atributo se llama _saldo. ¿Qué impide Python?",
+          "options": [
+            "El acceso desde fuera de la clase",
+            "Que las hijas lo hereden",
+            "Modificarlo incluso dentro de la clase",
+            "Nada: es una convención que dice 'no lo toques desde fuera'"
+          ],
+          "correctIndex": 3,
+          "explanation": "Python no tiene private real; el guion bajo es un acuerdo entre personas. El encapsulamiento se refuerza con @property para validar."
+        },
+        {
+          "question": "Quieres que p1 == p2 compare nombre y precio en vez de identidad. ¿Qué método defines?",
+          "options": [
+            "__str__",
+            "__eq__",
+            "__init__",
+            "__repr__"
+          ],
+          "correctIndex": 1,
+          "explanation": "== llama a __eq__; sin él compara si son el mismo objeto. __str__ y __repr__ solo cambian cómo se muestra el objeto."
+        },
+        {
+          "question": "CocheElectrico hereda de Coche y de Electrico. ¿Qué permite Python?",
+          "options": [
+            "Solo una clase base por clase",
+            "Copiar a mano los métodos de Electrico",
+            "Herencia múltiple: reutiliza Coche y cumple la interfaz Electrico",
+            "Usar composición de forma obligatoria"
+          ],
+          "correctIndex": 2,
+          "explanation": "Python admite varias bases y resuelve el orden con el MRO. Usar una clase abstracta como interfaz es un patrón común para esto."
+        },
+        {
+          "question": "Tu código usa if tipo == 'fijo' ... elif tipo == 'hora'. Llega EmpleadoComision. ¿Qué ganas con polimorfismo?",
+          "options": [
+            "Creas la clase nueva con su calcular_salario sin tocar el bucle",
+            "Nada, igual hay que añadir otro elif",
+            "El código corre más rápido",
+            "Python detecta solo el tipo nuevo sin clase"
+          ],
+          "correctIndex": 0,
+          "explanation": "Abierto a extensión, cerrado a modificación (la O de SOLID): agregas una clase en vez de editar el if. Cada elif nuevo es un lugar más donde equivocarse."
+        }
+      ]
+    },
+    "mod-python-5": {
+      "emoji": "🗄️",
+      "exam": [
+        {
+          "question": "Creas class SaldoInsuficiente(Exception). ¿Qué ganas frente a lanzar ValueError?",
+          "options": [
+            "Python la ejecuta más rápido",
+            "El llamador puede atrapar justo ese caso sin atrapar otros errores de valor",
+            "No necesita try/except",
+            "Se registra sola en el log"
+          ],
+          "correctIndex": 1,
+          "explanation": "Un nombre propio permite except SaldoInsuficiente: y reaccionar distinto. Con ValueError mezclarías saldo bajo con un número mal escrito."
+        },
+        {
+          "question": "Pones except Exception antes de except ZeroDivisionError. ¿Qué pasa con 1 / 0?",
+          "options": [
+            "Lo atrapa ZeroDivisionError por ser más específico",
+            "Corren ambos bloques",
+            "Lo atrapa except Exception y el segundo nunca corre",
+            "Python lanza SyntaxError"
+          ],
+          "correctIndex": 2,
+          "explanation": "Python prueba los except en orden y usa el primero que coincide. Por eso van del más específico al más general."
+        },
+        {
+          "question": "Tu clase DatabaseConnection tiene __exit__ que devuelve True. Hay un error dentro del with. ¿Qué pasa?",
+          "options": [
+            "El error se suprime y el código sigue después del with",
+            "El error sube igual",
+            "La conexión no se cierra",
+            "Se reintenta el bloque"
+          ],
+          "correctIndex": 0,
+          "explanation": "Si __exit__ devuelve True, Python considera manejada la excepción. Útil a veces, peligroso si escondes fallos sin querer."
+        },
+        {
+          "question": "Guardas {'nombre': 'Ñandú'} con json.dump y el archivo muestra \\u00d1and\\u00fa. ¿Cómo dejarlo legible?",
+          "options": [
+            "Usar csv en vez de json",
+            "Abrir el archivo en modo 'rb'",
+            "Pasar indent=2",
+            "json.dump(datos, f, ensure_ascii=False) abriendo con encoding='utf-8'"
+          ],
+          "correctIndex": 3,
+          "explanation": "Por defecto json escapa todo lo que no es ASCII. ensure_ascii=False escribe la Ñ tal cual, y utf-8 evita que Windows use otra codificación."
+        },
+        {
+          "question": "exportar_datos(datos, 'xml', ruta) y tu dict de funciones solo tiene json, csv y yaml. ¿Qué haces?",
+          "options": [
+            "Devolver None en silencio",
+            "Lanzar ValueError indicando los formatos soportados",
+            "Exportar a JSON sin avisar",
+            "Atrapar el KeyError y seguir"
+          ],
+          "correctIndex": 1,
+          "explanation": "Fallar con un mensaje claro le dice al llamador qué corregir. Exportar otro formato o devolver None genera un archivo que nadie esperaba."
+        }
+      ]
+    },
+    "mod-python-6": {
+      "emoji": "📝",
+      "exam": [
+        {
+          "question": "Post y Tag tienen relación muchos a muchos. ¿Qué necesita SQLAlchemy?",
+          "options": [
+            "Una tabla intermedia, como post_tags, con las dos llaves foráneas",
+            "Una columna tags con una lista dentro de Post",
+            "Una ForeignKey en Post y otra en Tag",
+            "Nada: relationship lo resuelve sin tabla extra"
+          ],
+          "correctIndex": 0,
+          "explanation": "Una base relacional no guarda listas en una celda; la tabla intermedia une pares post-tag. relationship usa secondary= para apuntarla."
+        },
+        {
+          "question": "POST /api/posts crea el post sin problemas. ¿Qué respondes?",
+          "options": [
+            "200 OK sin cuerpo",
+            "204 No Content",
+            "201 Created con el post creado",
+            "302 Found"
+          ],
+          "correctIndex": 2,
+          "explanation": "201 indica que nació un recurso, y devolverlo ahorra otra petición al cliente. 204 significa éxito sin contenido, útil en DELETE."
+        },
+        {
+          "question": "User guarda password_hash en vez de password. ¿Qué ganas?",
+          "options": [
+            "Los logins son más rápidos",
+            "Puedes mostrar la contraseña si el usuario la olvida",
+            "Ocupa menos espacio",
+            "Si roban la base, no obtienen las contraseñas reales"
+          ],
+          "correctIndex": 3,
+          "explanation": "El hash no se revierte; al hacer login se hashea lo escrito y se compara. Si pudieras mostrar la contraseña, no sería un hash."
+        },
+        {
+          "question": "Escribes default=datetime.utcnow() con paréntesis en created_at. ¿Qué pasa?",
+          "options": [
+            "Funciona igual que sin paréntesis",
+            "Todos los posts reciben la misma fecha: cuando arrancó la app",
+            "SQLAlchemy lanza error",
+            "La fecha queda vacía"
+          ],
+          "correctIndex": 1,
+          "explanation": "Con paréntesis la función se ejecuta una vez al cargar el módulo. Sin paréntesis pasas la función y se llama en cada inserción."
+        },
+        {
+          "question": "ProductionConfig usa os.environ.get('DATABASE_URL') y la variable no existe en el servidor. ¿Qué obtienes?",
+          "options": [
+            "None, y la app falla al intentar conectarse",
+            "Usa sqlite:///blog.db de desarrollo",
+            "Docker la crea sola",
+            "Un error claro al arrancar que nombra la variable"
+          ],
+          "correctIndex": 0,
+          "explanation": "get devuelve None sin avisar y el error aparece después, más confuso. Validar al arrancar ahorra horas de depuración."
+        },
+        {
+          "question": "En docker-compose tienes los servicios api y db. ¿Cómo encuentra api a la base?",
+          "options": [
+            "Por localhost, porque están en la misma máquina",
+            "Con una IP fija que pones a mano",
+            "Por el nombre del servicio: db es el host en DATABASE_URL",
+            "Por el puerto 5000 de la api"
+          ],
+          "correctIndex": 2,
+          "explanation": "Compose crea una red donde cada servicio se resuelve por su nombre. localhost dentro de un contenedor apunta a él mismo, no a la base."
+        }
+      ]
+    }
+  }
+}

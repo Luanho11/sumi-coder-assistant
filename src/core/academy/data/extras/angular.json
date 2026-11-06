@@ -1,0 +1,627 @@
+{
+  "trackId": "angular",
+  "lessons": {
+    "ses-angular-1-1": {
+      "emoji": "🅰️",
+      "summary": "Construyes componentes Angular y conectas datos entre la clase y la vista en ambas direcciones.",
+      "analogy": "El data binding es un intercomunicador de edificio: {{ }} y [ ] son la voz que baja al portero, ( ) es el timbre que sube, y [( )] es hablar y escuchar a la vez.",
+      "learned": [
+        "📢 Puedes mostrar en pantalla un dato que vive en tu código",
+        "🔔 Haces que un clic avise a tu código para que reaccione",
+        "🤝 Conectas una pieza padre con una hija en ambos sentidos",
+        "🧹 Sabes en qué momento preparar y en cuál limpiar una pieza"
+      ],
+      "check": [
+        {
+          "question": "Quieres deshabilitar un botón mientras se envía el formulario. ¿Qué escribes?",
+          "options": [
+            "<button disabled=\"{{enviando}}\">",
+            "<button (disabled)=\"enviando\">",
+            "<button [(disabled)]=\"enviando\">",
+            "<button [disabled]=\"enviando\">"
+          ],
+          "correctIndex": 3,
+          "explanation": "Property binding [ ] asigna la propiedad real del DOM con un booleano. Con interpolación el atributo existe como texto y el botón queda siempre deshabilitado."
+        },
+        {
+          "question": "Un hijo debe avisar al padre que se eliminó el item 7. ¿Qué usas en el hijo?",
+          "options": [
+            "@Output() itemEliminado = new EventEmitter<number>() y emit(7)",
+            "@Input() itemEliminado",
+            "Modificar el array del padre directamente",
+            "Un ngOnChanges que llame al padre"
+          ],
+          "correctIndex": 0,
+          "explanation": "@Output con EventEmitter es el canal hijo → padre; el padre escucha con (itemEliminado). @Input solo baja datos."
+        }
+      ],
+      "diagram": "flowchart LR\n  C[Clase TS]:::azul -->|\"interpolación y [prop]\"| V[Vista]:::verde\n  V -->|\"(evento)\"| C\n  C <-->|\"[(ngModel)]\"| V2[Input]:::morado\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n  classDef morado fill:#BF5AF2,stroke:#BF5AF2,color:#fff"
+    },
+    "ses-angular-1-2": {
+      "emoji": "🧪",
+      "summary": "Controlas qué aparece en pantalla, formateas datos con pipes y mueves la lógica a servicios compartidos.",
+      "analogy": "Un pipe es la máquina de un cajero: le entra 1234.5 y sale $1,234.50 bien presentado, sin cambiar el dinero que hay en la caja.",
+      "learned": [
+        "🎭 Puedes mostrar u ocultar partes de la pantalla según una condición",
+        "💲 Presentas precios, fechas y porcentajes en un formato legible",
+        "📦 Guardas la lógica compartida en un solo lugar que todos usan",
+        "🔍 Creas tu propio filtro para buscar en una lista"
+      ],
+      "check": [
+        {
+          "question": "Un panel pesado debe dejar de existir (y liberar recursos) cuando se cierra. ¿*ngIf o [hidden]?",
+          "options": [
+            "[hidden], porque es más rápido",
+            "*ngIf, porque quita el elemento del DOM y destruye el componente",
+            "Cualquiera, hacen lo mismo",
+            "[ngStyle] con display none"
+          ],
+          "correctIndex": 1,
+          "explanation": "*ngIf elimina el nodo y llama a ngOnDestroy. [hidden] solo lo oculta con CSS: sigue vivo, con sus suscripciones."
+        },
+        {
+          "question": "Dos componentes inyectan ProductoService con providedIn: \"root\". Uno guarda una lista en el servicio. ¿El otro la ve?",
+          "options": [
+            "No, cada uno recibe su copia",
+            "Solo si son padre e hijo",
+            "Sí, es la misma instancia compartida (singleton)",
+            "Solo con @Input"
+          ],
+          "correctIndex": 2,
+          "explanation": "providedIn: \"root\" crea una sola instancia para toda la app. Por eso los servicios sirven para compartir estado entre componentes no relacionados."
+        }
+      ],
+      "diagram": "flowchart LR\n  P[precio 1234.5]:::cian --> PI[currency USD]:::morado --> S[\"$1,234.50\"]:::verde\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n  classDef morado fill:#BF5AF2,stroke:#BF5AF2,color:#fff\n  classDef cian fill:#64D2FF,stroke:#64D2FF,color:#1d1d1f"
+    },
+    "ses-angular-2-1": {
+      "emoji": "🛂",
+      "summary": "Proteges rutas con guards, navegas con parámetros y validas formularios desde el código.",
+      "analogy": "Un guard es el portero de una discoteca: antes de abrir la puerta de /admin revisa tu pulsera; si no la tienes, te manda a la fila de /login.",
+      "learned": [
+        "🚦 Puedes decidir quién entra a cada sección de una app",
+        "🔗 Armas enlaces que llevan al detalle exacto de un producto",
+        "📝 Validas un formulario y muestras el error justo debajo del campo",
+        "🔐 Compruebas que dos contraseñas coincidan antes de enviar"
+      ],
+      "check": [
+        {
+          "question": "Un error \"Nombre requerido\" aparece apenas carga el formulario, antes de que el usuario toque nada. ¿Qué condición falta?",
+          "options": [
+            "Mostrarlo solo si nombre.invalid && nombre.touched",
+            "Quitar Validators.required",
+            "Usar nombre.valid",
+            "Mostrarlo en ngOnInit"
+          ],
+          "correctIndex": 0,
+          "explanation": "Un campo vacío es inválido desde el inicio; touched espera a que el usuario pase por él. Quitar el validador elimina la regla."
+        },
+        {
+          "question": "Quieres precargar el producto antes de mostrar /productos/:id para no ver la pantalla vacía. ¿Qué usas?",
+          "options": [
+            "Un CanActivateFn",
+            "Un CanDeactivateFn",
+            "Un pipe async en el router-outlet",
+            "Un ResolveFn en la ruta"
+          ],
+          "correctIndex": 3,
+          "explanation": "El resolver obtiene datos antes de activar la ruta. CanActivate decide si se entra, no trae datos; CanDeactivate es para salir."
+        }
+      ],
+      "diagram": "flowchart LR\n  U[Navega a admin]:::azul --> G{authGuard}:::amarillo\n  G -->|autenticado| A[AdminComponent]:::verde\n  G -->|no| L[Redirige a login]:::rosa\n  A --> CH[children usuarios]:::cian\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n  classDef rosa fill:#FF375F,stroke:#FF375F,color:#fff\n  classDef cian fill:#64D2FF,stroke:#64D2FF,color:#1d1d1f\n  classDef amarillo fill:#FFD60A,stroke:#FFD60A,color:#1d1d1f"
+    },
+    "ses-angular-2-2": {
+      "emoji": "🌊",
+      "summary": "Combinas operadores RxJS para búsquedas en vivo y cierras suscripciones para no dejar fugas.",
+      "analogy": "switchMap es pedir un taxi y cancelarlo cuando ves pasar uno mejor: solo te subes al último que pediste, los anteriores ya no te esperan.",
+      "learned": [
+        "⌨️ Puedes hacer un buscador que espera a que termines de escribir",
+        "🚕 Descartas resultados viejos cuando llega uno más nuevo",
+        "🚰 Cierras las llaves que abriste para que la app no gaste memoria",
+        "🛒 Guardas un carrito compartido que avisa cada vez que cambia"
+      ],
+      "check": [
+        {
+          "question": "El buscador manda una petición por cada tecla y a veces muestra resultados de \"ca\" después de \"casa\". ¿Qué combinas?",
+          "options": [
+            "map + filter",
+            "mergeMap + tap",
+            "debounceTime(300) + switchMap",
+            "forkJoin + retry"
+          ],
+          "correctIndex": 2,
+          "explanation": "debounceTime espera a que dejes de escribir y switchMap cancela la petición anterior. mergeMap las deja todas vivas: ahí nace el resultado viejo."
+        },
+        {
+          "question": "El BusquedaComponent declara destroy$ y lo completa en ngOnDestroy, pero la suscripción sigue viva. ¿Qué falta?",
+          "options": [
+            "Llamar a destroy$.next() en ngOnInit",
+            "Agregar takeUntil(this.destroy$) dentro del pipe",
+            "Usar un BehaviorSubject",
+            "Quitar distinctUntilChanged"
+          ],
+          "correctIndex": 1,
+          "explanation": "destroy$ solo corta lo que lo escucha con takeUntil. Emitir en ngOnDestroy no sirve si ningún flujo está conectado a él."
+        }
+      ],
+      "diagram": "flowchart LR\n  I[Teclas]:::cian --> D[debounceTime 300]:::azul\n  D --> DU[distinctUntilChanged]:::azul\n  DU --> F[filter 2 chars]:::azul\n  F --> S[switchMap buscar]:::morado\n  S --> R[Resultados]:::verde\n  S -.->|cancela| V[Petición vieja]:::rosa\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n  classDef rosa fill:#FF375F,stroke:#FF375F,color:#fff\n  classDef morado fill:#BF5AF2,stroke:#BF5AF2,color:#fff\n  classDef cian fill:#64D2FF,stroke:#64D2FF,color:#1d1d1f"
+    },
+    "ses-angular-3-1": {
+      "emoji": "🚇",
+      "summary": "Organizas rutas anidadas y cargas secciones enteras solo cuando alguien entra a ellas.",
+      "analogy": "Lazy loading es un tren con vagones que se enganchan al llegar a su estación: sales con la locomotora ligera y sumas el vagón de admin solo si alguien baja ahí.",
+      "learned": [
+        "🚉 Puedes lograr que la app abra rápido trayendo secciones solo al visitarlas",
+        "🪆 Metes pantallas dentro de otras con su propia navegación",
+        "🛡️ Explicas en una entrevista la diferencia entre bloquear y no descargar",
+        "📥 Preparas los datos antes de que la pantalla aparezca"
+      ],
+      "check": [
+        {
+          "question": "Un usuario sin rol admin no debería ni descargar el código del módulo Admin. ¿Qué guard usas?",
+          "options": [
+            "CanMatchFn",
+            "CanActivateFn",
+            "ResolveFn",
+            "CanDeactivateFn"
+          ],
+          "correctIndex": 0,
+          "explanation": "CanMatch decide antes de que la ruta haga match y evita cargar el módulo lazy. CanActivate bloquea la entrada, pero el código ya pudo descargarse."
+        },
+        {
+          "question": "¿Qué escribes para que /admin cargue su módulo bajo demanda?",
+          "options": [
+            "component: AdminModule",
+            "children: [AdminModule]",
+            "loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule)",
+            "redirectTo: './admin/admin.module'"
+          ],
+          "correctIndex": 2,
+          "explanation": "loadChildren con import dinámico crea un archivo aparte que se descarga al navegar. component y children cargan todo desde el inicio."
+        }
+      ]
+    },
+    "ses-angular-4-1": {
+      "emoji": "📬",
+      "summary": "Haces peticiones HTTP tipadas, manejas errores y añades lógica común a todas las llamadas.",
+      "analogy": "Un interceptor es la oficina de correos que sella cada carta que sale: no le pides a cada persona que ponga la estampilla, se pone sola en el mostrador.",
+      "learned": [
+        "✉️ Puedes pedir y enviar datos a un servidor desde tu app",
+        "🏷️ Agregas tu credencial a todas las peticiones sin repetirla",
+        "🩹 Muestras un mensaje amable cuando el servidor falla",
+        "🧭 Eliges si varias peticiones van en fila, en paralelo o reemplazándose"
+      ],
+      "check": [
+        {
+          "question": "Al guardar 5 cambios de un formulario necesitas que se envíen en orden, uno tras otro. ¿Qué operador?",
+          "options": [
+            "switchMap",
+            "mergeMap",
+            "map",
+            "concatMap"
+          ],
+          "correctIndex": 3,
+          "explanation": "concatMap espera a que termine cada petición antes de la siguiente. switchMap cancelaría las anteriores; mergeMap las lanza en paralelo."
+        },
+        {
+          "question": "getAll() devuelve un Observable pero la petición nunca aparece en la pestaña Red. ¿Causa?",
+          "options": [
+            "Nadie se suscribe: los Observables de HttpClient son fríos",
+            "HttpClient necesita fetch",
+            "Falta retry()",
+            "catchError bloquea la petición"
+          ],
+          "correctIndex": 0,
+          "explanation": "HttpClient no hace la petición hasta que alguien se suscribe (subscribe o pipe async). catchError solo actúa si hay error."
+        }
+      ],
+      "diagram": "flowchart LR\n  CP[Componente]:::azul --> SV[Servicio]:::morado\n  SV --> IN[Interceptor token]:::naranja\n  IN --> AP[Servidor]:::cian\n  AP -->|error| CE[catchError]:::rosa\n  AP -->|ok| CP\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef naranja fill:#FF9F0A,stroke:#FF9F0A,color:#fff\n  classDef rosa fill:#FF375F,stroke:#FF375F,color:#fff\n  classDef morado fill:#BF5AF2,stroke:#BF5AF2,color:#fff\n  classDef cian fill:#64D2FF,stroke:#64D2FF,color:#1d1d1f"
+    },
+    "ses-angular-5-1": {
+      "emoji": "🏢",
+      "summary": "Planeas un dashboard empresarial por capas: core, features y shared, con rutas que cargan bajo demanda.",
+      "analogy": "core, features y shared son un hospital: core es la recepción y seguridad, features son las especialidades y shared es la farmacia que todos usan.",
+      "learned": [
+        "🏥 Puedes ordenar un proyecto grande en zonas que no se pisan",
+        "📐 Dibujas la pantalla en papel antes de escribir una línea",
+        "🧾 Describes con precisión qué datos tiene un empleado o un reporte",
+        "🧠 Separas las piezas que piensan de las que solo muestran"
+      ],
+      "check": [
+        {
+          "question": "¿Dónde va el authGuard en la estructura del dashboard?",
+          "options": [
+            "shared/components",
+            "core/guards",
+            "features/auth",
+            "app.routes.ts directamente"
+          ],
+          "correctIndex": 1,
+          "explanation": "Guards, interceptors y servicios globales viven en core. features/auth tiene login y registro; shared es para piezas de UI reutilizables."
+        },
+        {
+          "question": "KpiCardComponent hace su propia petición HTTP para obtener el valor. ¿Qué patrón rompe?",
+          "options": [
+            "Lazy loading",
+            "Facade, porque no hay facade sin HTTP",
+            "Smart/Dumb: la tarjeta debería ser presentacional y recibir el dato por @Input",
+            "Ninguno, está bien"
+          ],
+          "correctIndex": 2,
+          "explanation": "Las piezas dumb solo reciben y muestran; un contenedor smart pide los datos. Así la tarjeta se reutiliza y se prueba sin servidor."
+        }
+      ],
+      "diagram": "flowchart TD\n  APP[app]:::azul --> CO[core]:::morado\n  APP --> FE[features]:::verde\n  APP --> SH[shared]:::naranja\n  CO --> G[guards interceptors]:::morado\n  FE --> EM[employees reports]:::verde\n  SH --> UI[KpiCard DataTable]:::naranja\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n  classDef naranja fill:#FF9F0A,stroke:#FF9F0A,color:#fff\n  classDef morado fill:#BF5AF2,stroke:#BF5AF2,color:#fff"
+    },
+    "ses-angular-5-2": {
+      "emoji": "🚢",
+      "summary": "Implementas features con un facade, pruebas servicios con espías y publicas la app con Docker y CI.",
+      "analogy": "El facade es el control remoto de la tele: un botón \"ver película\" enciende la tele, la consola y el audio sin que sepas qué cable va a dónde.",
+      "learned": [
+        "🎮 Puedes esconder pasos complicados detrás de una sola acción simple",
+        "🕵️ Pruebas una pieza reemplazando a sus ayudantes por dobles",
+        "🤖 Haces que cada cambio se pruebe y se publique solo",
+        "⚖️ Recibes un aviso si tu app empieza a pesar demasiado"
+      ],
+      "check": [
+        {
+          "question": "En el ejemplo, EmployeeFacade usa this.notificationService pero no lo inyecta. ¿Qué pasa al fallar la creación?",
+          "options": [
+            "Error en ejecución: notificationService es undefined",
+            "Se muestra la notificación igual",
+            "El compilador lo inyecta solo",
+            "Angular lo crea por providedIn root"
+          ],
+          "correctIndex": 0,
+          "explanation": "Sin inject(NotificationService) la propiedad no existe y TypeScript lo marca. providedIn: \"root\" registra el servicio, pero hay que pedirlo."
+        },
+        {
+          "question": "El pipeline corre npm test y luego npm run build. Un test falla. ¿Qué debería pasar?",
+          "options": [
+            "Publica igual, los tests son opcionales",
+            "Reintenta hasta que pase",
+            "Publica en staging en vez de prod",
+            "El pipeline se detiene y no publica"
+          ],
+          "correctIndex": 3,
+          "explanation": "Los pasos de CI se cortan al primer fallo: es lo que evita publicar código roto. Reintentar a ciegas oculta errores reales."
+        }
+      ],
+      "diagram": "flowchart LR\n  P[push]:::azul --> CI[npm ci]:::cian --> T[npm test]:::amarillo\n  T -->|falla| X[Detener]:::rosa\n  T -->|ok| B[build prod]:::verde --> D[Publicar]:::verde\n  classDef azul fill:#0A84FF,stroke:#0A84FF,color:#fff\n  classDef verde fill:#30D158,stroke:#30D158,color:#fff\n  classDef rosa fill:#FF375F,stroke:#FF375F,color:#fff\n  classDef cian fill:#64D2FF,stroke:#64D2FF,color:#1d1d1f\n  classDef amarillo fill:#FFD60A,stroke:#FFD60A,color:#1d1d1f"
+    }
+  },
+  "modules": {
+    "mod-angular-1": {
+      "emoji": "🅰️",
+      "exam": [
+        {
+          "question": "Usas [(ngModel)] y aparece \"Can't bind to ngModel\". ¿Qué falta?",
+          "options": [
+            "Importar HttpClientModule",
+            "Importar FormsModule",
+            "Declarar ngModel como @Input",
+            "Usar ReactiveFormsModule obligatoriamente"
+          ],
+          "correctIndex": 1,
+          "explanation": "ngModel viene de FormsModule. ReactiveFormsModule da formControlName, no ngModel; HttpClient no tiene relación."
+        },
+        {
+          "question": "<li *ngFor=\"let p of productos\"> se repinta entero cada vez que llega la lista del servidor. ¿Qué agregas?",
+          "options": [
+            "trackBy: trackById para reutilizar los elementos por id",
+            "index as i",
+            "*ngIf alrededor",
+            "Un pipe json"
+          ],
+          "correctIndex": 0,
+          "explanation": "trackBy le dice a Angular cómo reconocer cada item; sin él, objetos nuevos implican nodos nuevos. index solo expone la posición."
+        },
+        {
+          "question": "Con [ngSwitch]=\"estado\", `*ngSwitchCase=\"activo\"` nunca coincide aunque estado sea \"activo\". ¿Por qué?",
+          "options": [
+            "ngSwitch no acepta strings",
+            "Falta ngSwitchDefault",
+            "Compara con una propiedad llamada activo; el texto va como \"'activo'\"",
+            "Debe usarse *ngIf"
+          ],
+          "correctIndex": 2,
+          "explanation": "Lo que va entre comillas es una expresión: activo es una variable. Para un literal se escribe \"'activo'\". Es un error que trae el propio ejemplo de la lección."
+        },
+        {
+          "question": "¿Dónde haces la carga inicial de datos de un componente?",
+          "options": [
+            "constructor con lógica pesada",
+            "ngOnDestroy",
+            "ngOnChanges siempre",
+            "ngOnInit"
+          ],
+          "correctIndex": 3,
+          "explanation": "ngOnInit corre cuando los @Input ya están listos. El constructor es para inyectar; ngOnChanges reacciona a cambios de @Input."
+        },
+        {
+          "question": "{{ 0.855 | percent:\"1.1-1\" }} ¿qué muestra?",
+          "options": [
+            "85.5%",
+            "0.855%",
+            "86%",
+            "8.55%"
+          ],
+          "correctIndex": 0,
+          "explanation": "percent multiplica por 100 y \"1.1-1\" fija un decimal: 85.5%. 86% sería sin decimales."
+        },
+        {
+          "question": "Un pipe \"resaltar\" devuelve `<mark>texto</mark>` y en pantalla se ven las etiquetas como texto. ¿Por qué?",
+          "options": [
+            "El pipe debe ser impuro",
+            "La interpolación escapa HTML; habría que usar [innerHTML] y sanitizar",
+            "Falta registrar el pipe",
+            "mark no existe en HTML5"
+          ],
+          "correctIndex": 1,
+          "explanation": "{{ }} siempre muestra texto plano por seguridad contra XSS. [innerHTML] lo interpreta, pasando por el sanitizador de Angular."
+        }
+      ]
+    },
+    "mod-angular-2": {
+      "emoji": "🛂",
+      "exam": [
+        {
+          "question": "Un usuario tiene cambios sin guardar y quieres preguntarle antes de salir de la ruta. ¿Qué guard usas?",
+          "options": [
+            "CanActivateFn",
+            "CanMatchFn",
+            "CanDeactivateFn",
+            "ResolveFn"
+          ],
+          "correctIndex": 2,
+          "explanation": "CanDeactivate decide si se puede abandonar la ruta actual. Los demás actúan al entrar o al cargar."
+        },
+        {
+          "question": "Validators.pattern(\"^[0-9]{5}$\") en codigoPostal. ¿Qué valor pasa?",
+          "options": [
+            "2801",
+            "28013-1",
+            "AB123",
+            "28013"
+          ],
+          "correctIndex": 3,
+          "explanation": "El patrón exige exactamente 5 dígitos de inicio a fin. 4 dígitos o un guion extra no cumplen."
+        },
+        {
+          "question": "Necesitas usuarios y permisos, y mostrar la pantalla cuando lleguen los dos. ¿Qué operador?",
+          "options": [
+            "forkJoin",
+            "switchMap",
+            "debounceTime",
+            "startWith"
+          ],
+          "correctIndex": 0,
+          "explanation": "forkJoin espera a que todas las fuentes completen y emite juntos los resultados. Funciona con peticiones HTTP, que emiten una vez y completan."
+        },
+        {
+          "question": "Usas takeUntilDestroyed() dentro de ngOnInit y Angular lanza error. ¿Por qué?",
+          "options": [
+            "Está obsoleto en Angular 16",
+            "Sin argumento solo funciona en un contexto de inyección como el constructor",
+            "Solo funciona con Subjects",
+            "Requiere ngOnDestroy vacío"
+          ],
+          "correctIndex": 1,
+          "explanation": "takeUntilDestroyed() usa inject(DestroyRef) por dentro. Fuera del constructor hay que pasarle un DestroyRef inyectado."
+        },
+        {
+          "question": "[routerLink]=\"['/productos', producto.id]\" con id 9 lleva a…",
+          "options": [
+            "/productos?id=9",
+            "/productos,9",
+            "/productos/9",
+            "/9/productos"
+          ],
+          "correctIndex": 2,
+          "explanation": "El array se une como segmentos de ruta. Para query params se usa queryParams aparte."
+        },
+        {
+          "question": "Un carrito con BehaviorSubject: un componente que se suscribe tarde, ¿qué recibe?",
+          "options": [
+            "El valor actual inmediatamente y luego los cambios",
+            "Nada hasta el próximo cambio",
+            "Todos los valores históricos",
+            "Un error"
+          ],
+          "correctIndex": 0,
+          "explanation": "BehaviorSubject guarda el último valor y lo entrega a cada nuevo suscriptor. Un Subject normal no da nada hasta la próxima emisión."
+        }
+      ]
+    },
+    "mod-angular-3": {
+      "emoji": "🚇",
+      "exam": [
+        {
+          "question": "¿Qué ruta debe ir al final del array de rutas?",
+          "options": [
+            "{ path: '', component: HomeComponent }",
+            "{ path: 'admin', loadChildren: ... }",
+            "{ path: 'productos/:id', ... }",
+            "{ path: '**', redirectTo: '' }"
+          ],
+          "correctIndex": 3,
+          "explanation": "El router evalúa en orden; el comodín ** coincide con todo y taparía las rutas que vengan después."
+        },
+        {
+          "question": "Un Resolver tarda 4 segundos y el usuario cree que la app se colgó. ¿Qué mejoras?",
+          "options": [
+            "Quitar el resolver y no mostrar datos",
+            "Mostrar un indicador de carga escuchando los eventos de navegación del Router",
+            "Usar CanMatch en su lugar",
+            "Poner el resolver en el componente padre"
+          ],
+          "correctIndex": 1,
+          "explanation": "Con resolver la ruta no se activa hasta tener datos; NavigationStart/End permiten mostrar un loader. CanMatch no trae datos."
+        },
+        {
+          "question": "Rutas children de /dashboard: ¿dónde se pintan?",
+          "options": [
+            "En un <router-outlet> dentro del componente de /dashboard",
+            "En el router-outlet de AppComponent",
+            "En un modal",
+            "Debajo del footer"
+          ],
+          "correctIndex": 0,
+          "explanation": "Las rutas hijas necesitan su propio router-outlet en el componente padre. El outlet raíz pinta al padre."
+        },
+        {
+          "question": "¿Qué afirmación sobre lazy loading es correcta?",
+          "options": [
+            "Hace cada navegación instantánea",
+            "Siempre mejora la carga un 80%",
+            "Reduce lo que se descarga al abrir la app; cada sección llega al visitarla",
+            "Elimina la necesidad de guards"
+          ],
+          "correctIndex": 2,
+          "explanation": "Divide el código en partes. La mejora depende de cuánto pese cada sección; cifras fijas como \"60-80%\" no son una garantía."
+        },
+        {
+          "question": "Tu authGuard devuelve false sin redirigir. ¿Qué ve el usuario?",
+          "options": [
+            "Se redirige a /login automáticamente",
+            "Un 404",
+            "Un error en consola obligatorio",
+            "No pasa nada visible: se queda en la página actual o en blanco"
+          ],
+          "correctIndex": 3,
+          "explanation": "Angular solo cancela la navegación. Hay que devolver router.createUrlTree([\"/login\"]) o navegar para llevarlo al login."
+        }
+      ]
+    },
+    "mod-angular-4": {
+      "emoji": "📬",
+      "exam": [
+        {
+          "question": "Un interceptor agrega el token, pero cuando no hay token envía \"Bearer null\". ¿Arreglo?",
+          "options": [
+            "Si no hay token, pasar la petición original sin clonar",
+            "Enviar siempre el header",
+            "Lanzar error si no hay token",
+            "Guardar \"null\" como token"
+          ],
+          "correctIndex": 0,
+          "explanation": "El ejercicio pide continuar sin header. \"Bearer null\" hace que el servidor rechace incluso rutas públicas."
+        },
+        {
+          "question": "Una petición a veces falla por red inestable. ¿Qué combinas en el pipe?",
+          "options": [
+            "catchError y luego retry",
+            "switchMap y tap",
+            "retry(2) y luego catchError para mostrar un mensaje",
+            "Solo tap"
+          ],
+          "correctIndex": 2,
+          "explanation": "retry va antes para reintentar; si sigue fallando, catchError maneja el error final. Al revés, catchError traga el error y retry no actúa."
+        },
+        {
+          "question": "Abrir el detalle de 10 productos a la vez, sin importar el orden. ¿Qué operador?",
+          "options": [
+            "concatMap",
+            "mergeMap",
+            "switchMap",
+            "debounceTime"
+          ],
+          "correctIndex": 1,
+          "explanation": "mergeMap ejecuta en paralelo. concatMap haría una tras otra (más lento) y switchMap cancelaría las anteriores."
+        },
+        {
+          "question": "¿Qué ventaja de HttpClient sobre fetch facilita las pruebas?",
+          "options": [
+            "Es más rápido",
+            "No necesita suscripción",
+            "No usa HTTP",
+            "HttpTestingController permite simular respuestas sin servidor"
+          ],
+          "correctIndex": 3,
+          "explanation": "Con HttpTestingController verificas qué petición se hizo y le respondes en el test. La velocidad de red es la misma."
+        },
+        {
+          "question": "tap(console.log) en el pipe de una petición, ¿cambia los datos que recibe el componente?",
+          "options": [
+            "No, tap ejecuta un efecto y deja pasar el valor igual",
+            "Sí, los convierte en texto",
+            "Sí, los vacía",
+            "Cancela la petición"
+          ],
+          "correctIndex": 0,
+          "explanation": "tap es para efectos secundarios como logs. Para transformar se usa map."
+        }
+      ]
+    },
+    "mod-angular-5": {
+      "emoji": "🏢",
+      "exam": [
+        {
+          "question": "¿Qué hace `loadComponent` en las rutas del dashboard?",
+          "options": [
+            "Carga un NgModule completo",
+            "Descarga un componente standalone solo cuando se visita la ruta",
+            "Precarga todo al inicio",
+            "Reemplaza a canActivate"
+          ],
+          "correctIndex": 1,
+          "explanation": "loadComponent es el lazy loading para componentes standalone; loadChildren es para módulos o arrays de rutas."
+        },
+        {
+          "question": "ng build marca \"budget exceeded\" en el bundle principal. ¿Qué haces primero?",
+          "options": [
+            "Subir el budget al doble",
+            "Desactivar budgets",
+            "Revisar qué librerías pesadas se cargan al inicio y llevarlas a rutas lazy",
+            "Quitar tree-shaking"
+          ],
+          "correctIndex": 2,
+          "explanation": "El budget es una alarma útil. Subirlo o apagarlo esconde el problema; mover código a rutas lazy reduce la carga inicial."
+        },
+        {
+          "question": "En el ejemplo de gráfico, `[type]=\"bar\"` no funciona. ¿Por qué?",
+          "options": [
+            "Busca una propiedad bar en la clase; el literal es \"'bar'\" o type=\"bar\"",
+            "Chart.js no soporta barras",
+            "Falta NgChartsModule",
+            "type debe ir en ngOnInit"
+          ],
+          "correctIndex": 0,
+          "explanation": "Con [ ] el valor es una expresión. bar sin comillas internas es una variable inexistente. Es un error del propio ejemplo."
+        },
+        {
+          "question": "¿Qué prueba con spies verifica bien el facade?",
+          "options": [
+            "Montar toda la app y abrir la pantalla",
+            "Hacer una petición real al servidor",
+            "Comprobar el HTML de la tabla",
+            "Llamar facade.loadEmployees() y esperar que serviceMock.loadAll haya sido llamado"
+          ],
+          "correctIndex": 3,
+          "explanation": "Un test unitario aísla al facade con dobles. Llamar al servidor real lo vuelve lento y frágil."
+        },
+        {
+          "question": "¿Por qué usar un Dockerfile multi-stage con Nginx?",
+          "options": [
+            "Para correr ng serve en producción",
+            "La imagen final solo lleva los archivos compilados, no Node ni node_modules",
+            "Para que los tests corran más rápido",
+            "Porque Angular lo exige"
+          ],
+          "correctIndex": 1,
+          "explanation": "La primera etapa compila y la segunda sirve dist con Nginx. ng serve es solo para desarrollo."
+        },
+        {
+          "question": "Un empleado con salary visible para todos los roles en la tabla. ¿Qué revisas en la arquitectura?",
+          "options": [
+            "Solo ocultar la columna con *ngIf",
+            "Usar un pipe que lo borre",
+            "Que el servidor no envíe salary a roles sin permiso, además de ocultarlo en la UI",
+            "Un roleGuard en la ruta basta"
+          ],
+          "correctIndex": 2,
+          "explanation": "Ocultar en el navegador no protege: el dato sigue en la respuesta. El filtro real va en el servidor."
+        }
+      ]
+    }
+  }
+}
