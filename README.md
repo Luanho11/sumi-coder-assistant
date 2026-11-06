@@ -1,6 +1,6 @@
-# SUMI — Asistente de programación con IA
+# XARA Coder Assistant
 
-Este proyecto se presenta como **SUMI**. El código y el paquete de esta versión conservan el nombre interno **XARA Coder Assistant**. Es una tutora y asistente de programación con IA para Windows (antes “Copiloto Técnico”). Su objetivo: que llegues a ser
+Tutora y asistente de programación con IA para Windows (antes “Copiloto Técnico”). Su objetivo: que llegues a ser
 un gran profesional en 2026, cuando buena parte del código lo escriben agentes y lo que se paga es **especificar,
 revisar, verificar, decidir y comunicar**.
 
